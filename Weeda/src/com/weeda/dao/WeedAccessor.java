@@ -20,8 +20,7 @@ public class WeedAccessor {
 		connectionProps.put("user", this.userName);
 		connectionProps.put("password", this.password);
 
-		conn = DriverManager.getConnection("jdbc:mysql://54.215.236.186:3306/"
-				+ dbName, connectionProps);
+		conn = DriverManager.getConnection("jdbc:mysql://54.215.236.186:3306/" + dbName, connectionProps);
 		System.out.println("Connected to database");
 		return conn;
 	}
