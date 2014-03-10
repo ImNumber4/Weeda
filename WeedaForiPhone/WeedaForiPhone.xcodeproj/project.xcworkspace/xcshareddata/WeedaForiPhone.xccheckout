@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>13C23255-13DF-438D-905D-5CA10AFC417E</string>
+	<key>IDESourceControlProjectName</key>
+	<string>WeedaForiPhone</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>603D3B30-2540-4A29-8233-8FA7874C86AC</key>
+		<string>https://github.com/ImNumber4/Weeda.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>WeedaForiPhone/WeedaForiPhone.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>603D3B30-2540-4A29-8233-8FA7874C86AC</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/ImNumber4/Weeda.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>603D3B30-2540-4A29-8233-8FA7874C86AC</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>603D3B30-2540-4A29-8233-8FA7874C86AC</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Weeda</string>
+		</dict>
+	</array>
+</dict>
+</plist>
