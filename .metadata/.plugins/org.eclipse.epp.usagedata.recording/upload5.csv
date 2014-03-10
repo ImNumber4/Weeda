@@ -1,0 +1,26 @@
+what,kind,bundleId,bundleVersion,description,time
+java.vm.info,sysinfo,,,"mixed mode",1394409588803
+java.vm.name,sysinfo,,,"Java HotSpot(TM) Client VM",1394409588803
+java.vm.specification.name,sysinfo,,,"Java Virtual Machine Specification",1394409588803
+java.vm.specification.vendor,sysinfo,,,"Sun Microsystems Inc.",1394409588803
+java.vm.specification.version,sysinfo,,,"1.0",1394409588803
+java.vm.vendor,sysinfo,,,"Apple Inc.",1394409588803
+java.vm.version,sysinfo,,,"20.65-b04-462",1394409588803
+activated,view,org.eclipse.ui.navigator.resources,3.4.1.M20090826-0800,"org.eclipse.ui.navigator.ProjectExplorer",1394409589314
+activated,view,org.eclipse.ui.navigator.resources,3.4.1.M20090826-0800,"org.eclipse.ui.navigator.ProjectExplorer",1394409589317
+closed,view,org.eclipse.ui,3.5.1.M20090902-1000,"org.eclipse.ui.internal.introview",1394409589327
+deactivated,workbench,org.eclipse.ui.workbench,3.5.1.M20090826-0800a,"",1394409591251
+activated,workbench,org.eclipse.ui.workbench,3.5.1.M20090826-0800a,"",1394409593199
+deactivated,workbench,org.eclipse.ui.workbench,3.5.1.M20090826-0800a,"",1394409600209
+activated,workbench,org.eclipse.ui.workbench,3.5.1.M20090826-0800a,"",1394409602615
+executed,command,org.eclipse.ui.ide,3.5.1.M20090826-0800,"org.eclipse.ui.edit.text.openLocalFile",1394409602623
+deactivated,workbench,org.eclipse.ui.workbench,3.5.1.M20090826-0800a,"",1394409626929
+activated,workbench,org.eclipse.ui.workbench,3.5.1.M20090826-0800a,"",1394409640544
+executed,command,org.eclipse.ui,3.5.1.M20090902-1000,"org.eclipse.ui.file.import",1394409640610
+deactivated,workbench,org.eclipse.ui.workbench,3.5.1.M20090826-0800a,"",1394409641594
+activated,workbench,org.eclipse.ui.workbench,3.5.1.M20090826-0800a,"",1394409659645
+deactivated,workbench,org.eclipse.ui.workbench,3.5.1.M20090826-0800a,"",1394409661174
+started,bundle,org.eclipse.debug.core,3.5.0.v20090526-1600,"org.eclipse.debug.core",1394409662792
+started,bundle,org.eclipse.jdt.launching,3.5.0.v20090527,"org.eclipse.jdt.launching",1394409662806
+started,bundle,org.eclipse.jdt.launching.macosx,3.2.0.v20090527,"org.eclipse.jdt.launching.macosx",1394409662812
+started,bundle,org.eclipse.jdt.debug,3.5.0.v20090526,"org.eclipse.jdt.debug",1394409700988
