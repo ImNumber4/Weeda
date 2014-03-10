@@ -1,4 +1,6 @@
-.metadata/*
-*.zip
-*.class
+.project
+.settings
 .classpath
+.metadata/*
+.class
+Weeda/bin/*
