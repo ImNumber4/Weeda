@@ -25,6 +25,7 @@
 		A914CCCE18CD756200B870D8 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A914CCA918CD756200B870D8 /* CoreData.framework */; };
 		A914CCD618CD756200B870D8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A914CCD418CD756200B870D8 /* InfoPlist.strings */; };
 		A914CCD818CD756200B870D8 /* WeedaForiPhoneTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A914CCD718CD756200B870D8 /* WeedaForiPhoneTests.m */; };
+		A914CCE718CDAC0A00B870D8 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = A914CCE618CDAC0A00B870D8 /* User.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +62,8 @@
 		A914CCD318CD756200B870D8 /* WeedaForiPhoneTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "WeedaForiPhoneTests-Info.plist"; sourceTree = "<group>"; };
 		A914CCD518CD756200B870D8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A914CCD718CD756200B870D8 /* WeedaForiPhoneTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WeedaForiPhoneTests.m; sourceTree = "<group>"; };
+		A914CCE318CD771300B870D8 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = User.h; path = WeedaForiPhone/User.h; sourceTree = "<group>"; };
+		A914CCE618CDAC0A00B870D8 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = User.m; path = WeedaForiPhone/User.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,6 +95,7 @@
 		A914CC9718CD756200B870D8 = {
 			isa = PBXGroup;
 			children = (
+				A914CCE218CD76C500B870D8 /* Model */,
 				A914CCAB18CD756200B870D8 /* WeedaForiPhone */,
 				A914CCD118CD756200B870D8 /* WeedaForiPhoneTests */,
 				A914CCA218CD756200B870D8 /* Frameworks */,
@@ -164,6 +168,15 @@
 				A914CCD418CD756200B870D8 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		A914CCE218CD76C500B870D8 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				A914CCE618CDAC0A00B870D8 /* User.m */,
+				A914CCE318CD771300B870D8 /* User.h */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -265,6 +278,7 @@
 			files = (
 				A914CCC218CD756200B870D8 /* DetailViewController.m in Sources */,
 				A914CCBF18CD756200B870D8 /* MasterViewController.m in Sources */,
+				A914CCE718CDAC0A00B870D8 /* User.m in Sources */,
 				A914CCBC18CD756200B870D8 /* WeedaForiPhone.xcdatamodeld in Sources */,
 				A914CCB618CD756200B870D8 /* AppDelegate.m in Sources */,
 				A914CCB218CD756200B870D8 /* main.m in Sources */,
