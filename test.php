@@ -1,3 +1,5 @@
+<?php
+
 /* require the user as the parameter */
 if(isset($_GET['user']) && intval($_GET['user'])) {
 
@@ -11,7 +13,7 @@ if(isset($_GET['user']) && intval($_GET['user'])) {
 	mysql_select_db('weeda',$link) or die('Cannot select the DB');
 
 	/* grab the posts from the db */
-	$query = "SELECT id FROM user WHERE id = $user_id";
+	$query = "SELECT id, username FROM user WHERE id = $user_id";
 	$result = mysql_query($query,$link) or die('Errant query:  '.$query);
 
 	/* create one master array of the records */
@@ -49,3 +51,5 @@ if(isset($_GET['user']) && intval($_GET['user'])) {
 	/* disconnect from the db */
 	@mysql_close($link);
 }
+
+?>
