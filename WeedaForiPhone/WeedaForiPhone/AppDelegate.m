@@ -20,34 +20,11 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    
-    NSURL *url = [NSURL URLWithString:@"http://localhost/test.php"];
-    
-    NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReturnCacheDataElseLoad timeoutInterval:60];
-    
-    NSData *returnData = [NSURLConnection sendSynchronousRequest:urlRequest returningResponse: nil error: nil ];
-    NSString *responseString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
-    NSLog(@"%@", responseString);
-    NSDictionary *parsedObject = [NSJSONSerialization JSONObjectWithData:returnData options:0 error:nil];
-    
-    NSArray *results = [parsedObject valueForKey:@"users"];
-    NSMutableArray *users = [[NSMutableArray alloc] init];
-    for (NSDictionary *userDic in results) {
-        User *user = [[User alloc] init];
-        for (NSString *key in userDic) {
-            if ([user respondsToSelector:NSSelectorFromString(key)]) {
-                [user setValue:[userDic valueForKey:key] forKey:key];
-            }
-        }
-        [users addObject:user];
-    }
-    
     // Override point for customization after application launch.
     UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
     MasterViewController *controller = (MasterViewController *)navigationController.topViewController;
     
     controller.managedObjectContext = self.managedObjectContext;
-    controller.users = users;
     return YES;
 }
 							

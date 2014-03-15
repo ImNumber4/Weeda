@@ -28,6 +28,27 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    NSURL *url = [NSURL URLWithString:@"http://localhost/test.php"];
+    
+    NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReturnCacheDataElseLoad timeoutInterval:60];
+    
+    NSData *returnData = [NSURLConnection sendSynchronousRequest:urlRequest returningResponse: nil error: nil ];
+    NSString *responseString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
+    NSLog(@"%@", responseString);
+    NSDictionary *parsedObject = [NSJSONSerialization JSONObjectWithData:returnData options:0 error:nil];
+    
+    NSArray *results = [parsedObject valueForKey:@"users"];
+    self.users = [[NSMutableArray alloc] init];
+    for (NSDictionary *userDic in results) {
+        User *user = [[User alloc] init];
+        for (NSString *key in userDic) {
+            if ([user respondsToSelector:NSSelectorFromString(key)]) {
+                [user setValue:[userDic valueForKey:key] forKey:key];
+            }
+        }
+        [self.users addObject:user];
+    }
+    
 	// Do any additional setup after loading the view, typically from a nib.
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
 
