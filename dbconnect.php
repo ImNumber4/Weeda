@@ -1,23 +1,31 @@
-<%php
+<?php
 
 class DbConnection 
 {
-    public $connectionString;
-
 	public $host = '54.215.236.186';
     
     public $username = 'weeda';
 
     public $password = 'weeda';
 
-    public function init_connection() 
-	{
+	public $database = 'weeda';
+
+	private $db_conn;
+
+    private function init_connection() {
 		/* connect to the db */
-		$link = mysql_connect($this->host, $this->username, $this->password) or die('Cannot connect to the DB');
-		mysql_select_db('weeda',$link) or die('Cannot select the DB');
-		
-		return $link;
+		$this->db_conn = mysql_connect($this->host, $this->username, $this->password) or die('Cannot connect to the DB');
+		mysql_select_db($this->database, $this->db_conn) or die('Cannot select the DB');
+	}
+	
+	public function query($query) {
+		if ($this->db_conn == null) {
+			$this->init_connection();
+		}
+
+		$result = mysql_query($query, $this->db_conn) or die('Errant query:  '.$query);
+		return $result;
 	}
 }
 
-%>
+?>

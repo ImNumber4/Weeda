@@ -1,33 +1,13 @@
 <?php
-//include 'db/dbconnect.php'
-
-// class DbConnection 
-// {
-//     public $connectionString;
-// 
-// 	public $host = '54.215.236.186';
-//     
-//     public $username = 'weeda';
-// 
-//     public $password = 'weeda';
-// 
-//     public function init_connection() 
-// 	{
-// 		/* connect to the db */
-// 		$link = mysql_connect($this->host, $this->username, $this->password) or die('Cannot connect to the DB');
-// 		mysql_select_db('weeda',$link) or die('Cannot select the DB');
-// 		
-// 		return $link;
-// 	}
-// }
+include("dbconnect.php");
 
 /* connect to the db */
-$db_con = new DbConnection();
-$link = $db_con->init_connection();
+$db_conn = new DbConnection();
 
 /* grab the users from the db */
 $query = "SELECT * FROM weed";
-$result = mysql_query($query,$link) or die('Errant query:  '.$query);
+
+$result = $db_conn->query($query);
 
 /* create one master array of the records */
 $weeds = array();
