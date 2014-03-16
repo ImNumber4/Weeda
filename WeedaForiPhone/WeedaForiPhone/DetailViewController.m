@@ -31,7 +31,9 @@
     // Update the user interface for the detail item.
 
     if (self.detailItem) {
-        self.detailDescriptionLabel.text = [[self.detailItem valueForKey:@"timeStamp"] description];
+        NSString *username = [[self.detailItem valueForKey:@"username"] description];
+        NSString *email = [[self.detailItem valueForKey:@"email"] description];
+        self.detailDescriptionLabel.text = [NSString stringWithFormat:@"%@/%@", username,email];
     }
 }
 
