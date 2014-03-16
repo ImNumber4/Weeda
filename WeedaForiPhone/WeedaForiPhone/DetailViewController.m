@@ -31,9 +31,16 @@
     // Update the user interface for the detail item.
 
     if (self.detailItem) {
+        NSString *content = [[self.detailItem valueForKey:@"content"] description];
         NSString *username = [[self.detailItem valueForKey:@"username"] description];
         NSString *email = [[self.detailItem valueForKey:@"email"] description];
-        self.detailDescriptionLabel.text = [NSString stringWithFormat:@"%@/%@", username,email];
+        self.userLabel.text = [NSString stringWithFormat:@"%@(%@)", username, email];
+        self.detailDescriptionLabel.text = [NSString stringWithFormat:@"%@", content];
+        self.detailDescriptionLabel.font = [UIFont systemFontOfSize:10.0];
+        self.detailDescriptionLabel.numberOfLines=5;
+        self.userLabel.font = [UIFont systemFontOfSize:8.0 ];
+        self.userLabel.textColor = [UIColor grayColor];
+
     }
 }
 
