@@ -99,7 +99,9 @@
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MyBasicCell" forIndexPath:indexPath];
     User *user = [self.users objectAtIndex:indexPath.row];
-    cell.textLabel.text = [NSString stringWithFormat:@"%@/%@", user.username, user.email];
+    cell.textLabel.text = [NSString stringWithFormat:@"%@", user.username];
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"by %@", user.email];
+
     return cell;
 }
 
@@ -243,6 +245,7 @@
 {
     NSManagedObject *object = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.textLabel.text = [[object valueForKey:@"timeStamp"] description];
+    
 }
 
 @end
