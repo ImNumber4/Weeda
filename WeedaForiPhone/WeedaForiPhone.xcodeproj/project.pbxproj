@@ -26,6 +26,7 @@
 		A914CCD618CD756200B870D8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A914CCD418CD756200B870D8 /* InfoPlist.strings */; };
 		A914CCD818CD756200B870D8 /* WeedaForiPhoneTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A914CCD718CD756200B870D8 /* WeedaForiPhoneTests.m */; };
 		A914CCE718CDAC0A00B870D8 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = A914CCE618CDAC0A00B870D8 /* User.m */; };
+		A97251E618D65D7A0020844D /* Weed.m in Sources */ = {isa = PBXBuildFile; fileRef = A97251E518D65D7A0020844D /* Weed.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,6 +65,8 @@
 		A914CCD718CD756200B870D8 /* WeedaForiPhoneTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WeedaForiPhoneTests.m; sourceTree = "<group>"; };
 		A914CCE318CD771300B870D8 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = User.h; path = WeedaForiPhone/User.h; sourceTree = "<group>"; };
 		A914CCE618CDAC0A00B870D8 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = User.m; path = WeedaForiPhone/User.m; sourceTree = "<group>"; };
+		A97251E418D65D7A0020844D /* Weed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Weed.h; path = WeedaForiPhone/Weed.h; sourceTree = "<group>"; };
+		A97251E518D65D7A0020844D /* Weed.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Weed.m; path = WeedaForiPhone/Weed.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -175,6 +178,8 @@
 			children = (
 				A914CCE618CDAC0A00B870D8 /* User.m */,
 				A914CCE318CD771300B870D8 /* User.h */,
+				A97251E418D65D7A0020844D /* Weed.h */,
+				A97251E518D65D7A0020844D /* Weed.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -282,6 +287,7 @@
 				A914CCBC18CD756200B870D8 /* WeedaForiPhone.xcdatamodeld in Sources */,
 				A914CCB618CD756200B870D8 /* AppDelegate.m in Sources */,
 				A914CCB218CD756200B870D8 /* main.m in Sources */,
+				A97251E618D65D7A0020844D /* Weed.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -490,6 +496,7 @@
 				A914CCDD18CD756200B870D8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		A914CCDE18CD756200B870D8 /* Build configuration list for PBXNativeTarget "WeedaForiPhoneTests" */ = {
 			isa = XCConfigurationList;
@@ -498,6 +505,7 @@
 				A914CCE018CD756200B870D8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 

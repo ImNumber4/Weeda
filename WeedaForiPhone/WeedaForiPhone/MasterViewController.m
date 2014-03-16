@@ -9,7 +9,7 @@
 #import "MasterViewController.h"
 
 #import "DetailViewController.h"
-#import "User.h"
+#import "Weed.h"
 
 
 @interface MasterViewController ()
@@ -18,7 +18,7 @@
 
 @implementation MasterViewController
 
-@synthesize users = _users;
+@synthesize weeds = _weeds;
 
 - (void)awakeFromNib
 {
@@ -28,7 +28,39 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    NSURL *url = [NSURL URLWithString:@"http://localhost/test.php"];
+    NSURL *url = [NSURL URLWithString:@"http://localhost/weed/query"];
+    
+    NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReturnCacheDataElseLoad timeoutInterval:60];
+
+    NSData *returnData = [NSURLConnection sendSynchronousRequest:urlRequest returningResponse: nil error: nil ];
+    NSString *responseString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
+    NSLog(@"%@", responseString);
+    NSDictionary *parsedObject = [NSJSONSerialization JSONObjectWithData:returnData options:0 error:nil];
+    
+    NSArray *results = [parsedObject valueForKey:@"weeds"];
+    self.weeds = [[NSMutableArray alloc] init];
+    for (NSDictionary *weedDic in results) {
+        Weed *weed = [[Weed alloc] init];
+        for (NSString *key in weedDic) {
+            if ([weed respondsToSelector:NSSelectorFromString(key)]) {
+                [weed setValue:[weedDic valueForKey:key] forKey:key];
+            }
+        }
+        [self.weeds addObject:weed];
+    }
+    
+	// Do any additional setup after loading the view, typically from a nib.
+    self.navigationItem.leftBarButtonItem = self.editButtonItem;
+
+    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
+    self.navigationItem.rightBarButtonItem = addButton;
+    self.title = @"Weeds";
+}
+
+- (void)reloadData
+{
+    NSLog(@"I am reloading");
+    NSURL *url = [NSURL URLWithString:@"http://localhost/weed/query"];
     
     NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReturnCacheDataElseLoad timeoutInterval:60];
     
@@ -37,24 +69,17 @@
     NSLog(@"%@", responseString);
     NSDictionary *parsedObject = [NSJSONSerialization JSONObjectWithData:returnData options:0 error:nil];
     
-    NSArray *results = [parsedObject valueForKey:@"users"];
-    self.users = [[NSMutableArray alloc] init];
-    for (NSDictionary *userDic in results) {
-        User *user = [[User alloc] init];
-        for (NSString *key in userDic) {
-            if ([user respondsToSelector:NSSelectorFromString(key)]) {
-                [user setValue:[userDic valueForKey:key] forKey:key];
+    NSArray *results = [parsedObject valueForKey:@"weeds"];
+    self.weeds = [[NSMutableArray alloc] init];
+    for (NSDictionary *weedDic in results) {
+        Weed *weed = [[Weed alloc] init];
+        for (NSString *key in weedDic) {
+            if ([weed respondsToSelector:NSSelectorFromString(key)]) {
+                [weed setValue:[weedDic valueForKey:key] forKey:key];
             }
         }
-        [self.users addObject:user];
+        [self.weeds addObject:weed];
     }
-    
-	// Do any additional setup after loading the view, typically from a nib.
-    self.navigationItem.leftBarButtonItem = self.editButtonItem;
-
-    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
-    self.navigationItem.rightBarButtonItem = addButton;
-    self.title = @"Users";
 }
 
 - (void)didReceiveMemoryWarning
@@ -92,15 +117,19 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _users.count;
+    return _weeds.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MyBasicCell" forIndexPath:indexPath];
-    User *user = [self.users objectAtIndex:indexPath.row];
-    cell.textLabel.text = [NSString stringWithFormat:@"%@", user.username];
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"by %@", user.email];
+    Weed *weed = [self.weeds objectAtIndex:indexPath.row];
+    cell.textLabel.font = [UIFont systemFontOfSize:10.0];
+    cell.textLabel.numberOfLines=5;
+    cell.textLabel.text = [NSString stringWithFormat:@"%@", weed.content];
+    cell.detailTextLabel.font = [UIFont systemFontOfSize:8.0 ];
+    cell.detailTextLabel.textColor = [UIColor grayColor];
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"by %@", weed.email];
 
     return cell;
 }
@@ -137,8 +166,8 @@
 {
     if ([[segue identifier] isEqualToString:@"showDetail"]) {
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-        User *user = [self.users objectAtIndex:indexPath.row];
-        [[segue destinationViewController] setDetailItem:user];
+        Weed *weed = [self.weeds objectAtIndex:indexPath.row];
+        [[segue destinationViewController] setDetailItem:weed];
     }
 }
 
