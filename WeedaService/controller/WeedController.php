@@ -9,7 +9,7 @@ class WeedController extends Controller
 		$db_conn = new DbConnection();
 
 		/* grab the users from the db */
-		$query = "SELECT * FROM weed";
+		$query = "SELECT * FROM weed LEFT JOIN user ON user.id=weed.user_id";
 
 		$result = $db_conn->query($query);
 
