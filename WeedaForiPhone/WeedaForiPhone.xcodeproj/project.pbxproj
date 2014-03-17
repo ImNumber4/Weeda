@@ -26,6 +26,12 @@
 		A914CCD618CD756200B870D8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A914CCD418CD756200B870D8 /* InfoPlist.strings */; };
 		A914CCD818CD756200B870D8 /* WeedaForiPhoneTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A914CCD718CD756200B870D8 /* WeedaForiPhoneTests.m */; };
 		A914CCE718CDAC0A00B870D8 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = A914CCE618CDAC0A00B870D8 /* User.m */; };
+		A953B6EE18D6D7B5001CDD4C /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A953B6ED18D6D7B5001CDD4C /* CFNetwork.framework */; };
+		A953B6F018D6D7BC001CDD4C /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A953B6EF18D6D7BC001CDD4C /* libxml2.dylib */; };
+		A953B6F218D6D7C3001CDD4C /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A953B6F118D6D7C3001CDD4C /* MobileCoreServices.framework */; };
+		A953B6F418D6D7CB001CDD4C /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A953B6F318D6D7CB001CDD4C /* QuartzCore.framework */; };
+		A953B6F618D6D7D2001CDD4C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A953B6F518D6D7D2001CDD4C /* Security.framework */; };
+		A953B6F818D6D7DB001CDD4C /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A953B6F718D6D7DB001CDD4C /* SystemConfiguration.framework */; };
 		A97251E618D65D7A0020844D /* Weed.m in Sources */ = {isa = PBXBuildFile; fileRef = A97251E518D65D7A0020844D /* Weed.m */; };
 /* End PBXBuildFile section */
 
@@ -36,6 +42,41 @@
 			proxyType = 1;
 			remoteGlobalIDString = A914CC9F18CD756200B870D8;
 			remoteInfo = WeedaForiPhone;
+		};
+		A953B6E318D6D794001CDD4C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A953B6DC18D6D794001CDD4C /* RestKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 25160D1614564E810060A5C5;
+			remoteInfo = RestKit;
+		};
+		A953B6E518D6D794001CDD4C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A953B6DC18D6D794001CDD4C /* RestKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 25160D2614564E820060A5C5;
+			remoteInfo = RestKitTests;
+		};
+		A953B6E718D6D794001CDD4C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A953B6DC18D6D794001CDD4C /* RestKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 25160E62145651060060A5C5;
+			remoteInfo = RestKitFramework;
+		};
+		A953B6E918D6D794001CDD4C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A953B6DC18D6D794001CDD4C /* RestKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 25160E78145651060060A5C5;
+			remoteInfo = RestKitFrameworkTests;
+		};
+		A953B6EB18D6D7A1001CDD4C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A953B6DC18D6D794001CDD4C /* RestKit.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 25160D1514564E810060A5C5;
+			remoteInfo = RestKit;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -65,6 +106,13 @@
 		A914CCD718CD756200B870D8 /* WeedaForiPhoneTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WeedaForiPhoneTests.m; sourceTree = "<group>"; };
 		A914CCE318CD771300B870D8 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = User.h; path = WeedaForiPhone/User.h; sourceTree = "<group>"; };
 		A914CCE618CDAC0A00B870D8 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = User.m; path = WeedaForiPhone/User.m; sourceTree = "<group>"; };
+		A953B6DC18D6D794001CDD4C /* RestKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RestKit.xcodeproj; path = RestKit/RestKit.xcodeproj; sourceTree = "<group>"; };
+		A953B6ED18D6D7B5001CDD4C /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		A953B6EF18D6D7BC001CDD4C /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
+		A953B6F118D6D7C3001CDD4C /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		A953B6F318D6D7CB001CDD4C /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		A953B6F518D6D7D2001CDD4C /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		A953B6F718D6D7DB001CDD4C /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		A97251E418D65D7A0020844D /* Weed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Weed.h; path = WeedaForiPhone/Weed.h; sourceTree = "<group>"; };
 		A97251E518D65D7A0020844D /* Weed.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Weed.m; path = WeedaForiPhone/Weed.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -74,6 +122,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A953B6F818D6D7DB001CDD4C /* SystemConfiguration.framework in Frameworks */,
+				A953B6F618D6D7D2001CDD4C /* Security.framework in Frameworks */,
+				A953B6F418D6D7CB001CDD4C /* QuartzCore.framework in Frameworks */,
+				A953B6F218D6D7C3001CDD4C /* MobileCoreServices.framework in Frameworks */,
+				A953B6F018D6D7BC001CDD4C /* libxml2.dylib in Frameworks */,
+				A953B6EE18D6D7B5001CDD4C /* CFNetwork.framework in Frameworks */,
 				A914CCA618CD756200B870D8 /* CoreGraphics.framework in Frameworks */,
 				A914CCAA18CD756200B870D8 /* CoreData.framework in Frameworks */,
 				A914CCA818CD756200B870D8 /* UIKit.framework in Frameworks */,
@@ -98,6 +152,7 @@
 		A914CC9718CD756200B870D8 = {
 			isa = PBXGroup;
 			children = (
+				A953B6DC18D6D794001CDD4C /* RestKit.xcodeproj */,
 				A914CCE218CD76C500B870D8 /* Model */,
 				A914CCAB18CD756200B870D8 /* WeedaForiPhone */,
 				A914CCD118CD756200B870D8 /* WeedaForiPhoneTests */,
@@ -118,6 +173,12 @@
 		A914CCA218CD756200B870D8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A953B6F718D6D7DB001CDD4C /* SystemConfiguration.framework */,
+				A953B6F518D6D7D2001CDD4C /* Security.framework */,
+				A953B6F318D6D7CB001CDD4C /* QuartzCore.framework */,
+				A953B6F118D6D7C3001CDD4C /* MobileCoreServices.framework */,
+				A953B6EF18D6D7BC001CDD4C /* libxml2.dylib */,
+				A953B6ED18D6D7B5001CDD4C /* CFNetwork.framework */,
 				A914CCA318CD756200B870D8 /* Foundation.framework */,
 				A914CCA518CD756200B870D8 /* CoreGraphics.framework */,
 				A914CCA718CD756200B870D8 /* UIKit.framework */,
@@ -184,6 +245,17 @@
 			name = Model;
 			sourceTree = "<group>";
 		};
+		A953B6DD18D6D794001CDD4C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A953B6E418D6D794001CDD4C /* libRestKit.a */,
+				A953B6E618D6D794001CDD4C /* RestKitTests.octest */,
+				A953B6E818D6D794001CDD4C /* RestKit.framework */,
+				A953B6EA18D6D794001CDD4C /* RestKitFrameworkTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -198,6 +270,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				A953B6EC18D6D7A1001CDD4C /* PBXTargetDependency */,
 			);
 			name = WeedaForiPhone;
 			productName = WeedaForiPhone;
@@ -247,6 +320,12 @@
 			mainGroup = A914CC9718CD756200B870D8;
 			productRefGroup = A914CCA118CD756200B870D8 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = A953B6DD18D6D794001CDD4C /* Products */;
+					ProjectRef = A953B6DC18D6D794001CDD4C /* RestKit.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				A914CC9F18CD756200B870D8 /* WeedaForiPhone */,
@@ -254,6 +333,37 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		A953B6E418D6D794001CDD4C /* libRestKit.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRestKit.a;
+			remoteRef = A953B6E318D6D794001CDD4C /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A953B6E618D6D794001CDD4C /* RestKitTests.octest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = RestKitTests.octest;
+			remoteRef = A953B6E518D6D794001CDD4C /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A953B6E818D6D794001CDD4C /* RestKit.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = RestKit.framework;
+			remoteRef = A953B6E718D6D794001CDD4C /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A953B6EA18D6D794001CDD4C /* RestKitFrameworkTests.octest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = RestKitFrameworkTests.octest;
+			remoteRef = A953B6E918D6D794001CDD4C /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		A914CC9E18CD756200B870D8 /* Resources */ = {
@@ -306,6 +416,11 @@
 			isa = PBXTargetDependency;
 			target = A914CC9F18CD756200B870D8 /* WeedaForiPhone */;
 			targetProxy = A914CCCF18CD756200B870D8 /* PBXContainerItemProxy */;
+		};
+		A953B6EC18D6D7A1001CDD4C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = RestKit;
+			targetProxy = A953B6EB18D6D7A1001CDD4C /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -414,7 +529,9 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "WeedaForiPhone/WeedaForiPhone-Prefix.pch";
+				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"";
 				INFOPLIST_FILE = "WeedaForiPhone/WeedaForiPhone-Info.plist";
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -427,7 +544,9 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "WeedaForiPhone/WeedaForiPhone-Prefix.pch";
+				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"";
 				INFOPLIST_FILE = "WeedaForiPhone/WeedaForiPhone-Info.plist";
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

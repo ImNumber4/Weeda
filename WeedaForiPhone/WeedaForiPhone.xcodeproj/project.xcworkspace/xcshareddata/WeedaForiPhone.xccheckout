@@ -12,6 +12,8 @@
 	<dict>
 		<key>603D3B30-2540-4A29-8233-8FA7874C86AC</key>
 		<string>https://github.com/ImNumber4/Weeda.git</string>
+		<key>7AFB0A53-E2CC-41FA-A776-D9377407C059</key>
+		<string>https://github.com/blakewatters/ISO8601DateFormatterValueTransformer.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>WeedaForiPhone/WeedaForiPhone.xcodeproj/project.xcworkspace</string>
@@ -19,6 +21,8 @@
 	<dict>
 		<key>603D3B30-2540-4A29-8233-8FA7874C86AC</key>
 		<string>../../..</string>
+		<key>7AFB0A53-E2CC-41FA-A776-D9377407C059</key>
+		<string>../../RestKit/Vendor/ISO8601DateFormatterValueTransformer</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/ImNumber4/Weeda.git</string>
@@ -28,6 +32,14 @@
 	<string>603D3B30-2540-4A29-8233-8FA7874C86AC</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>7AFB0A53-E2CC-41FA-A776-D9377407C059</string>
+			<key>IDESourceControlWCCName</key>
+			<string>ISO8601DateFormatterValueTransformer</string>
+		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>

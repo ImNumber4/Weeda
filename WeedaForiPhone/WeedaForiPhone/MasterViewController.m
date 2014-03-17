@@ -7,7 +7,7 @@
 //
 
 #import "MasterViewController.h"
-
+#import <RestKit/RestKit.h>
 #import "DetailViewController.h"
 #import "Weed.h"
 
