@@ -36,7 +36,6 @@
         NSString *email = [[self.detailItem valueForKey:@"email"] description];
         self.userLabel.text = [NSString stringWithFormat:@"%@(%@)", username, email];
         self.detailDescriptionLabel.text = [NSString stringWithFormat:@"%@", content];
-        self.detailDescriptionLabel.font = [UIFont systemFontOfSize:10.0];
         self.detailDescriptionLabel.numberOfLines=5;
         self.userLabel.font = [UIFont systemFontOfSize:8.0 ];
         self.userLabel.textColor = [UIColor grayColor];

@@ -124,7 +124,6 @@
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MyBasicCell" forIndexPath:indexPath];
     Weed *weed = [self.weeds objectAtIndex:indexPath.row];
-    cell.textLabel.font = [UIFont systemFontOfSize:10.0];
     cell.textLabel.numberOfLines=5;
     cell.textLabel.text = [NSString stringWithFormat:@"%@", weed.content];
     cell.detailTextLabel.font = [UIFont systemFontOfSize:8.0 ];
