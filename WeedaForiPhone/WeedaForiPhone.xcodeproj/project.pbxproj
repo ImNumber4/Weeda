@@ -15,7 +15,6 @@
 		A914CCB218CD756200B870D8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A914CCB118CD756200B870D8 /* main.m */; };
 		A914CCB618CD756200B870D8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A914CCB518CD756200B870D8 /* AppDelegate.m */; };
 		A914CCB918CD756200B870D8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A914CCB718CD756200B870D8 /* Main.storyboard */; };
-		A914CCBC18CD756200B870D8 /* WeedaForiPhone.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A914CCBA18CD756200B870D8 /* WeedaForiPhone.xcdatamodeld */; };
 		A914CCBF18CD756200B870D8 /* MasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A914CCBE18CD756200B870D8 /* MasterViewController.m */; };
 		A914CCC218CD756200B870D8 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A914CCC118CD756200B870D8 /* DetailViewController.m */; };
 		A914CCC418CD756200B870D8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A914CCC318CD756200B870D8 /* Images.xcassets */; };
@@ -25,14 +24,17 @@
 		A914CCCE18CD756200B870D8 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A914CCA918CD756200B870D8 /* CoreData.framework */; };
 		A914CCD618CD756200B870D8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A914CCD418CD756200B870D8 /* InfoPlist.strings */; };
 		A914CCD818CD756200B870D8 /* WeedaForiPhoneTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A914CCD718CD756200B870D8 /* WeedaForiPhoneTests.m */; };
-		A914CCE718CDAC0A00B870D8 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = A914CCE618CDAC0A00B870D8 /* User.m */; };
 		A953B6EE18D6D7B5001CDD4C /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A953B6ED18D6D7B5001CDD4C /* CFNetwork.framework */; };
 		A953B6F018D6D7BC001CDD4C /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A953B6EF18D6D7BC001CDD4C /* libxml2.dylib */; };
 		A953B6F218D6D7C3001CDD4C /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A953B6F118D6D7C3001CDD4C /* MobileCoreServices.framework */; };
 		A953B6F418D6D7CB001CDD4C /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A953B6F318D6D7CB001CDD4C /* QuartzCore.framework */; };
 		A953B6F618D6D7D2001CDD4C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A953B6F518D6D7D2001CDD4C /* Security.framework */; };
 		A953B6F818D6D7DB001CDD4C /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A953B6F718D6D7DB001CDD4C /* SystemConfiguration.framework */; };
-		A97251E618D65D7A0020844D /* Weed.m in Sources */ = {isa = PBXBuildFile; fileRef = A97251E518D65D7A0020844D /* Weed.m */; };
+		A953B6FE18D6D9DB001CDD4C /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A953B6FC18D6D9DB001CDD4C /* Model.xcdatamodeld */; };
+		A953B70418DF7FA4001CDD4C /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = A953B70318DF7FA4001CDD4C /* User.m */; };
+		A953B70718DF7FA4001CDD4C /* Weed.m in Sources */ = {isa = PBXBuildFile; fileRef = A953B70618DF7FA4001CDD4C /* Weed.m */; };
+		A953B70A18DF8386001CDD4C /* RemoteObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A953B70918DF8386001CDD4C /* RemoteObject.m */; };
+		A953B70B18DF8E42001CDD4C /* libRestKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A953B6E418D6D794001CDD4C /* libRestKit.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -93,7 +95,6 @@
 		A914CCB418CD756200B870D8 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		A914CCB518CD756200B870D8 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		A914CCB818CD756200B870D8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		A914CCBB18CD756200B870D8 /* WeedaForiPhone.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = WeedaForiPhone.xcdatamodel; sourceTree = "<group>"; };
 		A914CCBD18CD756200B870D8 /* MasterViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MasterViewController.h; sourceTree = "<group>"; };
 		A914CCBE18CD756200B870D8 /* MasterViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MasterViewController.m; sourceTree = "<group>"; };
 		A914CCC018CD756200B870D8 /* DetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
@@ -104,8 +105,6 @@
 		A914CCD318CD756200B870D8 /* WeedaForiPhoneTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "WeedaForiPhoneTests-Info.plist"; sourceTree = "<group>"; };
 		A914CCD518CD756200B870D8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A914CCD718CD756200B870D8 /* WeedaForiPhoneTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WeedaForiPhoneTests.m; sourceTree = "<group>"; };
-		A914CCE318CD771300B870D8 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = User.h; path = WeedaForiPhone/User.h; sourceTree = "<group>"; };
-		A914CCE618CDAC0A00B870D8 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = User.m; path = WeedaForiPhone/User.m; sourceTree = "<group>"; };
 		A953B6DC18D6D794001CDD4C /* RestKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RestKit.xcodeproj; path = RestKit/RestKit.xcodeproj; sourceTree = "<group>"; };
 		A953B6ED18D6D7B5001CDD4C /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		A953B6EF18D6D7BC001CDD4C /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
@@ -113,8 +112,13 @@
 		A953B6F318D6D7CB001CDD4C /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		A953B6F518D6D7D2001CDD4C /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		A953B6F718D6D7DB001CDD4C /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
-		A97251E418D65D7A0020844D /* Weed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Weed.h; path = WeedaForiPhone/Weed.h; sourceTree = "<group>"; };
-		A97251E518D65D7A0020844D /* Weed.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Weed.m; path = WeedaForiPhone/Weed.m; sourceTree = "<group>"; };
+		A953B6FD18D6D9DB001CDD4C /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		A953B70218DF7FA4001CDD4C /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = User.h; path = WeedaForiPhone/Model/User.h; sourceTree = "<group>"; };
+		A953B70318DF7FA4001CDD4C /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = User.m; path = WeedaForiPhone/Model/User.m; sourceTree = "<group>"; };
+		A953B70518DF7FA4001CDD4C /* Weed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Weed.h; path = WeedaForiPhone/Model/Weed.h; sourceTree = "<group>"; };
+		A953B70618DF7FA4001CDD4C /* Weed.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Weed.m; path = WeedaForiPhone/Model/Weed.m; sourceTree = "<group>"; };
+		A953B70818DF8386001CDD4C /* RemoteObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RemoteObject.h; path = WeedaForiPhone/Model/RemoteObject.h; sourceTree = "<group>"; };
+		A953B70918DF8386001CDD4C /* RemoteObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RemoteObject.m; path = WeedaForiPhone/Model/RemoteObject.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +126,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A953B70B18DF8E42001CDD4C /* libRestKit.a in Frameworks */,
 				A953B6F818D6D7DB001CDD4C /* SystemConfiguration.framework in Frameworks */,
 				A953B6F618D6D7D2001CDD4C /* Security.framework in Frameworks */,
 				A953B6F418D6D7CB001CDD4C /* QuartzCore.framework in Frameworks */,
@@ -199,7 +204,6 @@
 				A914CCC018CD756200B870D8 /* DetailViewController.h */,
 				A914CCC118CD756200B870D8 /* DetailViewController.m */,
 				A914CCC318CD756200B870D8 /* Images.xcassets */,
-				A914CCBA18CD756200B870D8 /* WeedaForiPhone.xcdatamodeld */,
 				A914CCAC18CD756200B870D8 /* Supporting Files */,
 			);
 			path = WeedaForiPhone;
@@ -237,10 +241,13 @@
 		A914CCE218CD76C500B870D8 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				A914CCE618CDAC0A00B870D8 /* User.m */,
-				A914CCE318CD771300B870D8 /* User.h */,
-				A97251E418D65D7A0020844D /* Weed.h */,
-				A97251E518D65D7A0020844D /* Weed.m */,
+				A953B6FC18D6D9DB001CDD4C /* Model.xcdatamodeld */,
+				A953B70518DF7FA4001CDD4C /* Weed.h */,
+				A953B70618DF7FA4001CDD4C /* Weed.m */,
+				A953B70218DF7FA4001CDD4C /* User.h */,
+				A953B70318DF7FA4001CDD4C /* User.m */,
+				A953B70818DF8386001CDD4C /* RemoteObject.h */,
+				A953B70918DF8386001CDD4C /* RemoteObject.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -391,13 +398,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A953B70418DF7FA4001CDD4C /* User.m in Sources */,
+				A953B6FE18D6D9DB001CDD4C /* Model.xcdatamodeld in Sources */,
 				A914CCC218CD756200B870D8 /* DetailViewController.m in Sources */,
 				A914CCBF18CD756200B870D8 /* MasterViewController.m in Sources */,
-				A914CCE718CDAC0A00B870D8 /* User.m in Sources */,
-				A914CCBC18CD756200B870D8 /* WeedaForiPhone.xcdatamodeld in Sources */,
+				A953B70A18DF8386001CDD4C /* RemoteObject.m in Sources */,
 				A914CCB618CD756200B870D8 /* AppDelegate.m in Sources */,
+				A953B70718DF7FA4001CDD4C /* Weed.m in Sources */,
 				A914CCB218CD756200B870D8 /* main.m in Sources */,
-				A97251E618D65D7A0020844D /* Weed.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -531,6 +539,7 @@
 				GCC_PREFIX_HEADER = "WeedaForiPhone/WeedaForiPhone-Prefix.pch";
 				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"";
 				INFOPLIST_FILE = "WeedaForiPhone/WeedaForiPhone-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
@@ -546,6 +555,7 @@
 				GCC_PREFIX_HEADER = "WeedaForiPhone/WeedaForiPhone-Prefix.pch";
 				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"";
 				INFOPLIST_FILE = "WeedaForiPhone/WeedaForiPhone-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
@@ -625,13 +635,13 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		A914CCBA18CD756200B870D8 /* WeedaForiPhone.xcdatamodeld */ = {
+		A953B6FC18D6D9DB001CDD4C /* Model.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				A914CCBB18CD756200B870D8 /* WeedaForiPhone.xcdatamodel */,
+				A953B6FD18D6D9DB001CDD4C /* Model.xcdatamodel */,
 			);
-			currentVersion = A914CCBB18CD756200B870D8 /* WeedaForiPhone.xcdatamodel */;
-			path = WeedaForiPhone.xcdatamodeld;
+			currentVersion = A953B6FD18D6D9DB001CDD4C /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

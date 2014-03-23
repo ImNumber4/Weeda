@@ -16,10 +16,10 @@
 
 #pragma mark - Managing the detail item
 
-- (void)setDetailItem:(id)newDetailItem
+- (void)setWeed:(Weed*)newDetailItem
 {
-    if (_detailItem != newDetailItem) {
-        _detailItem = newDetailItem;
+    if (_weed != newDetailItem) {
+        _weed = newDetailItem;
         
         // Update the view.
         [self configureView];
@@ -30,10 +30,10 @@
 {
     // Update the user interface for the detail item.
 
-    if (self.detailItem) {
-        NSString *content = [[self.detailItem valueForKey:@"content"] description];
-        NSString *username = [[self.detailItem valueForKey:@"username"] description];
-        NSString *email = [[self.detailItem valueForKey:@"email"] description];
+    if (self.weed) {
+        NSString *content = self.weed.content;
+        NSString *username = self.weed.user.username;
+        NSString *email = self.weed.user.email;
         self.userLabel.text = [NSString stringWithFormat:@"%@(%@)", username, email];
         self.detailDescriptionLabel.text = [NSString stringWithFormat:@"%@", content];
         self.detailDescriptionLabel.numberOfLines=5;

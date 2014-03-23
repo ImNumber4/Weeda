@@ -7,9 +7,10 @@
 //
 
 #import "MasterViewController.h"
-#import <RestKit/RestKit.h>
 #import "DetailViewController.h"
+#import <RestKit/RestKit.h>
 #import "Weed.h"
+#import "User.h"
 
 
 @interface MasterViewController ()
@@ -28,27 +29,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    NSURL *url = [NSURL URLWithString:@"http://localhost/weed/query"];
     
-    NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReturnCacheDataElseLoad timeoutInterval:60];
-
-    NSData *returnData = [NSURLConnection sendSynchronousRequest:urlRequest returningResponse: nil error: nil ];
-    NSString *responseString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
-    NSLog(@"%@", responseString);
-    NSDictionary *parsedObject = [NSJSONSerialization JSONObjectWithData:returnData options:0 error:nil];
-    
-    NSArray *results = [parsedObject valueForKey:@"weeds"];
-    self.weeds = [[NSMutableArray alloc] init];
-    for (NSDictionary *weedDic in results) {
-        Weed *weed = [[Weed alloc] init];
-        for (NSString *key in weedDic) {
-            if ([weed respondsToSelector:NSSelectorFromString(key)]) {
-                [weed setValue:[weedDic valueForKey:key] forKey:key];
-            }
-        }
-        [self.weeds addObject:weed];
-    }
-    
+    [[RKObjectManager sharedManager] getObjectsAtPath:@"classes/Weed" parameters:@{@"include" : @"user"} success:nil failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        
+        NSLog(@"Error: %@",error);
+    }];
 	// Do any additional setup after loading the view, typically from a nib.
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
 
@@ -57,30 +42,6 @@
     self.title = @"Weeds";
 }
 
-- (void)reloadData
-{
-    NSLog(@"I am reloading");
-    NSURL *url = [NSURL URLWithString:@"http://localhost/weed/query"];
-    
-    NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReturnCacheDataElseLoad timeoutInterval:60];
-    
-    NSData *returnData = [NSURLConnection sendSynchronousRequest:urlRequest returningResponse: nil error: nil ];
-    NSString *responseString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
-    NSLog(@"%@", responseString);
-    NSDictionary *parsedObject = [NSJSONSerialization JSONObjectWithData:returnData options:0 error:nil];
-    
-    NSArray *results = [parsedObject valueForKey:@"weeds"];
-    self.weeds = [[NSMutableArray alloc] init];
-    for (NSDictionary *weedDic in results) {
-        Weed *weed = [[Weed alloc] init];
-        for (NSString *key in weedDic) {
-            if ([weed respondsToSelector:NSSelectorFromString(key)]) {
-                [weed setValue:[weedDic valueForKey:key] forKey:key];
-            }
-        }
-        [self.weeds addObject:weed];
-    }
-}
 
 - (void)didReceiveMemoryWarning
 {
@@ -117,19 +78,21 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _weeds.count;
+    id sectionInfo = [[self.fetchedResultsController sections] objectAtIndex:section];
+    return [sectionInfo numberOfObjects];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MyBasicCell" forIndexPath:indexPath];
-    Weed *weed = [self.weeds objectAtIndex:indexPath.row];
+    static NSString *CellIdentifier = @"MyBasicCell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    Weed *weed = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.textLabel.numberOfLines=5;
     cell.textLabel.text = [NSString stringWithFormat:@"%@", weed.content];
     cell.detailTextLabel.font = [UIFont systemFontOfSize:8.0 ];
     cell.detailTextLabel.textColor = [UIColor grayColor];
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"by %@", weed.email];
-
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"by %@", weed.user.email];
+    
     return cell;
 }
 
@@ -165,46 +128,58 @@
 {
     if ([[segue identifier] isEqualToString:@"showDetail"]) {
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-        Weed *weed = [self.weeds objectAtIndex:indexPath.row];
-        [[segue destinationViewController] setDetailItem:weed];
+        Weed *weed = [[self fetchedResultsController] objectAtIndexPath:indexPath];
+        [[segue destinationViewController] setWeed:weed];
     }
+}
+
+- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView{
+    
+    return [self.fetchedResultsController sectionIndexTitles];
+    
+}
+
+- (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index{
+    
+    return [self.fetchedResultsController sectionForSectionIndexTitle:title atIndex:index];
+    
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    id  sectionInfo = [[self.fetchedResultsController sections] objectAtIndex:section];
+    
+    return [sectionInfo name];
+}
+
+#pragma mark - NSFetchedResultsControllerDelegate
+
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller{
+    [self.tableView reloadData];
 }
 
 #pragma mark - Fetched results controller
 
 - (NSFetchedResultsController *)fetchedResultsController
 {
-    if (_fetchedResultsController != nil) {
-        return _fetchedResultsController;
+    if (!_fetchedResultsController) {
+        
+        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Weed class])];
+        
+        fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"user.username" ascending:YES]];
+        
+        self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:[RKManagedObjectStore defaultStore].mainQueueManagedObjectContext sectionNameKeyPath:@"user.username" cacheName:@"Weed"];
+        self.fetchedResultsController.delegate = self;
+        
+        NSError *error;
+        
+        [self.fetchedResultsController performFetch:&error];
+        
+        NSLog(@"%@",[self.fetchedResultsController fetchedObjects]);
+        
+        NSAssert(!error, @"Error performing fetch request: %@", error);
+        
     }
-    
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    // Edit the entity name as appropriate.
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Event" inManagedObjectContext:self.managedObjectContext];
-    [fetchRequest setEntity:entity];
-    
-    // Set the batch size to a suitable number.
-    [fetchRequest setFetchBatchSize:20];
-    
-    // Edit the sort key as appropriate.
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"timeStamp" ascending:NO];
-    NSArray *sortDescriptors = @[sortDescriptor];
-    
-    [fetchRequest setSortDescriptors:sortDescriptors];
-    
-    // Edit the section name key path and cache name if appropriate.
-    // nil for section name key path means "no sections".
-    NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:self.managedObjectContext sectionNameKeyPath:nil cacheName:@"Master"];
-    aFetchedResultsController.delegate = self;
-    self.fetchedResultsController = aFetchedResultsController;
-    
-	NSError *error = nil;
-	if (![self.fetchedResultsController performFetch:&error]) {
-	     // Replace this implementation with code to handle the error appropriately.
-	     // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. 
-	    NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-	    abort();
-	}
     
     return _fetchedResultsController;
 }    
@@ -252,11 +227,6 @@
             [tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
             break;
     }
-}
-
-- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
-{
-    [self.tableView endUpdates];
 }
 
 /*
