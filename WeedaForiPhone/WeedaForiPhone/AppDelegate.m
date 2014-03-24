@@ -24,7 +24,7 @@
 
 - (void)setupRestKit{
     
-    RKObjectManager *manager = [RKObjectManager managerWithBaseURL:[NSURL URLWithString:@"http://localhost/weed/query"]];
+    RKObjectManager *manager = [RKObjectManager managerWithBaseURL:[NSURL URLWithString:@"http://localhost/"]];
     
     //[[manager HTTPClient] setDefaultHeader:@"X-Parse-REST-API-Key" value:@"your key"];
     //[[manager HTTPClient] setDefaultHeader:@"X-Parse-Application-Id" value:@"your key"];
@@ -62,8 +62,8 @@
     [userMapping addAttributeMappingsFromDictionary:parentObjectMapping];
     [manager addResponseDescriptorsFromArray:@[
                                                [RKResponseDescriptor responseDescriptorWithMapping:userMapping
-                                                                                       pathPattern:@"classes/User"
-                                                                                           keyPath:@"weeds"
+                                                                                       pathPattern:@"user/query"
+                                                                                           keyPath:@"users"
                                                                                        statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)]]];
     
     RKEntityMapping *weedMapping = [RKEntityMapping mappingForEntityForName:NSStringFromClass([Weed class]) inManagedObjectStore:managedObjectStore];
@@ -81,7 +81,7 @@
     [manager addResponseDescriptorsFromArray:@[
                                                
                                                [RKResponseDescriptor responseDescriptorWithMapping:weedMapping
-                                                                                       pathPattern:@"classes/Weed"
+                                                                                       pathPattern:@"weed/query"
                                                                                            keyPath:@"weeds"                                         statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)]
                                                ]];
     

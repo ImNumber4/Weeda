@@ -66,7 +66,7 @@
         NSLog(@"Error: %@",error);
     }
     // Load the object model via RestKit
-    [[RKObjectManager sharedManager] getObjectsAtPath:@"classes/Weed" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+    [[RKObjectManager sharedManager] getObjectsAtPath:@"weed/query" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
         RKLogInfo(@"Load complete: Table should refresh...");
         
         [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:@"time"];
@@ -80,7 +80,7 @@
 
 -(void)refreshView:(UIRefreshControl *)refresh {
     refresh.attributedTitle = [[NSAttributedString alloc] initWithString:@"Refreshing data..."];
-    [self.tableView reloadData];
+
     [self loadData];
     
 
@@ -101,12 +101,6 @@
 - (void)insertNewObject:(id)sender
 {
     NSManagedObjectContext *context = [self.fetchedResultsController managedObjectContext];
-    NSEntityDescription *entity = [[self.fetchedResultsController fetchRequest] entity];
-    NSManagedObject *newManagedObject = [NSEntityDescription insertNewObjectForEntityForName:[entity name] inManagedObjectContext:context];
-    
-    // If appropriate, configure the new managed object.
-    // Normally you should use accessor methods, but using KVC here avoids the need to add a custom class to the template.
-    [newManagedObject setValue:[NSDate date] forKey:@"timeStamp"];
     
     // Save the context.
     NSError *error = nil;
@@ -116,6 +110,25 @@
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
     }
+    
+    RKManagedObjectStore *objectStore = [[RKObjectManager sharedManager] managedObjectStore];
+    Weed *weed = [NSEntityDescription insertNewObjectForEntityForName:@"Weed" inManagedObjectContext:objectStore.mainQueueManagedObjectContext];
+    NSNumber * id = [[NSNumber alloc] initWithInteger:100];
+    NSString * content = @"TestAdd";
+    
+    // If appropriate, configure the new managed object.
+    // Normally you should use accessor methods, but using KVC here avoids the need to add a custom class to the template.
+    weed.id = id;
+    weed.content = content;
+    
+    [[RKObjectManager sharedManager] postObject:weed path:@"weed/create" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+        NSLog(@"Success saving post");
+    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        NSLog(@"Failure saving post: %@", error.localizedDescription);
+    }];
+
+    
+    [self.tableView reloadData];
 }
 
 #pragma mark - Table View
@@ -205,6 +218,7 @@
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller{
     [self.tableView reloadData];
+    [self loadData];
 }
   
 
