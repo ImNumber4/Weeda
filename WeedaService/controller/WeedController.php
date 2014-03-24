@@ -3,7 +3,6 @@
 class WeedController extends Controller
 {
 	public function query() {
-		include("db/dbconnect.php");
 
 		/* connect to the db */
 		$db_conn = new DbConnection();
@@ -27,8 +26,24 @@ class WeedController extends Controller
 		header('Content-type: application/json');
 		echo json_encode(array('weeds'=>$weeds));
 	}
+	
+	public function create() {
+		error_log('Creating the post.');
+		
+		$db_conn = new DbConnection();
+		
+		error_log("content: ". $this->model->get_content());
+		$query = 'INSERT INTO weed (content, user_id, time) VALUES (\'' . $this->model->get_content() . '\',\'' . $this->model->get_user_id() . '\',\'' . $this->model->get_time() . '\')';
+		error_log('execute sql command: '. $query);
+		
+		$result = $db_conn->query($query);
+		
+		header('Content-type: aplication/json');
+		if ($result != TRUE) {
+			header_status(500);
+			die("Create weed failed.");
+		}
+		header_status(200);	
+	}
 }
-
-
-
 ?>

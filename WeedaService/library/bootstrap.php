@@ -3,19 +3,48 @@
 // stop error reporting for curious eyes, should be set to E_ALL when debugging
 error_reporting(0);
 // name of folder that application class files reside in
-define('CLASSDIR', 'controller');
+define('CONTROLLER', 'controller');
+// name of folder that model class files reside in
+define('MODEL', 'model');
+// name of folder that db class in
+define('DB', 'db');
 // application absolute path to source files (should reside on a folder one level behind the public one)
-define('BASEDIR', @realpath(dirname(__FILE__).'/../'.CLASSDIR).'/');
+define('CONTROLLERDIR', @realpath(dirname(__FILE__).'/../'.CONTROLLER).'/');
+define('MODELDIR', @realpath(dirname(__FILE__).'/../'.MODEL).'/');
+define('DBDIR', @realpath(dirname(__FILE__).'/../'.DB).'/');
+
 // function to autoload classes (getting rid of include() calls)
 function __autoload($class)
 {
-	$file = BASEDIR.$class.'.php';
-	if (!file_exists($file))
-	{
-		echo 'Requested module \''.$class.'\' is missing. Execution stopped.';
-		exit();
+	error_log('Init class '. $class);
+	
+	try {
+		$file = CONTROLLERDIR.$class.'.php';
+		if (file_exists($file)) {
+			error_log("require: ".$file);
+			require($file);
+			return;
+		}
+
+		$model_file = MODELDIR.$class.'.php';
+		if (file_exists($model_file)) {
+			error_log("require: ".$model_file);
+			require($model_file);
+			return;
+		}
+
+		$db_file = DBDIR.$class.'.php';
+		if (file_exists($db_file)) {
+			error_log("require: ".$db_file);
+			require($db_file);
+			return;
+		}
+	} catch (Exception $e) {
+		error_log($e->getMessage());
 	}
-	require($file);
+	
+	
+	error_log('Requested module \''.$class.'\' is missing. Execution stopped.');
 }
 // the router code, breaks request uri to parts and retrieves the specific class, method and arguments
 // $route = '';

@@ -2,12 +2,13 @@
 
 define('DS', DIRECTORY_SEPARATOR);
 define('SYSTEM', dirname(dirname(__FILE__)));
+//Load Configuration File
+require (SYSTEM . DS . 'WeedaService/library' . DS . 'bootstrap.php');
 
 //Get URL
 $url = isset($_GET['url']) ? $_GET['url']: '';
+error_log('request url: '. $url);
 
-//Load Configuration File
-require_once (SYSTEM . DS . 'WeedaService/library' . DS . 'bootstrap.php');
 
 Hook($url);
 
@@ -24,9 +25,13 @@ function Hook($url) {
 
         $controllerName = $controller;
         $controller = ucwords($controller).'Controller';
-        $model = trim($controller);
-
-        $dispatch = new $controller($model,$controllerName,$action);
+        $model = $controllerName;
+		
+		try {
+			$dispatch = new $controller($model,$controllerName,$action);
+		} catch (Exception $e) {
+			error_log($e->getMessage());
+		}
 
         if ((int)method_exists($controller, $action)) {
             call_user_func_array(array($dispatch,$action),$stringParameter);

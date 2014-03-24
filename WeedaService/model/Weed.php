@@ -1,5 +1,6 @@
 <?php
-	
+class Weed
+{	
 	private $id;
 	
 	private $content;
@@ -7,6 +8,13 @@
 	private $user_id;
 	
 	private $time;
+	
+	public function __construct($postData) {
+		error_log("Create model weed: " . $postData->content);
+		$this->content = $postData->content;
+		$this->user_id = $postData->user_id;
+		$this->time = date('Y-m-d H:i:s');
+	}
 	
 	public function set_id($id) {
 		$this->id = $id;
@@ -39,4 +47,5 @@
 	public function get_time() {
 		return $this->time;
 	}
+}
 ?>
