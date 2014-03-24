@@ -13,13 +13,13 @@
 #import "User.h"
 
 
-@interface MasterViewController ()
+@interface MasterViewController () <UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate>
+@property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
 @end
 
 @implementation MasterViewController
 
-@synthesize weeds = _weeds;
 
 - (void)awakeFromNib
 {
@@ -28,18 +28,67 @@
 
 - (void)viewDidLoad
 {
+    
     [super viewDidLoad];
     
-    [[RKObjectManager sharedManager] getObjectsAtPath:@"classes/Weed" parameters:@{@"include" : @"user"} success:nil failure:^(RKObjectRequestOperation *operation, NSError *error) {
-        
-        NSLog(@"Error: %@",error);
-    }];
 	// Do any additional setup after loading the view, typically from a nib.
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
 
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
     self.navigationItem.rightBarButtonItem = addButton;
     self.title = @"Weeds";
+    
+    
+    UIRefreshControl *refresh = [[UIRefreshControl alloc] init];
+    refresh.attributedTitle = [[NSAttributedString alloc] initWithString:@"Pull to Refresh"];
+    [refresh addTarget:self action:@selector(refreshView:) forControlEvents:UIControlEventValueChanged];
+    self.refreshControl = refresh;
+    
+    [self loadData];
+    
+}
+
+- (void)loadData
+{
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Weed"];
+    NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"time" ascending:NO];
+    fetchRequest.sortDescriptors = @[descriptor];
+    NSError *error = nil;
+    
+    // Setup fetched results
+    self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
+                                                                        managedObjectContext:[RKManagedObjectStore defaultStore].mainQueueManagedObjectContext
+                                                                          sectionNameKeyPath:nil
+                                                                                   cacheName:nil];
+    [self.fetchedResultsController setDelegate:self];
+    BOOL fetchSuccessful = [self.fetchedResultsController performFetch:&error];
+    if (! fetchSuccessful) {
+        NSLog(@"Error: %@",error);
+    }
+    // Load the object model via RestKit
+    [[RKObjectManager sharedManager] getObjectsAtPath:@"classes/Weed" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+        RKLogInfo(@"Load complete: Table should refresh...");
+        
+        [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:@"time"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        RKLogError(@"Load failed with error: %@", error);
+        
+    }];
+}
+
+
+-(void)refreshView:(UIRefreshControl *)refresh {
+    refresh.attributedTitle = [[NSAttributedString alloc] initWithString:@"Refreshing data..."];
+    [self.tableView reloadData];
+    [self loadData];
+    
+
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"MMM d, h:mm a"];
+    NSString *lastUpdated = [NSString stringWithFormat:@"Last updated on %@", [formatter stringFromDate:[NSDate date]]];
+    refresh.attributedTitle = [[NSAttributedString alloc] initWithString:lastUpdated];
+    [refresh endRefreshing];
 }
 
 
@@ -157,32 +206,7 @@
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller{
     [self.tableView reloadData];
 }
-
-#pragma mark - Fetched results controller
-
-- (NSFetchedResultsController *)fetchedResultsController
-{
-    if (!_fetchedResultsController) {
-        
-        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Weed class])];
-        
-        fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"user.username" ascending:YES]];
-        
-        self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:[RKManagedObjectStore defaultStore].mainQueueManagedObjectContext sectionNameKeyPath:@"user.username" cacheName:@"Weed"];
-        self.fetchedResultsController.delegate = self;
-        
-        NSError *error;
-        
-        [self.fetchedResultsController performFetch:&error];
-        
-        NSLog(@"%@",[self.fetchedResultsController fetchedObjects]);
-        
-        NSAssert(!error, @"Error performing fetch request: %@", error);
-        
-    }
-    
-    return _fetchedResultsController;
-}    
+  
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
 {
@@ -229,6 +253,7 @@
     }
 }
 
+
 /*
 // Implementing the above methods to update the table view in response to individual changes may have performance implications if a large number of changes are made simultaneously. If this proves to be an issue, you can instead just implement controllerDidChangeContent: which notifies the delegate that all section and object changes have been processed. 
  
@@ -241,8 +266,12 @@
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
-    NSManagedObject *object = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    cell.textLabel.text = [[object valueForKey:@"timeStamp"] description];
+    Weed *weed = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    cell.textLabel.numberOfLines=5;
+    cell.textLabel.text = [NSString stringWithFormat:@"%@", weed.content];
+    cell.detailTextLabel.font = [UIFont systemFontOfSize:8.0 ];
+    cell.detailTextLabel.textColor = [UIColor grayColor];
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"by %@", weed.user.email];
     
 }
 
