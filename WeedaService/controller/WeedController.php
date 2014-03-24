@@ -32,7 +32,6 @@ class WeedController extends Controller
 		
 		$db_conn = new DbConnection();
 		
-		error_log("content: ". $this->model->get_content());
 		$query = 'INSERT INTO weed (content, user_id, time) VALUES (\'' . $this->model->get_content() . '\',\'' . $this->model->get_user_id() . '\',\'' . $this->model->get_time() . '\')';
 		error_log('execute sql command: '. $query);
 		
