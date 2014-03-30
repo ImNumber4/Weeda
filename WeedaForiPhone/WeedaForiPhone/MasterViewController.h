@@ -12,5 +12,4 @@
 #import <CoreData/CoreData.h>
 
 @interface MasterViewController : UITableViewController
-
 @end

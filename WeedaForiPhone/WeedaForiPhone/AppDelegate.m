@@ -42,9 +42,8 @@
     
     RKObjectMapping *errorMapping = [RKObjectMapping mappingForClass:[RKErrorMessage class]];
     [errorMapping addPropertyMapping:
-     [RKAttributeMapping attributeMappingFromKeyPath:nil toKeyPath:@"errorMessage"]];
-    RKResponseDescriptor *errorDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:errorMapping pathPattern:nil keyPath:@"error" statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassClientError)];
-    [manager addResponseDescriptorsFromArray:@[errorDescriptor]];
+    [RKAttributeMapping attributeMappingFromKeyPath:nil toKeyPath:@"errorMessage"]];
+    
     NSDictionary *parentObjectMapping = @{
                                           @"id" : @"id",
                                           @"time" : @"time"
@@ -60,32 +59,26 @@
                                                           }];
     
     [userMapping addAttributeMappingsFromDictionary:parentObjectMapping];
-    [manager addResponseDescriptorsFromArray:@[
-                                               [RKResponseDescriptor responseDescriptorWithMapping:userMapping
-                                                                                       pathPattern:@"user/query"
-                                                                                           keyPath:@"users"
-                                                                                       statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)]]];
     
     RKEntityMapping *weedMapping = [RKEntityMapping mappingForEntityForName:NSStringFromClass([Weed class]) inManagedObjectStore:managedObjectStore];
     
     weedMapping.identificationAttributes = @[ @"id" ];
     
-    [weedMapping addAttributeMappingsFromDictionary:@{
-                                                           @"content" : @"content"
-                                                           }];
+    [weedMapping addAttributeMappingsFromDictionary:@{@"content" : @"content"}];
     
     [weedMapping addAttributeMappingsFromDictionary:parentObjectMapping];
     
     [weedMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"user" toKeyPath:@"user" withMapping:userMapping]];
     
-    [manager addResponseDescriptorsFromArray:@[
-                                               
-                                               [RKResponseDescriptor responseDescriptorWithMapping:weedMapping
+    // Register our mappings with the provider
+    RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:weedMapping
+                                                                                            method:RKRequestMethodGET
                                                                                        pathPattern:@"weed/query"
-                                                                                           keyPath:@"weeds"                                         statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)]
-                                               ]];
+                                                                                           keyPath:@"weeds"
+                                                                                       statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
     
-
+    [manager addResponseDescriptor:responseDescriptor];
+    
     /**
      Complete Core Data stack initialization
      */
