@@ -11,8 +11,8 @@
 
 @implementation RemoteObject
 
+@dynamic shouldBeDeleted;
 @dynamic id;
 @dynamic time;
-@dynamic deleted;
 
 @end

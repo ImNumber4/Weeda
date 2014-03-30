@@ -45,6 +45,7 @@
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Weed"];
     NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"time" ascending:NO];
     fetchRequest.sortDescriptors = @[descriptor];
+    
     NSError *error = nil;
     
     // Setup fetched results
@@ -53,6 +54,7 @@
                                                                           sectionNameKeyPath:nil
                                                                                    cacheName:nil];
     [self.fetchedResultsController setDelegate:self];
+    
     BOOL fetchSuccessful = [self.fetchedResultsController performFetch:&error];
     if (! fetchSuccessful) {
         NSLog(@"Error: %@",error);
@@ -63,7 +65,7 @@
 
 - (void)loadData
 {
-    NSLog(@"loadData");
+    
     // Load the object model via RestKit
     [[RKObjectManager sharedManager] getObjectsAtPath:@"weed/query" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
         RKLogInfo(@"Load complete: Table should refresh...");
@@ -78,7 +80,6 @@
 
 
 -(void)refreshView:(UIRefreshControl *)refresh {
-    NSLog(@"refreshing");
     refresh.attributedTitle = [[NSAttributedString alloc] initWithString:@"Refreshing data..."];
 
     [self loadData];

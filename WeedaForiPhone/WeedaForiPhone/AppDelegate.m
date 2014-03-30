@@ -49,7 +49,7 @@
     NSDictionary *parentObjectMapping = @{
                                           @"id" : @"id",
                                           @"time" : @"time",
-                                          @"deleted" : @"deleted"
+                                          @"deleted" : @"shouldBeDeleted"
                                           };
     
     RKEntityMapping *userMapping = [RKEntityMapping mappingForEntityForName:NSStringFromClass([User class]) inManagedObjectStore:manager.managedObjectStore];
@@ -72,6 +72,11 @@
     [weedMapping addAttributeMappingsFromDictionary:parentObjectMapping];
     
     [weedMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"user" toKeyPath:@"user" withMapping:userMapping]];
+    
+    NSDate *now = [NSDate date];
+    NSDate *fiveDaysAgo = [now dateByAddingTimeInterval:-5 * 24 * 60 * 60];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"shouldBeDeleted = TRUE || time <= %@", fiveDaysAgo];
+    weedMapping.deletionPredicate = predicate;
     
     // Register our mappings with the provider
     RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:weedMapping
@@ -97,23 +102,6 @@
                                                                                    rootKeyPath:nil
                                                                                         method:RKRequestMethodPOST];
     [[RKObjectManager sharedManager] addRequestDescriptor:requestDescriptor];
-    
-
-    [[RKObjectManager sharedManager] addFetchRequestBlock:^NSFetchRequest *(NSURL *URL) {
-        NSDate *now = [NSDate date];
-        NSDate *twoDaysAgo = [now dateByAddingTimeInterval:2 * 24 * 60 * 60];
-        RKPathMatcher *pathMatcher = [RKPathMatcher pathMatcherWithPattern:@"weed/query"];
-        NSDictionary *argsDict = nil;
-        BOOL match = [pathMatcher matchesPath:[URL relativePath] tokenizeQueryStrings:NO parsedArguments:&argsDict];
-        if (match) {
-            NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Weed"];
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"deleted = true OR time <= %@", twoDaysAgo];
-            fetchRequest.predicate = predicate;
-            fetchRequest.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"time" ascending:YES] ];
-            return fetchRequest;
-        }
-        return nil;
-    }];
     
     
     /**

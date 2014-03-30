@@ -12,8 +12,8 @@
 
 @interface RemoteObject : NSManagedObject
 
+@property (nonatomic, retain) NSNumber * shouldBeDeleted;
 @property (nonatomic, retain) NSNumber * id;
 @property (nonatomic, retain) NSDate * time;
-@property (nonatomic, retain) NSNumber * deleted;
 
 @end
