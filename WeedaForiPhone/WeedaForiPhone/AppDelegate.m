@@ -81,8 +81,15 @@
     
     
     [manager addResponseDescriptor:responseDescriptor];
+    
+    RKObjectMapping *userRequestMapping = [RKObjectMapping requestMapping];
+    [userRequestMapping addAttributeMappingsFromArray:@[@"username"]];
+    
     RKObjectMapping * weedRequestMapping = [RKObjectMapping requestMapping];
-    [weedRequestMapping addAttributeMappingsFromArray:@[ @"id", @"content"]];
+    [weedRequestMapping addAttributeMappingsFromArray:@[ @"id", @"content",@"time"]];
+    
+    [weedRequestMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"user" toKeyPath:@"user" withMapping:userRequestMapping]];
+    
     
     RKRequestDescriptor *requestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:weedRequestMapping
                                                                                    objectClass:[Weed class]

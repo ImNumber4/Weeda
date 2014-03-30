@@ -113,6 +113,11 @@
     
     RKManagedObjectStore *objectStore = [[RKObjectManager sharedManager] managedObjectStore];
     Weed *weed = [NSEntityDescription insertNewObjectForEntityForName:@"Weed" inManagedObjectContext:objectStore.mainQueueManagedObjectContext];
+    
+    //create user
+    weed.user = [NSEntityDescription insertNewObjectForEntityForName:@"User" inManagedObjectContext:objectStore.mainQueueManagedObjectContext];
+    weed.user.username = @"lv";
+    
     NSNumber * id = [[NSNumber alloc] initWithInteger:100];
     NSString * content = @"TestAdd";
     
@@ -120,6 +125,7 @@
     // Normally you should use accessor methods, but using KVC here avoids the need to add a custom class to the template.
     weed.id = id;
     weed.content = content;
+    weed.time = [NSDate date];
     
     [[RKObjectManager sharedManager] postObject:weed path:@"weed/create" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
         NSLog(@"Success saving post");
