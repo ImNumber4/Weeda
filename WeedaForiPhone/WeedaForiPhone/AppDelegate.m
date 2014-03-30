@@ -44,11 +44,12 @@
     
     RKObjectMapping *errorMapping = [RKObjectMapping mappingForClass:[RKErrorMessage class]];
     [errorMapping addPropertyMapping:
-    [RKAttributeMapping attributeMappingFromKeyPath:nil toKeyPath:@"errorMessage"]];
+     [RKAttributeMapping attributeMappingFromKeyPath:nil toKeyPath:@"errorMessage"]];
     
     NSDictionary *parentObjectMapping = @{
                                           @"id" : @"id",
-                                          @"time" : @"time"
+                                          @"time" : @"time",
+                                          @"deleted" : @"deleted"
                                           };
     
     RKEntityMapping *userMapping = [RKEntityMapping mappingForEntityForName:NSStringFromClass([User class]) inManagedObjectStore:manager.managedObjectStore];
@@ -56,9 +57,9 @@
     userMapping.identificationAttributes = @[ @"id" ];
     
     [userMapping addAttributeMappingsFromDictionary:@{
-                                                          @"username" : @"username",
-                                                          @"email" : @"email",
-                                                          }];
+                                                      @"username" : @"username",
+                                                      @"email" : @"email",
+                                                      }];
     
     [userMapping addAttributeMappingsFromDictionary:parentObjectMapping];
     
@@ -97,6 +98,24 @@
                                                                                         method:RKRequestMethodPOST];
     [[RKObjectManager sharedManager] addRequestDescriptor:requestDescriptor];
     
+
+    [[RKObjectManager sharedManager] addFetchRequestBlock:^NSFetchRequest *(NSURL *URL) {
+        NSDate *now = [NSDate date];
+        NSDate *twoDaysAgo = [now dateByAddingTimeInterval:2 * 24 * 60 * 60];
+        RKPathMatcher *pathMatcher = [RKPathMatcher pathMatcherWithPattern:@"weed/query"];
+        NSDictionary *argsDict = nil;
+        BOOL match = [pathMatcher matchesPath:[URL relativePath] tokenizeQueryStrings:NO parsedArguments:&argsDict];
+        if (match) {
+            NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Weed"];
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"deleted = true OR time <= %@", twoDaysAgo];
+            fetchRequest.predicate = predicate;
+            fetchRequest.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"time" ascending:YES] ];
+            return fetchRequest;
+        }
+        return nil;
+    }];
+    
+    
     /**
      Complete Core Data stack initialization
      */
@@ -114,7 +133,7 @@
     
     // Configure a managed object cache to ensure we do not create duplicate objects
     managedObjectStore.managedObjectCache = [[RKInMemoryManagedObjectCache alloc] initWithManagedObjectContext:managedObjectStore.persistentStoreManagedObjectContext];
-
+    
 }
 
 @end

@@ -2,7 +2,7 @@
 //  RemoteObject.h
 //  WeedaForiPhone
 //
-//  Created by Chaoqing LV on 3/23/14.
+//  Created by Chaoqing LV on 3/30/14.
 //  Copyright (c) 2014 Weeda. All rights reserved.
 //
 
@@ -12,7 +12,8 @@
 
 @interface RemoteObject : NSManagedObject
 
-@property (nonatomic, retain) NSDate * time;
 @property (nonatomic, retain) NSNumber * id;
+@property (nonatomic, retain) NSDate * time;
+@property (nonatomic, retain) NSNumber * deleted;
 
 @end
