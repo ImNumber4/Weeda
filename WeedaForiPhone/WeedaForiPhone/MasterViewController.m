@@ -88,9 +88,8 @@
     NSString *lastUpdated = [NSString stringWithFormat:@"Last updated on %@", [formatter stringFromDate:[NSDate date]]];
     refresh.attributedTitle = [[NSAttributedString alloc] initWithString:lastUpdated];
     [refresh endRefreshing];
-    
-    
 }
+
 
 
 - (void)didReceiveMemoryWarning

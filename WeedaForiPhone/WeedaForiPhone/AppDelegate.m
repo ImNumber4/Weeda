@@ -32,6 +32,8 @@
     
     // Enable Activity Indicator Spinner
     [AFNetworkActivityIndicatorManager sharedManager].enabled = YES;
+    [manager setAcceptHeaderWithMIMEType:RKMIMETypeJSON];
+    [manager setRequestSerializationMIMEType:RKMIMETypeJSON];
     
     // Initialize managed object store
     NSManagedObjectModel *managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
@@ -77,7 +79,16 @@
                                                                                            keyPath:@"weeds"
                                                                                        statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
     
+    
     [manager addResponseDescriptor:responseDescriptor];
+    RKObjectMapping * weedRequestMapping = [RKObjectMapping requestMapping];
+    [weedRequestMapping addAttributeMappingsFromArray:@[ @"id", @"content"]];
+    
+    RKRequestDescriptor *requestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:weedRequestMapping
+                                                                                   objectClass:[Weed class]
+                                                                                   rootKeyPath:nil
+                                                                                        method:RKRequestMethodPOST];
+    [[RKObjectManager sharedManager] addRequestDescriptor:requestDescriptor];
     
     /**
      Complete Core Data stack initialization
