@@ -27,59 +27,70 @@ class WeedController extends Controller
 		echo json_encode(array('weeds'=>$weeds));
 	}
 	
-	public function create() {
-		error_log('Creating the post.');
+	public function create() 
+	{
+		//parse request body
+		$weed = $this->parse_request_body();
 		
-		$db_conn = new DbConnection();
-		
-		$query = 'INSERT INTO weed (content, user_id, time) VALUES (\'' . $this->model->get_content() . '\',\'' . $this->model->get_user_id() . '\',\'' . $this->model->get_time() . '\')';
-		error_log('execute sql command: '. $query);
-		
-		$result = $db_conn->query($query);
-		
-		header('Content-type: aplication/json');
-		if ($result != TRUE) {
-			header_status(500);
-			die("Create weed failed.");
+		$weedDAO = new WeedDAO();
+		if (!$weedDAO->create($weed)) {
+			//return 500
+			error_log("Create weed failed.");
+			http_response_code(500);
+			return;
 		}
-		header_status(200);	
+		
+		http_response_code(200);
 	}
 	
 	public function delete($para)
 	{
-		/* connect to the db */
-		$db_conn = new DbConnection();
-
-		/* grab the users from the db */
-		$query = "SELECT weed.id as weed_id, user.id as user_id, content, user.time as user_time, weed.time as weed_time, username, email, weed.deleted as weed_deleted, user.deleted as user_deleted FROM weed, user where user.id=weed.user_id";
-
-		$result = $db_conn->query($query);
-	}
-	
-	public function parse_request() {
-		if ($_SERVER['REQUEST_METHOD'] === 'POST' || $_SERVER['REQUEST_METHOD'] === 'PUT') {
-			$data = json_decode(file_get_contents('php://input'));
-			error_log(1);
-			if (!$this->parse_body($data)) {
-				//return 403
-				error_log("Input error.");
-				return;
-			}
-			
-			$this->model = new $this->_model($data);
+		$weedDAO = new WeedDAO();
+		$weed = $weedDAO->find_by_id($para);
+		if (!$weed) {
+			//return 400
+			error_log("Input error: did find weed by id: " . $para);
+			http_response_code(400);
+			return;
 		}
+		
+		//update delete flag
+		$weed->set_deleted(1);
+		$weedDAO->update($weed);
+		if (!$weedDAO->update($weed)) {
+			//return 400
+			http_response_code(400);
+			return;
+		}
+		error_log("Delete success.");
+		http_response_code(200);
+	}
+	
+	private function parse_request_body() {
+		if ($_SERVER['REQUEST_METHOD'] != 'POST' && $_SERVER['REQUEST_METHOD'] != 'PUT') {
+			//request method error, return 403
+			error_log("Request method error, should use POST or PUT.");
+			return null;
+		}
+		
+		$data = json_decode(file_get_contents('php://input'));
+		if (!$this->check_para($data)) {
+			//return 403
+			error_log("Input error.");
+			return;
+		}
+		
+		$weed = new Weed();
+		$weed->set_content($data->content);
+		$weed->set_user_id($data->user->id);
+		$weed->set_time($data->time);
+		$weed->set_deleted(0);
+		return $weed;
 	}
 	
 	
-	protected function parse_body($data)
-	{
-		// foreach ($body as $key => $value) {
-		// 			if (is_object($value)) {
-		// 				$this->parse_body($value);
-		// 			}
-		// 			array_push($this->_body, array($key => $value));
-		// 		}
-		
+	private function check_para($data)
+	{	
 		$content = trim($data->content);
 		if ($content == '') {
 			error_log('Input error, content is null');
@@ -99,26 +110,5 @@ class WeedController extends Controller
 		}
 		return true;		
 	}
-	
-	// public function checkEmpty($data) {
-	// 	$content = trim($data->content);
-	// 	if ($content == '') {
-	// 		error_log('Input error, content is null');
-	// 		return null;
-	// 	}
-	// 	
-	// 	$time = trim($data->time);
-	// 	if ($time == '') {
-	// 		error_log('Input error, time is null');
-	// 		return null;
-	// 	}
-	// 	
-	// 	$userid = trim($data->userid);
-	// 	error_log("4");
-	// 	if ($userid) {
-	// 		error_log('Input error, userid is null');
-	// 		return null;
-	// 	}
-	// }
 }
 ?>

@@ -9,12 +9,7 @@ class Weed
 	
 	private $time;
 	
-	public function __construct($postData) {
-		error_log("Create model weed: " . $postData->content . "  " . $postData->time . "  " . $postData->user->id);
-		$this->content = $postData->content;
-		$this->user_id = $postData->user->id;
-		$this->time = $postData->time;
-	}
+	private $deleted;
 	
 	public function set_id($id) {
 		$this->id = $id;
@@ -46,6 +41,16 @@ class Weed
 	
 	public function get_time() {
 		return $this->time;
+	}
+	
+	public function get_deleted()
+	{
+		return $this->deleted;
+	}
+	
+	public function set_deleted($deleted)
+	{
+		$this->deleted = $deleted;
 	}
 }
 ?>

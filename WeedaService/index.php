@@ -41,8 +41,6 @@ function Hook($url) {
 			error_log($e->getMessage());
 		}
 		
-		$dispatch->parse_request();
-		
         if ((int)method_exists($controller, $action)) {
             call_user_func_array(array($dispatch,$action),$stringParameter);
         } else {
