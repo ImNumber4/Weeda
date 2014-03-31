@@ -45,6 +45,17 @@ class WeedController extends Controller
 		header_status(200);	
 	}
 	
+	public function delete($para)
+	{
+		/* connect to the db */
+		$db_conn = new DbConnection();
+
+		/* grab the users from the db */
+		$query = "SELECT weed.id as weed_id, user.id as user_id, content, user.time as user_time, weed.time as weed_time, username, email, weed.deleted as weed_deleted, user.deleted as user_deleted FROM weed, user where user.id=weed.user_id";
+
+		$result = $db_conn->query($query);
+	}
+	
 	public function parse_request() {
 		if ($_SERVER['REQUEST_METHOD'] === 'POST' || $_SERVER['REQUEST_METHOD'] === 'PUT') {
 			$data = json_decode(file_get_contents('php://input'));
@@ -81,8 +92,8 @@ class WeedController extends Controller
 			return null;
 		}
 		
-		$userid = trim($data->user->userid);
-		if ($userid == '') {
+		$user_id = trim($data->user->id);
+		if ($user_id == '') {
 			error_log('Input error, userid is null');
 			return null;
 		}

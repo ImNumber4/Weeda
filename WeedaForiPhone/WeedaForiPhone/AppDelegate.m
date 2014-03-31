@@ -106,7 +106,7 @@
     [manager addResponseDescriptor:responseDescriptor];
     
     RKObjectMapping *userRequestMapping = [RKObjectMapping requestMapping];
-    [userRequestMapping addAttributeMappingsFromArray:@[@"username"]];
+    [userRequestMapping addAttributeMappingsFromArray:@[@"id"]];
     
     RKObjectMapping * weedRequestMapping = [RKObjectMapping requestMapping];
     [weedRequestMapping addAttributeMappingsFromArray:@[ @"id", @"content",@"time"]];
