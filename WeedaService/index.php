@@ -5,6 +5,9 @@ define('SYSTEM', dirname(dirname(__FILE__)));
 //Load Configuration File
 require (SYSTEM . DS . 'WeedaService/library' . DS . 'bootstrap.php');
 
+error_log('Http request: ');
+error_log(get_http_raw());
+
 //Get URL
 $url = isset($_GET['url']) ? $_GET['url']: '';
 error_log('request url: '. $url);
@@ -12,6 +15,7 @@ error_log('request url: '. $url);
 //Get post data
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	error_log('Post data is: ' . file_get_contents('php://input'));
+	var_dump($_POST);
 }
 
 Hook($url);
@@ -36,7 +40,9 @@ function Hook($url) {
 		} catch (Exception $e) {
 			error_log($e->getMessage());
 		}
-
+		
+		$dispatch->parse_request();
+		
         if ((int)method_exists($controller, $action)) {
             call_user_func_array(array($dispatch,$action),$stringParameter);
         } else {
@@ -46,5 +52,26 @@ function Hook($url) {
 		echo "Url Arr is empty.";
     }
 }
+
+function get_http_raw() {
+    $raw = '';
+
+    $raw .= $_SERVER['REQUEST_METHOD'].' '.$_SERVER['REQUEST_URI'].' '.$_SERVER['SERVER_PROTOCOL']."  ";
+
+    foreach($_SERVER as $key => $value) {
+        if(substr($key, 0, 5) === 'HTTP_') {
+            $key = substr($key, 5);
+
+            $key = str_replace('_', '-', $key);
+
+            $raw .= $key.': '.$value."    ";
+        }
+    }
+
+    $raw .= "    body: ";
+    $raw .= file_get_contents('php://input');
+    return $raw;
+}
+
 
 ?>

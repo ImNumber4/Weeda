@@ -44,5 +44,70 @@ class WeedController extends Controller
 		}
 		header_status(200);	
 	}
+	
+	public function parse_request() {
+		if ($_SERVER['REQUEST_METHOD'] === 'POST' || $_SERVER['REQUEST_METHOD'] === 'PUT') {
+			$data = json_decode(file_get_contents('php://input'));
+			error_log(1);
+			if (!$this->parse_body($data)) {
+				//return 403
+				error_log("Input error.");
+				return;
+			}
+			
+			$this->model = new $this->_model($data);
+		}
+	}
+	
+	
+	protected function parse_body($data)
+	{
+		// foreach ($body as $key => $value) {
+		// 			if (is_object($value)) {
+		// 				$this->parse_body($value);
+		// 			}
+		// 			array_push($this->_body, array($key => $value));
+		// 		}
+		
+		$content = trim($data->content);
+		if ($content == '') {
+			error_log('Input error, content is null');
+			return null;
+		}
+			
+		$time = trim($data->time);
+		if ($time == '') {
+			error_log('Input error, time is null');
+			return null;
+		}
+		
+		$userid = trim($data->user->userid);
+		if ($userid == '') {
+			error_log('Input error, userid is null');
+			return null;
+		}
+		return true;		
+	}
+	
+	// public function checkEmpty($data) {
+	// 	$content = trim($data->content);
+	// 	if ($content == '') {
+	// 		error_log('Input error, content is null');
+	// 		return null;
+	// 	}
+	// 	
+	// 	$time = trim($data->time);
+	// 	if ($time == '') {
+	// 		error_log('Input error, time is null');
+	// 		return null;
+	// 	}
+	// 	
+	// 	$userid = trim($data->userid);
+	// 	error_log("4");
+	// 	if ($userid) {
+	// 		error_log('Input error, userid is null');
+	// 		return null;
+	// 	}
+	// }
 }
 ?>

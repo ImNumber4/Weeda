@@ -10,10 +10,10 @@ class Weed
 	private $time;
 	
 	public function __construct($postData) {
-		error_log("Create model weed: " . $postData->content);
+		error_log("Create model weed: " . $postData->content . "  " . $postData->time . "  " . $postData->user->userid);
 		$this->content = $postData->content;
-		$this->user_id = $postData->user_id;
-		$this->time = date('Y-m-d H:i:s');
+		$this->user_id = $postData->user->userid;
+		$this->time = $postData->time;
 	}
 	
 	public function set_id($id) {
