@@ -11,6 +11,11 @@
 #import "MasterViewController.h"
 #import <RestKit/RestKit.h>
 #import "Weed.h"
+#import "User.h"
+
+@interface AppDelegate ()
+
+@end
 
 @implementation AppDelegate
 
@@ -18,6 +23,18 @@
 {
     // Override point for customization after application launch.
     [self setupRestKit];
+    
+    User *currentUser = [NSEntityDescription
+                      insertNewObjectForEntityForName:@"User"
+                      inManagedObjectContext:[RKObjectManager sharedManager].managedObjectStore.mainQueueManagedObjectContext];
+    
+    currentUser.id = [NSNumber numberWithInt:3];
+    currentUser.username = @"test";
+    currentUser.email = @"test@test.com";
+    
+    UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
+    MasterViewController *controller = (MasterViewController *)navigationController.topViewController;
+    controller.currentUser = currentUser;
     
     return YES;
 }
