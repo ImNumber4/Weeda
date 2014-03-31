@@ -39,20 +39,14 @@ class WeedController extends Controller
 			http_response_code(500);
 			return;
 		}
-		
+		header('Content-type: application/json');
 		http_response_code(200);
 	}
 	
 	public function delete($para)
 	{
 		$weedDAO = new WeedDAO();
-		$weed = $weedDAO->find_by_id($para);
-		if (!$weed) {
-			//return 400
-			error_log("Input error: did find weed by id: " . $para);
-			http_response_code(400);
-			return;
-		}
+		$weed = $this->parse_request_body();
 		
 		//update delete flag
 		$weed->set_deleted(1);
@@ -63,6 +57,7 @@ class WeedController extends Controller
 			return;
 		}
 		error_log("Delete success.");
+		header('Content-type: application/json');
 		http_response_code(200);
 	}
 	
@@ -84,6 +79,7 @@ class WeedController extends Controller
 		$weed->set_content($data->content);
 		$weed->set_user_id($data->user->id);
 		$weed->set_time($data->time);
+		$weed->set_id($data->id);
 		$weed->set_deleted(0);
 		return $weed;
 	}

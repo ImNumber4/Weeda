@@ -30,7 +30,7 @@ class WeedDAO extends BaseDAO
 	
 	public function find_by_id($id)
 	{
-		$query = "SELECT * FROM weed WHERE id = $id";
+		$query = "SELECT * FROM weed WHERE id = ".$id;
 		error_log('find query: ' . $query);
 		$result = $this->db_conn->query($query);
 		error_log('result: ' . $result);

@@ -8,6 +8,7 @@
 
 #import "MasterViewController.h"
 #import "DetailViewController.h"
+#import "AddWeedViewController.h"
 #import <RestKit/RestKit.h>
 #import "Weed.h"
 #import "User.h"
@@ -33,10 +34,6 @@
     
     [super viewDidLoad];
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
-
-    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
-    self.navigationItem.rightBarButtonItem = addButton;
-    self.title = @"Weeds";
     
     
     UIRefreshControl *refresh = [[UIRefreshControl alloc] init];
@@ -103,6 +100,13 @@
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
+        Weed * weed = [self.fetchedResultsController objectAtIndexPath:indexPath];
+        [[RKObjectManager sharedManager] postObject:weed path:@"weed/delete" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+            NSLog(@"Response: %@", mappingResult);
+        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+            NSLog(@"Failure saving post: %@", error.localizedDescription);
+        }];
+        
         NSManagedObjectContext *context = [self.fetchedResultsController managedObjectContext];
         [context deleteObject:[self.fetchedResultsController objectAtIndexPath:indexPath]];
         NSError *error = nil;
@@ -120,43 +124,6 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-- (void)insertNewObject:(id)sender
-{
-    NSManagedObjectContext *context = [self.fetchedResultsController managedObjectContext];
-    
-    // Save the context.
-    NSError *error = nil;
-    if (![context save:&error]) {
-         // Replace this implementation with code to handle the error appropriately.
-         // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. 
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-        abort();
-    }
-    
-    RKManagedObjectStore *objectStore = [[RKObjectManager sharedManager] managedObjectStore];
-    Weed *weed = [NSEntityDescription insertNewObjectForEntityForName:@"Weed" inManagedObjectContext:objectStore.mainQueueManagedObjectContext];
-    
-    weed.user = self.currentUser;
-    
-    NSNumber * id = [[NSNumber alloc] initWithInteger:100];
-    NSString * content = @"TestAdd";
-    
-    // If appropriate, configure the new managed object.
-    // Normally you should use accessor methods, but using KVC here avoids the need to add a custom class to the template.
-    weed.id = id;
-    weed.content = content;
-    weed.time = [NSDate date];
-    
-    [[RKObjectManager sharedManager] postObject:weed path:@"weed/create" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-        NSLog(@"Success saving post");
-    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-        NSLog(@"Failure saving post: %@", error.localizedDescription);
-    }];
-
-    
-    [self.tableView reloadData];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -187,10 +154,14 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([[segue identifier] isEqualToString:@"showDetail"]) {
+    if ([[segue identifier] isEqualToString:@"showWeed"]) {
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         Weed *weed = [[self fetchedResultsController] objectAtIndexPath:indexPath];
         [[segue destinationViewController] setWeed:weed];
+    }else if([[segue identifier] isEqualToString:@"addWeed"]) {
+        UINavigationController *nav = [segue destinationViewController];
+        AddWeedViewController *addWeedViewController = (AddWeedViewController *)nav.topViewController;
+        [addWeedViewController setCurrentUser:self.currentUser];
     }
 }
 

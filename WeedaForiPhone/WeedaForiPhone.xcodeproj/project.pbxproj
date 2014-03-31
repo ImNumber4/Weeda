@@ -35,6 +35,7 @@
 		A953B70718DF7FA4001CDD4C /* Weed.m in Sources */ = {isa = PBXBuildFile; fileRef = A953B70618DF7FA4001CDD4C /* Weed.m */; };
 		A953B70B18DF8E42001CDD4C /* libRestKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A953B6E418D6D794001CDD4C /* libRestKit.a */; };
 		A9CA8E5918E8DB1E004F095D /* RemoteObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A9CA8E5818E8DB1E004F095D /* RemoteObject.m */; };
+		A9CA8E6618E9132C004F095D /* AddWeedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9CA8E6518E9132C004F095D /* AddWeedViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -119,6 +120,8 @@
 		A953B70618DF7FA4001CDD4C /* Weed.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Weed.m; path = WeedaForiPhone/Model/Weed.m; sourceTree = "<group>"; };
 		A9CA8E5718E8DB1E004F095D /* RemoteObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RemoteObject.h; path = WeedaForiPhone/Model/RemoteObject.h; sourceTree = "<group>"; };
 		A9CA8E5818E8DB1E004F095D /* RemoteObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RemoteObject.m; path = WeedaForiPhone/Model/RemoteObject.m; sourceTree = "<group>"; };
+		A9CA8E6418E9132C004F095D /* AddWeedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddWeedViewController.h; sourceTree = "<group>"; };
+		A9CA8E6518E9132C004F095D /* AddWeedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddWeedViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -196,6 +199,8 @@
 		A914CCAB18CD756200B870D8 /* WeedaForiPhone */ = {
 			isa = PBXGroup;
 			children = (
+				A9CA8E6418E9132C004F095D /* AddWeedViewController.h */,
+				A9CA8E6518E9132C004F095D /* AddWeedViewController.m */,
 				A914CCB418CD756200B870D8 /* AppDelegate.h */,
 				A914CCB518CD756200B870D8 /* AppDelegate.m */,
 				A914CCB718CD756200B870D8 /* Main.storyboard */,
@@ -405,6 +410,7 @@
 				A9CA8E5918E8DB1E004F095D /* RemoteObject.m in Sources */,
 				A914CCB618CD756200B870D8 /* AppDelegate.m in Sources */,
 				A953B70718DF7FA4001CDD4C /* Weed.m in Sources */,
+				A9CA8E6618E9132C004F095D /* AddWeedViewController.m in Sources */,
 				A914CCB218CD756200B870D8 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

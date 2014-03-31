@@ -92,7 +92,7 @@
     
     NSDate *now = [NSDate date];
     NSDate *fiveDaysAgo = [now dateByAddingTimeInterval:-5 * 24 * 60 * 60];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"shouldBeDeleted = TRUE || time <= %@", fiveDaysAgo];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"shouldBeDeleted = TRUE || id < 0 || time <= %@", fiveDaysAgo];
     weedMapping.deletionPredicate = predicate;
     
     // Register our mappings with the provider
