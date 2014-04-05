@@ -24,6 +24,7 @@ class WeedController extends Controller
 		/* output in necessary format */
 
 		header('Content-type: application/json');
+		http_response_code(200);
 		echo json_encode(array('weeds'=>$weeds));
 	}
 	
@@ -33,7 +34,8 @@ class WeedController extends Controller
 		$weed = $this->parse_request_body();
 		
 		$weedDAO = new WeedDAO();
-		if (!$weedDAO->create($weed)) {
+		$result = $weedDAO->create($weed);
+		if ($result == 0) {
 			//return 500
 			error_log("Create weed failed.");
 			http_response_code(500);
@@ -41,6 +43,7 @@ class WeedController extends Controller
 		}
 		header('Content-type: application/json');
 		http_response_code(200);
+		echo json_encode(array('id' => $result));
 	}
 	
 	public function delete($para)

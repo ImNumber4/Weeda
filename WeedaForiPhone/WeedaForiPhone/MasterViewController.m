@@ -101,7 +101,7 @@
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         Weed * weed = [self.fetchedResultsController objectAtIndexPath:indexPath];
-        [[RKObjectManager sharedManager] postObject:weed path:@"weed/delete" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+        [[RKObjectManager sharedManager] deleteObject:weed path:[NSString stringWithFormat:@"weed/delete/%@", weed.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
             NSLog(@"Response: %@", mappingResult);
         } failure:^(RKObjectRequestOperation *operation, NSError *error) {
             NSLog(@"Failure saving post: %@", error.localizedDescription);

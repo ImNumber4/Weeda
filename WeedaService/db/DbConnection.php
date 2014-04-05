@@ -36,6 +36,15 @@ class DbConnection
 		$result = mysql_query($query, $this->db_conn) or die('Errant query:  '.$query);
 		return $result;
 	}
+	
+	public function insert($query) {
+		if (!$this->db_conn) {
+			$this->init_connection();
+		}
+		
+		$result = mysqli_insert_id($query);
+		return $result;
+	}
 }
 
 ?>

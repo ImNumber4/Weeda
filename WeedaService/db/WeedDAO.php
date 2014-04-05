@@ -8,12 +8,12 @@ class WeedDAO extends BaseDAO
 	{
 		$query = 'INSERT INTO weed (content, user_id, time, deleted) VALUES (\'' . $weed->get_content() . '\',\'' . $weed->get_user_id() . '\',\'' . $weed->get_time() . '\',' . $weed->get_deleted() . ')';
 		error_log('insert query:' . $query);
-		$result = $this->db_conn->query($query);
-		if (!$result) {
+		$result = $this->db_conn->insert($query);
+		if ($result == 0) {
 			error_log("SQL failed. Query: " . $query);
-			return false;
 		}
-		return true;
+		
+		return $result;
 	}
 	
 	public function update($weed)

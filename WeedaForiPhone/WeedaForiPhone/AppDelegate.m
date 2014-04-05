@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 
 #import "MasterViewController.h"
+#import "LoginViewController.h"
 #import <RestKit/RestKit.h>
 #import "Weed.h"
 #import "User.h"
@@ -33,8 +34,10 @@
     currentUser.email = @"test@test.com";
     
     UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
-    MasterViewController *controller = (MasterViewController *)navigationController.topViewController;
-    controller.currentUser = currentUser;
+    LoginViewController *loginViewController = (LoginViewController *)navigationController.topViewController;
+    //loginViewController.currentUser = currentUser;
+    //MasterViewController *controller = (MasterViewController *)navigationController.topViewController;
+    //controller.currentUser = currentUser;
     
     return YES;
 }
