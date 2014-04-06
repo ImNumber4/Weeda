@@ -158,6 +158,7 @@
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         Weed *weed = [[self fetchedResultsController] objectAtIndexPath:indexPath];
         [[segue destinationViewController] setWeed:weed];
+        [[segue destinationViewController] setCurrentUser:self.currentUser];
     }else if([[segue identifier] isEqualToString:@"addWeed"]) {
         UINavigationController *nav = [segue destinationViewController];
         AddWeedViewController *addWeedViewController = (AddWeedViewController *)nav.topViewController;

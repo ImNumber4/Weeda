@@ -16,19 +16,17 @@
 
 @implementation LoginViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.currentUser = [NSEntityDescription
+                        insertNewObjectForEntityForName:@"User"
+                        inManagedObjectContext:[RKObjectManager sharedManager].managedObjectStore.mainQueueManagedObjectContext];
+    
+    self.currentUser.id = [NSNumber numberWithInt:3];
+    self.currentUser.username = @"test";
+    self.currentUser.email = @"test@test.com";
 }
 
 - (void)didReceiveMemoryWarning
@@ -66,13 +64,7 @@
 //        //
 //    }
     
-    self.currentUser = [NSEntityDescription
-                         insertNewObjectForEntityForName:@"User"
-                         inManagedObjectContext:[RKObjectManager sharedManager].managedObjectStore.mainQueueManagedObjectContext];
     
-    self.currentUser.id = [NSNumber numberWithInt:3];
-    self.currentUser.username = @"test";
-    self.currentUser.email = @"test@test.com";
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {

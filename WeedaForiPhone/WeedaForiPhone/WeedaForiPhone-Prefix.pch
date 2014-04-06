@@ -16,4 +16,5 @@
     #import <CoreData/CoreData.h>
 #import "User.h"
 #import "Weed.h"
+#import <RestKit/RestKit.h>
 #endif

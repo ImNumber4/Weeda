@@ -7,6 +7,7 @@
 //
 
 #import "DetailViewController.h"
+#import "UserViewController.h"
 
 @interface DetailViewController ()
 - (void)configureView;
@@ -34,12 +35,9 @@
         NSString *content = self.weed.content;
         NSString *username = self.weed.user.username;
         NSString *email = self.weed.user.email;
-        self.userLabel.text = [NSString stringWithFormat:@"%@(%@)", username, email];
+        [self.userLabel setTitle:[NSString stringWithFormat:@"%@(%@)", username, email] forState:UIControlStateNormal];
         self.detailDescriptionLabel.text = [NSString stringWithFormat:@"%@", content];
         self.detailDescriptionLabel.numberOfLines=5;
-        self.userLabel.font = [UIFont systemFontOfSize:8.0 ];
-        self.userLabel.textColor = [UIColor grayColor];
-
     }
 }
 
@@ -55,5 +53,14 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([[segue identifier] isEqualToString:@"showUser"]) {
+        [[segue destinationViewController] setUser_id:self.weed.user.id];
+        [[segue destinationViewController] setCurrentUser:self.currentUser];
+    }
+}
+
 
 @end

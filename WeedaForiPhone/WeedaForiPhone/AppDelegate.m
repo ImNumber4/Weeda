@@ -25,14 +25,6 @@
     // Override point for customization after application launch.
     [self setupRestKit];
     
-    User *currentUser = [NSEntityDescription
-                      insertNewObjectForEntityForName:@"User"
-                      inManagedObjectContext:[RKObjectManager sharedManager].managedObjectStore.mainQueueManagedObjectContext];
-    
-    currentUser.id = [NSNumber numberWithInt:3];
-    currentUser.username = @"test";
-    currentUser.email = @"test@test.com";
-    
     //UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
     //LoginViewController *loginViewController = (LoginViewController *)navigationController.topViewController;
     //loginViewController.currentUser = currentUser;
@@ -99,14 +91,23 @@
     weedMapping.deletionPredicate = predicate;
     
     // Register our mappings with the provider
-    RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:weedMapping
+    RKResponseDescriptor *weedResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:weedMapping
                                                                                             method:RKRequestMethodGET
                                                                                        pathPattern:@"weed/query"
                                                                                            keyPath:@"weeds"
                                                                                        statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
     
     
-    [manager addResponseDescriptor:responseDescriptor];
+    [manager addResponseDescriptor:weedResponseDescriptor];
+    
+    RKResponseDescriptor *userResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping
+                                                                                                method:RKRequestMethodGET
+                                                                                           pathPattern:@"user/query/:id"
+                                                                                               keyPath:@"users"
+                                                                                           statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+    
+    
+    [manager addResponseDescriptor:userResponseDescriptor];
     
     RKObjectMapping *userRequestMapping = [RKObjectMapping requestMapping];
     [userRequestMapping addAttributeMappingsFromArray:@[@"id"]];
@@ -117,11 +118,11 @@
     [weedRequestMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"user" toKeyPath:@"user" withMapping:userRequestMapping]];
     
     
-    RKRequestDescriptor *requestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:weedRequestMapping
+    RKRequestDescriptor *weedRequestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:weedRequestMapping
                                                                                    objectClass:[Weed class]
                                                                                    rootKeyPath:nil
                                                                                         method:RKRequestMethodPOST];
-    [[RKObjectManager sharedManager] addRequestDescriptor:requestDescriptor];
+    [[RKObjectManager sharedManager] addRequestDescriptor:weedRequestDescriptor];
     
     
     /**

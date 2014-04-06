@@ -11,7 +11,8 @@
 @interface DetailViewController : UIViewController
 
 @property (strong, nonatomic) Weed *weed;
+@property (nonatomic, retain) User * currentUser;
 
 @property (weak, nonatomic) IBOutlet UILabel *detailDescriptionLabel;
-@property (weak, nonatomic) IBOutlet UILabel *userLabel;
+@property (weak, nonatomic) IBOutlet UIButton *userLabel;
 @end
