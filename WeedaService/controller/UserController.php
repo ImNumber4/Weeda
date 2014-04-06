@@ -40,6 +40,31 @@ class UserController extends Controller
 		
 	}
 	
+	public function query($id) {
+
+		/* connect to the db */
+		$db_conn = new DbConnection();
+
+		/* grab the users from the db */
+		$query = "SELECT * FROM user WHERE id=$id";
+
+		$result = $db_conn->query($query);
+
+		/* create one master array of the records */
+		$users = array();
+		if(mysql_num_rows($result)) {
+			while($user = mysql_fetch_assoc($result)) {
+				$users[] = $user;
+			}
+		}
+
+		/* output in necessary format */
+
+		header('Content-type: application/json');
+		http_response_code(200);
+		echo json_encode(array('users'=>$users));
+	}
+	
 	public function logout() {
 		$username = $_COOKIE['username'];
 		if (!isset($username)) {
