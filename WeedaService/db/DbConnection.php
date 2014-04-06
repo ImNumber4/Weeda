@@ -42,8 +42,13 @@ class DbConnection
 			$this->init_connection();
 		}
 		
-		$result = mysqli_insert_id($query);
-		return $result;
+		$result = mysqli_query($this->db_conn, $query);
+		if (!$result)
+		{
+			return 0;
+		}
+		$id = mysqli_insert_id($this->db_conn);
+		return $id;
 	}
 }
 
