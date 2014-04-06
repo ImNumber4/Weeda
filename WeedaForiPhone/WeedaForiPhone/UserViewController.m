@@ -23,7 +23,7 @@
     [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"user/query/%@", self.user_id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
         RKLogInfo(@"Load complete: Table should refresh...");
         User *user = [mappingResult.array objectAtIndex:0];
-        self.userNameLabel.text = user.username;
+        self.userNameLabel.text = [NSString stringWithFormat:@"@%@", user.username];
         self.userEmailLabel.text = user.email;
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"MMM. yyyy"];
