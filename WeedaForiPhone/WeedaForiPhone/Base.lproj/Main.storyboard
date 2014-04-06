@@ -169,7 +169,7 @@
                                 </state>
                                 <connections>
                                     <action selector="signinClicked:" destination="KCI-Ki-fQS" eventType="touchUpInside" id="yIG-fY-veQ"/>
-                                    <segue destination="rS3-R9-Ivy" kind="modal" identifier="loginSuccess" id="ZWE-Fs-pGq"/>
+                                    <segue destination="rS3-R9-Ivy" kind="modal" identifier="loginSuccess" modalTransitionStyle="crossDissolve" id="ZWE-Fs-pGq"/>
                                 </connections>
                             </button>
                         </subviews>
