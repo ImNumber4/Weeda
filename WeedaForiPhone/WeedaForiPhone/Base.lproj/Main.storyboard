@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="rS3-R9-Ivy">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="KCI-Ki-fQS">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
@@ -12,12 +12,12 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="KCI-Ki-fQS" kind="relationship" relationship="rootViewController" id="pDr-Fn-ro2"/>
+                        <segue destination="pGg-6v-bdr" kind="relationship" relationship="rootViewController" id="1hf-jE-uzv"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eq9-QA-ai8" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1" y="64"/>
+            <point key="canvasLocation" x="457" y="64"/>
         </scene>
         <!--Master View Controller - Master-->
         <scene sceneID="VgW-fR-Quf">
@@ -29,7 +29,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="MyBasicCell" textLabel="2pz-XF-uhl" detailTextLabel="Qhx-qU-d7r" rowHeight="99" style="IBUITableViewCellStyleSubtitle" id="m0d-ak-lc9">
-                                <rect key="frame" x="0.0" y="22" width="320" height="99"/>
+                                <rect key="frame" x="0.0" y="86" width="320" height="99"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="m0d-ak-lc9" id="qwc-8K-KPj">
                                     <rect key="frame" x="0.0" y="0.0" width="287" height="98"/>
@@ -169,6 +169,7 @@
                                 </state>
                                 <connections>
                                     <action selector="signinClicked:" destination="KCI-Ki-fQS" eventType="touchUpInside" id="yIG-fY-veQ"/>
+                                    <segue destination="rS3-R9-Ivy" kind="modal" identifier="loginSuccess" id="ZWE-Fs-pGq"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -182,7 +183,6 @@
                     <connections>
                         <outlet property="txtPassword" destination="RaO-OW-qvP" id="ErI-VI-umW"/>
                         <outlet property="txtUsername" destination="oAb-an-CVr" id="qxM-8a-8Mq"/>
-                        <segue destination="pGg-6v-bdr" kind="modal" id="OZz-uz-m51"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6ca-EB-qza" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -192,7 +192,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="468" y="64"/>
+            <point key="canvasLocation" x="-12" y="64"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="zjz-fH-nBj">

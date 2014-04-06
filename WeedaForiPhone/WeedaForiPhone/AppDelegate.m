@@ -33,8 +33,8 @@
     currentUser.username = @"test";
     currentUser.email = @"test@test.com";
     
-    UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
-    LoginViewController *loginViewController = (LoginViewController *)navigationController.topViewController;
+    //UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
+    //LoginViewController *loginViewController = (LoginViewController *)navigationController.topViewController;
     //loginViewController.currentUser = currentUser;
     //MasterViewController *controller = (MasterViewController *)navigationController.topViewController;
     //controller.currentUser = currentUser;

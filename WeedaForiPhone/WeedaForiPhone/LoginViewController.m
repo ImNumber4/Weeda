@@ -8,6 +8,8 @@
 
 #import "LoginViewController.h"
 
+#import "MasterViewController.h"
+
 @interface LoginViewController ()
 
 @end
@@ -47,6 +49,38 @@
 */
 
 - (IBAction)signinClicked:(id)sender {
+//    @try {
+//        if ([[self.txtUsername text] isEqualToString:@""] || [[self.txtPassword text] isEqualToString:@""]) {
+//            [self alertStatus:@"Please input your Email and Password" :@"Sign In Failed." :0];
+//            return;
+//        }
+//        
+//        
+//        
+//    }
+//    @catch (NSException *exception) {
+//        NSLog(@"Exception: %@", exception);
+//        [self alertStatus:@"Sign in Failed." :@"Error!" :0];
+//    }
+//    @finally {
+//        //
+//    }
+    
+    self.currentUser = [NSEntityDescription
+                         insertNewObjectForEntityForName:@"User"
+                         inManagedObjectContext:[RKObjectManager sharedManager].managedObjectStore.mainQueueManagedObjectContext];
+    
+    self.currentUser.id = [NSNumber numberWithInt:3];
+    self.currentUser.username = @"test";
+    self.currentUser.email = @"test@test.com";
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([[segue identifier] isEqualToString:@"loginSuccess"]) {
+        UINavigationController *nav = [segue destinationViewController];
+        MasterViewController *masterViewController = (MasterViewController *)nav.topViewController;
+        [masterViewController setCurrentUser:self.currentUser];
+    }
 }
 
 - (IBAction)backgroudTap:(id)sender {
@@ -56,6 +90,17 @@
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     [textField resignFirstResponder];
     return YES;
+}
+
+- (void) alertStatus:(NSString *)msg :(NSString *)title :(int) tag
+{
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
+                                                        message:msg
+                                                       delegate:self
+                                              cancelButtonTitle:@"Ok"
+                                              otherButtonTitles:nil, nil];
+    alertView.tag = tag;
+    [alertView show];
 }
 
 @end

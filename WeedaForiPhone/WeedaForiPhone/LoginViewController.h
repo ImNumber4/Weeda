@@ -15,4 +15,6 @@
 - (IBAction)signinClicked:(id)sender;
 - (IBAction)backgroudTap:(id)sender;
 
+@property (nonatomic, retain) User * currentUser;
+
 @end
