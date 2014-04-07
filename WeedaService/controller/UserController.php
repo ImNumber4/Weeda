@@ -2,8 +2,27 @@
 
 class UserController extends Controller
 {
+	public function query($id) {
+		if (!isset($id)) {
+			error_log('Input error, id is null.');
+			http_response_code(400);
+			return;
+		}
+		
+		$userDAO = new UserDAO();
+		$user = $userDAO->find_by_id($id);
+		if (!$user) {
+			http_response_code(500);
+			return;
+		}
+		
+		header("Content-type: application/json");
+		http_response_code(200);
+		echo json_encode(array('user' => $user));
+	}
+	
 	public function login() {
-		$data = json_decode(file_get_contents("php://input."));
+		$data = json_decode(file_get_contents("php://input"));
 		$username = $data->username;
 		$password = $data->password;
 		
@@ -26,43 +45,18 @@ class UserController extends Controller
 			return;
 		}
 		
-		if ($password == $user->get_password()) {
+		if ($password == $user['password']) {
 			//login success
-			setcookie('usename', $username, time() + (86400 * 7));
+			setcookie('usename', $user['username'], time() + (86400 * 7));
+			header('Content-type: application/json');
 			http_response_code(200);
-			header('ContentType: application/json');
-			echo json_encode(array('id' => $user->get_id()));
+			echo json_encode(array("user" => $user));
 		} else {
 			//username password is wrong.
 			http_response_code(401);
-			header('ContentType: application/json');
+			header('Content-type: application/json');
 		}
 		
-	}
-	
-	public function query($id) {
-
-		/* connect to the db */
-		$db_conn = new DbConnection();
-
-		/* grab the users from the db */
-		$query = "SELECT * FROM user WHERE id=$id";
-
-		$result = $db_conn->query($query);
-
-		/* create one master array of the records */
-		$users = array();
-		if(mysql_num_rows($result)) {
-			while($user = mysql_fetch_assoc($result)) {
-				$users[] = $user;
-			}
-		}
-
-		/* output in necessary format */
-
-		header('Content-type: application/json');
-		http_response_code(200);
-		echo json_encode(array('users'=>$users));
 	}
 	
 	public function logout() {

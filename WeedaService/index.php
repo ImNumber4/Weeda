@@ -15,7 +15,6 @@ error_log('request url: '. $url);
 //Get post data
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	error_log('Post data is: ' . file_get_contents('php://input'));
-	var_dump($_POST);
 }
 
 Hook($url);

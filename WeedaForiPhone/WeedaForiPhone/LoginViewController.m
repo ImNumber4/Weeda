@@ -19,6 +19,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.currentUser = [NSEntityDescription
+                        insertNewObjectForEntityForName:@"User"
+                        inManagedObjectContext:[RKObjectManager sharedManager].managedObjectStore.mainQueueManagedObjectContext];
+    
+    self.currentUser.id = [NSNumber numberWithInt:3];
+    self.currentUser.username = @"test";
+    self.currentUser.email = @"test@test.com";
     // Do any additional setup after loading the view.
     self.currentUser = [NSEntityDescription
                         insertNewObjectForEntityForName:@"User"
@@ -47,24 +54,39 @@
 */
 
 - (IBAction)signinClicked:(id)sender {
-//    @try {
-//        if ([[self.txtUsername text] isEqualToString:@""] || [[self.txtPassword text] isEqualToString:@""]) {
-//            [self alertStatus:@"Please input your Email and Password" :@"Sign In Failed." :0];
-//            return;
-//        }
-//        
-//        
-//        
-//    }
-//    @catch (NSException *exception) {
-//        NSLog(@"Exception: %@", exception);
-//        [self alertStatus:@"Sign in Failed." :@"Error!" :0];
-//    }
-//    @finally {
-//        //
-//    }
-    
-    
+    @try {
+        if ([[self.txtUsername text] isEqualToString:@""] || [[self.txtPassword text] isEqualToString:@""]) {
+            [self alertStatus:@"Please input your Email and Password" :@"Sign In Failed." :0];
+            return;
+        }
+        
+        RKManagedObjectStore *objectStore = [[RKObjectManager sharedManager] managedObjectStore];
+        User *user = [NSEntityDescription insertNewObjectForEntityForName:@"User" inManagedObjectContext:objectStore.mainQueueManagedObjectContext];
+        user.username = [self.txtUsername text];
+        user.password = [self.txtPassword text];
+        
+        RKObjectManager *manager = [RKObjectManager sharedManager];
+        RKObjectMapping * loginMapping = [RKObjectMapping requestMapping];
+        [loginMapping addAttributeMappingsFromArray:@[ @"username", @"password"]];
+        RKRequestDescriptor *loginRequestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:loginMapping
+                                                                                       objectClass:[User class]
+                                                                                       rootKeyPath:nil
+                                                                                            method:RKRequestMethodPOST];
+        [manager addRequestDescriptor:loginRequestDescriptor];
+        [[RKObjectManager sharedManager] postObject:user path:@"user/login" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+            NSLog(@"Response: %@", mappingResult);
+            [self performSegueWithIdentifier:@"loginSuccess" sender:self];
+        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+            NSLog(@"Failure login: %@", error.localizedDescription);
+        }];
+    }
+    @catch (NSException *exception) {
+        NSLog(@"Exception: %@", exception);
+        [self alertStatus:@"Sign in Failed." :@"Error!" :0];
+    }
+    @finally {
+        //
+    }
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {

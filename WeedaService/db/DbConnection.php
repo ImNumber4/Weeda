@@ -32,7 +32,7 @@ class DbConnection
 		if ($this->db_conn == null) {
 			$this->init_connection();
 		}
-
+		
 		$result = mysql_query($query, $this->db_conn) or die('Errant query:  '.$query);
 		return $result;
 	}

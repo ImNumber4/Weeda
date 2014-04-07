@@ -105,9 +105,17 @@
                                                                                            pathPattern:@"user/query/:id"
                                                                                                keyPath:@"users"
                                                                                            statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
-    
-    
     [manager addResponseDescriptor:userResponseDescriptor];
+    
+    RKResponseDescriptor *loginResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping
+                                                                                                 method:RKRequestMethodPOST
+                                                                                             pathPattern:@"user/login"
+                                                                                                keyPath:@"user"
+                                                                                            statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+    [manager addResponseDescriptor:loginResponseDescriptor];
+    
+    
+    
     
     RKObjectMapping *userRequestMapping = [RKObjectMapping requestMapping];
     [userRequestMapping addAttributeMappingsFromArray:@[@"id"]];

@@ -12,6 +12,7 @@
 @implementation User
 
 @dynamic username;
+@dynamic password;
 @dynamic email;
 @dynamic weeds;
 
