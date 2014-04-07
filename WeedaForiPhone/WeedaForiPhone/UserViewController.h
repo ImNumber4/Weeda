@@ -19,5 +19,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *weedCountLabel;
 @property (weak, nonatomic) IBOutlet UILabel *followingCountLabel;
 @property (weak, nonatomic) IBOutlet UILabel *followerCountLabel;
+@property (weak, nonatomic) IBOutlet UIButton *followButton;
+
 
 @end

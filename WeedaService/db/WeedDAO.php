@@ -28,6 +28,18 @@ class WeedDAO extends BaseDAO
 		return true;
 	}
 	
+	public function delete($id)
+	{
+		$query = 'UPDATE weed SET deleted = 1 WHERE id = ' . $id;
+		error_log('update query: ' . $query);
+		$result = $this->db_conn->query($query);
+		if (!$result) {
+			error_log("SQL failed. Query: " . $query);
+			return false;
+		}
+		return true;
+	}
+	
 	public function find_by_id($id)
 	{
 		$query = "SELECT * FROM weed WHERE id = ".$id;

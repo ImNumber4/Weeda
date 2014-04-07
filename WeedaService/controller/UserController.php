@@ -9,8 +9,16 @@ class UserController extends Controller
 			return;
 		}
 		
+		$currentUser_id = $_COOKIE['user_id'];
+		if (!isset($currentUser_id)) {
+			error_log('current user is not set');
+			header("Content-type: application/json");
+			http_response_code(400);
+			return;
+		}
+		
 		$userDAO = new UserDAO();
-		$user = $userDAO->find_by_id($id);
+		$user = $userDAO->find_by_id($id, $currentUser_id);
 		if (!$user) {
 			http_response_code(500);
 			return;
@@ -47,7 +55,7 @@ class UserController extends Controller
 		
 		if ($password == $user['password']) {
 			//login success
-			setcookie('username', $user['username'], time() + (86400 * 7));
+			setcookie('user_id', $user['id'], time() + (86400 * 7));
 			header('Content-type: application/json');
 			http_response_code(200);
 			echo json_encode(array("user" => $user));
@@ -56,17 +64,16 @@ class UserController extends Controller
 			http_response_code(401);
 			header('Content-type: application/json');
 		}
-		
 	}
 
 	public function logout() {
-		$username = $_COOKIE['username'];
-		if (!isset($username)) {
+		$user_id = $_COOKIE['user_id'];
+		if (!isset($user_id)) {
 			//already log out.
 			return;
 		}
 		
-		setcookie('username', '', time() - 3600);
+		setcookie('user_id', '', time() - 3600);
 	}
 	
 	private function parse_body_request() {

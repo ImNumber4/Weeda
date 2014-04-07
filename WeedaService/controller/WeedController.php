@@ -46,15 +46,11 @@ class WeedController extends Controller
 		echo json_encode(array('id' => $result));
 	}
 	
-	public function delete($para)
+	public function delete($id)
 	{
 		$weedDAO = new WeedDAO();
-		$weed = $this->parse_request_body();
-		
-		//update delete flag
-		$weed->set_deleted(1);
-		$weedDAO->update($weed);
-		if (!$weedDAO->update($weed)) {
+
+		if (!$weedDAO->delete($id)) {
 			//return 400
 			http_response_code(400);
 			return;

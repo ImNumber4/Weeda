@@ -23,7 +23,8 @@ class UserDAO
 		}
 	}
 	
-	public function find_by_id($id) {
+	
+	public function find_by_id($id, $currentUser_id) {
 		
 		$db_conn = new DbConnection();
 		
@@ -38,10 +39,40 @@ class UserDAO
 			$user['followingCount'] = $followingCount;
 			$weedCount = $this->getWeedCount($db_conn, $id);
 			$user['weedCount'] = $weedCount;
+			$relationship = $this->getRelationship($currentUser_id, $id);
+			$user['relationshipWithCurrentUser'] = $relationship;
 			return $user;
 		} else {
 			return null;
 		}
+	}
+	
+	public function getRelationship($userA_id, $userB_id) {
+		if($userA_id == $userB_id)
+			return 0;
+		$db_conn = new DbConnection();
+		$isAFollowingB = $this->isAFollowingB($db_conn, $userA_id, $userB_id);
+		$isBFollowingA = $this->isAFollowingB($db_conn, $userB_id, $userA_id);
+		if($isAFollowingB && $isBFollowingA){
+			return 4;
+		}else if($isAFollowingB){
+			return 3;
+		}else if($isBFollowingA){
+			return 2;
+		}else{
+			return 1;
+		}
+	}
+	
+	private function isAFollowingB($db_conn, $userA_id, $userB_id) {
+		$query = "SELECT count(*) as count FROM follow WHERE followee_uid = $userB_id AND follower_uid = $userA_id";	
+		$result = $db_conn->query($query);
+		$isAFollowingB = false;
+		$val = mysql_fetch_assoc($result)['count'];
+		if ($val > 0) {
+			$isAFollowingB = true;
+		}
+		return $isAFollowingB;
 	}
 	
 	private function getFollowerCount($db_conn, $id) {

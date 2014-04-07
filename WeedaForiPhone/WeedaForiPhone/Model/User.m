@@ -18,6 +18,7 @@
 @dynamic followingCount;
 @dynamic username;
 @dynamic weedCount;
+@dynamic relationshipWithCurrentUser;
 @dynamic weeds;
 
 @end

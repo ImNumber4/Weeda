@@ -21,7 +21,6 @@
     // Do any additional setup after loading the view.
     
     [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"user/query/%@", self.user_id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-        RKLogInfo(@"Load complete: Table should refresh...");
         User *user = [mappingResult.array objectAtIndex:0];
         self.userNameLabel.text = [NSString stringWithFormat:@"@%@", user.username];
         self.userEmailLabel.text = user.email;
@@ -32,9 +31,17 @@
         self.weedCountLabel.text = [NSString stringWithFormat:@"%@", user.weedCount];
         self.followerCountLabel.text = [NSString stringWithFormat:@"%@", user.followerCount];
         self.followingCountLabel.text = [NSString stringWithFormat:@"%@", user.followingCount];
+        if ([user.relationshipWithCurrentUser intValue] == 0) {
+            self.followButton.hidden = TRUE;
+        } else if ([user.relationshipWithCurrentUser intValue] < 3){
+            [self.followButton setTitle:@"+Follow" forState:UIControlStateNormal];
+        } else {
+            [self.followButton setTitle:@"Following" forState:UIControlStateNormal];
+        }
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
         RKLogError(@"Load failed with error: %@", error);
     }];
+    
 }
 
 - (void)didReceiveMemoryWarning

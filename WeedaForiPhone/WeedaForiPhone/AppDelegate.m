@@ -74,6 +74,7 @@
                                                       @"weedCount" : @"weedCount",
                                                       @"followerCount" : @"followerCount",
                                                       @"followingCount" : @"followingCount",
+                                                      @"relationshipWithCurrentUser" : @"relationshipWithCurrentUser",
                                                       }];
     
     [userMapping addAttributeMappingsFromDictionary:parentObjectMapping];

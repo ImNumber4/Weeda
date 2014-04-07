@@ -42,7 +42,8 @@ class DbConnection
 			$this->init_connection();
 		}
 		
-		$result = mysqli_query($this->db_conn, $query);
+		$result = mysql_query($query, $this->db_conn);
+		error_log('result'. $result);
 		if (!$result)
 		{
 			return 0;
