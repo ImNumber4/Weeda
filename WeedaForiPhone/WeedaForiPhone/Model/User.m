@@ -12,11 +12,12 @@
 
 @implementation User
 
-@dynamic username;
-@dynamic password;
 @dynamic email;
+@dynamic password;
 @dynamic followerCount;
 @dynamic followingCount;
+@dynamic username;
+@dynamic weedCount;
 @dynamic weeds;
 
 @end

@@ -29,7 +29,9 @@
         [dateFormatter setDateFormat:@"MMM. yyyy"];
         NSString *formattedDateString = [dateFormatter stringFromDate:user.time];
         self.timeLabel.text = [NSString stringWithFormat:@"Memeber since: %@", formattedDateString];
-        
+        self.weedCountLabel.text = [NSString stringWithFormat:@"%@", user.weedCount];
+        self.followerCountLabel.text = [NSString stringWithFormat:@"%@", user.followerCount];
+        self.followingCountLabel.text = [NSString stringWithFormat:@"%@", user.followingCount];
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
         RKLogError(@"Load failed with error: %@", error);
     }];

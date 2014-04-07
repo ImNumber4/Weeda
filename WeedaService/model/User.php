@@ -11,6 +11,9 @@ class User
 	private $email;
 	private $time;
 	private $deleted;
+	private $followerCount;
+	private $followingCount;
+	private $weedCount;
 	
 	public function get_id() {
 		return $this->id;
@@ -59,5 +62,30 @@ class User
 	public function set_deleted($deleted) {
 		$this->deleted = $deleted;
 	}
+	
+	public function  get_followerCount() {
+		return $this->followerCount;
+	}
+	
+	public function set_followerCount($followerCount) {
+		$this->followerCount = $followerCount;
+	}
+	
+	public function  get_followingCount() {
+		return $this->followingCount;
+	}
+	
+	public function set_followingCount($followingCount) {
+		$this->followingCount = $followingCount;
+	}
+	
+	public function  get_weedCount() {
+		return $this->weedCount;
+	}
+	
+	public function set_weedCount($weedCount) {
+		$this->weedCount = $weedCount;
+	}
+	
 }
 ?>

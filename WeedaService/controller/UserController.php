@@ -66,7 +66,7 @@ class UserController extends Controller
 			return;
 		}
 		
-		setcookie('usename', '', time() - 3600);
+		setcookie('username', '', time() - 3600);
 	}
 	
 	private function parse_body_request() {

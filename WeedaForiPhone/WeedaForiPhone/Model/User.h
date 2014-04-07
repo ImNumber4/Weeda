@@ -14,13 +14,12 @@
 
 @interface User : RemoteObject
 
-@property (nonatomic, retain) NSString * username;
-@property (nonatomic, retain) NSString * password;
 @property (nonatomic, retain) NSString * email;
-@property (nonatomic, retain) NSString * username;
 @property (nonatomic, retain) NSString * password;
 @property (nonatomic, retain) NSNumber * followerCount;
 @property (nonatomic, retain) NSNumber * followingCount;
+@property (nonatomic, retain) NSString * username;
+@property (nonatomic, retain) NSNumber * weedCount;
 @property (nonatomic, retain) NSSet *weeds;
 @end
 

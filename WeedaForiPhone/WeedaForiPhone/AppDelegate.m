@@ -71,6 +71,9 @@
     [userMapping addAttributeMappingsFromDictionary:@{
                                                       @"username" : @"username",
                                                       @"email" : @"email",
+                                                      @"weedCount" : @"weedCount",
+                                                      @"followerCount" : @"followerCount",
+                                                      @"followingCount" : @"followingCount",
                                                       }];
     
     [userMapping addAttributeMappingsFromDictionary:parentObjectMapping];
