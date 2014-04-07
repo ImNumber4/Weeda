@@ -20,6 +20,7 @@
     <elements>
         <element name="RemoteObject" positionX="-90" positionY="-61" width="128" height="90"/>
         <element name="User" positionX="-225" positionY="249" width="128" height="120"/>
+        <element name="User" positionX="-225" positionY="249" width="128" height="105"/>
         <element name="Weed" positionX="18" positionY="212" width="144" height="73"/>
     </elements>
 </model>
