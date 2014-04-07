@@ -47,7 +47,7 @@ class UserController extends Controller
 		
 		if ($password == $user['password']) {
 			//login success
-			setcookie('usename', $user['username'], time() + (86400 * 7));
+			setcookie('username', $user['username'], time() + (86400 * 7));
 			header('Content-type: application/json');
 			http_response_code(200);
 			echo json_encode(array("user" => $user));
@@ -58,7 +58,7 @@ class UserController extends Controller
 		}
 		
 	}
-	
+
 	public function logout() {
 		$username = $_COOKIE['username'];
 		if (!isset($username)) {

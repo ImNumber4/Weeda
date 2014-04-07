@@ -31,12 +31,12 @@
 		A953B6F618D6D7D2001CDD4C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A953B6F518D6D7D2001CDD4C /* Security.framework */; };
 		A953B6F818D6D7DB001CDD4C /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A953B6F718D6D7DB001CDD4C /* SystemConfiguration.framework */; };
 		A953B6FE18D6D9DB001CDD4C /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A953B6FC18D6D9DB001CDD4C /* Model.xcdatamodeld */; };
-		A953B70418DF7FA4001CDD4C /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = A953B70318DF7FA4001CDD4C /* User.m */; };
 		A953B70718DF7FA4001CDD4C /* Weed.m in Sources */ = {isa = PBXBuildFile; fileRef = A953B70618DF7FA4001CDD4C /* Weed.m */; };
 		A953B70B18DF8E42001CDD4C /* libRestKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A953B6E418D6D794001CDD4C /* libRestKit.a */; };
 		A9CA8E5918E8DB1E004F095D /* RemoteObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A9CA8E5818E8DB1E004F095D /* RemoteObject.m */; };
 		A9CA8E6618E9132C004F095D /* AddWeedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9CA8E6518E9132C004F095D /* AddWeedViewController.m */; };
 		A9CA8E7E18F0F814004F095D /* UserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9CA8E7D18F0F814004F095D /* UserViewController.m */; };
+		A9CA8E8418F238AB004F095D /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = A9CA8E8318F238AB004F095D /* User.m */; };
 		EAA18EDE18F0ADFD0081482D /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA18EDD18F0ADFD0081482D /* LoginViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -116,8 +116,6 @@
 		A953B6F518D6D7D2001CDD4C /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		A953B6F718D6D7DB001CDD4C /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		A953B6FD18D6D9DB001CDD4C /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
-		A953B70218DF7FA4001CDD4C /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = User.h; path = WeedaForiPhone/Model/User.h; sourceTree = "<group>"; };
-		A953B70318DF7FA4001CDD4C /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = User.m; path = WeedaForiPhone/Model/User.m; sourceTree = "<group>"; };
 		A953B70518DF7FA4001CDD4C /* Weed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Weed.h; path = WeedaForiPhone/Model/Weed.h; sourceTree = "<group>"; };
 		A953B70618DF7FA4001CDD4C /* Weed.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Weed.m; path = WeedaForiPhone/Model/Weed.m; sourceTree = "<group>"; };
 		A9CA8E5718E8DB1E004F095D /* RemoteObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RemoteObject.h; path = WeedaForiPhone/Model/RemoteObject.h; sourceTree = "<group>"; };
@@ -126,6 +124,8 @@
 		A9CA8E6518E9132C004F095D /* AddWeedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddWeedViewController.m; sourceTree = "<group>"; };
 		A9CA8E7C18F0F814004F095D /* UserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserViewController.h; sourceTree = "<group>"; };
 		A9CA8E7D18F0F814004F095D /* UserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserViewController.m; sourceTree = "<group>"; };
+		A9CA8E8218F238AB004F095D /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = User.h; path = WeedaForiPhone/Model/User.h; sourceTree = "<group>"; };
+		A9CA8E8318F238AB004F095D /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = User.m; path = WeedaForiPhone/Model/User.m; sourceTree = "<group>"; };
 		EAA18EDC18F0ADFD0081482D /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		EAA18EDD18F0ADFD0081482D /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -257,10 +257,10 @@
 			isa = PBXGroup;
 			children = (
 				A953B6FC18D6D9DB001CDD4C /* Model.xcdatamodeld */,
+				A9CA8E8218F238AB004F095D /* User.h */,
+				A9CA8E8318F238AB004F095D /* User.m */,
 				A953B70518DF7FA4001CDD4C /* Weed.h */,
 				A953B70618DF7FA4001CDD4C /* Weed.m */,
-				A953B70218DF7FA4001CDD4C /* User.h */,
-				A953B70318DF7FA4001CDD4C /* User.m */,
 				A9CA8E5718E8DB1E004F095D /* RemoteObject.h */,
 				A9CA8E5818E8DB1E004F095D /* RemoteObject.m */,
 			);
@@ -413,13 +413,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A953B70418DF7FA4001CDD4C /* User.m in Sources */,
 				A953B6FE18D6D9DB001CDD4C /* Model.xcdatamodeld in Sources */,
 				A914CCC218CD756200B870D8 /* DetailViewController.m in Sources */,
 				A914CCBF18CD756200B870D8 /* MasterViewController.m in Sources */,
 				EAA18EDE18F0ADFD0081482D /* LoginViewController.m in Sources */,
 				A9CA8E5918E8DB1E004F095D /* RemoteObject.m in Sources */,
 				A914CCB618CD756200B870D8 /* AppDelegate.m in Sources */,
+				A9CA8E8418F238AB004F095D /* User.m in Sources */,
 				A9CA8E7E18F0F814004F095D /* UserViewController.m in Sources */,
 				A953B70718DF7FA4001CDD4C /* Weed.m in Sources */,
 				A9CA8E6618E9132C004F095D /* AddWeedViewController.m in Sources */,

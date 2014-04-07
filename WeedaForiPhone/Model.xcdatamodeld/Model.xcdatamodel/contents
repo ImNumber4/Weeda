@@ -8,6 +8,8 @@
     <entity name="User" representedClassName="User" parentEntity="RemoteObject" syncable="YES">
         <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="password" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="followerCount" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="followingCount" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="weeds" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Weed" inverseName="user" inverseEntity="Weed" syncable="YES"/>
     </entity>
@@ -17,7 +19,7 @@
     </entity>
     <elements>
         <element name="RemoteObject" positionX="-90" positionY="-61" width="128" height="90"/>
-        <element name="User" positionX="-225" positionY="249" width="128" height="105"/>
+        <element name="User" positionX="-225" positionY="249" width="128" height="120"/>
         <element name="Weed" positionX="18" positionY="212" width="144" height="73"/>
     </elements>
 </model>
