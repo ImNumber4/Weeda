@@ -38,7 +38,6 @@
 		A9CA8E7E18F0F814004F095D /* UserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9CA8E7D18F0F814004F095D /* UserViewController.m */; };
 		A9CA8E8F18F264BA004F095D /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = A9CA8E8E18F264BA004F095D /* User.m */; };
 		EA1B050F18F3668A0033AB06 /* WelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA1B050E18F3668A0033AB06 /* WelcomeViewController.m */; };
-		EA1B051118F368220033AB06 /* backgroud.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EA1B051018F368220033AB06 /* backgroud.jpg */; };
 		EAA18EDE18F0ADFD0081482D /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA18EDD18F0ADFD0081482D /* LoginViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -130,7 +129,6 @@
 		A9CA8E8E18F264BA004F095D /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = User.m; path = WeedaForiPhone/Model/User.m; sourceTree = "<group>"; };
 		EA1B050D18F3668A0033AB06 /* WelcomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WelcomeViewController.h; sourceTree = "<group>"; };
 		EA1B050E18F3668A0033AB06 /* WelcomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WelcomeViewController.m; sourceTree = "<group>"; };
-		EA1B051018F368220033AB06 /* backgroud.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = backgroud.jpg; path = "../../../../Pictures/iPhoto 图库/Previews/2014/04/06/20140406-162511/V4DcSa88SlyuXz8nw8zHnA/backgroud.jpg"; sourceTree = "<group>"; };
 		EAA18EDC18F0ADFD0081482D /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		EAA18EDD18F0ADFD0081482D /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -210,7 +208,6 @@
 		A914CCAB18CD756200B870D8 /* WeedaForiPhone */ = {
 			isa = PBXGroup;
 			children = (
-				EA1B051018F368220033AB06 /* backgroud.jpg */,
 				A9CA8E7C18F0F814004F095D /* UserViewController.h */,
 				A9CA8E7D18F0F814004F095D /* UserViewController.m */,
 				EAA18EDC18F0ADFD0081482D /* LoginViewController.h */,
@@ -400,7 +397,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EA1B051118F368220033AB06 /* backgroud.jpg in Resources */,
 				A914CCC418CD756200B870D8 /* Images.xcassets in Resources */,
 				A914CCB018CD756200B870D8 /* InfoPlist.strings in Resources */,
 				A914CCB918CD756200B870D8 /* Main.storyboard in Resources */,
