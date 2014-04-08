@@ -47,8 +47,15 @@
 - (void)makeFollowingButton
 {
     [self.followButton setTitle:@"Following" forState:UIControlStateNormal];
-    self.followButton.backgroundColor = [UIColor colorWithRed:75.0/255.0 green:250.0/255.0 blue:117.0/255.0 alpha:1];
+    self.followButton.backgroundColor = [UIColor colorWithRed:127.0/255.0 green:242.0/255.0 blue:61.0/255.0 alpha:1];
     [self.followButton addTarget:self action:@selector(unfollow:) forControlEvents:UIControlEventTouchUpInside];
+}
+
+- (void)makeEditProfileButton
+{
+    [self.followButton setTitle:@"Edit Profile" forState:UIControlStateNormal];
+    self.followButton.backgroundColor = [UIColor colorWithRed:200.0/255.0 green:200.0/255.0 blue:200.0/255.0 alpha:1];
+    [self.followButton addTarget:self action:@selector(editProfile:) forControlEvents:UIControlEventTouchUpInside];
 }
 
 - (void)updateView
@@ -63,7 +70,7 @@
     self.followerCountLabel.text = [NSString stringWithFormat:@"%@", self.user.followerCount];
     self.followingCountLabel.text = [NSString stringWithFormat:@"%@", self.user.followingCount];
     if ([self.user.relationshipWithCurrentUser intValue] == 0) {
-        self.followButton.hidden = TRUE;
+        [self makeEditProfileButton];
     } else if ([self.user.relationshipWithCurrentUser intValue] < 3){
         [self makeFollowButton];
     } else {
@@ -71,6 +78,10 @@
     }
 }
 
+- (void)editProfile:(id)sender
+{
+    NSLog(@"Editing Profile");
+}
 
 - (void)follow:(id)sender
 {
