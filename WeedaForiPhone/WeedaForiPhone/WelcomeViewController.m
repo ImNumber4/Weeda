@@ -82,13 +82,13 @@
 - (NSHTTPCookie *) checkCookies
 {
     NSArray *cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookies];
-    if (!cookies || !cookies.count) {
+    if (!cookies || cookies.count == 0) {
         return nil;
     }
     
     if (cookies.count == 1) {
         NSHTTPCookie *cookie = [cookies objectAtIndex:0];
-        if ([cookie.expiresDate earlierDate:[NSDate date]]) {
+        if ([cookie.expiresDate isEqualToDate:[cookie.expiresDate earlierDate:[NSDate date]]]) {
             //cookie expired, delete cookie
             [[NSHTTPCookieStorage sharedHTTPCookieStorage] deleteCookie:cookie];
             return nil;
@@ -100,7 +100,7 @@
     //if there are more than one cookies, save the first one which not expired, delete others.
     NSHTTPCookie *savedCookie = nil;
     for (NSHTTPCookie *cookie in cookies) {
-        if (!savedCookie && [cookie.expiresDate laterDate:[NSDate date]]) {
+        if (!savedCookie && [cookie.expiresDate isEqualToDate:[cookie.expiresDate laterDate:[NSDate date]]]) {
             savedCookie = cookie;
         } else {
             [[NSHTTPCookieStorage sharedHTTPCookieStorage] deleteCookie:cookie];
