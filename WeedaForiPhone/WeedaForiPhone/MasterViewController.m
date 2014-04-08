@@ -9,6 +9,8 @@
 #import "MasterViewController.h"
 #import "DetailViewController.h"
 #import "AddWeedViewController.h"
+#import "UserViewController.h"
+#import "WeedTableViewCell.h"
 #import <RestKit/RestKit.h>
 #import "Weed.h"
 #import "User.h"
@@ -33,8 +35,6 @@
 {
     
     [super viewDidLoad];
-    self.navigationItem.leftBarButtonItem = self.editButtonItem;
-    
     
     UIRefreshControl *refresh = [[UIRefreshControl alloc] init];
     refresh.attributedTitle = [[NSAttributedString alloc] initWithString:@"Pull to Refresh"];
@@ -134,15 +134,30 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"MyBasicCell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    static NSString *CellIdentifier = @"WeedTableCell";
+    WeedTableViewCell *cell = (WeedTableViewCell *) [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     Weed *weed = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    cell.textLabel.numberOfLines=5;
-    cell.textLabel.text = [NSString stringWithFormat:@"%@", weed.content];
-    cell.detailTextLabel.font = [UIFont systemFontOfSize:8.0 ];
-    cell.detailTextLabel.textColor = [UIColor grayColor];
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"by %@", weed.user.email];
+    cell.weedContentLabel.text = [NSString stringWithFormat:@"%@", weed.content];
     
+    NSString *nameLabel = [NSString stringWithFormat:@"@%@ (%@)", weed.user.username, weed.user.email];
+    NSMutableAttributedString *attString=[[NSMutableAttributedString alloc] initWithString:nameLabel];
+    NSInteger nameLength=[weed.user.username length] + 1;
+    NSInteger totalLength=[nameLabel length];
+    [attString addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Helvetica" size:9.0f] range:NSMakeRange(0, totalLength)];
+    [attString addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Helvetica-Bold" size:10.0f] range:NSMakeRange(0, nameLength)];
+    [attString addAttribute:NSForegroundColorAttributeName value:[UIColor grayColor] range:NSMakeRange(0, totalLength)];
+    [attString addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(0, nameLength)];
+    [cell.usernameLabel setAttributedTitle:attString forState:UIControlStateNormal];
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"MMM. dd yyyy"];
+    NSString *formattedDateString = [dateFormatter stringFromDate:weed.time];
+    cell.timeLabel.text = [NSString stringWithFormat:@"%@", formattedDateString];
+    cell.userAvatar.image = [UIImage imageNamed:@"avatar.jpg"];
+    CALayer * l = [cell.userAvatar layer];
+    [l setMasksToBounds:YES];
+    [l setCornerRadius:7.0];
+
     return cell;
 }
 
@@ -159,10 +174,16 @@
         Weed *weed = [[self fetchedResultsController] objectAtIndexPath:indexPath];
         [[segue destinationViewController] setWeed:weed];
         [[segue destinationViewController] setCurrentUser:self.currentUser];
-    }else if([[segue identifier] isEqualToString:@"addWeed"]) {
+    } else if ([[segue identifier] isEqualToString:@"addWeed"]) {
         UINavigationController *nav = [segue destinationViewController];
         AddWeedViewController *addWeedViewController = (AddWeedViewController *)nav.topViewController;
         [addWeedViewController setCurrentUser:self.currentUser];
+    } else if ([[segue identifier] isEqualToString:@"showUser"]) {
+        CGPoint buttonPosition = [sender convertPoint:CGPointZero toView:self.tableView];
+        NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:buttonPosition];
+        Weed *weed = [[self fetchedResultsController] objectAtIndexPath:indexPath];
+        [[segue destinationViewController] setUser_id:weed.user.id];
+        [[segue destinationViewController] setCurrentUser:self.currentUser];
     }
 }
 

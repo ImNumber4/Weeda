@@ -13,6 +13,8 @@
 @property (strong, nonatomic) Weed *weed;
 @property (nonatomic, retain) User * currentUser;
 
-@property (weak, nonatomic) IBOutlet UILabel *detailDescriptionLabel;
+@property (weak, nonatomic) IBOutlet UILabel *weedContentLabel;
 @property (weak, nonatomic) IBOutlet UIButton *userLabel;
+@property (weak, nonatomic) IBOutlet UILabel *timeLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *userAvatar;
 @end

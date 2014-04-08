@@ -35,9 +35,26 @@
         NSString *content = self.weed.content;
         NSString *username = self.weed.user.username;
         NSString *email = self.weed.user.email;
-        [self.userLabel setTitle:[NSString stringWithFormat:@"%@(%@)", username, email] forState:UIControlStateNormal];
-        self.detailDescriptionLabel.text = [NSString stringWithFormat:@"%@", content];
-        self.detailDescriptionLabel.numberOfLines=5;
+        
+        NSString *nameLabel = [NSString stringWithFormat:@"@%@ (%@)", username, email];
+        NSMutableAttributedString *attString=[[NSMutableAttributedString alloc] initWithString:nameLabel];
+        NSInteger nameLength=[username length] + 1;
+        NSInteger totalLength=[nameLabel length];
+        [attString addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Helvetica" size:9.0f] range:NSMakeRange(0, totalLength)];
+        [attString addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Helvetica-Bold" size:10.0f] range:NSMakeRange(0, nameLength)];
+        [attString addAttribute:NSForegroundColorAttributeName value:[UIColor grayColor] range:NSMakeRange(0, totalLength)];
+        [attString addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(0, nameLength)];
+        [self.userLabel setAttributedTitle:attString forState:UIControlStateNormal];
+        
+        self.weedContentLabel.text = [NSString stringWithFormat:@"%@", content];
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"MMM. dd yyyy"];
+        NSString *formattedDateString = [dateFormatter stringFromDate:self.weed.time];
+        self.timeLabel.text = [NSString stringWithFormat:@"%@", formattedDateString];
+        self.userAvatar.image = [UIImage imageNamed:@"avatar.jpg"];
+        CALayer * l = [self.userAvatar layer];
+        [l setMasksToBounds:YES];
+        [l setCornerRadius:7.0];
     }
 }
 

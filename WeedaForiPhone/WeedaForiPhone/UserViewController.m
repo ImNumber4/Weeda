@@ -76,6 +76,11 @@
     } else {
         [self makeFollowingButton];
     }
+    
+    self.userAvatar.image = [UIImage imageNamed:@"avatar.jpg"];
+    CALayer * l = [self.userAvatar layer];
+    [l setMasksToBounds:YES];
+    [l setCornerRadius:7.0];
 }
 
 - (void)editProfile:(id)sender
