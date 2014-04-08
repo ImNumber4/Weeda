@@ -29,6 +29,55 @@ class UserController extends Controller
 		echo json_encode(array('user' => $user));
 	}
 	
+	public function follow($id) {
+		if (!isset($id)) {
+			error_log('Input error, id is null.');
+			http_response_code(400);
+			return;
+		}
+		$currentUser_id = $_COOKIE['user_id'];
+		if (!isset($currentUser_id)) {
+			error_log('current user is not set');
+			header("Content-type: application/json");
+			http_response_code(400);
+			return;
+		}
+		$userDAO = new UserDAO();
+		if ($userDAO->setAFollowB($currentUser_id, $id)) {
+			return $this->query($id);
+		} else {
+			error_log("failed to set currentUser=" . $currentUser_id . " to follow user " . $id);
+			header("Content-type: application/json");
+			http_response_code(500);
+			return;
+		}
+	}
+	
+	public function unfollow($id) {
+		if (!isset($id)) {
+			error_log('Input error, id is null.');
+			http_response_code(400);
+			return;
+		}
+		$currentUser_id = $_COOKIE['user_id'];
+		if (!isset($currentUser_id)) {
+			error_log('current user is not set');
+			header("Content-type: application/json");
+			http_response_code(400);
+			return;
+		}
+		$userDAO = new UserDAO();
+		if ($userDAO->setAUnfollowB($currentUser_id, $id)) {
+			return $this->query($id);
+		} else {
+			error_log('failed to set currentUser='. $currentUser_id. ' to unfollow user '. $id);
+			header("Content-type: application/json");
+			http_response_code(500);
+			return;
+		}
+	}
+	
+	
 	public function login() {
 		$data = json_decode(file_get_contents("php://input"));
 		$username = $data->username;

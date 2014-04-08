@@ -39,7 +39,7 @@ class UserDAO
 			$user['followingCount'] = $followingCount;
 			$weedCount = $this->getWeedCount($db_conn, $id);
 			$user['weedCount'] = $weedCount;
-			$relationship = $this->getRelationship($currentUser_id, $id);
+			$relationship = $this->getRelationship($db_conn, $currentUser_id, $id);
 			$user['relationshipWithCurrentUser'] = $relationship;
 			return $user;
 		} else {
@@ -47,10 +47,9 @@ class UserDAO
 		}
 	}
 	
-	public function getRelationship($userA_id, $userB_id) {
+	private function getRelationship($db_conn, $userA_id, $userB_id) {
 		if($userA_id == $userB_id)
 			return 0;
-		$db_conn = new DbConnection();
 		$isAFollowingB = $this->isAFollowingB($db_conn, $userA_id, $userB_id);
 		$isBFollowingA = $this->isAFollowingB($db_conn, $userB_id, $userA_id);
 		if($isAFollowingB && $isBFollowingA){
@@ -64,6 +63,23 @@ class UserDAO
 		}
 	}
 	
+	public function setAFollowB($userA_id, $userB_id) {
+		if($userA_id == $userB_id)
+			return false;
+		$db_conn = new DbConnection();
+		$query = "INSERT INTO follow VALUES($userB_id,$userA_id)";	
+		return $db_conn->query($query);
+	}
+	
+	public function setAUnfollowB($userA_id, $userB_id) {
+		if($userA_id == $userB_id)
+			return false;
+		$db_conn = new DbConnection();
+		$query = "DELETE FROM follow WHERE followee_uid = $userB_id AND follower_uid = $userA_id";	
+		return $db_conn->query($query);
+	}
+	
+	
 	private function isAFollowingB($db_conn, $userA_id, $userB_id) {
 		$query = "SELECT count(*) as count FROM follow WHERE followee_uid = $userB_id AND follower_uid = $userA_id";	
 		$result = $db_conn->query($query);
@@ -74,6 +90,7 @@ class UserDAO
 		}
 		return $isAFollowingB;
 	}
+	
 	
 	private function getFollowerCount($db_conn, $id) {
 		

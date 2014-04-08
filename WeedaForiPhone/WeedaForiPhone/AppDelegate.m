@@ -111,6 +111,20 @@
                                                                                            statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
     [manager addResponseDescriptor:userResponseDescriptor];
     
+    RKResponseDescriptor *followResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping
+                                                                                                method:RKRequestMethodGET
+                                                                                           pathPattern:@"user/follow/:id"
+                                                                                               keyPath:@"user"
+                                                                                           statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+    [manager addResponseDescriptor:followResponseDescriptor];
+    
+    RKResponseDescriptor *unfollowResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping
+                                                                                                  method:RKRequestMethodGET
+                                                                                             pathPattern:@"user/unfollow/:id"
+                                                                                                 keyPath:@"user"
+                                                                                             statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+    [manager addResponseDescriptor:unfollowResponseDescriptor];
+    
     RKResponseDescriptor *loginResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping
                                                                                                  method:RKRequestMethodPOST
                                                                                              pathPattern:@"user/login"
