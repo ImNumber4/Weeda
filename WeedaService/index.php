@@ -17,6 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	error_log('Post data is: ' . file_get_contents('php://input'));
 }
 
+
 Hook($url);
 
 function Hook($url) {
@@ -29,6 +30,16 @@ function Hook($url) {
         $controller = array_shift($urlArr); 
         $action = array_shift($urlArr);     
         $stringParameter = $urlArr;
+        
+        //check the authentication
+        if ($action != 'login') {
+        	$currentUser_id = $_COOKIE['user_id'];
+        	if (!isset($currentUser_id)) {
+        		header('Content-Type: application/json');
+        		http_response_code(401);
+        		return;
+        	}
+        }
 
         $controllerName = $controller;
         $controller = ucwords($controller).'Controller';

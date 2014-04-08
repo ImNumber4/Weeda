@@ -19,21 +19,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.currentUser = [NSEntityDescription
-                        insertNewObjectForEntityForName:@"User"
-                        inManagedObjectContext:[RKObjectManager sharedManager].managedObjectStore.mainQueueManagedObjectContext];
-    
-    self.currentUser.id = [NSNumber numberWithInt:3];
-    self.currentUser.username = @"test";
-    self.currentUser.email = @"test@test.com";
-    // Do any additional setup after loading the view.
-    self.currentUser = [NSEntityDescription
-                        insertNewObjectForEntityForName:@"User"
-                        inManagedObjectContext:[RKObjectManager sharedManager].managedObjectStore.mainQueueManagedObjectContext];
-    
-    self.currentUser.id = [NSNumber numberWithInt:3];
-    self.currentUser.username = @"test";
-    self.currentUser.email = @"test@test.com";
 }
 
 - (void)didReceiveMemoryWarning
@@ -61,9 +46,9 @@
         }
         
         RKManagedObjectStore *objectStore = [[RKObjectManager sharedManager] managedObjectStore];
-        User *user = [NSEntityDescription insertNewObjectForEntityForName:@"User" inManagedObjectContext:objectStore.mainQueueManagedObjectContext];
-        user.username = [self.txtUsername text];
-        user.password = [self.txtPassword text];
+        self.currentUser = [NSEntityDescription insertNewObjectForEntityForName:@"User" inManagedObjectContext:objectStore.mainQueueManagedObjectContext];
+        self.currentUser.username = [self.txtUsername text];
+        self.currentUser.password = [self.txtPassword text];
         
         RKObjectManager *manager = [RKObjectManager sharedManager];
         RKObjectMapping * loginMapping = [RKObjectMapping requestMapping];
@@ -73,8 +58,15 @@
                                                                                        rootKeyPath:nil
                                                                                             method:RKRequestMethodPOST];
         [manager addRequestDescriptor:loginRequestDescriptor];
-        [[RKObjectManager sharedManager] postObject:user path:@"user/login" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+        [[RKObjectManager sharedManager] postObject:self.currentUser path:@"user/login" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
             NSLog(@"Response: %@", mappingResult);
+            
+            NSHTTPURLResponse *response = [[operation HTTPRequestOperation] response];
+            NSDictionary *headerDictionary = [response allHeaderFields];
+            NSString *cookieString = [headerDictionary objectForKey:@"Set-Cookie"];
+            NSHTTPCookie * cookie = [self setCookie:cookieString];
+            
+            self.currentUser.id = [NSNumber numberWithInt:[cookie.value intValue]];
             [self performSegueWithIdentifier:@"loginSuccess" sender:self];
         } failure:^(RKObjectRequestOperation *operation, NSError *error) {
             NSLog(@"Failure login: %@", error.localizedDescription);
@@ -115,6 +107,30 @@
                                               otherButtonTitles:nil, nil];
     alertView.tag = tag;
     [alertView show];
+}
+
+- (NSHTTPCookie *) setCookie:(NSString *)cookieString
+{
+    NSArray *tmpArray = [cookieString componentsSeparatedByString:@";"];
+    NSArray *keyValue = [[tmpArray objectAtIndex:0] componentsSeparatedByString:@"="];
+    NSString *key = [keyValue objectAtIndex:0];
+    NSString *value = [keyValue objectAtIndex:1];
+    
+    
+    NSMutableDictionary *cookieProperties = [NSMutableDictionary dictionary];
+    [cookieProperties setObject:key forKey:NSHTTPCookieName];
+    [cookieProperties setObject:value forKey:NSHTTPCookieValue];
+    [cookieProperties setObject:@"/" forKey:NSHTTPCookiePath];
+    [cookieProperties setObject:@"0" forKey:NSHTTPCookieVersion];
+    
+    // set expiration to one month from now or any NSDate of your choosing
+    // this makes the cookie sessionless and it will persist across web sessions and app launches
+    /// if you want the cookie to be destroyed when your app exits, don't set this
+    [cookieProperties setObject:[[NSDate date] dateByAddingTimeInterval:86400 * 7] forKey:NSHTTPCookieExpires];
+    
+    NSHTTPCookie *cookie = [NSHTTPCookie cookieWithProperties:cookieProperties];
+    [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie];
+    return cookie;
 }
 
 @end
