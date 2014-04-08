@@ -47,7 +47,7 @@
         [self performSegueWithIdentifier:@"login" sender:self];
     } else {
         //renew cookie expire time;
-        [self renewCookieExpireTime:cookie];
+        //[self renewCookieExpireTime:cookie];
         
         //check cookie authentication
         //success, go to MasterView
@@ -124,8 +124,8 @@
     
     NSHTTPCookie *newCookie = [NSHTTPCookie cookieWithProperties:cookieProperties];
     
-    [[NSHTTPCookieStorage sharedHTTPCookieStorage] deleteCookie:cookie];
     [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:newCookie];
+    [[NSHTTPCookieStorage sharedHTTPCookieStorage] deleteCookie:cookie];
 }
 
 
