@@ -47,14 +47,14 @@
         [self performSegueWithIdentifier:@"login" sender:self];
     } else {
         //renew cookie expire time;
-        //[self renewCookieExpireTime:cookie];
+        NSHTTPCookie * newCookie = [self renewCookieExpireTime:cookie];
         
         //check cookie authentication
         //success, go to MasterView
         self.currentUser = [NSEntityDescription
                             insertNewObjectForEntityForName:@"User"
                             inManagedObjectContext:[RKObjectManager sharedManager].managedObjectStore.mainQueueManagedObjectContext];
-        self.currentUser.id = [NSNumber numberWithInt:[cookie.value integerValue]];
+        self.currentUser.id = [NSNumber numberWithInt:[newCookie.value integerValue]];
         
         sleep(2);
         [self performSegueWithIdentifier:@"masterView" sender:self];
@@ -109,23 +109,15 @@
     return savedCookie;
 }
 
-- (void) renewCookieExpireTime:(NSHTTPCookie *)cookie
+- (NSHTTPCookie *) renewCookieExpireTime:(NSHTTPCookie *)cookie
 {
-    NSMutableDictionary *cookieProperties = [NSMutableDictionary dictionary];
-    [cookieProperties setObject:cookie.name forKey:NSHTTPCookieName];
-    [cookieProperties setObject:cookie.value forKey:NSHTTPCookieValue];
-    [cookieProperties setObject:cookie.path forKey:NSHTTPCookiePath];
-    [cookieProperties setObject:[NSString stringWithFormat:@"%d", cookie.version] forKey:NSHTTPCookieVersion];
-    
-    // set expiration to one month from now or any NSDate of your choosing
-    // this makes the cookie sessionless and it will persist across web sessions and app launches
-    /// if you want the cookie to be destroyed when your app exits, don't set this
+    NSMutableDictionary *cookieProperties = (NSMutableDictionary *)[cookie properties] ;
     [cookieProperties setObject:[[NSDate date] dateByAddingTimeInterval:86400 * 7] forKey:NSHTTPCookieExpires];
     
     NSHTTPCookie *newCookie = [NSHTTPCookie cookieWithProperties:cookieProperties];
-    
     [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:newCookie];
-    [[NSHTTPCookieStorage sharedHTTPCookieStorage] deleteCookie:cookie];
+
+    return newCookie;
 }
 
 
