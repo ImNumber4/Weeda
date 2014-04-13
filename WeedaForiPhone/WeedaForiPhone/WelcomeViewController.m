@@ -7,7 +7,7 @@
 //
 
 #import "WelcomeViewController.h"
-
+#import "TabBarController.h"
 #import "LoginViewController.h"
 #import "MasterViewController.h"
 
@@ -73,9 +73,8 @@
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
     if ([[segue identifier] isEqualToString:@"masterView"]) {
-        UINavigationController *nav = [segue destinationViewController];
-        MasterViewController *masterViewController = (MasterViewController *)nav.topViewController;
-        [masterViewController setCurrentUser:self.currentUser];
+        TabBarController *tabBarController = [segue destinationViewController];
+        [tabBarController setCurrentUser:self.currentUser];
     }
 }
 

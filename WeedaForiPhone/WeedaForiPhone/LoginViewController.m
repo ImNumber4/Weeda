@@ -7,7 +7,7 @@
 //
 
 #import "LoginViewController.h"
-
+#import "TabBarController.h"
 #import "MasterViewController.h"
 
 @interface LoginViewController ()
@@ -83,9 +83,8 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:@"loginSuccess"]) {
-        UINavigationController *nav = [segue destinationViewController];
-        MasterViewController *masterViewController = (MasterViewController *)nav.topViewController;
-        [masterViewController setCurrentUser:self.currentUser];
+        TabBarController *tabBarController = [segue destinationViewController];
+        [tabBarController setCurrentUser:self.currentUser];
     }
 }
 

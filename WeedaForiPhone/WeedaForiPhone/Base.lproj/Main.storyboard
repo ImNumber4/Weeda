@@ -27,17 +27,18 @@
                     </view>
                     <connections>
                         <segue destination="KCI-Ki-fQS" kind="modal" identifier="login" id="5fv-xA-GDY"/>
-                        <segue destination="rS3-R9-Ivy" kind="modal" identifier="masterView" modalTransitionStyle="crossDissolve" id="kOW-ub-kjq"/>
+                        <segue destination="6Nn-SQ-2Of" kind="modal" identifier="masterView" modalTransitionStyle="crossDissolve" id="aBn-FK-paW"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DJ4-qS-ScA" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-12" y="-644"/>
+            <point key="canvasLocation" x="-2487" y="-826"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Navigation Controller - Item-->
         <scene sceneID="cUi-kZ-frf">
             <objects>
                 <navigationController id="rS3-R9-Ivy" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Item" id="1L0-5V-pZh"/>
                     <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="yXu-0R-QUA">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -47,7 +48,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eq9-QA-ai8" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="457" y="64"/>
+            <point key="canvasLocation" x="281" y="175"/>
         </scene>
         <!--Master View Controller - Weeds-->
         <scene sceneID="VgW-fR-Quf">
@@ -127,7 +128,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6Cn-md-YlS" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="918" y="64"/>
+            <point key="canvasLocation" x="898" y="175"/>
         </scene>
         <!--Detail View Controller - Detail-->
         <scene sceneID="Cn3-H9-jdl">
@@ -182,7 +183,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lrm-kH-fPn" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1381" y="64"/>
+            <point key="canvasLocation" x="1601" y="175"/>
         </scene>
         <!--User View Controller - Profile-->
         <scene sceneID="16z-tA-IpX">
@@ -282,6 +283,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
+                    <tabBarItem key="tabBarItem" title="Item" id="Pxc-ck-0FY"/>
                     <navigationItem key="navigationItem" title="Profile" id="DW3-Yh-eqg"/>
                     <connections>
                         <outlet property="followButton" destination="biu-I2-PTp" id="wa9-qM-OH0"/>
@@ -296,7 +298,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eoY-9M-DDM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1829" y="-107"/>
+            <point key="canvasLocation" x="2117" y="-995"/>
         </scene>
         <!--Login View Controller-->
         <scene sceneID="ts3-Iz-3bI">
@@ -367,7 +369,7 @@
                     <connections>
                         <outlet property="txtPassword" destination="RaO-OW-qvP" id="ErI-VI-umW"/>
                         <outlet property="txtUsername" destination="oAb-an-CVr" id="qxM-8a-8Mq"/>
-                        <segue destination="rS3-R9-Ivy" kind="modal" identifier="loginSuccess" modalTransitionStyle="crossDissolve" id="a1k-uZ-IUE"/>
+                        <segue destination="6Nn-SQ-2Of" kind="modal" identifier="loginSuccess" modalTransitionStyle="crossDissolve" id="ojy-bF-iNg"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6ca-EB-qza" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -377,7 +379,26 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="-12" y="64"/>
+            <point key="canvasLocation" x="-1540" y="-812"/>
+        </scene>
+        <!--Tab Bar Controller-->
+        <scene sceneID="mKd-qv-jhC">
+            <objects>
+                <tabBarController definesPresentationContext="YES" id="6Nn-SQ-2Of" customClass="TabBarController" sceneMemberID="viewController">
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
+                    <tabBar key="tabBar" contentMode="scaleToFill" id="47B-uR-MR3">
+                        <rect key="frame" x="129" y="330" width="163" height="49"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="rS3-R9-Ivy" kind="relationship" relationship="viewControllers" id="Z9y-H4-sB2"/>
+                        <segue destination="UY4-39-rji" kind="relationship" relationship="viewControllers" id="vVd-bm-Pmr"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Uha-fY-9vL" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-739" y="175"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="zjz-fH-nBj">
@@ -392,7 +413,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HAp-V5-L5u" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="934" y="772"/>
+            <point key="canvasLocation" x="1322" y="1452"/>
         </scene>
         <!--Add Weed View Controller - Add weed-->
         <scene sceneID="pyh-c2-iUW">
@@ -427,16 +448,17 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Zyl-34-KtR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1308" y="771"/>
+            <point key="canvasLocation" x="1812" y="1439"/>
         </scene>
     </scenes>
+    <color key="tintColor" red="0.24313727021217346" green="0.64705884456634521" blue="0.24705883860588074" alpha="1" colorSpace="deviceRGB"/>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="kOW-ub-kjq"/>
-        <segue reference="E6k-db-1Nu"/>
+        <segue reference="vVd-bm-Pmr"/>
+        <segue reference="ojy-bF-iNg"/>
     </inferredMetricsTieBreakers>
 </document>
