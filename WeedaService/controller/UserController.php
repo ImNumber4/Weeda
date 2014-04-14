@@ -105,6 +105,8 @@ class UserController extends Controller
 		if ($password == $user['password']) {
 			//login success
 			setcookie('user_id', $user['id'], time() + (86400 * 7), '/');
+			setcookie('username', $user['username'], time() + (86400 * 7), '/');
+			setcookie('password', $user['password'], time() + (86400 * 7), '/');
 			header('Content-type: application/json');
 			http_response_code(200);
 			echo json_encode(array("user" => $user));

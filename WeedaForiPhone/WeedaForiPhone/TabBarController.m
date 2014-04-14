@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 Weeda. All rights reserved.
 //
 
+#import "AppDelegate.h"
 #import "TabBarController.h"
 #import "MasterViewController.h"
 #import "UserViewController.h"
@@ -36,11 +37,13 @@
     
     UINavigationController *nav = [self.viewControllers objectAtIndex:0];
     MasterViewController *masterViewController = (MasterViewController *)nav.topViewController;
-    [masterViewController setCurrentUser:self.currentUser];
+    
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    [masterViewController setCurrentUser: appDelegate.currentUser];
     
     UserViewController *userView = [self.viewControllers objectAtIndex:1];
-    [userView setCurrentUser:self.currentUser];
-    [userView setUser_id:self.currentUser.id];
+    [userView setCurrentUser:appDelegate.currentUser];
+    [userView setUser_id:appDelegate.currentUser.id];
     
     tabBarItem1.title = @"Weeds";
     tabBarItem2.title = @"Me";

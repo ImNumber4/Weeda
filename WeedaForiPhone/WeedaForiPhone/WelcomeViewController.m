@@ -6,6 +6,7 @@
 //  Copyright (c) 2014年 Weeda. All rights reserved.
 //
 
+#import "AppDelegate.h"
 #import "WelcomeViewController.h"
 #import "TabBarController.h"
 #import "LoginViewController.h"
@@ -41,21 +42,16 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     //check cookie and renew the cookie expire time
-    NSHTTPCookie *cookie = [self checkCookies];
-    if (!cookie) {
+    User *user = [self checkCookiesAndGetCurrentUser];
+    if (!user) {
         sleep(2);
         [self performSegueWithIdentifier:@"login" sender:self];
     } else {
-        //renew cookie expire time;
-        NSHTTPCookie * newCookie = [self renewCookieExpireTime:cookie];
-        
         //check cookie authentication
         //success, go to MasterView
-        self.currentUser = [NSEntityDescription
-                            insertNewObjectForEntityForName:@"User"
-                            inManagedObjectContext:[RKObjectManager sharedManager].managedObjectStore.mainQueueManagedObjectContext];
-        self.currentUser.id = [NSNumber numberWithInt:[newCookie.value integerValue]];
         
+        AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+        appDelegate.currentUser = user;
         sleep(2);
         [self performSegueWithIdentifier:@"masterView" sender:self];
         
@@ -73,39 +69,71 @@
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
     if ([[segue identifier] isEqualToString:@"masterView"]) {
-        TabBarController *tabBarController = [segue destinationViewController];
-        [tabBarController setCurrentUser:self.currentUser];
+//        TabBarController *tabBarController = [segue destinationViewController];
+//        [tabBarController setCurrentUser:self.currentUser];
     }
 }
 
-- (NSHTTPCookie *) checkCookies
+- (User *) checkCookiesAndGetCurrentUser
 {
     NSArray *cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookies];
     if (!cookies || cookies.count == 0) {
         return nil;
     }
     
-    if (cookies.count == 1) {
-        NSHTTPCookie *cookie = [cookies objectAtIndex:0];
-        if ([cookie.expiresDate compare:[NSDate date]] == NSOrderedAscending) {
-            //cookie expired, delete cookie
-            [[NSHTTPCookieStorage sharedHTTPCookieStorage] deleteCookie:cookie];
-            return nil;
-        } else {
-            return cookie;
+    //if there are more than one cookies, save the first one which not expired, delete others.
+    NSHTTPCookie *userIdCookie = nil;
+    NSHTTPCookie *usernameCookie = nil;
+    NSHTTPCookie *passwordCookie = nil;
+    NSArray *deleteCookie = nil;
+    for (NSHTTPCookie *cookie in cookies) {
+        if ([cookie.name isEqualToString:@"user_id"] && userIdCookie == nil) {
+            userIdCookie = cookie;
+            continue;
         }
+        
+        if ([cookie.name isEqualToString:@"username"] && usernameCookie == nil) {
+            usernameCookie = cookie;
+            continue;
+        }
+        
+        if ([cookie.name isEqualToString:@"password"] && passwordCookie == nil) {
+            passwordCookie = cookie;
+            continue;
+        }
+        
+        [deleteCookie arrayByAddingObject:cookie];
     }
     
-    //if there are more than one cookies, save the first one which not expired, delete others.
-    NSHTTPCookie *savedCookie = nil;
-    for (NSHTTPCookie *cookie in cookies) {
-        if (!savedCookie && [cookie.expiresDate compare:[NSDate date]] == NSOrderedDescending) {
-            savedCookie = cookie;
-        } else {
-            [[NSHTTPCookieStorage sharedHTTPCookieStorage] deleteCookie:cookie];
-        }
+    for (NSHTTPCookie *cookie in deleteCookie) {
+        [[NSHTTPCookieStorage sharedHTTPCookieStorage] deleteCookie:cookie];
     }
-    return savedCookie;
+    
+    if (userIdCookie == nil || usernameCookie == nil || passwordCookie == nil) {
+        NSLog(@"There is no available cookie.");
+        return nil;
+    }
+    
+    if ([userIdCookie.expiresDate compare:[NSDate date]] == NSOrderedAscending) {
+        NSLog(@"Cookie is expired.");
+        [[NSHTTPCookieStorage sharedHTTPCookieStorage] deleteCookie:userIdCookie];
+        [[NSHTTPCookieStorage sharedHTTPCookieStorage] deleteCookie:usernameCookie];
+        [[NSHTTPCookieStorage sharedHTTPCookieStorage] deleteCookie:passwordCookie];
+        return nil;
+    }
+    
+    [self renewCookieExpireTime:userIdCookie];
+    [self renewCookieExpireTime:usernameCookie];
+    [self renewCookieExpireTime:passwordCookie];
+    
+    User *user = [NSEntityDescription
+                  insertNewObjectForEntityForName:@"User"
+                  inManagedObjectContext:[RKObjectManager sharedManager].managedObjectStore.mainQueueManagedObjectContext];
+    user.id = [NSNumber numberWithInteger:[userIdCookie.value integerValue]];
+    user.username = usernameCookie.value;
+    user.password = passwordCookie.value;
+    
+    return user;
 }
 
 - (NSHTTPCookie *) renewCookieExpireTime:(NSHTTPCookie *)cookie

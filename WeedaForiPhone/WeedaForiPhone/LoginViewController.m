@@ -64,13 +64,7 @@
         [manager addRequestDescriptor:loginRequestDescriptor];
         [[RKObjectManager sharedManager] postObject:self.currentUser path:@"user/login" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
             NSLog(@"Response: %@", mappingResult);
-            
-            NSHTTPURLResponse *response = [[operation HTTPRequestOperation] response];
-            NSDictionary *headerDictionary = [response allHeaderFields];
-            NSString *cookieString = [headerDictionary objectForKey:@"Set-Cookie"];
-            NSHTTPCookie * cookie = [self setCookie:cookieString];
-            
-            self.currentUser.id = [NSNumber numberWithInt:[cookie.value intValue]];
+            [self setCurrentUser];
             [self performSegueWithIdentifier:@"loginSuccess" sender:self];
         } failure:^(RKObjectRequestOperation *operation, NSError *error) {
             NSLog(@"Failure login: %@", error.localizedDescription);
@@ -112,6 +106,22 @@
                                               otherButtonTitles:nil, nil];
     alertView.tag = tag;
     [alertView show];
+}
+
+- (void) setCurrentUser
+{
+    NSArray *cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookies];
+    for (NSHTTPCookie *cookie in cookies) {
+        if ([cookie.name isEqualToString:@"user_id"]) {
+            self.currentUser.id = [NSNumber numberWithInteger:[cookie.value integerValue]];
+        } else if ([cookie.name isEqualToString:@"username"]) {
+            self.currentUser.username = cookie.value;
+        } else if ([cookie.name isEqualToString:@"password"]) {
+            self.currentUser.password = cookie.value;
+        } else {
+            NSLog(@"Extra cookie in the app, cookie name is %@", cookie.name);
+        }
+    }
 }
 
 - (NSHTTPCookie *) setCookie:(NSString *)cookieString
