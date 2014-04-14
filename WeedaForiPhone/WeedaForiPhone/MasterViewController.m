@@ -137,6 +137,11 @@
     static NSString *CellIdentifier = @"WeedTableCell";
     WeedTableViewCell *cell = (WeedTableViewCell *) [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     Weed *weed = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    [self decorateCellWithWeed:weed cell:cell];
+    return cell;
+}
+
+- (void)decorateCellWithWeed:(Weed *)weed cell:(WeedTableViewCell *)cell {
     cell.weedContentLabel.text = [NSString stringWithFormat:@"%@", weed.content];
     
     NSString *nameLabel = [NSString stringWithFormat:@"@%@ (%@)", weed.user.username, weed.user.email];
@@ -157,13 +162,33 @@
     CALayer * l = [cell.userAvatar layer];
     [l setMasksToBounds:YES];
     [l setCornerRadius:7.0];
-
-    return cell;
+    if ([weed.if_cur_user_water_it intValue] == 1) {
+        [cell.waterDrop setImage:[UIImage imageNamed:@"waterdrop.png"] forState:UIControlStateNormal];
+    } else {
+        [cell.waterDrop setImage:[UIImage imageNamed:@"waterdropgray.png"] forState:UIControlStateNormal];
+    }
+    [cell.waterDrop addTarget:self action:@selector(waterIt:)forControlEvents:UIControlEventTouchDown];
+    cell.waterCount.text = [NSString stringWithFormat:@"%@", weed.water_count];
 }
+
+- (void)waterIt:(id) sender {
+    CGPoint buttonPosition = [sender convertPoint:CGPointZero toView:self.tableView];
+    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:buttonPosition];
+    Weed *weed = [[self fetchedResultsController] objectAtIndexPath:indexPath];
+    if ([weed.if_cur_user_water_it intValue] == 1) {
+        weed.water_count = [NSNumber numberWithInt:[weed.water_count intValue] - 1];
+        weed.if_cur_user_water_it = [NSNumber numberWithInt:0];
+    } else {
+        weed.water_count = [NSNumber numberWithInt:[weed.water_count intValue] + 1];
+        weed.if_cur_user_water_it = [NSNumber numberWithInt:1];
+    }
+    WeedTableViewCell *cell = (WeedTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+    [self decorateCellWithWeed:weed cell:cell];
+}
+
 
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // The table view should not be re-orderable.
     return NO;
 }
 

@@ -31,13 +31,16 @@
 		A953B6F618D6D7D2001CDD4C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A953B6F518D6D7D2001CDD4C /* Security.framework */; };
 		A953B6F818D6D7DB001CDD4C /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A953B6F718D6D7DB001CDD4C /* SystemConfiguration.framework */; };
 		A953B6FE18D6D9DB001CDD4C /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A953B6FC18D6D9DB001CDD4C /* Model.xcdatamodeld */; };
-		A953B70718DF7FA4001CDD4C /* Weed.m in Sources */ = {isa = PBXBuildFile; fileRef = A953B70618DF7FA4001CDD4C /* Weed.m */; };
 		A953B70B18DF8E42001CDD4C /* libRestKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A953B6E418D6D794001CDD4C /* libRestKit.a */; };
 		A991C04818FB3B7700A3D2CD /* TabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = A991C04718FB3B7700A3D2CD /* TabBarController.m */; };
 		A991C04E18FB42EC00A3D2CD /* profile_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A991C04D18FB42EC00A3D2CD /* profile_icon.png */; };
 		A991C05018FB517600A3D2CD /* selected_profile_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A991C04F18FB517600A3D2CD /* selected_profile_icon.png */; };
 		A991C05218FB58D600A3D2CD /* weed.png in Resources */ = {isa = PBXBuildFile; fileRef = A991C05118FB58D600A3D2CD /* weed.png */; };
 		A991C05418FB597900A3D2CD /* selected_weed.png in Resources */ = {isa = PBXBuildFile; fileRef = A991C05318FB597900A3D2CD /* selected_weed.png */; };
+		A991C05718FB70D400A3D2CD /* waterdropgray.png in Resources */ = {isa = PBXBuildFile; fileRef = A991C05618FB70D400A3D2CD /* waterdropgray.png */; };
+		A991C05C18FB726A00A3D2CD /* waterdropgreen.png in Resources */ = {isa = PBXBuildFile; fileRef = A991C05B18FB726A00A3D2CD /* waterdropgreen.png */; };
+		A991C05E18FB75A900A3D2CD /* waterdrop.png in Resources */ = {isa = PBXBuildFile; fileRef = A991C05D18FB75A900A3D2CD /* waterdrop.png */; };
+		A991C06118FB8AE300A3D2CD /* Weed.m in Sources */ = {isa = PBXBuildFile; fileRef = A991C06018FB8AE300A3D2CD /* Weed.m */; };
 		A9CA8E5918E8DB1E004F095D /* RemoteObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A9CA8E5818E8DB1E004F095D /* RemoteObject.m */; };
 		A9CA8E6618E9132C004F095D /* AddWeedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9CA8E6518E9132C004F095D /* AddWeedViewController.m */; };
 		A9CA8E7E18F0F814004F095D /* UserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9CA8E7D18F0F814004F095D /* UserViewController.m */; };
@@ -125,14 +128,17 @@
 		A953B6F518D6D7D2001CDD4C /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		A953B6F718D6D7DB001CDD4C /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		A953B6FD18D6D9DB001CDD4C /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
-		A953B70518DF7FA4001CDD4C /* Weed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Weed.h; path = WeedaForiPhone/Model/Weed.h; sourceTree = "<group>"; };
-		A953B70618DF7FA4001CDD4C /* Weed.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Weed.m; path = WeedaForiPhone/Model/Weed.m; sourceTree = "<group>"; };
 		A991C04618FB3B7700A3D2CD /* TabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TabBarController.h; sourceTree = "<group>"; };
 		A991C04718FB3B7700A3D2CD /* TabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TabBarController.m; sourceTree = "<group>"; };
 		A991C04D18FB42EC00A3D2CD /* profile_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = profile_icon.png; path = WeedaForiPhone/Images/profile_icon.png; sourceTree = "<group>"; };
 		A991C04F18FB517600A3D2CD /* selected_profile_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = selected_profile_icon.png; path = WeedaForiPhone/Images/selected_profile_icon.png; sourceTree = "<group>"; };
 		A991C05118FB58D600A3D2CD /* weed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = weed.png; path = WeedaForiPhone/Images/weed.png; sourceTree = "<group>"; };
 		A991C05318FB597900A3D2CD /* selected_weed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = selected_weed.png; path = WeedaForiPhone/Images/selected_weed.png; sourceTree = "<group>"; };
+		A991C05618FB70D400A3D2CD /* waterdropgray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = waterdropgray.png; path = WeedaForiPhone/Images/waterdropgray.png; sourceTree = "<group>"; };
+		A991C05B18FB726A00A3D2CD /* waterdropgreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = waterdropgreen.png; path = WeedaForiPhone/Images/waterdropgreen.png; sourceTree = "<group>"; };
+		A991C05D18FB75A900A3D2CD /* waterdrop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = waterdrop.png; path = WeedaForiPhone/Images/waterdrop.png; sourceTree = "<group>"; };
+		A991C05F18FB8AE300A3D2CD /* Weed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Weed.h; path = WeedaForiPhone/Model/Weed.h; sourceTree = "<group>"; };
+		A991C06018FB8AE300A3D2CD /* Weed.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Weed.m; path = WeedaForiPhone/Model/Weed.m; sourceTree = "<group>"; };
 		A9CA8E5718E8DB1E004F095D /* RemoteObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RemoteObject.h; path = WeedaForiPhone/Model/RemoteObject.h; sourceTree = "<group>"; };
 		A9CA8E5818E8DB1E004F095D /* RemoteObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RemoteObject.m; path = WeedaForiPhone/Model/RemoteObject.m; sourceTree = "<group>"; };
 		A9CA8E6418E9132C004F095D /* AddWeedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddWeedViewController.h; sourceTree = "<group>"; };
@@ -287,12 +293,12 @@
 			isa = PBXGroup;
 			children = (
 				A953B6FC18D6D9DB001CDD4C /* Model.xcdatamodeld */,
-				A953B70518DF7FA4001CDD4C /* Weed.h */,
-				A953B70618DF7FA4001CDD4C /* Weed.m */,
 				A9CA8E5718E8DB1E004F095D /* RemoteObject.h */,
 				A9CA8E5818E8DB1E004F095D /* RemoteObject.m */,
 				A9CA8E8D18F264BA004F095D /* User.h */,
 				A9CA8E8E18F264BA004F095D /* User.m */,
+				A991C05F18FB8AE300A3D2CD /* Weed.h */,
+				A991C06018FB8AE300A3D2CD /* Weed.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -311,6 +317,9 @@
 		A9CA8E9218F3DAC6004F095D /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				A991C05D18FB75A900A3D2CD /* waterdrop.png */,
+				A991C05B18FB726A00A3D2CD /* waterdropgreen.png */,
+				A991C05618FB70D400A3D2CD /* waterdropgray.png */,
 				A991C05318FB597900A3D2CD /* selected_weed.png */,
 				A991C05118FB58D600A3D2CD /* weed.png */,
 				A991C04D18FB42EC00A3D2CD /* profile_icon.png */,
@@ -446,11 +455,14 @@
 				A9CA8E9718F3DD67004F095D /* avatar.jpg in Resources */,
 				A991C05418FB597900A3D2CD /* selected_weed.png in Resources */,
 				A914CCC418CD756200B870D8 /* Images.xcassets in Resources */,
+				A991C05E18FB75A900A3D2CD /* waterdrop.png in Resources */,
 				A914CCB018CD756200B870D8 /* InfoPlist.strings in Resources */,
 				A991C05218FB58D600A3D2CD /* weed.png in Resources */,
 				A991C05018FB517600A3D2CD /* selected_profile_icon.png in Resources */,
 				A991C04E18FB42EC00A3D2CD /* profile_icon.png in Resources */,
 				A914CCB918CD756200B870D8 /* Main.storyboard in Resources */,
+				A991C05C18FB726A00A3D2CD /* waterdropgreen.png in Resources */,
+				A991C05718FB70D400A3D2CD /* waterdropgray.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -474,6 +486,7 @@
 				A9CA8EA018F3E255004F095D /* WeedTableViewCell.m in Sources */,
 				A914CCBF18CD756200B870D8 /* MasterViewController.m in Sources */,
 				EAA18EDE18F0ADFD0081482D /* LoginViewController.m in Sources */,
+				A991C06118FB8AE300A3D2CD /* Weed.m in Sources */,
 				A9CA8E5918E8DB1E004F095D /* RemoteObject.m in Sources */,
 				EA1B050F18F3668A0033AB06 /* WelcomeViewController.m in Sources */,
 				A991C04818FB3B7700A3D2CD /* TabBarController.m in Sources */,
@@ -481,7 +494,6 @@
 				EAF6762C18FB62E4003BB138 /* SignupViewController.m in Sources */,
 				A9CA8E8F18F264BA004F095D /* User.m in Sources */,
 				A9CA8E7E18F0F814004F095D /* UserViewController.m in Sources */,
-				A953B70718DF7FA4001CDD4C /* Weed.m in Sources */,
 				A9CA8E6618E9132C004F095D /* AddWeedViewController.m in Sources */,
 				A914CCB218CD756200B870D8 /* main.m in Sources */,
 			);

@@ -83,7 +83,7 @@
     
     weedMapping.identificationAttributes = @[ @"id" ];
     
-    [weedMapping addAttributeMappingsFromDictionary:@{@"content" : @"content"}];
+    [weedMapping addAttributeMappingsFromDictionary:@{@"content" : @"content", @"water_count" : @"water_count", @"if_cur_user_water_it" : @"if_cur_user_water_it"}];
     
     [weedMapping addAttributeMappingsFromDictionary:parentObjectMapping];
     

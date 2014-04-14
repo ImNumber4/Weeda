@@ -116,12 +116,28 @@
                                                 <segue destination="UY4-39-rji" kind="push" identifier="showUser" id="E6k-db-1Nu"/>
                                             </connections>
                                         </button>
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PpY-d2-dfz">
+                                            <rect key="frame" x="278" y="59" width="27" height="16"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="9"/>
+                                            <color key="textColor" red="0.80392163989999998" green="0.80392163989999998" blue="0.80392163989999998" alpha="1" colorSpace="deviceRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f4i-fn-mcx">
+                                            <rect key="frame" x="265" y="61" width="6" height="12"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <state key="normal" image="waterdropgray.png">
+                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                        </button>
                                     </subviews>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="timeLabel" destination="OFa-0b-vQg" id="1mw-uN-gXm"/>
                                     <outlet property="userAvatar" destination="xNo-bR-ugn" id="NLf-tX-XEl"/>
                                     <outlet property="usernameLabel" destination="93j-3H-9Ql" id="K9c-S0-9VP"/>
+                                    <outlet property="waterCount" destination="PpY-d2-dfz" id="wd3-bp-ki5"/>
+                                    <outlet property="waterDrop" destination="f4i-fn-mcx" id="bPA-rP-jJu"/>
                                     <outlet property="weedContentLabel" destination="cjb-Z3-qdm" id="Udz-Vc-357"/>
                                     <segue destination="Ah7-4n-0Wa" kind="push" identifier="showWeed" id="jUr-3t-vfg"/>
                                 </connections>
@@ -551,6 +567,9 @@
             <point key="canvasLocation" x="1812" y="1439"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="waterdropgray.png" width="591" height="980"/>
+    </resources>
     <color key="tintColor" red="0.24313727021217346" green="0.64705884456634521" blue="0.24705883860588074" alpha="1" colorSpace="deviceRGB"/>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
@@ -559,6 +578,6 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="ojy-bF-iNg"/>
-        <segue reference="vVd-bm-Pmr"/>
+        <segue reference="E6k-db-1Nu"/>
     </inferredMetricsTieBreakers>
 </document>

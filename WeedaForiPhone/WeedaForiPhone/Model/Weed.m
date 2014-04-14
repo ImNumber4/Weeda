@@ -2,7 +2,7 @@
 //  Weed.m
 //  WeedaForiPhone
 //
-//  Created by Chaoqing LV on 3/23/14.
+//  Created by Chaoqing LV on 4/13/14.
 //  Copyright (c) 2014 Weeda. All rights reserved.
 //
 
@@ -13,6 +13,8 @@
 @implementation Weed
 
 @dynamic content;
+@dynamic water_count;
+@dynamic if_cur_user_water_it;
 @dynamic user;
 
 @end
