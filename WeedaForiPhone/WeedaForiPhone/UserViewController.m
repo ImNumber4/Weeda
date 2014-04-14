@@ -28,7 +28,30 @@
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
         RKLogError(@"Load failed with error: %@", error);
     }];
+    if (!self.navigationController.toolbarHidden) {
+        NSLog(@"adding toolbar");
+        UIToolbar *toolbar = [[UIToolbar alloc] init];
+        toolbar.frame = CGRectMake(0, 20, self.view.frame.size.width, 44);
+        NSMutableArray *items = [[NSMutableArray alloc] init];
+        [self.view addSubview:toolbar];
+        
+        UIImage * image = [UIImage imageNamed:@"setting.png"];
+        CGSize sacleSize = CGSizeMake(30, 30);
+        UIGraphicsBeginImageContextWithOptions(sacleSize, NO, 0.0);
+        [image drawInRect:CGRectMake(0, 0, sacleSize.width, sacleSize.height)];
+        
+        UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithImage:UIGraphicsGetImageFromCurrentImageContext() style:UIBarButtonItemStylePlain target:self action:@selector(setting:)];
+        [items addObject:addButton];
+        [toolbar setItems:items animated:NO];
+        
+    }
     
+}
+
+- (void)setting:(id)sender
+{
+    
+    // Dispose of any resources that can be recreated.
 }
 
 - (void)didReceiveMemoryWarning
