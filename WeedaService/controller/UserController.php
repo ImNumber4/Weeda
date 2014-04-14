@@ -125,8 +125,75 @@ class UserController extends Controller
 		setcookie('user_id', '', time() - 3600);
 	}
 	
-	private function parse_body_request() {
+	public function signup() {
+		$user = $this->parse_body_request();
+		if ($user == null) {
+			http_response_code(500);
+			return;
+		}
 		
+		$userDAO = new UserDAO();
+		$result = $userDAO->create($user);
+		if ($result == 0) {
+			//return 500
+			error_log("Create weed failed.");
+			http_response_code(500);
+			return;
+		}
+		header('Content-type: application/json');
+		http_response_code(200);
+		echo json_encode(array('id' => $result));
+	}
+	
+	private function parse_body_request() {
+		if ($_SERVER['REQUEST_METHOD'] != 'POST' && $_SERVER['REQUEST_METHOD'] != 'PUT') {
+			//request method error, return 400
+			error_log("Request method error, should use POST or PUT.");
+			return null;
+		}
+		
+		$data = json_decode(file_get_contents('php://input'));
+		if (!$this->check_para($data)) {
+			//return 400
+			error_log("Input error.");
+			return null;
+		}
+		
+		$user = new User();
+		$user->set_username($data->username);
+		$user->set_password($data->password);
+		$user->set_email($data->email);
+		$user->set_time($data->time);
+		$user->set_deleted(0);
+		return $user;
+	}
+	
+	private function check_para($data) {
+		$username = trim($data->username);
+		if ($username == '') {
+			error_log('Input error, username is null.');
+			return false;
+		}
+		
+		$password = trim($data->password);
+		if ($password == '') {
+			error_log('Input error, password is null');
+			return false;
+		}
+		
+		$email = trim($data->email);
+		if ($email == '') {
+			error_log('Input error, email is null');
+			return false;
+		}
+		
+		$time = trim($data->time);
+		if ($time == '') {
+			error_log('Input error, time is null');
+			return false;
+		}
+		
+		return true;
 	}
 }
 ?>

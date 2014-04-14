@@ -2,12 +2,27 @@
 /**
 * 
 */
-class UserDAO
+class UserDAO extends BaseDAO
 {
 	private $user;
 	
-	public function find_by_username($username)
-	{
+	public function create($user) {
+		$query = 'INSERT INTO user (username, password, email, time, deleted) VALUES (\'' 
+				. $user->get_username() . '\',\'' 
+				. $user->get_password() . '\',\''
+				. $user->get_email() . '\',\'' 
+				. $user->get_time() . '\',' 
+				. $user->get_deleted() . ')';
+		error_log('insert query:' . $query);
+		$result = $this->db_conn->insert($query);
+		if ($result == 0) {
+			error_log("SQL failed. Query: " . $query);
+		}
+		
+		return $result;
+	}
+	
+	public function find_by_username($username) {
 		/* connect to the db */
 		$db_conn = new DbConnection();
 

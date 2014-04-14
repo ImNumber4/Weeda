@@ -9,6 +9,7 @@
 #import "LoginViewController.h"
 #import "TabBarController.h"
 #import "MasterViewController.h"
+#import "SignupViewController.h"
 
 @interface LoginViewController ()
 
@@ -37,6 +38,9 @@
     // Pass the selected object to the new view controller.
 }
 */
+
+- (IBAction)signupClicked:(id)sender {
+}
 
 - (IBAction)signinClicked:(id)sender {
     @try {
@@ -85,6 +89,8 @@
     if ([[segue identifier] isEqualToString:@"loginSuccess"]) {
         TabBarController *tabBarController = [segue destinationViewController];
         [tabBarController setCurrentUser:self.currentUser];
+    } else if ([[segue identifier] isEqualToString:@"signup"]) {
+        
     }
 }
 

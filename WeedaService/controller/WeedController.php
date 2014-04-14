@@ -69,7 +69,7 @@ class WeedController extends Controller
 		
 		$data = json_decode(file_get_contents('php://input'));
 		if (!$this->check_para($data)) {
-			//return 403
+			//return 400
 			error_log("Input error.");
 			return;
 		}

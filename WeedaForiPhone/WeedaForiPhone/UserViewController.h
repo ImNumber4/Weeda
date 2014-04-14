@@ -22,5 +22,4 @@
 @property (weak, nonatomic) IBOutlet UILabel *followerCountLabel;
 @property (weak, nonatomic) IBOutlet UIButton *followButton;
 
-
 @end

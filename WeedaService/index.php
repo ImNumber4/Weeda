@@ -32,7 +32,7 @@ function Hook($url) {
         $stringParameter = $urlArr;
         
         //check the authentication
-        if ($action != 'login') {
+        if ($action != 'login' && $action != 'signup' ) {
         	$currentUser_id = $_COOKIE['user_id'];
         	if (!isset($currentUser_id)) {
         		header('Content-Type: application/json');
