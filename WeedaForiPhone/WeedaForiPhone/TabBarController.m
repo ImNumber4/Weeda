@@ -45,27 +45,22 @@
     tabBarItem1.title = @"Weeds";
     tabBarItem2.title = @"Me";
     
-    // this way, the icon gets rendered as it is (thus, it needs to be green in this example)
-    tabBarItem1.selectedImage = [[UIImage imageNamed:@"selected_weed.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    tabBarItem1.image = [[UIImage imageNamed:@"weed.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     
-    tabBarItem2.image = [[UIImage imageNamed:@"profile_icon.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    tabBarItem2.selectedImage = [[UIImage imageNamed:@"selected_profile_icon.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    
-    /**
-    [tabBarItem1 setFinishedSelectedImage:[UIImage imageNamed:@"home_selected.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"home.png"]];
-        [tabBarItem3 setFinishedSelectedImage:[UIImage imageNamed:@"myplan_selected.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"myplan.png"]];
-    [tabBarItem4 setFinishedSelectedImage:[UIImage imageNamed:@"settings_selected.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"settings.png"]];
-    
-    
-    // Change the tab bar background
-    UIImage* tabBarBackground = [UIImage imageNamed:@"tabbar.png"];
-    [[UITabBar appearance] setBackgroundImage:tabBarBackground];
-    [[UITabBar appearance] setSelectionIndicatorImage:[UIImage imageNamed:@"tabbar_selected.png"]];
-    */
-    // Change the title color of tab bar items
+    tabBarItem1.selectedImage = [[self getImage:@"selected_weed.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    tabBarItem1.image = [[self getImage:@"weed.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    tabBarItem2.image = [[self getImage:@"profile_icon.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    tabBarItem2.selectedImage = [[self getImage:@"selected_profile_icon.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     
     self.tabBar.tintColor = [UIColor colorWithRed:62.0/255.0 green:165.0/255.0 blue:64.0/255.0 alpha:1];
+}
+
+- (UIImage *)getImage:(NSString *)imageName
+{
+    UIImage * image = [UIImage imageNamed:imageName];
+    CGSize sacleSize = CGSizeMake(30, 30);
+    UIGraphicsBeginImageContextWithOptions(sacleSize, NO, 0.0);
+    [image drawInRect:CGRectMake(0, 0, sacleSize.width, sacleSize.height)];
+    return UIGraphicsGetImageFromCurrentImageContext();
 }
 
 - (void)didReceiveMemoryWarning
