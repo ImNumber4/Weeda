@@ -176,11 +176,19 @@
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:buttonPosition];
     Weed *weed = [[self fetchedResultsController] objectAtIndexPath:indexPath];
     if ([weed.if_cur_user_water_it intValue] == 1) {
-        weed.water_count = [NSNumber numberWithInt:[weed.water_count intValue] - 1];
-        weed.if_cur_user_water_it = [NSNumber numberWithInt:0];
+        [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/unwater/%@", weed.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+            weed.water_count = [NSNumber numberWithInt:[weed.water_count intValue] - 1];
+            weed.if_cur_user_water_it = [NSNumber numberWithInt:0];
+        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+            RKLogError(@"Follow failed with error: %@", error);
+        }];
     } else {
-        weed.water_count = [NSNumber numberWithInt:[weed.water_count intValue] + 1];
-        weed.if_cur_user_water_it = [NSNumber numberWithInt:1];
+        [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/water/%@", weed.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+            weed.water_count = [NSNumber numberWithInt:[weed.water_count intValue] + 1];
+            weed.if_cur_user_water_it = [NSNumber numberWithInt:1];
+        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+            RKLogError(@"Follow failed with error: %@", error);
+        }];
     }
     WeedTableViewCell *cell = (WeedTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
     [self decorateCellWithWeed:weed cell:cell];
