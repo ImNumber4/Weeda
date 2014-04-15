@@ -34,8 +34,8 @@
         UIGraphicsBeginImageContextWithOptions(sacleSize, NO, 0.0);
         [image drawInRect:CGRectMake(0, 0, sacleSize.width, sacleSize.height)];
         
-        UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithImage:UIGraphicsGetImageFromCurrentImageContext() style:UIBarButtonItemStylePlain target:self action:@selector(setting:)];
-        [self.navigationItem setRightBarButtonItem:addButton];
+        UIBarButtonItem *settingButton = [[UIBarButtonItem alloc] initWithImage:UIGraphicsGetImageFromCurrentImageContext() style:UIBarButtonItemStylePlain target:self action:@selector(setting:)];
+        [self.navigationItem setRightBarButtonItem:settingButton];
         
     }
     

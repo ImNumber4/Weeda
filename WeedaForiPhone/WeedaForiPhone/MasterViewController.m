@@ -51,7 +51,9 @@
                                                                         managedObjectContext:[RKManagedObjectStore defaultStore].mainQueueManagedObjectContext
                                                                           sectionNameKeyPath:nil
                                                                                    cacheName:nil];
-    [self.fetchedResultsController setDelegate:self];
+    
+    UIBarButtonItem *composeButton = [[UIBarButtonItem alloc] initWithImage:[self getWaterImage:@"compose.png" width:30 height:30] style:UIBarButtonItemStylePlain target:self action:@selector(compose:)];
+    [self.navigationItem setRightBarButtonItem:composeButton];
     
     BOOL fetchSuccessful = [self.fetchedResultsController performFetch:&error];
     if (! fetchSuccessful) {
@@ -76,12 +78,16 @@
     
 }
 
+-(void)compose:(id)sender {
+    [self performSegueWithIdentifier:@"addWeed" sender:self];
+}
+
 
 -(void)refreshView:(UIRefreshControl *)refresh {
     refresh.attributedTitle = [[NSAttributedString alloc] initWithString:@"Refreshing data..."];
 
     [self loadData];
-
+    
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"MMM d, h:mm a"];
     NSString *lastUpdated = [NSString stringWithFormat:@"Last updated on %@", [formatter stringFromDate:[NSDate date]]];
@@ -140,9 +146,26 @@
     return cell;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
+{
+    
+    Weed *weed = [self.fetchedResultsController objectAtIndexPath:indexPath];
+
+    UITextView *temp = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 44)]; //This initial size doesn't matter
+    temp.font = [UIFont systemFontOfSize:12.0];
+    temp.text = weed.content;
+    
+    CGFloat textViewWidth = 200.0;
+    CGRect tempFrame = CGRectMake(0, 0, textViewWidth, 50); //The height of this frame doesn't matter.
+    CGSize tvsize = [temp sizeThatFits:CGSizeMake(tempFrame.size.width, tempFrame.size.height)]; //This calculates the necessary size so that all the text fits in the necessary width.
+    
+    //Add the height of the other UI elements inside your cell    
+    return MAX(tvsize.height, 50.0) + 20.0;
+}
+
 - (void)decorateCellWithWeed:(Weed *)weed cell:(WeedTableViewCell *)cell {
     cell.weedContentLabel.text = [NSString stringWithFormat:@"%@", weed.content];
-    
+    [cell.weedContentLabel sizeToFit];
     NSString *nameLabel = [NSString stringWithFormat:@"@%@", weed.user.username];
     [cell.usernameLabel setTitle:nameLabel forState:UIControlStateNormal];
     
@@ -155,12 +178,22 @@
     [l setMasksToBounds:YES];
     [l setCornerRadius:7.0];
     if ([weed.if_cur_user_water_it intValue] == 1) {
-        [cell.waterDrop setImage:[UIImage imageNamed:@"waterdrop.png"] forState:UIControlStateNormal];
+        [cell.waterDrop setImage:[self getWaterImage:@"waterdrop.png" width:6 height:12] forState:UIControlStateNormal];
     } else {
-        [cell.waterDrop setImage:[UIImage imageNamed:@"waterdropgray.png"] forState:UIControlStateNormal];
+        [cell.waterDrop setImage:[self getWaterImage:@"waterdropgray.png" width:6 height:12] forState:UIControlStateNormal];
     }
     [cell.waterDrop addTarget:self action:@selector(waterIt:)forControlEvents:UIControlEventTouchDown];
     cell.waterCount.text = [NSString stringWithFormat:@"%@", weed.water_count];
+    [cell sizeToFit];
+}
+
+- (UIImage *)getWaterImage:(NSString *)imageName width:(int)width height:(int) height
+{
+    UIImage * image = [UIImage imageNamed:imageName];
+    CGSize sacleSize = CGSizeMake(width, height);
+    UIGraphicsBeginImageContextWithOptions(sacleSize, NO, 0.0);
+    [image drawInRect:CGRectMake(0, 0, sacleSize.width, sacleSize.height)];
+    return UIGraphicsGetImageFromCurrentImageContext();
 }
 
 - (void)waterIt:(id) sender {
