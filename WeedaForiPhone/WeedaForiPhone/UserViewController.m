@@ -28,21 +28,14 @@
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
         RKLogError(@"Load failed with error: %@", error);
     }];
-    if (!self.navigationController.toolbarHidden) {
-        NSLog(@"adding toolbar");
-        UIToolbar *toolbar = [[UIToolbar alloc] init];
-        toolbar.frame = CGRectMake(0, 20, self.view.frame.size.width, 44);
-        NSMutableArray *items = [[NSMutableArray alloc] init];
-        [self.view addSubview:toolbar];
-        
+    if ([self.user_id isEqualToNumber:self.currentUser.id]) {
         UIImage * image = [UIImage imageNamed:@"setting.png"];
         CGSize sacleSize = CGSizeMake(30, 30);
         UIGraphicsBeginImageContextWithOptions(sacleSize, NO, 0.0);
         [image drawInRect:CGRectMake(0, 0, sacleSize.width, sacleSize.height)];
         
         UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithImage:UIGraphicsGetImageFromCurrentImageContext() style:UIBarButtonItemStylePlain target:self action:@selector(setting:)];
-        [items addObject:addButton];
-        [toolbar setItems:items animated:NO];
+        [self.navigationItem setRightBarButtonItem:addButton];
         
     }
     
@@ -83,8 +76,7 @@
 
 - (void)updateView
 {
-    self.userNameLabel.text = [NSString stringWithFormat:@"@%@", self.user.username];
-    self.userEmailLabel.text = self.user.email;
+    self.navigationController.navigationBar.topItem.title = [NSString stringWithFormat:@"%@", self.user.username];
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"MMM. yyyy"];
     NSString *formattedDateString = [dateFormatter stringFromDate:self.user.time];

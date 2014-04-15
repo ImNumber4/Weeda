@@ -34,9 +34,8 @@
     if (self.weed) {
         NSString *content = self.weed.content;
         NSString *username = self.weed.user.username;
-        NSString *email = self.weed.user.email;
         
-        NSString *nameLabel = [NSString stringWithFormat:@"@%@ (%@)", username, email];
+        NSString *nameLabel = [NSString stringWithFormat:@"@%@", username];
         NSMutableAttributedString *attString=[[NSMutableAttributedString alloc] initWithString:nameLabel];
         NSInteger nameLength=[username length] + 1;
         NSInteger totalLength=[nameLabel length];

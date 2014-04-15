@@ -20,7 +20,6 @@
 
 @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
 
-- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
 @end
 
 @implementation MasterViewController
@@ -144,15 +143,8 @@
 - (void)decorateCellWithWeed:(Weed *)weed cell:(WeedTableViewCell *)cell {
     cell.weedContentLabel.text = [NSString stringWithFormat:@"%@", weed.content];
     
-    NSString *nameLabel = [NSString stringWithFormat:@"@%@ (%@)", weed.user.username, weed.user.email];
-    NSMutableAttributedString *attString=[[NSMutableAttributedString alloc] initWithString:nameLabel];
-    NSInteger nameLength=[weed.user.username length] + 1;
-    NSInteger totalLength=[nameLabel length];
-    [attString addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Helvetica" size:9.0f] range:NSMakeRange(0, totalLength)];
-    [attString addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Helvetica-Bold" size:10.0f] range:NSMakeRange(0, nameLength)];
-    [attString addAttribute:NSForegroundColorAttributeName value:[UIColor grayColor] range:NSMakeRange(0, totalLength)];
-    [attString addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(0, nameLength)];
-    [cell.usernameLabel setAttributedTitle:attString forState:UIControlStateNormal];
+    NSString *nameLabel = [NSString stringWithFormat:@"@%@", weed.user.username];
+    [cell.usernameLabel setTitle:nameLabel forState:UIControlStateNormal];
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"MMM. dd yyyy"];
@@ -246,26 +238,5 @@
 }
 
 
-
-/*
-// Implementing the above methods to update the table view in response to individual changes may have performance implications if a large number of changes are made simultaneously. If this proves to be an issue, you can instead just implement controllerDidChangeContent: which notifies the delegate that all section and object changes have been processed. 
- 
- - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
-{
-    // In the simplest, most efficient, case, reload the table view.
-    [self.tableView reloadData];
-}
- */
-
-- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
-{
-    Weed *weed = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    cell.textLabel.numberOfLines=5;
-    cell.textLabel.text = [NSString stringWithFormat:@"%@", weed.content];
-    cell.detailTextLabel.font = [UIFont systemFontOfSize:8.0 ];
-    cell.detailTextLabel.textColor = [UIColor grayColor];
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"by %@", weed.user.email];
-    
-}
 
 @end

@@ -35,13 +35,14 @@
     UITabBarItem *tabBarItem1 = [tabBar.items objectAtIndex:0];
     UITabBarItem *tabBarItem2 = [tabBar.items objectAtIndex:1];
     
-    UINavigationController *nav = [self.viewControllers objectAtIndex:0];
-    MasterViewController *masterViewController = (MasterViewController *)nav.topViewController;
+    UINavigationController *nav1 = [self.viewControllers objectAtIndex:0];
+    MasterViewController *masterViewController = (MasterViewController *)nav1.topViewController;
     
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     [masterViewController setCurrentUser: appDelegate.currentUser];
     
-    UserViewController *userView = [self.viewControllers objectAtIndex:1];
+    UINavigationController *nav2 = [self.viewControllers objectAtIndex:1];
+    UserViewController *userView = (UserViewController *)nav2.topViewController;
     [userView setCurrentUser:appDelegate.currentUser];
     [userView setUser_id:appDelegate.currentUser.id];
     
