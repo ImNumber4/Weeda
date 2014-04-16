@@ -6,6 +6,7 @@
 //  Copyright (c) 2014年 Weeda. All rights reserved.
 //
 
+#import "AppDelegate.h"
 #import "LoginViewController.h"
 #import "TabBarController.h"
 #import "MasterViewController.h"
@@ -122,6 +123,9 @@
             NSLog(@"Extra cookie in the app, cookie name is %@", cookie.name);
         }
     }
+    
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    appDelegate.currentUser = self.currentUser;
 }
 
 - (NSHTTPCookie *) setCookie:(NSString *)cookieString
