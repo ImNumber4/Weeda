@@ -55,6 +55,8 @@
     UIBarButtonItem *composeButton = [[UIBarButtonItem alloc] initWithImage:[self getWaterImage:@"compose.png" width:30 height:30] style:UIBarButtonItemStylePlain target:self action:@selector(compose:)];
     [self.navigationItem setRightBarButtonItem:composeButton];
     
+    [self.fetchedResultsController setDelegate:self];
+    
     BOOL fetchSuccessful = [self.fetchedResultsController performFetch:&error];
     if (! fetchSuccessful) {
         NSLog(@"Error: %@",error);
