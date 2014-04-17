@@ -133,8 +133,6 @@
     [manager addResponseDescriptor:loginResponseDescriptor];
     
     
-    
-    
     RKObjectMapping *userRequestMapping = [RKObjectMapping requestMapping];
     [userRequestMapping addAttributeMappingsFromArray:@[@"id"]];
     
@@ -149,6 +147,29 @@
                                                                                    rootKeyPath:nil
                                                                                         method:RKRequestMethodPOST];
     [[RKObjectManager sharedManager] addRequestDescriptor:weedRequestDescriptor];
+    
+    //For checking username
+    RKObjectMapping * checkMapping = [RKObjectMapping requestMapping];
+    [checkMapping addAttributeMappingsFromArray:@[@"username", @"password", @"email"]];
+    RKRequestDescriptor *checkRequestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:checkMapping
+                                                                                        objectClass:[User class]
+                                                                                        rootKeyPath:nil
+                                                                                             method:RKRequestMethodPOST];
+    
+    [manager addRequestDescriptor:checkRequestDescriptor];
+    
+    RKResponseDescriptor *checkResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping method:RKRequestMethodPOST pathPattern:@"user/username" keyPath:@"user" statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+    [manager addResponseDescriptor:checkResponseDescriptor];
+    
+    //For login
+//    RKObjectMapping * loginMapping = [RKObjectMapping requestMapping];
+//    [loginMapping addAttributeMappingsFromArray:@[ @"username", @"password"]];
+//    RKRequestDescriptor *loginRequestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:loginMapping
+//                                                                                        objectClass:[User class]
+//                                                                                        rootKeyPath:nil
+//                                                                                             method:RKRequestMethodPOST];
+//    [manager addRequestDescriptor:loginRequestDescriptor];
+
     
     
     /**

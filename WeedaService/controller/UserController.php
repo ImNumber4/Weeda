@@ -117,7 +117,7 @@ class UserController extends Controller
 		}
 	}
 
-	public function logout() {
+	public function signout() {
 		$user_id = $_COOKIE['user_id'];
 		if (!isset($user_id)) {
 			//already log out.
@@ -145,6 +145,22 @@ class UserController extends Controller
 		header('Content-type: application/json');
 		http_response_code(200);
 		echo json_encode(array('id' => $result));
+	}
+	
+	public function username() {
+		$data = json_decode(file_get_contents('php://input'));
+		$username = $data->username;
+		if (!isset($username)) {
+			error_log('Input error, username is null');
+			http_response_code(400);
+			return;
+		}
+		$userDAO = new UserDAO();
+		$user = $userDAO->find_by_username($username);
+		
+		header("Content-type: application/json");
+		http_response_code(200);
+		echo json_encode(array('user' => $user));
 	}
 	
 	private function parse_body_request() {

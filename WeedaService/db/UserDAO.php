@@ -22,6 +22,23 @@ class UserDAO extends BaseDAO
 		return $result;
 	}
 	
+	public function has_username($username) {
+		$db_conn = new DbConnection();
+		
+		$query = 'SELECT COUNT(*) as number FROM user where username=\'' . $username . '\'';
+		error_log('query: ' . $query);
+		
+		$result = $db_conn->query($query);
+		error_log('query result: ' . $result);
+		$data = mysql_fetch_assoc($result);
+		error_log($data['number']);
+		if ($data['number'] == 0) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
 	public function find_by_username($username) {
 		/* connect to the db */
 		$db_conn = new DbConnection();

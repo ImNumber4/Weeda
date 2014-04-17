@@ -49,6 +49,8 @@
 		A9CA8E9718F3DD67004F095D /* avatar.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A9CA8E9618F3DD67004F095D /* avatar.jpg */; };
 		A9CA8EA018F3E255004F095D /* WeedTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A9CA8E9E18F3E255004F095D /* WeedTableViewCell.m */; };
 		EA1B050F18F3668A0033AB06 /* WelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA1B050E18F3668A0033AB06 /* WelcomeViewController.m */; };
+		EA56109C18FF22100038E3E4 /* ok.png in Resources */ = {isa = PBXBuildFile; fileRef = EA56109B18FF22100038E3E4 /* ok.png */; };
+		EA5610A118FF31F70038E3E4 /* wrong.png in Resources */ = {isa = PBXBuildFile; fileRef = EA5610A018FF31F70038E3E4 /* wrong.png */; };
 		EAA18EDE18F0ADFD0081482D /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA18EDD18F0ADFD0081482D /* LoginViewController.m */; };
 		EAF6762C18FB62E4003BB138 /* SignupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAF6762B18FB62E4003BB138 /* SignupViewController.m */; };
 /* End PBXBuildFile section */
@@ -154,6 +156,8 @@
 		A9CA8E9E18F3E255004F095D /* WeedTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WeedTableViewCell.m; path = WeedaForiPhone/UI/WeedTableViewCell.m; sourceTree = "<group>"; };
 		EA1B050D18F3668A0033AB06 /* WelcomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WelcomeViewController.h; sourceTree = "<group>"; };
 		EA1B050E18F3668A0033AB06 /* WelcomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WelcomeViewController.m; sourceTree = "<group>"; };
+		EA56109B18FF22100038E3E4 /* ok.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ok.png; sourceTree = "<group>"; };
+		EA5610A018FF31F70038E3E4 /* wrong.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wrong.png; sourceTree = "<group>"; };
 		EAA18EDC18F0ADFD0081482D /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		EAA18EDD18F0ADFD0081482D /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		EAF6762A18FB62E4003BB138 /* SignupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignupViewController.h; sourceTree = "<group>"; };
@@ -319,6 +323,8 @@
 		A9CA8E9218F3DAC6004F095D /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				EA5610A018FF31F70038E3E4 /* wrong.png */,
+				EA56109B18FF22100038E3E4 /* ok.png */,
 				A91A62E218FD1B1C008726E5 /* compose.png */,
 				A91A62DD18FBBE0F008726E5 /* setting.png */,
 				A991C05D18FB75A900A3D2CD /* waterdrop.png */,
@@ -455,10 +461,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EA56109C18FF22100038E3E4 /* ok.png in Resources */,
 				A9CA8E9718F3DD67004F095D /* avatar.jpg in Resources */,
 				A991C05418FB597900A3D2CD /* selected_weed.png in Resources */,
 				A914CCC418CD756200B870D8 /* Images.xcassets in Resources */,
 				A991C05E18FB75A900A3D2CD /* waterdrop.png in Resources */,
+				EA5610A118FF31F70038E3E4 /* wrong.png in Resources */,
 				A914CCB018CD756200B870D8 /* InfoPlist.strings in Resources */,
 				A991C05218FB58D600A3D2CD /* weed.png in Resources */,
 				A91A62E318FD1B1C008726E5 /* compose.png in Resources */,
