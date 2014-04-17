@@ -7,6 +7,7 @@
 //
 
 #import "UserViewController.h"
+#import "LoginViewController.h"
 
 @interface UserViewController ()
 
@@ -43,8 +44,14 @@
 
 - (void)setting:(id)sender
 {
-    
     // Dispose of any resources that can be recreated.
+    NSArray *cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookies];
+    for (NSHTTPCookie *cookie in cookies) {
+        [[NSHTTPCookieStorage sharedHTTPCookieStorage] deleteCookie:cookie];
+    }
+    
+    UIViewController *controller = [self.storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
+    [self presentViewController:controller animated:YES completion:nil];
 }
 
 - (void)didReceiveMemoryWarning
