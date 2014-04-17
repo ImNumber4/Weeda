@@ -150,7 +150,7 @@
     
     //For checking username
     RKObjectMapping * checkMapping = [RKObjectMapping requestMapping];
-    [checkMapping addAttributeMappingsFromArray:@[@"username", @"password", @"email"]];
+    [checkMapping addAttributeMappingsFromArray:@[@"username", @"password", @"email", @"time"]];
     RKRequestDescriptor *checkRequestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:checkMapping
                                                                                         objectClass:[User class]
                                                                                         rootKeyPath:nil
@@ -158,8 +158,8 @@
     
     [manager addRequestDescriptor:checkRequestDescriptor];
     
-    RKResponseDescriptor *checkResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping method:RKRequestMethodPOST pathPattern:@"user/username" keyPath:@"user" statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
-    [manager addResponseDescriptor:checkResponseDescriptor];
+    RKResponseDescriptor *signupResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping method:RKRequestMethodPOST pathPattern:@"user/signup" keyPath:@"user" statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+    [manager addResponseDescriptor:signupResponseDescriptor];
     
     //For login
 //    RKObjectMapping * loginMapping = [RKObjectMapping requestMapping];
