@@ -38,7 +38,6 @@ class UserController extends Controller
 			return;
 		}
 		$userDAO = new UserDAO();
-		error_log("wukun loves pz");
 		$users = $userDAO->getUsersWaterWeed($currentUser_id, $weed_id);
 		header('Content-type: application/json');
 		http_response_code(200);

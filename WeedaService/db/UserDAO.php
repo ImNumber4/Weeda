@@ -81,11 +81,13 @@ class UserDAO extends BaseDAO
 	
 	public function getUsersWaterWeed($currentUser_id, $weed_id) {
 		$db_conn = new DbConnection();
-		$query = "SELECT * FROM water, user LEFT JOIN follow ON user.id=follow.followee_uid AND follow.follower_uid = $currentUser_id WHERE water.user_id = user.id AND water.weed_id = $weed_id";
+		$query = "SELECT user.username, user.id FROM water, user WHERE water.user_id = user.id AND water.weed_id = $weed_id";
 		$result = $db_conn->query($query);
 		$users = array();
 		if (mysql_num_rows($result)) {
 			while($user = mysql_fetch_assoc($result)) {
+				$relationship = $this->getRelationship($db_conn, $currentUser_id, $user['id']);
+				$user['relationshipWithCurrentUser'] = $relationship;
 				$users[] = $user;
 			}
 		} 

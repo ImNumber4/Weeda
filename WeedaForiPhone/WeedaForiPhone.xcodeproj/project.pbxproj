@@ -30,6 +30,9 @@
 		A91A62F619035910008726E5 /* Weed.m in Sources */ = {isa = PBXBuildFile; fileRef = A91A62F519035910008726E5 /* Weed.m */; };
 		A91A62F819035FCC008726E5 /* ok.png in Resources */ = {isa = PBXBuildFile; fileRef = A91A62F719035FCC008726E5 /* ok.png */; };
 		A91A62FA1903602B008726E5 /* wrong.png in Resources */ = {isa = PBXBuildFile; fileRef = A91A62F91903602B008726E5 /* wrong.png */; };
+		A92E513A19046E2A00FC518F /* UserTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A92E513919046E2A00FC518F /* UserTableViewCell.m */; };
+		A92E513D19047C6000FC518F /* follow.png in Resources */ = {isa = PBXBuildFile; fileRef = A92E513B19047C6000FC518F /* follow.png */; };
+		A92E514019048B0400FC518F /* followed.png in Resources */ = {isa = PBXBuildFile; fileRef = A92E513F19048B0400FC518F /* followed.png */; };
 		A953B6EE18D6D7B5001CDD4C /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A953B6ED18D6D7B5001CDD4C /* CFNetwork.framework */; };
 		A953B6F018D6D7BC001CDD4C /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A953B6EF18D6D7BC001CDD4C /* libxml2.dylib */; };
 		A953B6F218D6D7C3001CDD4C /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A953B6F118D6D7C3001CDD4C /* MobileCoreServices.framework */; };
@@ -132,6 +135,10 @@
 		A91A62F519035910008726E5 /* Weed.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Weed.m; path = WeedaForiPhone/Model/Weed.m; sourceTree = "<group>"; };
 		A91A62F719035FCC008726E5 /* ok.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ok.png; path = WeedaForiPhone/Images/ok.png; sourceTree = "<group>"; };
 		A91A62F91903602B008726E5 /* wrong.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = wrong.png; path = WeedaForiPhone/Images/wrong.png; sourceTree = "<group>"; };
+		A92E513819046E2A00FC518F /* UserTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserTableViewCell.h; path = WeedaForiPhone/UI/UserTableViewCell.h; sourceTree = "<group>"; };
+		A92E513919046E2A00FC518F /* UserTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserTableViewCell.m; path = WeedaForiPhone/UI/UserTableViewCell.m; sourceTree = "<group>"; };
+		A92E513B19047C6000FC518F /* follow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = follow.png; path = WeedaForiPhone/Images/follow.png; sourceTree = "<group>"; };
+		A92E513F19048B0400FC518F /* followed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = followed.png; path = WeedaForiPhone/Images/followed.png; sourceTree = "<group>"; };
 		A953B6DC18D6D794001CDD4C /* RestKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RestKit.xcodeproj; path = RestKit/RestKit.xcodeproj; sourceTree = "<group>"; };
 		A953B6ED18D6D7B5001CDD4C /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		A953B6EF18D6D7BC001CDD4C /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
@@ -328,6 +335,8 @@
 		A9CA8E9218F3DAC6004F095D /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				A92E513F19048B0400FC518F /* followed.png */,
+				A92E513B19047C6000FC518F /* follow.png */,
 				A91A62F91903602B008726E5 /* wrong.png */,
 				A91A62F719035FCC008726E5 /* ok.png */,
 				A91A62E218FD1B1C008726E5 /* compose.png */,
@@ -345,6 +354,8 @@
 		A9CA8E9A18F3E01C004F095D /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				A92E513819046E2A00FC518F /* UserTableViewCell.h */,
+				A92E513919046E2A00FC518F /* UserTableViewCell.m */,
 				A991C04F18FB517600A3D2CD /* selected_profile_icon.png */,
 				A9CA8E9D18F3E255004F095D /* WeedTableViewCell.h */,
 				A9CA8E9E18F3E255004F095D /* WeedTableViewCell.m */,
@@ -470,6 +481,8 @@
 				A991C05418FB597900A3D2CD /* selected_weed.png in Resources */,
 				A914CCC418CD756200B870D8 /* Images.xcassets in Resources */,
 				A991C05E18FB75A900A3D2CD /* waterdrop.png in Resources */,
+				A92E513D19047C6000FC518F /* follow.png in Resources */,
+				A92E514019048B0400FC518F /* followed.png in Resources */,
 				A914CCB018CD756200B870D8 /* InfoPlist.strings in Resources */,
 				A91A62FA1903602B008726E5 /* wrong.png in Resources */,
 				A991C05218FB58D600A3D2CD /* weed.png in Resources */,
@@ -514,6 +527,7 @@
 				A91A62ED18FF8F48008726E5 /* UserListViewController.m in Sources */,
 				A9CA8E6618E9132C004F095D /* AddWeedViewController.m in Sources */,
 				A914CCB218CD756200B870D8 /* main.m in Sources */,
+				A92E513A19046E2A00FC518F /* UserTableViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

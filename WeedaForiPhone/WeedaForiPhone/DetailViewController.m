@@ -59,6 +59,8 @@
         [attString addAttribute:NSForegroundColorAttributeName value:[UIColor grayColor] range:NSMakeRange(0, totalLength)];
         [attString addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(0, waterCountLength)];
         [self.waterCount setAttributedTitle:attString forState:UIControlStateNormal];
+        if([self.weed.water_count intValue] <= 0)
+            [self.waterCount setEnabled:NO];
     }
 }
 
