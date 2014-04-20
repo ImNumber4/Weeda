@@ -88,8 +88,6 @@
     
     [weedMapping addAttributeMappingsFromDictionary:parentObjectMapping];
     
-    [weedMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"user" toKeyPath:@"user" withMapping:userMapping]];
-    
     NSDate *now = [NSDate date];
     NSDate *fiveDaysAgo = [now dateByAddingTimeInterval:-5 * 24 * 60 * 60];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"shouldBeDeleted = TRUE || id < 0 || time <= %@", fiveDaysAgo];
@@ -145,9 +143,7 @@
     [userRequestMapping addAttributeMappingsFromArray:@[@"id"]];
     
     RKObjectMapping * weedRequestMapping = [RKObjectMapping requestMapping];
-    [weedRequestMapping addAttributeMappingsFromArray:@[ @"id", @"content",@"time"]];
-    
-    [weedRequestMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"user" toKeyPath:@"user" withMapping:userRequestMapping]];
+    [weedRequestMapping addAttributeMappingsFromArray:@[ @"id", @"content",@"time",@"user_id"]];
     
     
     RKRequestDescriptor *weedRequestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:weedRequestMapping

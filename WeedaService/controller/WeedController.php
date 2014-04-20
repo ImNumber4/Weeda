@@ -118,14 +118,13 @@ class WeedController extends Controller
 		
 		$data = json_decode(file_get_contents('php://input'));
 		if (!$this->check_para($data)) {
-			//return 400
-			error_log("Input error.");
-			return;
+			header('Content-type: application/json');
+			http_response_code(400);
 		}
 		
 		$weed = new Weed();
 		$weed->set_content($data->content);
-		$weed->set_user_id($data->user->id);
+		$weed->set_user_id($data->user_id);
 		$weed->set_time($data->time);
 		$weed->set_id($data->id);
 		$weed->set_deleted(0);
@@ -147,7 +146,7 @@ class WeedController extends Controller
 			return null;
 		}
 		
-		$user_id = trim($data->user->id);
+		$user_id = trim($data->user_id);
 		if ($user_id == '') {
 			error_log('Input error, userid is null');
 			return null;
