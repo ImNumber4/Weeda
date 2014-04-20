@@ -137,7 +137,7 @@
                                         <button opaque="NO" contentMode="redraw" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f4i-fn-mcx">
                                             <rect key="frame" x="265" y="61" width="6" height="12"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <state key="normal" image="105C1A5A-3615-4D3E-B2D5-0729DDC20A43">
+                                            <state key="normal" image="96010DBE-2600-451A-9D6D-86B61ACFF6A5">
                                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
                                         </button>
@@ -223,10 +223,13 @@
                                 <rect key="frame" x="77" y="162" width="88" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                                <state key="normal" title="12 WATER DROPS">
+                                <state key="normal" title="0 WATER DROPS">
                                     <color key="titleColor" red="0.80000001190000003" green="0.80000001190000003" blue="0.80000001190000003" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <segue destination="kcP-Br-rTe" kind="push" identifier="showWaterUser" id="dNf-E1-grd"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KDf-j8-IOh">
                                 <rect key="frame" x="9" y="162" width="68" height="30"/>
@@ -261,15 +264,46 @@
                     </view>
                     <navigationItem key="navigationItem" title="Weed" id="cra-N8-TIN"/>
                     <connections>
+                        <outlet property="seedCount" destination="KDf-j8-IOh" id="dT6-jx-vL9"/>
                         <outlet property="timeLabel" destination="QTI-gT-Uhe" id="w5R-Fk-3Rc"/>
                         <outlet property="userAvatar" destination="ZTC-sK-Cdc" id="7o1-qq-ATz"/>
                         <outlet property="userLabel" destination="zrZ-lc-Sta" id="PIJ-Yi-Yih"/>
+                        <outlet property="waterCount" destination="PPu-cO-BXO" id="uda-RN-Vda"/>
                         <outlet property="weedContentLabel" destination="jLb-uc-KAe" id="ogm-IJ-JMc"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lrm-kH-fPn" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1601" y="175"/>
+        </scene>
+        <!--User List View Controller-->
+        <scene sceneID="O5z-QD-a6U">
+            <objects>
+                <tableViewController id="kcP-Br-rTe" customClass="UserListViewController" sceneMemberID="viewController">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="LHR-x9-g5Y">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UserTableCell" id="zRo-LP-f1X">
+                                <rect key="frame" x="0.0" y="86" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="zRo-LP-f1X" id="sRi-CC-ZUz">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="kcP-Br-rTe" id="Fzd-2L-N5d"/>
+                            <outlet property="delegate" destination="kcP-Br-rTe" id="ozH-0K-ixw"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="ceM-lJ-ZkV"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="e5B-cO-4xD" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2183" y="175"/>
         </scene>
         <!--User View Controller - Profile-->
         <scene sceneID="16z-tA-IpX">
@@ -636,7 +670,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="105C1A5A-3615-4D3E-B2D5-0729DDC20A43" width="591" height="980">
+        <image name="96010DBE-2600-451A-9D6D-86B61ACFF6A5" width="591" height="980">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPj9YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQsLzI4O1UkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw

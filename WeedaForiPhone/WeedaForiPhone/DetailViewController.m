@@ -8,6 +8,7 @@
 
 #import "DetailViewController.h"
 #import "UserViewController.h"
+#import "UserListViewController.h"
 
 @interface DetailViewController ()
 - (void)configureView;
@@ -33,7 +34,7 @@
 
     if (self.weed) {
         NSString *content = self.weed.content;
-        NSString *username = self.weed.user.username;
+        NSString *username = self.weed.username;
         
         NSString *nameLabel = [NSString stringWithFormat:@"@%@", username];
         [self.userLabel setTitle:nameLabel forState:UIControlStateNormal];
@@ -48,6 +49,16 @@
         CALayer * l = [self.userAvatar layer];
         [l setMasksToBounds:YES];
         [l setCornerRadius:7.0];
+        NSString * waterCount = [self.weed.water_count description];
+        NSString * waterCountButtonLabel = [NSString stringWithFormat:@"%@ WATER DROPS", waterCount];
+        NSMutableAttributedString *attString=[[NSMutableAttributedString alloc] initWithString:waterCountButtonLabel];
+        NSInteger waterCountLength = [waterCount length];
+        NSInteger totalLength=[waterCountButtonLabel length];
+        [attString addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Helvetica" size:9.0f] range:NSMakeRange(0, totalLength)];
+        [attString addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Helvetica-Bold" size:10.0f] range:NSMakeRange(0, waterCountLength)];
+        [attString addAttribute:NSForegroundColorAttributeName value:[UIColor grayColor] range:NSMakeRange(0, totalLength)];
+        [attString addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(0, waterCountLength)];
+        [self.waterCount setAttributedTitle:attString forState:UIControlStateNormal];
     }
 }
 
@@ -69,9 +80,12 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([[segue identifier] isEqualToString:@"showUser"]) {
-        [[segue destinationViewController] setUser_id:self.weed.user.id];
+        [[segue destinationViewController] setUser_id:self.weed.user_id];
         [[segue destinationViewController] setCurrentUser:self.currentUser];
+    } else if ([[segue identifier] isEqualToString:@"showWaterUser"]) {
+        [[segue destinationViewController] setWater_weed_id:self.weed.id];
     }
+    
 }
 
 

@@ -12,13 +12,15 @@
 
 @implementation User
 
-@dynamic email;
-@dynamic password;
-@dynamic followerCount;
-@dynamic followingCount;
-@dynamic username;
-@dynamic weedCount;
-@dynamic relationshipWithCurrentUser;
-@dynamic weeds;
+@synthesize id;
+@synthesize time;
+@synthesize shouldBeDeleted;
+@synthesize email;
+@synthesize password;
+@synthesize followerCount;
+@synthesize followingCount;
+@synthesize username;
+@synthesize weedCount;
+@synthesize relationshipWithCurrentUser;
 
 @end

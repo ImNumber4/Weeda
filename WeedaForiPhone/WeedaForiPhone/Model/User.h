@@ -10,10 +10,12 @@
 #import <CoreData/CoreData.h>
 #import "RemoteObject.h"
 
-@class Weed;
 
-@interface User : RemoteObject
+@interface User : NSObject
 
+@property (nonatomic, retain) NSNumber * shouldBeDeleted;
+@property (nonatomic, retain) NSNumber * id;
+@property (nonatomic, retain) NSDate * time;
 @property (nonatomic, retain) NSString * email;
 @property (nonatomic, retain) NSString * password;
 @property (nonatomic, retain) NSNumber * followerCount;
@@ -22,13 +24,6 @@
 @property (nonatomic, retain) NSNumber * weedCount;
 @property (nonatomic, retain) NSNumber * relationshipWithCurrentUser;
 @property (nonatomic, retain) NSSet *weeds;
-@end
 
-@interface User (CoreDataGeneratedAccessors)
-
-- (void)addWeedsObject:(Weed *)value;
-- (void)removeWeedsObject:(Weed *)value;
-- (void)addWeeds:(NSSet *)values;
-- (void)removeWeeds:(NSSet *)values;
 
 @end

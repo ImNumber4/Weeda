@@ -2,7 +2,7 @@
 //  Weed.h
 //  WeedaForiPhone
 //
-//  Created by Chaoqing LV on 4/13/14.
+//  Created by Chaoqing LV on 4/19/14.
 //  Copyright (c) 2014 Weeda. All rights reserved.
 //
 
@@ -10,13 +10,13 @@
 #import <CoreData/CoreData.h>
 #import "RemoteObject.h"
 
-@class User;
 
 @interface Weed : RemoteObject
 
 @property (nonatomic, retain) NSString * content;
-@property (nonatomic, retain) NSNumber * water_count;
 @property (nonatomic, retain) NSNumber * if_cur_user_water_it;
-@property (nonatomic, retain) User *user;
+@property (nonatomic, retain) NSNumber * water_count;
+@property (nonatomic, retain) NSNumber * user_id;
+@property (nonatomic, retain) NSString * username;
 
 @end

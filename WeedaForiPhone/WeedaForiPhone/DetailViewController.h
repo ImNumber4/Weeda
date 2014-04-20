@@ -17,4 +17,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *userLabel;
 @property (weak, nonatomic) IBOutlet UILabel *timeLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *userAvatar;
+@property (weak, nonatomic) IBOutlet UIButton *waterCount;
+@property (weak, nonatomic) IBOutlet UIButton *seedCount;
 @end

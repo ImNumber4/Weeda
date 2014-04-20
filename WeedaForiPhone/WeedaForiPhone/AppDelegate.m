@@ -63,12 +63,14 @@
                                           @"time" : @"time",
                                           @"deleted" : @"shouldBeDeleted"
                                           };
+
+    RKObjectMapping *userMapping = [RKObjectMapping mappingForClass:[User class]];
     
-    RKEntityMapping *userMapping = [RKEntityMapping mappingForEntityForName:NSStringFromClass([User class]) inManagedObjectStore:manager.managedObjectStore];
-    
-    userMapping.identificationAttributes = @[ @"id" ];
     
     [userMapping addAttributeMappingsFromDictionary:@{
+                                                      @"id" : @"id",
+                                                      @"time" : @"time",
+                                                      @"deleted" : @"shouldBeDeleted",
                                                       @"username" : @"username",
                                                       @"email" : @"email",
                                                       @"weedCount" : @"weedCount",
@@ -76,14 +78,13 @@
                                                       @"followingCount" : @"followingCount",
                                                       @"relationshipWithCurrentUser" : @"relationshipWithCurrentUser",
                                                       }];
-    
-    [userMapping addAttributeMappingsFromDictionary:parentObjectMapping];
+
     
     RKEntityMapping *weedMapping = [RKEntityMapping mappingForEntityForName:NSStringFromClass([Weed class]) inManagedObjectStore:managedObjectStore];
     
     weedMapping.identificationAttributes = @[ @"id" ];
     
-    [weedMapping addAttributeMappingsFromDictionary:@{@"content" : @"content", @"water_count" : @"water_count", @"if_cur_user_water_it" : @"if_cur_user_water_it"}];
+    [weedMapping addAttributeMappingsFromDictionary:@{@"user_id" : @"user_id", @"username" : @"username", @"content" : @"content", @"water_count" : @"water_count", @"if_cur_user_water_it" : @"if_cur_user_water_it"}];
     
     [weedMapping addAttributeMappingsFromDictionary:parentObjectMapping];
     
@@ -100,9 +101,16 @@
                                                                                        pathPattern:@"weed/query"
                                                                                            keyPath:@"weeds"
                                                                                        statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
-    
-    
     [manager addResponseDescriptor:weedResponseDescriptor];
+    
+    RKResponseDescriptor *usersResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping
+                                                                                                method:RKRequestMethodGET
+                                                                                           pathPattern:@"user/getUsersWaterWeed/:id"
+                                                                                               keyPath:@"users"
+                                                                                           statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+    
+    [manager addResponseDescriptor:usersResponseDescriptor];
+    
     
     RKResponseDescriptor *userResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping
                                                                                                 method:RKRequestMethodGET

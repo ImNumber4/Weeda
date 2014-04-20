@@ -24,8 +24,7 @@ class WeedController extends Controller
 		$weeds = array();
 		if(mysql_num_rows($result)) {
 			while($weed = mysql_fetch_assoc($result)) {
-				$user = array('id' => $weed['user_id'], 'username' => $weed['username'], 'email' => $weed['email'], 'time' => $weed['user_time'], 'deleted' => $weed['user_deleted']);
-				$weeds[] = array('id' => $weed['weed_id'], 'content' => $weed['content'], 'user' => $user, 'time' => $weed['weed_time'], 'deleted' => $weed['weed_deleted'], 'water_count' => $weed['water_count'], 'if_cur_user_water_it' => $weed['if_cur_user_water_it'] == $currentUser_id);
+				$weeds[] = array('id' => $weed['weed_id'], 'content' => $weed['content'], 'user_id' => $weed['user_id'], 'username' => $weed['username'], 'time' => $weed['weed_time'], 'deleted' => $weed['weed_deleted'], 'water_count' => $weed['water_count'], 'if_cur_user_water_it' => $weed['if_cur_user_water_it'] == $currentUser_id);
 			}
 		}
 

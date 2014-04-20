@@ -39,7 +39,8 @@
     RKManagedObjectStore *objectStore = [[RKObjectManager sharedManager] managedObjectStore];
     Weed *weed = [NSEntityDescription insertNewObjectForEntityForName:@"Weed" inManagedObjectContext:objectStore.mainQueueManagedObjectContext];
     weed.id = [NSNumber numberWithInt:-1];
-    weed.user = self.currentUser;
+    weed.username = self.currentUser.username;
+    weed.user_id = self.currentUser.id;
     
     // If appropriate, configure the new managed object.
     // Normally you should use accessor methods, but using KVC here avoids the need to add a custom class to the template.

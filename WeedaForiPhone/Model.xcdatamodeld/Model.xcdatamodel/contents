@@ -1,29 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5063" systemVersion="13C64" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5064" systemVersion="13C64" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="RemoteObject" representedClassName="RemoteObject" isAbstract="YES" syncable="YES">
         <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="shouldBeDeleted" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="time" optional="YES" attributeType="Date" syncable="YES"/>
     </entity>
-    <entity name="User" representedClassName="User" parentEntity="RemoteObject" syncable="YES">
-        <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="followerCount" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <attribute name="followingCount" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <attribute name="password" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="relationshipWithCurrentUser" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="weedCount" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <relationship name="weeds" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Weed" inverseName="user" inverseEntity="Weed" syncable="YES"/>
-    </entity>
     <entity name="Weed" representedClassName="Weed" parentEntity="RemoteObject" syncable="YES">
         <attribute name="content" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="if_cur_user_water_it" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="user_id" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="water_count" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="weeds" inverseEntity="User" syncable="YES"/>
     </entity>
     <elements>
         <element name="RemoteObject" positionX="-90" positionY="-61" width="128" height="90"/>
-        <element name="User" positionX="-225" positionY="249" width="128" height="165"/>
-        <element name="Weed" positionX="18" positionY="212" width="144" height="105"/>
+        <element name="Weed" positionX="18" positionY="212" width="144" height="120"/>
     </elements>
 </model>

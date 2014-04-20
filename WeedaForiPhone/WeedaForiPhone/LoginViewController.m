@@ -50,8 +50,7 @@
             return;
         }
         
-        RKManagedObjectStore *objectStore = [[RKObjectManager sharedManager] managedObjectStore];
-        self.currentUser = [NSEntityDescription insertNewObjectForEntityForName:@"User" inManagedObjectContext:objectStore.mainQueueManagedObjectContext];
+        self.currentUser = [User alloc];
         self.currentUser.username = [self.txtUsername text];
         self.currentUser.password = [self.txtPassword text];
         

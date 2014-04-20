@@ -101,7 +101,7 @@
 {
     // Return NO if you do not want the specified item to be editable.
     Weed * weed = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    return [weed.user.id intValue] == [self.currentUser.id integerValue]?YES:NO;
+    return [weed.user_id intValue] == [self.currentUser.id integerValue]?YES:NO;
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -168,7 +168,7 @@
 - (void)decorateCellWithWeed:(Weed *)weed cell:(WeedTableViewCell *)cell {
     cell.weedContentLabel.text = [NSString stringWithFormat:@"%@", weed.content];
     [cell.weedContentLabel sizeToFit];
-    NSString *nameLabel = [NSString stringWithFormat:@"@%@", weed.user.username];
+    NSString *nameLabel = [NSString stringWithFormat:@"@%@", weed.username];
     [cell.usernameLabel setTitle:nameLabel forState:UIControlStateNormal];
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -242,7 +242,7 @@
         CGPoint buttonPosition = [sender convertPoint:CGPointZero toView:self.tableView];
         NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:buttonPosition];
         Weed *weed = [[self fetchedResultsController] objectAtIndexPath:indexPath];
-        [[segue destinationViewController] setUser_id:weed.user.id];
+        [[segue destinationViewController] setUser_id:weed.user_id];
         [[segue destinationViewController] setCurrentUser:self.currentUser];
     }
 }

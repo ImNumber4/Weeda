@@ -126,9 +126,7 @@
     [self renewCookieExpireTime:usernameCookie];
     [self renewCookieExpireTime:passwordCookie];
     
-    User *user = [NSEntityDescription
-                  insertNewObjectForEntityForName:@"User"
-                  inManagedObjectContext:[RKObjectManager sharedManager].managedObjectStore.mainQueueManagedObjectContext];
+    User *user = [User alloc];
     user.id = [NSNumber numberWithInteger:[userIdCookie.value integerValue]];
     user.username = usernameCookie.value;
     user.password = passwordCookie.value;

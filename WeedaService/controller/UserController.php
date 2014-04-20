@@ -29,6 +29,22 @@ class UserController extends Controller
 		echo json_encode(array('user' => $user));
 	}
 	
+	public function getUsersWaterWeed($weed_id) {
+		$currentUser_id = $_COOKIE['user_id'];
+		if (!isset($currentUser_id)) {
+			error_log('current user is not set');
+			header("Content-type: application/json");
+			http_response_code(400);
+			return;
+		}
+		$userDAO = new UserDAO();
+		error_log("wukun loves pz");
+		$users = $userDAO->getUsersWaterWeed($currentUser_id, $weed_id);
+		header('Content-type: application/json');
+		http_response_code(200);
+		echo json_encode(array('users'=>$users));
+	}
+	
 	public function follow($id) {
 		if (!isset($id)) {
 			error_log('Input error, id is null.');
