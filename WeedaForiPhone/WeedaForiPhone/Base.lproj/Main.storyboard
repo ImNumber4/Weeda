@@ -137,7 +137,7 @@
                                         <button opaque="NO" contentMode="redraw" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f4i-fn-mcx">
                                             <rect key="frame" x="265" y="61" width="6" height="12"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <state key="normal" image="96010DBE-2600-451A-9D6D-86B61ACFF6A5">
+                                            <state key="normal" image="DB272697-1E11-4061-B4EA-A2CA7E8C3828">
                                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
                                         </button>
@@ -593,6 +593,7 @@
                         <outlet property="txtPassword" destination="qRY-3l-I40" id="7BG-Nv-PiZ"/>
                         <outlet property="txtUsername" destination="iDn-Y3-Vva" id="8xJ-AZ-dZc"/>
                         <outlet property="usernameValidImageView" destination="pew-bb-lRo" id="Z7m-B8-d0x"/>
+                        <segue destination="6Nn-SQ-2Of" kind="modal" identifier="signupSuccess" modalTransitionStyle="crossDissolve" id="dcA-N1-b4z"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3D7-Fb-OYU" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -670,7 +671,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="96010DBE-2600-451A-9D6D-86B61ACFF6A5" width="591" height="980">
+        <image name="DB272697-1E11-4061-B4EA-A2CA7E8C3828" width="591" height="980">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPj9YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQsLzI4O1UkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw
@@ -39345,7 +39346,7 @@ I2RUACNkVwAjZGkAI2RsACNkcQAAAAAAAAQBAAAAAAAAAEIAAAAAAAAAAAAAAAAAI2RzA
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="ojy-bF-iNg"/>
+        <segue reference="dcA-N1-b4z"/>
         <segue reference="h1t-lH-4fa"/>
     </inferredMetricsTieBreakers>
 </document>

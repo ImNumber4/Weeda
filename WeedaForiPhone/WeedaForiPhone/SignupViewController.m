@@ -6,6 +6,7 @@
 //  Copyright (c) 2014年 Weeda. All rights reserved.
 //
 
+#import "AppDelegate.h";
 #import "SignupViewController.h"
 
 @interface SignupViewController ()
@@ -51,6 +52,22 @@ bool availableUsername = false;
 }
 
 - (IBAction)signupClicked:(id)sender {
+    RKManagedObjectStore *objectStore = [[RKObjectManager sharedManager] managedObjectStore];
+    User *user = [NSEntityDescription insertNewObjectForEntityForName:@"User" inManagedObjectContext:objectStore.mainQueueManagedObjectContext];
+    user.id = [NSNumber numberWithInt:-1];
+    user.username = self.txtUsername.text;
+    user.password = self.txtPassword.text;
+    user.email = self.txtEmail.text;
+    user.time = [NSDate date];
+    
+    [[RKObjectManager sharedManager] postObject:user path:@"user/signup" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+        NSLog(@"Response: %@", mappingResult);
+        
+        [self setCurrentUser];
+        [self performSegueWithIdentifier:@"signupSuccess" sender:self];
+    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        RKLogError(@"Load failed with error: %@", error);
+    }];
 }
 
 /*
@@ -65,31 +82,29 @@ bool availableUsername = false;
 */
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    NSCharacterSet *unacceptedInput = nil;
     switch (textField.tag) {
-            // Assuming EMAIL_TextField.tag == 1001
         case 1001:
             self.usernameValidImageView.image = [UIImage imageNamed:@"wrong.png"];
             break;
-            // Assuming PHONE_textField.tag == 1002
         case 1002:
-            if ([self validateEmailWithString:self.txtEmail.text]) {
+            if ([self validateEmailWithString:textField.text]) {
                 self.emailValidImageView.image = [UIImage imageNamed:@"ok.png"];
             } else {
                 self.emailValidImageView.image = [UIImage imageNamed:@"wrong.png"];
             }
-            
             break;
         case 1003:
-            if (self.txtPassword.text.length >= 8) {
+            if ([self validatePassword:textField.text]) {
                 self.passwordValidImageView.image = [UIImage imageNamed:@"ok.png"];
             } else {
-                self.passwordValidImageView.image = [UIImage imageNamed:@"worng.png"];
+                self.passwordValidImageView.image = [UIImage imageNamed:@"wrong.png"];
             }
             break;
         default:
-            unacceptedInput = [[NSCharacterSet illegalCharacterSet] invertedSet];
             break;
+    }
+    if (availableUsername && [self validateEmailWithString:self.txtEmail.text] && [self validatePassword:self.txtPassword.text]) {
+        [self.btnSignup setEnabled:YES];
     }
     return true;
 }
@@ -111,62 +126,33 @@ bool availableUsername = false;
             NSLog(@"password");
             break;
         default:
-            if (availableUsername && [self validateEmailWithString:self.txtEmail.text] && [self validatePassword:self.txtPassword.text]) {
-                [self.btnSignup setEnabled:YES];
-            }
             break;
     }
-    return true;
-}
-
--(void) validateTextFields {
-    if ((self.txtUsername.text.length > 0) && self.txtPassword.text.length > 0 && self.txtEmail.text.length > 0) {
+    if (availableUsername && [self validateEmailWithString:self.txtEmail.text] && [self validatePassword:self.txtPassword.text]) {
         [self.btnSignup setEnabled:YES];
-    } else {
-        [self.btnSignup setEnabled:NO];
     }
+    return true;
 }
 
 - (BOOL)validateUsername:(NSString *)username
 {
-//    RKManagedObjectStore *objectStore = [[RKObjectManager sharedManager] managedObjectStore];
-//    User *user = [NSEntityDescription insertNewObjectForEntityForName:@"User" inManagedObjectContext:objectStore.mainQueueManagedObjectContext];
-//    user.username = [self.txtUsername text];
-//    
-//    
-//    [[RKObjectManager sharedManager] postObject:user path:@"user/username" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-//        NSLog(@"Response: %@", mappingResult);
-//        if (mappingResult.array.count == 0) {
-//            availableUsername = true;
-//        }
-//        
-//    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-//        NSLog(@"Failure login: %@", error.localizedDescription);
-//    }];
-//    
-//    return availableUsername;
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://localhost/user/username/%@", username]];
     
-//    NSURL *url = [NSURL URLWithString:@"http://localhost/user/username"];
-//    
-//    NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReturnCacheDataElseLoad timeoutInterval:60];
-//    
-//    NSData *returnData = [NSURLConnection sendSynchronousRequest:urlRequest returningResponse: nil error: nil ];
-//    NSString *responseString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
-//    NSLog(@"%@", responseString);
-//    NSDictionary *parsedObject = [NSJSONSerialization JSONObjectWithData:returnData options:0 error:nil];
-//    
-//    NSArray *results = [parsedObject valueForKey:@"users"];
-//    self.users = [[NSMutableArray alloc] init];
-//    for (NSDictionary *userDic in results) {
-//        User *user = [[User alloc] init];
-//        for (NSString *key in userDic) {
-//            if ([user respondsToSelector:NSSelectorFromString(key)]) {
-//                [user setValue:[userDic valueForKey:key] forKey:key];
-//            }
-//        }
-//        [self.users addObject:user];
-//    }
-    return true;
+    NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReturnCacheDataElseLoad timeoutInterval:60];
+    
+    NSData *returnData = [NSURLConnection sendSynchronousRequest:urlRequest returningResponse: nil error: nil ];
+    NSString *responseString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
+    NSLog(@"%@", responseString);
+    NSDictionary *parsedObject = [NSJSONSerialization JSONObjectWithData:returnData options:0 error:nil];
+    
+    BOOL result = [[parsedObject valueForKey:@"exist"] boolValue];
+    if (result) {
+        availableUsername = false;
+        return false;
+    } else {
+        availableUsername = true;
+        return true;
+    }
 }
 
 - (BOOL)validateEmailWithString:(NSString*)email
@@ -178,11 +164,32 @@ bool availableUsername = false;
 
 - (BOOL)validatePassword:(NSString *)password
 {
-    if (password.length >= 8) {
+    if (password.length >= 7) {
         return true;
     } else {
         return false;
     }
+}
+
+- (void) setCurrentUser
+{
+    RKManagedObjectStore *objectStore = [[RKObjectManager sharedManager] managedObjectStore];
+    User *user = [NSEntityDescription insertNewObjectForEntityForName:@"User" inManagedObjectContext:objectStore.mainQueueManagedObjectContext];
+
+    NSArray *cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookies];
+    for (NSHTTPCookie *cookie in cookies) {
+        if ([cookie.name isEqualToString:@"user_id"]) {
+            user.id = [NSNumber numberWithInteger:[cookie.value integerValue]];
+        } else if ([cookie.name isEqualToString:@"username"]) {
+            user.username = cookie.value;
+        } else if ([cookie.name isEqualToString:@"password"]) {
+            user.password = cookie.value;
+        } else {
+            NSLog(@"Extra cookie in the app, cookie name is %@", cookie.name);
+        }
+    }
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    [appDelegate setCurrentUser:user];
 }
 
 @end

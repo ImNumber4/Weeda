@@ -158,25 +158,30 @@ class UserController extends Controller
 			http_response_code(500);
 			return;
 		}
+		
+		$user->set_id($result);
+		setcookie('user_id', $result, time() + (86400 * 7), '/');
+		setcookie('username', $user->get_username(), time() + (86400 * 7), '/');
+		setcookie('password', $user->get_password(), time() + (86400 * 7), '/');	
 		header('Content-type: application/json');
 		http_response_code(200);
-		echo json_encode(array('id' => $result));
+		echo json_encode(array('user' => $user));
 	}
 	
-	public function username() {
-		$data = json_decode(file_get_contents('php://input'));
-		$username = $data->username;
+	public function username($username) {
+// 		$data = json_decode(file_get_contents('php://input'));
+// 		$username = $data->username;
 		if (!isset($username)) {
 			error_log('Input error, username is null');
 			http_response_code(400);
 			return;
 		}
 		$userDAO = new UserDAO();
-		$user = $userDAO->find_by_username($username);
+		$exist = $userDAO->username_exist($username);
 		
 		header("Content-type: application/json");
 		http_response_code(200);
-		echo json_encode(array('user' => $user));
+		echo json_encode(array('exist' => $exist));
 	}
 	
 	private function parse_body_request() {
