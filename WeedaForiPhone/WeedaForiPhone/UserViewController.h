@@ -11,8 +11,6 @@
 @interface UserViewController : UIViewController
 
 @property (nonatomic, retain) NSNumber * user_id;
-@property (nonatomic, retain) User * currentUser;
-
 @property (weak, nonatomic) IBOutlet UILabel *timeLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *userAvatar;
 @property (weak, nonatomic) IBOutlet UILabel *weedCountLabel;

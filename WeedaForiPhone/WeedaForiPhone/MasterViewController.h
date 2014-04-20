@@ -13,6 +13,4 @@
 
 @interface MasterViewController : UITableViewController
 
-@property (nonatomic, retain) User * currentUser;
-
 @end

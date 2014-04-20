@@ -5,7 +5,7 @@
 //  Created by Chaoqing LV on 3/9/14.
 //  Copyright (c) 2014 Weeda. All rights reserved.
 //
-
+#import "AppDelegate.h"
 #import "MasterViewController.h"
 #import "DetailViewController.h"
 #import "AddWeedViewController.h"
@@ -101,7 +101,8 @@
 {
     // Return NO if you do not want the specified item to be editable.
     Weed * weed = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    return [weed.user_id intValue] == [self.currentUser.id integerValue]?YES:NO;
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    return [weed.user_id intValue] == [appDelegate.currentUser.id integerValue]?YES:NO;
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -233,17 +234,12 @@
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         Weed *weed = [[self fetchedResultsController] objectAtIndexPath:indexPath];
         [[segue destinationViewController] setWeed:weed];
-        [[segue destinationViewController] setCurrentUser:self.currentUser];
     } else if ([[segue identifier] isEqualToString:@"addWeed"]) {
-        UINavigationController *nav = [segue destinationViewController];
-        AddWeedViewController *addWeedViewController = (AddWeedViewController *)nav.topViewController;
-        [addWeedViewController setCurrentUser:self.currentUser];
     } else if ([[segue identifier] isEqualToString:@"showUser"]) {
         CGPoint buttonPosition = [sender convertPoint:CGPointZero toView:self.tableView];
         NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:buttonPosition];
         Weed *weed = [[self fetchedResultsController] objectAtIndexPath:indexPath];
         [[segue destinationViewController] setUser_id:weed.user_id];
-        [[segue destinationViewController] setCurrentUser:self.currentUser];
     }
 }
 

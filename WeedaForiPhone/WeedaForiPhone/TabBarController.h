@@ -10,6 +10,4 @@
 
 @interface TabBarController : UITabBarController
 
-@property (nonatomic, retain) User * currentUser;
-
 @end

@@ -10,7 +10,6 @@
 #import "DetailViewController.h"
 
 @interface AddWeedViewController :  UIViewController
-@property (nonatomic, retain) User * currentUser;
 @property (weak, nonatomic) IBOutlet UITextView *weedContentView;
 
 

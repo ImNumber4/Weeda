@@ -83,7 +83,6 @@
 {
     if ([[segue identifier] isEqualToString:@"showUser"]) {
         [[segue destinationViewController] setUser_id:self.weed.user_id];
-        [[segue destinationViewController] setCurrentUser:self.currentUser];
     } else if ([[segue identifier] isEqualToString:@"showWaterUser"]) {
         [[segue destinationViewController] setWater_weed_id:self.weed.id];
     }

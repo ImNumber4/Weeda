@@ -6,7 +6,7 @@
 //  Copyright (c) 2014年 Weeda. All rights reserved.
 //
 
-#import "AppDelegate.h";
+#import "AppDelegate.h"
 #import "SignupViewController.h"
 
 @interface SignupViewController ()

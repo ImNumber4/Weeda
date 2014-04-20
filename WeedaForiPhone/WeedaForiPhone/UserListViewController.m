@@ -136,4 +136,13 @@
     }];
 }
 
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([[segue identifier] isEqualToString:@"showUser"]) {
+        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+        User *user = [self.users objectAtIndex:indexPath.row];
+        [[segue destinationViewController] setUser_id:user.id];
+    }
+}
+
 @end

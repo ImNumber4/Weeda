@@ -79,14 +79,6 @@
     }
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([[segue identifier] isEqualToString:@"loginSuccess"]) {
-        TabBarController *tabBarController = [segue destinationViewController];
-        [tabBarController setCurrentUser:self.currentUser];
-    } else if ([[segue identifier] isEqualToString:@"signup"]) {
-        
-    }
-}
 
 - (IBAction)backgroudTap:(id)sender {
     [self.view endEditing:YES];

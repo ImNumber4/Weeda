@@ -8,6 +8,7 @@
 
 #import "UserViewController.h"
 #import "LoginViewController.h"
+#import "AppDelegate.h"
 
 @interface UserViewController ()
 
@@ -29,7 +30,8 @@
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
         RKLogError(@"Load failed with error: %@", error);
     }];
-    if ([self.user_id isEqualToNumber:self.currentUser.id]) {
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    if ([self.user_id isEqualToNumber:appDelegate.currentUser.id]) {
         UIImage * image = [UIImage imageNamed:@"setting.png"];
         CGSize sacleSize = CGSizeMake(30, 30);
         UIGraphicsBeginImageContextWithOptions(sacleSize, NO, 0.0);

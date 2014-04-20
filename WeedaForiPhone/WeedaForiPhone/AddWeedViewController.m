@@ -5,7 +5,7 @@
 //  Created by Chaoqing LV on 3/30/14.
 //  Copyright (c) 2014 Weeda. All rights reserved.
 //
-
+#import "AppDelegate.h"
 #import "AddWeedViewController.h"
 #import <RestKit/RestKit.h>
 
@@ -39,8 +39,9 @@
     RKManagedObjectStore *objectStore = [[RKObjectManager sharedManager] managedObjectStore];
     Weed *weed = [NSEntityDescription insertNewObjectForEntityForName:@"Weed" inManagedObjectContext:objectStore.mainQueueManagedObjectContext];
     weed.id = [NSNumber numberWithInt:-1];
-    weed.username = self.currentUser.username;
-    weed.user_id = self.currentUser.id;
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    weed.username = appDelegate.currentUser.username;
+    weed.user_id = appDelegate.currentUser.id;
     
     // If appropriate, configure the new managed object.
     // Normally you should use accessor methods, but using KVC here avoids the need to add a custom class to the template.
