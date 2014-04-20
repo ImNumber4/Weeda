@@ -10,5 +10,5 @@
 
 @interface UserListViewController : UITableViewController  <NSFetchedResultsControllerDelegate>
 @property (nonatomic, retain) NSNumber * water_weed_id;
-@property (strong) NSMutableArray *users;
+@property (strong) NSArray *users;
 @end
