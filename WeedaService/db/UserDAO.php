@@ -94,6 +94,21 @@ class UserDAO extends BaseDAO
 		return $users;
 	}
 	
+	public function getUsersSeedWeed($currentUser_id, $weed_id) {
+		$db_conn = new DbConnection();
+		$query = "SELECT user.username, user.id FROM weed, user WHERE weed.user_id = user.id AND weed.seed_id = $weed_id";
+		$result = $db_conn->query($query);
+		$users = array();
+		if (mysql_num_rows($result)) {
+			while($user = mysql_fetch_assoc($result)) {
+				$relationship = $this->getRelationship($db_conn, $currentUser_id, $user['id']);
+				$user['relationshipWithCurrentUser'] = $relationship;
+				$users[] = $user;
+			}
+		} 
+		return $users;
+	}
+	
 	private function getRelationship($db_conn, $userA_id, $userB_id) {
 		if($userA_id == $userB_id)
 			return 0;

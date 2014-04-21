@@ -137,7 +137,7 @@
                                         <button opaque="NO" contentMode="redraw" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f4i-fn-mcx">
                                             <rect key="frame" x="265" y="61" width="6" height="12"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <state key="normal" image="C794E1E7-F7FA-4788-8C4D-533FD6006D91">
+                                            <state key="normal" image="596571EF-0189-4A85-AD4A-5C04BAA133CB">
                                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
                                         </button>
@@ -239,6 +239,9 @@
                                     <color key="titleColor" red="0.80000001190000003" green="0.80000001190000003" blue="0.80000001190000003" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <segue destination="kcP-Br-rTe" kind="push" identifier="showSeedUser" id="Zoc-F5-yfx"/>
+                                </connections>
                             </button>
                             <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Nz9-dJ-0hJ">
                                 <rect key="frame" x="20" y="163" width="280" height="1"/>
@@ -706,7 +709,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="C794E1E7-F7FA-4788-8C4D-533FD6006D91" width="591" height="980">
+        <image name="596571EF-0189-4A85-AD4A-5C04BAA133CB" width="591" height="980">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPj9YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQsLzI4O1UkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw
@@ -39383,5 +39386,6 @@ I2RUACNkVwAjZGkAI2RsACNkcQAAAAAAAAQBAAAAAAAAAEIAAAAAAAAAAAAAAAAAI2RzA
     <inferredMetricsTieBreakers>
         <segue reference="dcA-N1-b4z"/>
         <segue reference="h1t-lH-4fa"/>
+        <segue reference="Zoc-F5-yfx"/>
     </inferredMetricsTieBreakers>
 </document>

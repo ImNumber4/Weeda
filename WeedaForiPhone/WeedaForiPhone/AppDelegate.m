@@ -101,13 +101,21 @@
                                                                                        statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
     [manager addResponseDescriptor:weedResponseDescriptor];
     
-    RKResponseDescriptor *usersResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping
+    RKResponseDescriptor *usersWaterWeedResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping
                                                                                                 method:RKRequestMethodGET
                                                                                            pathPattern:@"user/getUsersWaterWeed/:id"
                                                                                                keyPath:@"users"
                                                                                            statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
     
-    [manager addResponseDescriptor:usersResponseDescriptor];
+    [manager addResponseDescriptor:usersWaterWeedResponseDescriptor];
+    
+    RKResponseDescriptor *usersSeedWeedResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping
+                                                                                                 method:RKRequestMethodGET
+                                                                                            pathPattern:@"user/getUsersSeedWeed/:id"
+                                                                                                keyPath:@"users"
+                                                                                            statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+    
+    [manager addResponseDescriptor:usersSeedWeedResponseDescriptor];
     
     
     RKResponseDescriptor *userResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping

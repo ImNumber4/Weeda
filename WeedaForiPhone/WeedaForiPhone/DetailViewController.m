@@ -101,6 +101,8 @@
         [[segue destinationViewController] setUser_id:self.weed.user_id];
     } else if ([[segue identifier] isEqualToString:@"showWaterUser"]) {
         [[segue destinationViewController] setWater_weed_id:self.weed.id];
+    } else if ([[segue identifier] isEqualToString:@"showSeedUser"]) {
+        [[segue destinationViewController] setSeed_weed_id:self.weed.id];
     }
     
 }
