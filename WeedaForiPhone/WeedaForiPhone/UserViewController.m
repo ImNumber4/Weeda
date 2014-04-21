@@ -66,6 +66,7 @@
 {
     [self.followButton setTitle:@"+Follow" forState:UIControlStateNormal];
     self.followButton.backgroundColor = [UIColor colorWithRed:105.0/255.0 green:210.0/255.0 blue:245.0/255.0 alpha:1];
+    [self.followButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
     [self.followButton addTarget:self action:@selector(follow:) forControlEvents:UIControlEventTouchUpInside];
 }
 
@@ -73,6 +74,7 @@
 {
     [self.followButton setTitle:@"Following" forState:UIControlStateNormal];
     self.followButton.backgroundColor = [UIColor colorWithRed:62.0/255.0 green:165.0/255.0 blue:64.0/255.0 alpha:1];
+    [self.followButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
     [self.followButton addTarget:self action:@selector(unfollow:) forControlEvents:UIControlEventTouchUpInside];
 }
 

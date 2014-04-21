@@ -47,6 +47,7 @@ class UserController extends Controller
 	public function follow($id) {
 		if (!isset($id)) {
 			error_log('Input error, id is null.');
+			header("Content-type: application/json");
 			http_response_code(400);
 			return;
 		}
@@ -59,6 +60,7 @@ class UserController extends Controller
 		}
 		$userDAO = new UserDAO();
 		if ($userDAO->setAFollowB($currentUser_id, $id)) {
+			header("Content-type: application/json");
 			return $this->query($id);
 		} else {
 			error_log("failed to set currentUser=" . $currentUser_id . " to follow user " . $id);
@@ -71,6 +73,7 @@ class UserController extends Controller
 	public function unfollow($id) {
 		if (!isset($id)) {
 			error_log('Input error, id is null.');
+			header("Content-type: application/json");
 			http_response_code(400);
 			return;
 		}
@@ -83,6 +86,7 @@ class UserController extends Controller
 		}
 		$userDAO = new UserDAO();
 		if ($userDAO->setAUnfollowB($currentUser_id, $id)) {
+			header("Content-type: application/json");
 			return $this->query($id);
 		} else {
 			error_log('failed to set currentUser='. $currentUser_id. ' to unfollow user '. $id);

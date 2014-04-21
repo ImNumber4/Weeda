@@ -185,6 +185,7 @@
     } else {
         [cell.waterDrop setImage:[self getWaterImage:@"waterdropgray.png" width:6 height:12] forState:UIControlStateNormal];
     }
+    [cell.waterDrop removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
     [cell.waterDrop addTarget:self action:@selector(waterIt:)forControlEvents:UIControlEventTouchDown];
     cell.waterCount.text = [NSString stringWithFormat:@"%@", weed.water_count];
     [cell sizeToFit];
