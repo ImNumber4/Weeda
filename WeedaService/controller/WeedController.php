@@ -16,7 +16,7 @@ class WeedController extends Controller
 		}
 
 		/* grab the users from the db */
-		$query = "SELECT weed.id as weed_id, user.id as user_id, currentUserWater.user_id as if_cur_user_water_it, count(water.user_id) as water_count, content, user.time as user_time, weed.time as weed_time, username, email, weed.deleted as weed_deleted, user.deleted as user_deleted FROM weed LEFT JOIN water water ON water.weed_id = weed.id left join water currentUserWater on currentUserWater.weed_id=weed.id and currentUserWater.user_id=$currentUser_id, user where user.id=weed.user_id GROUP BY weed.id;";
+		$query = "SELECT weed.id as weed_id, user.id as user_id, currentUserWater.user_id as if_cur_user_water_it, water_count, seed_count, weed.content as content, user.time as user_time, weed.time as weed_time, username, email, weed.deleted as weed_deleted, user.deleted as user_deleted FROM weed left join water currentUserWater on currentUserWater.weed_id=weed.id and currentUserWater.user_id=$currentUser_id, user where user.id=weed.user_id GROUP BY weed.id";
 
 		$result = $db_conn->query($query);
 
@@ -24,7 +24,7 @@ class WeedController extends Controller
 		$weeds = array();
 		if(mysql_num_rows($result)) {
 			while($weed = mysql_fetch_assoc($result)) {
-				$weeds[] = array('id' => $weed['weed_id'], 'content' => $weed['content'], 'user_id' => $weed['user_id'], 'username' => $weed['username'], 'time' => $weed['weed_time'], 'deleted' => $weed['weed_deleted'], 'water_count' => $weed['water_count'], 'if_cur_user_water_it' => $weed['if_cur_user_water_it'] == $currentUser_id);
+				$weeds[] = array('id' => $weed['weed_id'], 'content' => $weed['content'], 'user_id' => $weed['user_id'], 'username' => $weed['username'], 'time' => $weed['weed_time'], 'deleted' => $weed['weed_deleted'], 'water_count' => $weed['water_count'], 'seed_count' => $weed['seed_count'], 'if_cur_user_water_it' => $weed['if_cur_user_water_it'] == $currentUser_id);
 			}
 		}
 

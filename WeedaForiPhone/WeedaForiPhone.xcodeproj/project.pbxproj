@@ -27,12 +27,12 @@
 		A91A62DE18FBBE0F008726E5 /* setting.png in Resources */ = {isa = PBXBuildFile; fileRef = A91A62DD18FBBE0F008726E5 /* setting.png */; };
 		A91A62E318FD1B1C008726E5 /* compose.png in Resources */ = {isa = PBXBuildFile; fileRef = A91A62E218FD1B1C008726E5 /* compose.png */; };
 		A91A62ED18FF8F48008726E5 /* UserListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A91A62EC18FF8F48008726E5 /* UserListViewController.m */; };
-		A91A62F619035910008726E5 /* Weed.m in Sources */ = {isa = PBXBuildFile; fileRef = A91A62F519035910008726E5 /* Weed.m */; };
 		A91A62F819035FCC008726E5 /* ok.png in Resources */ = {isa = PBXBuildFile; fileRef = A91A62F719035FCC008726E5 /* ok.png */; };
 		A91A62FA1903602B008726E5 /* wrong.png in Resources */ = {isa = PBXBuildFile; fileRef = A91A62F91903602B008726E5 /* wrong.png */; };
 		A92E513A19046E2A00FC518F /* UserTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A92E513919046E2A00FC518F /* UserTableViewCell.m */; };
 		A92E513D19047C6000FC518F /* follow.png in Resources */ = {isa = PBXBuildFile; fileRef = A92E513B19047C6000FC518F /* follow.png */; };
 		A92E514019048B0400FC518F /* followed.png in Resources */ = {isa = PBXBuildFile; fileRef = A92E513F19048B0400FC518F /* followed.png */; };
+		A92E51431904E27A00FC518F /* Weed.m in Sources */ = {isa = PBXBuildFile; fileRef = A92E51421904E27A00FC518F /* Weed.m */; };
 		A953B6EE18D6D7B5001CDD4C /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A953B6ED18D6D7B5001CDD4C /* CFNetwork.framework */; };
 		A953B6F018D6D7BC001CDD4C /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A953B6EF18D6D7BC001CDD4C /* libxml2.dylib */; };
 		A953B6F218D6D7C3001CDD4C /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A953B6F118D6D7C3001CDD4C /* MobileCoreServices.framework */; };
@@ -131,14 +131,14 @@
 		A91A62E218FD1B1C008726E5 /* compose.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = compose.png; path = WeedaForiPhone/Images/compose.png; sourceTree = "<group>"; };
 		A91A62EB18FF8F48008726E5 /* UserListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserListViewController.h; sourceTree = "<group>"; };
 		A91A62EC18FF8F48008726E5 /* UserListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserListViewController.m; sourceTree = "<group>"; };
-		A91A62F419035910008726E5 /* Weed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Weed.h; path = WeedaForiPhone/Model/Weed.h; sourceTree = "<group>"; };
-		A91A62F519035910008726E5 /* Weed.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Weed.m; path = WeedaForiPhone/Model/Weed.m; sourceTree = "<group>"; };
 		A91A62F719035FCC008726E5 /* ok.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ok.png; path = WeedaForiPhone/Images/ok.png; sourceTree = "<group>"; };
 		A91A62F91903602B008726E5 /* wrong.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = wrong.png; path = WeedaForiPhone/Images/wrong.png; sourceTree = "<group>"; };
 		A92E513819046E2A00FC518F /* UserTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserTableViewCell.h; path = WeedaForiPhone/UI/UserTableViewCell.h; sourceTree = "<group>"; };
 		A92E513919046E2A00FC518F /* UserTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserTableViewCell.m; path = WeedaForiPhone/UI/UserTableViewCell.m; sourceTree = "<group>"; };
 		A92E513B19047C6000FC518F /* follow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = follow.png; path = WeedaForiPhone/Images/follow.png; sourceTree = "<group>"; };
 		A92E513F19048B0400FC518F /* followed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = followed.png; path = WeedaForiPhone/Images/followed.png; sourceTree = "<group>"; };
+		A92E51411904E27A00FC518F /* Weed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Weed.h; path = WeedaForiPhone/Model/Weed.h; sourceTree = "<group>"; };
+		A92E51421904E27A00FC518F /* Weed.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Weed.m; path = WeedaForiPhone/Model/Weed.m; sourceTree = "<group>"; };
 		A953B6DC18D6D794001CDD4C /* RestKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RestKit.xcodeproj; path = RestKit/RestKit.xcodeproj; sourceTree = "<group>"; };
 		A953B6ED18D6D7B5001CDD4C /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		A953B6EF18D6D7BC001CDD4C /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
@@ -310,9 +310,9 @@
 		A914CCE218CD76C500B870D8 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				A92E51411904E27A00FC518F /* Weed.h */,
+				A92E51421904E27A00FC518F /* Weed.m */,
 				A953B6FC18D6D9DB001CDD4C /* Model.xcdatamodeld */,
-				A91A62F419035910008726E5 /* Weed.h */,
-				A91A62F519035910008726E5 /* Weed.m */,
 				A9CA8E5718E8DB1E004F095D /* RemoteObject.h */,
 				A9CA8E5818E8DB1E004F095D /* RemoteObject.m */,
 				A9CA8E8D18F264BA004F095D /* User.h */,
@@ -517,7 +517,7 @@
 				A914CCBF18CD756200B870D8 /* MasterViewController.m in Sources */,
 				EAA18EDE18F0ADFD0081482D /* LoginViewController.m in Sources */,
 				A9CA8E5918E8DB1E004F095D /* RemoteObject.m in Sources */,
-				A91A62F619035910008726E5 /* Weed.m in Sources */,
+				A92E51431904E27A00FC518F /* Weed.m in Sources */,
 				EA1B050F18F3668A0033AB06 /* WelcomeViewController.m in Sources */,
 				A991C04818FB3B7700A3D2CD /* TabBarController.m in Sources */,
 				A914CCB618CD756200B870D8 /* AppDelegate.m in Sources */,

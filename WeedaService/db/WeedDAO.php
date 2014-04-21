@@ -6,7 +6,7 @@ class WeedDAO extends BaseDAO
 {
 	public function create($weed)
 	{
-		$query = 'INSERT INTO weed (content, user_id, time, deleted) VALUES (\'' . $weed->get_content() . '\',\'' . $weed->get_user_id() . '\',\'' . $weed->get_time() . '\',' . $weed->get_deleted() . ')';
+		$query = 'INSERT INTO weed (content, user_id, time, deleted) VALUES (\'' . $weed->get_content() . '\',\'' . $weed->get_user_id() . '\',\'' . $weed->get_time() . '\',' . $weed->get_deleted() . ',0,0)';
 		error_log('insert query:' . $query);
 		$result = $this->db_conn->insert($query);
 		if ($result == 0) {
@@ -42,13 +42,17 @@ class WeedDAO extends BaseDAO
 	
 	public function setUserWaterWeed($user_id, $weed_id) {
 		$db_conn = new DbConnection();
+		$query = "UPDATE weed SET water_count =  water_count + 1 WHERE id = $weed_id";
+		$db_conn->query($query);	
 		$query = "INSERT INTO water VALUES($weed_id,$user_id)";	
 		return $db_conn->query($query);
 	}
 	
 	public function setUserUnwaterWeed($user_id, $weed_id) {
 		$db_conn = new DbConnection();
-		$query = "DELETE FROM water WHERE user_id = $user_id AND weed_id = $weed_id";	
+		$query = "UPDATE weed SET water_count =  water_count - 1 WHERE id = $weed_id";
+		$db_conn->query($query);
+		$query = "DELETE FROM water WHERE user_id = $user_id AND weed_id = $weed_id";
 		return $db_conn->query($query);
 	}
 	

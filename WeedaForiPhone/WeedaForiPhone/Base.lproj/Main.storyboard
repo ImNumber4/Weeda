@@ -137,7 +137,7 @@
                                         <button opaque="NO" contentMode="redraw" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f4i-fn-mcx">
                                             <rect key="frame" x="265" y="61" width="6" height="12"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <state key="normal" image="003A4519-DF8C-4D97-B33A-50B778195D9E">
+                                            <state key="normal" image="C794E1E7-F7FA-4788-8C4D-533FD6006D91">
                                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
                                         </button>
@@ -220,9 +220,9 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PPu-cO-BXO">
-                                <rect key="frame" x="77" y="162" width="88" height="30"/>
+                                <rect key="frame" x="77" y="168" width="88" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="9"/>
                                 <state key="normal" title="0 WATER DROPS">
                                     <color key="titleColor" red="0.80000001190000003" green="0.80000001190000003" blue="0.80000001190000003" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -232,9 +232,9 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KDf-j8-IOh">
-                                <rect key="frame" x="9" y="162" width="68" height="30"/>
+                                <rect key="frame" x="6" y="169" width="68" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="9"/>
                                 <state key="normal" title="10 SEEDS">
                                     <color key="titleColor" red="0.80000001190000003" green="0.80000001190000003" blue="0.80000001190000003" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -246,7 +246,7 @@
                                 <color key="backgroundColor" red="0.80000001190000003" green="0.80000001190000003" blue="0.80000001190000003" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
                             <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="arc-Cc-9va">
-                                <rect key="frame" x="20" y="191" width="280" height="1"/>
+                                <rect key="frame" x="20" y="197" width="280" height="1"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.80000001190000003" green="0.80000001190000003" blue="0.80000001190000003" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
@@ -254,12 +254,13 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="QTI-gT-Uhe" firstAttribute="top" secondItem="zrZ-lc-Sta" secondAttribute="bottom" constant="-1" id="4BB-MT-eeR"/>
-                            <constraint firstItem="PPu-cO-BXO" firstAttribute="top" secondItem="Nz9-dJ-0hJ" secondAttribute="bottom" constant="-2" id="6wi-fc-6f0"/>
+                            <constraint firstItem="PPu-cO-BXO" firstAttribute="top" secondItem="jLb-uc-KAe" secondAttribute="bottom" constant="23" id="5cV-fI-AgR"/>
+                            <constraint firstItem="PPu-cO-BXO" firstAttribute="top" secondItem="Nz9-dJ-0hJ" secondAttribute="bottom" constant="4" id="AVG-Hm-iie"/>
+                            <constraint firstItem="jLb-uc-KAe" firstAttribute="top" secondItem="9uy-yc-6eC" secondAttribute="bottom" constant="56" id="ChZ-rd-3rI"/>
+                            <constraint firstItem="PPu-cO-BXO" firstAttribute="centerY" secondItem="KDf-j8-IOh" secondAttribute="centerY" id="GG9-Rj-5wL"/>
                             <constraint firstItem="jLb-uc-KAe" firstAttribute="top" secondItem="QTI-gT-Uhe" secondAttribute="bottom" constant="8" id="JNH-kF-dM6"/>
-                            <constraint firstItem="PPu-cO-BXO" firstAttribute="top" secondItem="jLb-uc-KAe" secondAttribute="bottom" constant="12" id="cCb-cr-W56"/>
-                            <constraint firstItem="arc-Cc-9va" firstAttribute="top" secondItem="PPu-cO-BXO" secondAttribute="bottom" constant="-1" id="diM-Mj-nmR"/>
+                            <constraint firstItem="arc-Cc-9va" firstAttribute="top" secondItem="PPu-cO-BXO" secondAttribute="bottom" constant="-1" id="KEt-6h-K9F"/>
                             <constraint firstItem="zrZ-lc-Sta" firstAttribute="top" secondItem="9uy-yc-6eC" secondAttribute="bottom" constant="13" id="l0K-gg-qnU"/>
-                            <constraint firstItem="PPu-cO-BXO" firstAttribute="centerY" secondItem="KDf-j8-IOh" secondAttribute="centerY" id="qpg-uF-rTm"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Weed" id="cra-N8-TIN"/>
@@ -705,7 +706,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="003A4519-DF8C-4D97-B33A-50B778195D9E" width="591" height="980">
+        <image name="C794E1E7-F7FA-4788-8C4D-533FD6006D91" width="591" height="980">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPj9YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQsLzI4O1UkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw
@@ -39381,6 +39382,6 @@ I2RUACNkVwAjZGkAI2RsACNkcQAAAAAAAAQBAAAAAAAAAEIAAAAAAAAAAAAAAAAAI2RzA
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="dcA-N1-b4z"/>
-        <segue reference="TQg-xg-4RQ"/>
+        <segue reference="h1t-lH-4fa"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -2,7 +2,7 @@
 //  Weed.h
 //  WeedaForiPhone
 //
-//  Created by Chaoqing LV on 4/19/14.
+//  Created by Chaoqing LV on 4/20/14.
 //  Copyright (c) 2014 Weeda. All rights reserved.
 //
 
@@ -15,8 +15,9 @@
 
 @property (nonatomic, retain) NSString * content;
 @property (nonatomic, retain) NSNumber * if_cur_user_water_it;
-@property (nonatomic, retain) NSNumber * water_count;
 @property (nonatomic, retain) NSNumber * user_id;
 @property (nonatomic, retain) NSString * username;
+@property (nonatomic, retain) NSNumber * water_count;
+@property (nonatomic, retain) NSNumber * seed_count;
 
 @end

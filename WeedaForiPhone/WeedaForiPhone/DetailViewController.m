@@ -51,16 +51,32 @@
         [l setCornerRadius:7.0];
         NSString * waterCount = [self.weed.water_count description];
         NSString * waterCountButtonLabel = [NSString stringWithFormat:@"%@ WATER DROPS", waterCount];
-        NSMutableAttributedString *attString=[[NSMutableAttributedString alloc] initWithString:waterCountButtonLabel];
+        NSMutableAttributedString *waterAttString=[[NSMutableAttributedString alloc] initWithString:waterCountButtonLabel];
         NSInteger waterCountLength = [waterCount length];
-        NSInteger totalLength=[waterCountButtonLabel length];
-        [attString addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Helvetica" size:9.0f] range:NSMakeRange(0, totalLength)];
-        [attString addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Helvetica-Bold" size:10.0f] range:NSMakeRange(0, waterCountLength)];
-        [attString addAttribute:NSForegroundColorAttributeName value:[UIColor grayColor] range:NSMakeRange(0, totalLength)];
-        [attString addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(0, waterCountLength)];
-        [self.waterCount setAttributedTitle:attString forState:UIControlStateNormal];
+        NSInteger waterTotalLength=[waterCountButtonLabel length];
+        [waterAttString addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Helvetica" size:9.0f] range:NSMakeRange(0, waterTotalLength)];
+        [waterAttString addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Helvetica-Bold" size:9.0f] range:NSMakeRange(0, waterCountLength)];
+        [waterAttString addAttribute:NSForegroundColorAttributeName value:[UIColor grayColor] range:NSMakeRange(0, waterTotalLength)];
+        [waterAttString addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(0, waterCountLength)];
+        [self.waterCount setAttributedTitle:waterAttString forState:UIControlStateNormal];
+        
         if([self.weed.water_count intValue] <= 0)
             [self.waterCount setEnabled:NO];
+        
+        NSString * seedCount = [self.weed.seed_count description];
+        NSString * seedCountButtonLabel = [NSString stringWithFormat:@"%@ SEEDS", seedCount];
+        NSMutableAttributedString *seedAttString=[[NSMutableAttributedString alloc] initWithString:seedCountButtonLabel];
+        NSInteger seedCountLength = [seedCount length];
+        NSInteger seedTotalLength=[seedCountButtonLabel length];
+        [seedAttString addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Helvetica" size:9.0f] range:NSMakeRange(0, seedTotalLength)];
+        [seedAttString addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Helvetica-Bold" size:9.0f] range:NSMakeRange(0, seedCountLength)];
+        [seedAttString addAttribute:NSForegroundColorAttributeName value:[UIColor grayColor] range:NSMakeRange(0, seedTotalLength)];
+        [seedAttString addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(0, seedCountLength)];
+        [self.seedCount setAttributedTitle:seedAttString forState:UIControlStateNormal];
+        
+        if([self.weed.seed_count intValue] <= 0)
+            [self.seedCount setEnabled:NO];
+        
     }
 }
 
