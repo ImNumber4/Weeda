@@ -84,7 +84,7 @@
     
     weedMapping.identificationAttributes = @[ @"id" ];
     
-    [weedMapping addAttributeMappingsFromDictionary:@{@"user_id" : @"user_id", @"username" : @"username", @"content" : @"content", @"water_count" : @"water_count", @"seed_count" : @"seed_count", @"if_cur_user_water_it" : @"if_cur_user_water_it"}];
+    [weedMapping addAttributeMappingsFromDictionary:@{@"user_id" : @"user_id", @"username" : @"username", @"content" : @"content", @"water_count" : @"water_count", @"seed_count" : @"seed_count", @"if_cur_user_water_it" : @"if_cur_user_water_it", @"if_cur_user_seed_it" : @"if_cur_user_seed_it"}];
     
     [weedMapping addAttributeMappingsFromDictionary:parentObjectMapping];
     

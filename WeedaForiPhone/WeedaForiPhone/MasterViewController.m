@@ -52,7 +52,7 @@
                                                                           sectionNameKeyPath:nil
                                                                                    cacheName:nil];
     
-    UIBarButtonItem *composeButton = [[UIBarButtonItem alloc] initWithImage:[self getWaterImage:@"compose.png" width:30 height:30] style:UIBarButtonItemStylePlain target:self action:@selector(compose:)];
+    UIBarButtonItem *composeButton = [[UIBarButtonItem alloc] initWithImage:[self getImage:@"compose.png" width:30 height:30] style:UIBarButtonItemStylePlain target:self action:@selector(compose:)];
     [self.navigationItem setRightBarButtonItem:composeButton];
     
     [self.fetchedResultsController setDelegate:self];
@@ -181,17 +181,28 @@
     [l setMasksToBounds:YES];
     [l setCornerRadius:7.0];
     if ([weed.if_cur_user_water_it intValue] == 1) {
-        [cell.waterDrop setImage:[self getWaterImage:@"waterdrop.png" width:6 height:12] forState:UIControlStateNormal];
+        [cell.waterDrop setImage:[self getImage:@"waterdrop.png" width:6 height:12] forState:UIControlStateNormal];
     } else {
-        [cell.waterDrop setImage:[self getWaterImage:@"waterdropgray.png" width:6 height:12] forState:UIControlStateNormal];
+        [cell.waterDrop setImage:[self getImage:@"waterdropgray.png" width:6 height:12] forState:UIControlStateNormal];
     }
+    if ([weed.if_cur_user_seed_it intValue] == 1) {
+        [cell.seed setImage:[self getImage:@"seed.png" width:18 height:9] forState:UIControlStateNormal];
+    } else {
+        [cell.seed setImage:[self getImage:@"seedgray.png" width:18 height:9] forState:UIControlStateNormal];
+    }
+    
     [cell.waterDrop removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
     [cell.waterDrop addTarget:self action:@selector(waterIt:)forControlEvents:UIControlEventTouchDown];
+    
+    [cell.seed removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+    [cell.seed addTarget:self action:@selector(seedIt:)forControlEvents:UIControlEventTouchDown];
+    
+    cell.seedCount.text = [NSString stringWithFormat:@"%@", weed.seed_count];
     cell.waterCount.text = [NSString stringWithFormat:@"%@", weed.water_count];
     [cell sizeToFit];
 }
 
-- (UIImage *)getWaterImage:(NSString *)imageName width:(int)width height:(int) height
+- (UIImage *)getImage:(NSString *)imageName width:(int)width height:(int) height
 {
     UIImage * image = [UIImage imageNamed:imageName];
     CGSize sacleSize = CGSizeMake(width, height);
@@ -215,6 +226,29 @@
         [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/water/%@", weed.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
             weed.water_count = [NSNumber numberWithInt:[weed.water_count intValue] + 1];
             weed.if_cur_user_water_it = [NSNumber numberWithInt:1];
+        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+            RKLogError(@"Follow failed with error: %@", error);
+        }];
+    }
+    WeedTableViewCell *cell = (WeedTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+    [self decorateCellWithWeed:weed cell:cell];
+}
+
+- (void)seedIt:(id) sender {
+    CGPoint buttonPosition = [sender convertPoint:CGPointZero toView:self.tableView];
+    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:buttonPosition];
+    Weed *weed = [[self fetchedResultsController] objectAtIndexPath:indexPath];
+    if ([weed.if_cur_user_seed_it intValue] == 1) {
+        [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/unseed/%@", weed.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+            weed.seed_count = [NSNumber numberWithInt:[weed.seed_count intValue] - 1];
+            weed.if_cur_user_seed_it = [NSNumber numberWithInt:0];
+        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+            RKLogError(@"Follow failed with error: %@", error);
+        }];
+    } else {
+        [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/seed/%@", weed.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+            weed.seed_count = [NSNumber numberWithInt:[weed.seed_count intValue] + 1];
+            weed.if_cur_user_seed_it = [NSNumber numberWithInt:1];
         } failure:^(RKObjectRequestOperation *operation, NSError *error) {
             RKLogError(@"Follow failed with error: %@", error);
         }];

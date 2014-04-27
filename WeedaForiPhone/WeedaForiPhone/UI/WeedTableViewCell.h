@@ -14,6 +14,8 @@
 @property (nonatomic, weak) IBOutlet UILabel *weedContentLabel;
 @property (nonatomic, weak) IBOutlet UILabel *timeLabel;
 @property (nonatomic, weak) IBOutlet UIImageView *userAvatar;
+@property (nonatomic, weak) IBOutlet UIButton *seed;
+@property (nonatomic, weak) IBOutlet UILabel *seedCount;
 @property (nonatomic, weak) IBOutlet UIButton *waterDrop;
 @property (nonatomic, weak) IBOutlet UILabel *waterCount;
 

@@ -40,6 +40,22 @@ class WeedDAO extends BaseDAO
 		return true;
 	}
 	
+	public function setUserSeedWeed($user_id, $weed_id) {
+		$db_conn = new DbConnection();
+		$query = "UPDATE weed SET seed_count =  seed_count + 1 WHERE id = $weed_id";
+		$db_conn->query($query);	
+		$query = "INSERT INTO seed VALUES($weed_id,$user_id)";	
+		return $db_conn->query($query);
+	}
+	
+	public function setUserUnseedWeed($user_id, $weed_id) {
+		$db_conn = new DbConnection();
+		$query = "UPDATE weed SET seed_count =  seed_count - 1 WHERE id = $weed_id";
+		$db_conn->query($query);
+		$query = "DELETE FROM seed WHERE user_id = $user_id AND weed_id = $weed_id";
+		return $db_conn->query($query);
+	}
+	
 	public function setUserWaterWeed($user_id, $weed_id) {
 		$db_conn = new DbConnection();
 		$query = "UPDATE weed SET water_count =  water_count + 1 WHERE id = $weed_id";
