@@ -129,7 +129,7 @@ class UserDAO extends BaseDAO
 	
 	public function getUsersSeedWeed($currentUser_id, $weed_id) {
 		$db_conn = new DbConnection();
-		$query = "SELECT user.username, user.id FROM weed, user WHERE weed.user_id = user.id AND weed.seed_id = $weed_id";
+		$query = "SELECT user.username, user.id FROM seed, user WHERE seed.user_id = user.id AND seed.weed_id = $weed_id";
 		$result = $db_conn->query($query);
 		$users = array();
 		if (mysql_num_rows($result)) {

@@ -53,11 +53,16 @@
         [self.waterCount setTitle:[NSString stringWithFormat:@"%@ WATER DROPS", self.weed.water_count] forState:UIControlStateNormal];
         if([self.weed.water_count intValue] <= 0)
             [self.waterCount setEnabled:NO];
+        else
+            [self.waterCount setEnabled:YES];
         
         
         [self.seedCount setTitle:[NSString stringWithFormat:@"%@ SEEDS", self.weed.seed_count] forState:UIControlStateNormal];
         if([self.weed.seed_count intValue] <= 0)
             [self.seedCount setEnabled:NO];
+        else
+            [self.seedCount setEnabled:YES];
+
         
         if ([self.weed.if_cur_user_water_it intValue] == 1) {
             [self.waterDrop setImage:[self getImage:@"waterdrop.png" width:6 height:12] forState:UIControlStateNormal];
