@@ -17,4 +17,6 @@
 @property (weak, nonatomic) IBOutlet UIImageView *userAvatar;
 @property (weak, nonatomic) IBOutlet UIButton *waterCount;
 @property (weak, nonatomic) IBOutlet UIButton *seedCount;
+@property (nonatomic, weak) IBOutlet UIButton *seed;
+@property (nonatomic, weak) IBOutlet UIButton *waterDrop;
 @end

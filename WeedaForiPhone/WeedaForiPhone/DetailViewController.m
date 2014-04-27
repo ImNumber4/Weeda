@@ -49,44 +49,85 @@
         CALayer * l = [self.userAvatar layer];
         [l setMasksToBounds:YES];
         [l setCornerRadius:7.0];
-        NSString * waterCount = [self.weed.water_count description];
-        NSString * waterCountButtonLabel = [NSString stringWithFormat:@"%@ WATER DROPS", waterCount];
-        NSMutableAttributedString *waterAttString=[[NSMutableAttributedString alloc] initWithString:waterCountButtonLabel];
-        NSInteger waterCountLength = [waterCount length];
-        NSInteger waterTotalLength=[waterCountButtonLabel length];
-        [waterAttString addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Helvetica" size:9.0f] range:NSMakeRange(0, waterTotalLength)];
-        [waterAttString addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Helvetica-Bold" size:9.0f] range:NSMakeRange(0, waterCountLength)];
-        [waterAttString addAttribute:NSForegroundColorAttributeName value:[UIColor grayColor] range:NSMakeRange(0, waterTotalLength)];
-        [waterAttString addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(0, waterCountLength)];
-        [self.waterCount setAttributedTitle:waterAttString forState:UIControlStateNormal];
         
+        [self.waterCount setTitle:[NSString stringWithFormat:@"%@ WATER DROPS", self.weed.water_count] forState:UIControlStateNormal];
         if([self.weed.water_count intValue] <= 0)
             [self.waterCount setEnabled:NO];
         
-        NSString * seedCount = [self.weed.seed_count description];
-        NSString * seedCountButtonLabel = [NSString stringWithFormat:@"%@ SEEDS", seedCount];
-        NSMutableAttributedString *seedAttString=[[NSMutableAttributedString alloc] initWithString:seedCountButtonLabel];
-        NSInteger seedCountLength = [seedCount length];
-        NSInteger seedTotalLength=[seedCountButtonLabel length];
-        [seedAttString addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Helvetica" size:9.0f] range:NSMakeRange(0, seedTotalLength)];
-        [seedAttString addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Helvetica-Bold" size:9.0f] range:NSMakeRange(0, seedCountLength)];
-        [seedAttString addAttribute:NSForegroundColorAttributeName value:[UIColor grayColor] range:NSMakeRange(0, seedTotalLength)];
-        [seedAttString addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(0, seedCountLength)];
-        [self.seedCount setAttributedTitle:seedAttString forState:UIControlStateNormal];
         
+        [self.seedCount setTitle:[NSString stringWithFormat:@"%@ SEEDS", self.weed.seed_count] forState:UIControlStateNormal];
         if([self.weed.seed_count intValue] <= 0)
             [self.seedCount setEnabled:NO];
         
+        if ([self.weed.if_cur_user_water_it intValue] == 1) {
+            [self.waterDrop setImage:[self getImage:@"waterdrop.png" width:6 height:12] forState:UIControlStateNormal];
+        } else {
+            [self.waterDrop setImage:[self getImage:@"waterdropgray.png" width:6 height:12] forState:UIControlStateNormal];
+        }
+        if ([self.weed.if_cur_user_seed_it intValue] == 1) {
+            [self.seed setImage:[self getImage:@"seed.png" width:18 height:9] forState:UIControlStateNormal];
+        } else {
+            [self.seed setImage:[self getImage:@"seedgray.png" width:18 height:9] forState:UIControlStateNormal];
+        }
+        
+        [self.waterDrop removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+        [self.waterDrop addTarget:self action:@selector(waterIt:)forControlEvents:UIControlEventTouchDown];
+        
+        [self.seed removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+        [self.seed addTarget:self action:@selector(seedIt:)forControlEvents:UIControlEventTouchDown];
+        
     }
 }
+
+- (void)waterIt:(id) sender {
+    Weed *weed = self.weed;
+    if ([weed.if_cur_user_water_it intValue] == 1) {
+        [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/unwater/%@", weed.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+            weed.water_count = [NSNumber numberWithInt:[weed.water_count intValue] - 1];
+            weed.if_cur_user_water_it = [NSNumber numberWithInt:0];
+            [self configureView];
+        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+            RKLogError(@"Follow failed with error: %@", error);
+        }];
+    } else {
+        [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/water/%@", weed.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+            weed.water_count = [NSNumber numberWithInt:[weed.water_count intValue] + 1];
+            weed.if_cur_user_water_it = [NSNumber numberWithInt:1];
+            [self configureView];
+        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+            RKLogError(@"Follow failed with error: %@", error);
+        }];
+    }
+    
+}
+
+- (void)seedIt:(id) sender {
+    Weed *weed = self.weed;
+    if ([weed.if_cur_user_seed_it intValue] == 1) {
+        [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/unseed/%@", weed.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+            weed.seed_count = [NSNumber numberWithInt:[weed.seed_count intValue] - 1];
+            weed.if_cur_user_seed_it = [NSNumber numberWithInt:0];
+            [self configureView];
+        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+            RKLogError(@"Follow failed with error: %@", error);
+        }];
+    } else {
+        [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/seed/%@", weed.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+            weed.seed_count = [NSNumber numberWithInt:[weed.seed_count intValue] + 1];
+            weed.if_cur_user_seed_it = [NSNumber numberWithInt:1];
+            [self configureView];
+        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+            RKLogError(@"Follow failed with error: %@", error);
+        }];
+    }
+}
+
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     [self configureView];
-    
-    
 }
 
 - (void)didReceiveMemoryWarning
@@ -105,6 +146,15 @@
         [[segue destinationViewController] setSeed_weed_id:self.weed.id];
     }
     
+}
+
+- (UIImage *)getImage:(NSString *)imageName width:(int)width height:(int) height
+{
+    UIImage * image = [UIImage imageNamed:imageName];
+    CGSize sacleSize = CGSizeMake(width, height);
+    UIGraphicsBeginImageContextWithOptions(sacleSize, NO, 0.0);
+    [image drawInRect:CGRectMake(0, 0, sacleSize.width, sacleSize.height)];
+    return UIGraphicsGetImageFromCurrentImageContext();
 }
 
 
