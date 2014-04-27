@@ -22,6 +22,20 @@ class UserDAO extends BaseDAO
 		return $result;
 	}
 	
+	public function update($user) {
+		$query = 'UPDATE user SET email = \'' 
+				. $user->get_email() . '\',time = \'' 
+				. $user->get_time() . '\', deleted = ' 
+				. $user->get_deleted() . ', has_avatar = ' 
+				. $user->get_has_avatar() . ' WHERE id = ' . $user->get_id();
+
+		$result = $this->db_conn->query($query);
+		if ($result == 0) {
+			error_log("SQL failed. Query: " . $query);
+		}
+		return $result;
+	}
+	
 	public function username_exist($username) {
 		$db_conn = new DbConnection();
 		
@@ -55,6 +69,25 @@ class UserDAO extends BaseDAO
 		}
 	}
 	
+	public function find_by_user_id($id) {
+		$query = "SELECT * FROM user WHERE id = " . $id;
+		
+		$result = $db_conn->query($query);
+		if (mysql_num_rows($result)) {
+			$user_array = mysql_fetch_assoc($result);
+			$user = new User();
+			$user->set_id($userArray['id']);
+			$user->set_username($user_array['username']);
+			$user->set_password($user_array['password']);
+			$user->set_email($user_array['email']);
+			$user->set_time($user_array['time']);
+			$user->set_deleted($user_array['deleted']);
+			$user->set_has_avatar($user_array['has_avatar']);
+			return $user;
+		} else {
+			return null;
+		}
+	}
 	
 	public function find_by_id($id, $currentUser_id) {
 		

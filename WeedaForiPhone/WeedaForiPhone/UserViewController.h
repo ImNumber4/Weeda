@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UserViewController : UIViewController
+@interface UserViewController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 @property (nonatomic, retain) NSNumber * user_id;
 @property (weak, nonatomic) IBOutlet UILabel *timeLabel;

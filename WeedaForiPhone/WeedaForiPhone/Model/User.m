@@ -22,5 +22,7 @@
 @synthesize username;
 @synthesize weedCount;
 @synthesize relationshipWithCurrentUser;
+@synthesize weeds;
+@synthesize hasAvatar;
 
 @end

@@ -6,9 +6,11 @@
 //  Copyright (c) 2014 Weeda. All rights reserved.
 //
 
+#import <RestKit/RestKit.h>
 #import "UserViewController.h"
 #import "LoginViewController.h"
 #import "AppDelegate.h"
+#import "Image.h"
 
 @interface UserViewController ()
 
@@ -24,12 +26,17 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    //Get User Profile
     [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"user/query/%@", self.user_id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
         self.user = [mappingResult.array objectAtIndex:0];
         [self updateView];
+        
+        //Get User Avatar
+        [self getAvatarFromServer];
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
         RKLogError(@"Load failed with error: %@", error);
     }];
+    
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     if ([self.user_id isEqualToNumber:appDelegate.currentUser.id]) {
         UIImage * image = [UIImage imageNamed:@"setting.png"];
@@ -42,6 +49,63 @@
         
     }
     
+}
+- (IBAction)handleSelectAvatar:(id)sender {
+    UIImagePickerController *pickerController = [[UIImagePickerController alloc] init];
+    pickerController.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+    pickerController.mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeSavedPhotosAlbum];
+    pickerController.allowsEditing = NO;
+    pickerController.delegate = self;
+    
+    [self presentViewController:pickerController animated:YES completion:nil];
+}
+
+- (void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    UIImage *userPickerImage = [info objectForKey:UIImagePickerControllerOriginalImage];
+    
+    //Upload Avatar to Server
+    [self uploadImageToServer:userPickerImage];
+    
+    self.userAvatar.contentMode = UIViewContentModeScaleAspectFill;
+    self.userAvatar.clipsToBounds = YES;
+    self.userAvatar.image = userPickerImage;
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void) getAvatarFromServer
+{
+    if (self.user.hasAvatar == 0) {
+        [self updateUserAvatar:nil];
+    } else {
+        [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"user/avatar/%@", self.user.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+            NSLog(@"Update User Avatar...");
+            Image *image = [mappingResult.array objectAtIndex:0];
+            [self updateUserAvatar:image.image];
+        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+            NSLog(@"Get Avatar Failed: %@", error);
+        }];
+    }
+}
+
+- (BOOL) uploadImageToServer:(UIImage *)image
+{
+    User *user = [User new];
+    NSMutableURLRequest *request = [[RKObjectManager sharedManager] multipartFormRequestWithObject:user method:RKRequestMethodPOST path:@"user/upload" parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        [formData appendPartWithFileData:UIImageJPEGRepresentation(image, 90)
+                                    name:@"avatar"
+                                fileName:@"avatar.jpeg"
+                                mimeType:@"image/jpeg"];
+    }];
+    
+    RKObjectRequestOperation *operation = [[RKObjectManager sharedManager] objectRequestOperationWithRequest:request success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+        NSLog(@"Upload image success.");
+    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        NSLog(@"%@", error);
+    }];
+    
+    [[RKObjectManager sharedManager] enqueueObjectRequestOperation:operation];
+    return YES;
 }
 
 - (void)setting:(id)sender
@@ -102,8 +166,19 @@
     } else {
         [self makeFollowingButton];
     }
+}
+
+- (void)updateUserAvatar:(UIImage *)image
+{
+    self.userAvatar.contentMode = UIViewContentModeScaleAspectFill;
+    self.userAvatar.clipsToBounds = YES;
     
-    self.userAvatar.image = [UIImage imageNamed:@"avatar.jpg"];
+    if (!image) {
+        self.userAvatar.image = [UIImage imageNamed:@"avatar.jpg"];
+    } else {
+        self.userAvatar.image = image;
+    }
+    
     CALayer * l = [self.userAvatar layer];
     [l setMasksToBounds:YES];
     [l setCornerRadius:7.0];

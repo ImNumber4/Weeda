@@ -458,10 +458,13 @@
                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8hV-4I-7MM">
+                            <imageView multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8hV-4I-7MM">
                                 <rect key="frame" x="20" y="74" width="56" height="56"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.80392163991928101" green="0.80392163991928101" blue="0.80392163991928101" alpha="1" colorSpace="deviceRGB"/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="gSI-80-Ysg" appends="YES" id="ish-3I-q4n"/>
+                                </connections>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -478,6 +481,11 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eoY-9M-DDM" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="gSI-80-Ysg">
+                    <connections>
+                        <action selector="handleSelectAvatar:" destination="UY4-39-rji" id="GJ8-HE-R5m"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="2131" y="-779"/>
         </scene>

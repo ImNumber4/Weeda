@@ -1,7 +1,24 @@
 <?php
 
-decodeJson();
+//decodeJson();
+base64test();
 
+$query = 'UPDATE user SET email = \''
+		. 1 . '\',time = \''
+				. 2 . '\', deleted = '
+						. 3 . ', has_avatar = '
+								. 4 . ' WHERE id = ' . 5;
+
+echo $query;
+
+function base64test()
+{
+	$filePath = 'upload/2/avatar/avatar.jpeg';
+	$encode = base64_encode($filePath);
+	echo  $encode . "\n";
+	$decode = base64_decode($encode);
+	echo $decode . "\n";
+}
 
 function decodeJson()
 {

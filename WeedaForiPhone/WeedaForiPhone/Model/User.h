@@ -24,6 +24,6 @@
 @property (nonatomic, retain) NSNumber * weedCount;
 @property (nonatomic, retain) NSNumber * relationshipWithCurrentUser;
 @property (nonatomic, retain) NSSet *weeds;
-
+@property (nonatomic, retain) NSNumber *hasAvatar;
 
 @end

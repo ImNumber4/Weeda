@@ -14,6 +14,7 @@
 #import <RestKit/RestKit.h>
 #import "Weed.h"
 #import "User.h"
+#import "Image.h"
 
 
 @interface MasterViewController () <UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate>
@@ -145,6 +146,21 @@
     static NSString *CellIdentifier = @"WeedTableCell";
     WeedTableViewCell *cell = (WeedTableViewCell *) [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     Weed *weed = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    
+    //Get Avatar and Weeds Image
+    [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"user/avatar/%@", weed.user_id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+        NSLog(@"Get Avatar success.");
+        if (mappingResult.array.count > 0) {
+            Image *image = [mappingResult.array objectAtIndex:0];
+            [self getImageFromServer:image.image cell:cell];
+        } else {
+            [self getImageFromServer:nil cell:cell];
+        }
+    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+        [self getImageFromServer:nil cell:cell];
+    }];
+    
     [self decorateCellWithWeed:weed cell:cell];
     return cell;
 }
@@ -166,7 +182,8 @@
     return MAX(tvsize.height, 50.0) + 20.0;
 }
 
-- (void)decorateCellWithWeed:(Weed *)weed cell:(WeedTableViewCell *)cell {
+- (void)decorateCellWithWeed:(Weed *)weed cell:(WeedTableViewCell *)cell
+{
     cell.weedContentLabel.text = [NSString stringWithFormat:@"%@", weed.content];
     [cell.weedContentLabel sizeToFit];
     NSString *nameLabel = [NSString stringWithFormat:@"@%@", weed.username];
@@ -176,10 +193,10 @@
     [dateFormatter setDateFormat:@"MMM. dd yyyy"];
     NSString *formattedDateString = [dateFormatter stringFromDate:weed.time];
     cell.timeLabel.text = [NSString stringWithFormat:@"%@", formattedDateString];
-    cell.userAvatar.image = [UIImage imageNamed:@"avatar.jpg"];
-    CALayer * l = [cell.userAvatar layer];
-    [l setMasksToBounds:YES];
-    [l setCornerRadius:7.0];
+//    cell.userAvatar.image = [self.weedAvatarDictionary objectForKey:weed.user_id];
+//    CALayer * l = [cell.userAvatar layer];
+//    [l setMasksToBounds:YES];
+//    [l setCornerRadius:7.0];
     if ([weed.if_cur_user_water_it intValue] == 1) {
         [cell.waterDrop setImage:[self getImage:@"waterdrop.png" width:6 height:12] forState:UIControlStateNormal];
     } else {
@@ -200,6 +217,21 @@
     cell.seedCount.text = [NSString stringWithFormat:@"%@", weed.seed_count];
     cell.waterCount.text = [NSString stringWithFormat:@"%@", weed.water_count];
     [cell sizeToFit];
+}
+
+- (void)getImageFromServer:(UIImage *)image cell:(WeedTableViewCell *)cell
+{
+    cell.userAvatar.contentMode = UIViewContentModeScaleAspectFill;
+    cell.userAvatar.clipsToBounds = YES;
+    if (!image) {
+        cell.userAvatar.image = [UIImage imageNamed:@"avatar.jpg"];
+    } else {
+        cell.userAvatar.image = image;
+
+    }
+    CALayer * l = [cell.userAvatar layer];
+    [l setMasksToBounds:YES];
+    [l setCornerRadius:7.0];
 }
 
 - (UIImage *)getImage:(NSString *)imageName width:(int)width height:(int) height

@@ -1,5 +1,7 @@
 <?php
 
+include './library/ImageHandler.php';
+
 class UserController extends Controller
 {
 	public function query($id) {
@@ -186,9 +188,40 @@ class UserController extends Controller
 		echo json_encode(array('user' => $user));
 	}
 	
+	public function upload() {
+		$user_id = $_COOKIE['user_id'];
+		if (!isset($user_id)) {
+			error_log('Did get the user id.');
+			http_response_code(401);
+			return;
+		}
+		
+		error_log('Image name: ' . $_FILES['avatar']['name']);
+		error_log('Image type: ' . $_FILES['avatar']['type']);
+		error_log('Image size: ' . $_FILES['avatar']['size']);
+		error_log('Image tmp name: ' . $_FILES['avatar']['tmp_name']);
+		
+		if (!saveAvatarToServer($_FILES['avatar'], $user_id)) {
+			header('Content-type: application/json');
+			http_response_code(500);
+			return;
+		}
+		
+		$userDAO = new UserDAO();
+		$user = $userDAO->find_by_user_id($user_id);
+		if (!$user) {
+			error_log('Did not find user by user id: ' . $user_id);
+			http_response_code(500);
+			return;
+		}
+		$user->set_has_avatar(1);
+		$userDAO->update($user);
+		
+		header('Content-type:application/json');
+		http_response_code(200);
+	}
+	
 	public function username($username) {
-// 		$data = json_decode(file_get_contents('php://input'));
-// 		$username = $data->username;
 		if (!isset($username)) {
 			error_log('Input error, username is null');
 			http_response_code(400);
@@ -200,6 +233,31 @@ class UserController extends Controller
 		header("Content-type: application/json");
 		http_response_code(200);
 		echo json_encode(array('exist' => $exist));
+	}
+	
+	public function avatar($user_id) {
+// 		$currentUser_id = $_COOKIE['user_id'];
+		if (!isset($user_id)) {
+			error_log('current user is not set');
+			header("Content-type: application/json");
+			http_response_code(400);
+			return;
+		}
+		
+		//Get the user avatar
+		$avatar = getAvatarFromServer($user_id, 50);
+		if (!$avatar) {
+			error_log('Get avatar failed.');
+			header("Content-type: application/json");
+			http_response_code(500);
+			return;
+		}
+		$image['url'] = 'http://localhost/upload/xx/xx/avatar.jpeg';
+		$image['image'] = $avatar;
+		
+		header('Content-type: application/json');
+		http_response_code(200);
+		echo json_encode(array('image' => $image));
 	}
 	
 	private function parse_body_request() {

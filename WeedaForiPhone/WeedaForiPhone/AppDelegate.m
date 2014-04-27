@@ -13,6 +13,7 @@
 #import <RestKit/RestKit.h>
 #import "Weed.h"
 #import "User.h"
+#import "Image.h"
 
 @interface AppDelegate ()
 
@@ -77,8 +78,8 @@
                                                       @"followerCount" : @"followerCount",
                                                       @"followingCount" : @"followingCount",
                                                       @"relationshipWithCurrentUser" : @"relationshipWithCurrentUser",
+                                                      @"has_avatar" : @"hasAvatar"
                                                       }];
-
     
     RKEntityMapping *weedMapping = [RKEntityMapping mappingForEntityForName:NSStringFromClass([Weed class]) inManagedObjectStore:managedObjectStore];
     
@@ -173,16 +174,8 @@
     RKResponseDescriptor *signupResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping method:RKRequestMethodPOST pathPattern:@"user/signup" keyPath:@"user" statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
     [manager addResponseDescriptor:signupResponseDescriptor];
     
-    //For login
-//    RKObjectMapping * loginMapping = [RKObjectMapping requestMapping];
-//    [loginMapping addAttributeMappingsFromArray:@[ @"username", @"password"]];
-//    RKRequestDescriptor *loginRequestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:loginMapping
-//                                                                                        objectClass:[User class]
-//                                                                                        rootKeyPath:nil
-//                                                                                             method:RKRequestMethodPOST];
-//    [manager addRequestDescriptor:loginRequestDescriptor];
-
-    
+    //Adding Image response descriptor
+    [self addImageHttpResponser];
     
     /**
      Complete Core Data stack initialization
@@ -202,6 +195,30 @@
     // Configure a managed object cache to ensure we do not create duplicate objects
     managedObjectStore.managedObjectCache = [[RKInMemoryManagedObjectCache alloc] initWithManagedObjectContext:managedObjectStore.persistentStoreManagedObjectContext];
     
+}
+
+- (void) addImageHttpResponser
+{
+    RKObjectMapping *imageObjectMapping = [RKObjectMapping mappingForClass:[Image class]];
+    [imageObjectMapping addAttributeMappingsFromDictionary:@{@"url": @"url"}];
+    
+    RKAttributeMapping *imageMapping = [RKAttributeMapping attributeMappingFromKeyPath:@"image" toKeyPath:@"image"];
+    RKValueTransformer *imageTransformer = [RKBlockValueTransformer valueTransformerWithValidationBlock:^BOOL(__unsafe_unretained Class inputValueClass, __unsafe_unretained Class outputValueClass) {
+        return ([inputValueClass isSubclassOfClass:[NSString class]] || [inputValueClass isSubclassOfClass:[UIImage class]]) && [outputValueClass isSubclassOfClass:[UIImage class]];
+    } transformationBlock:^BOOL(id inputValue, __autoreleasing id *outputValue, __unsafe_unretained Class outputClass, NSError *__autoreleasing *error) {
+        NSData * input = (NSData *)inputValue;
+        if ([input isKindOfClass:[UIImage class]]) {
+            *outputValue = (UIImage *)inputValue;
+        } else {
+            NSData *decodeData = [[NSData alloc] initWithBase64EncodedString:(NSString *)inputValue options:0];
+            *outputValue = [UIImage imageWithData:decodeData];
+        }
+        return YES;
+    }];
+    imageMapping.valueTransformer = imageTransformer;
+    [imageObjectMapping addPropertyMapping:imageMapping];
+    RKResponseDescriptor *imageResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:imageObjectMapping method:RKRequestMethodGET pathPattern:@"user/avatar/:id" keyPath:@"image" statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+    [[RKObjectManager sharedManager] addResponseDescriptor:imageResponseDescriptor];
 }
 
 @end

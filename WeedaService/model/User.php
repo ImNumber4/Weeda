@@ -14,6 +14,7 @@ class User
 	private $followerCount;
 	private $followingCount;
 	private $weedCount;
+	private $has_avatar;
 	
 	public function get_id() {
 		return $this->id;
@@ -85,6 +86,14 @@ class User
 	
 	public function set_weedCount($weedCount) {
 		$this->weedCount = $weedCount;
+	}
+	
+	public function get_has_avatar() {
+		return $this->has_avatar;
+	}
+	
+	public function set_has_avatar($has_avatar) {
+		$this->has_avatar = $has_avatar;
 	}
 	
 }

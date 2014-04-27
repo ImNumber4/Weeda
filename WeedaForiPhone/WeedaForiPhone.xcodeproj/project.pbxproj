@@ -57,6 +57,7 @@
 		A9CA8E9718F3DD67004F095D /* avatar.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A9CA8E9618F3DD67004F095D /* avatar.jpg */; };
 		A9CA8EA018F3E255004F095D /* WeedTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A9CA8E9E18F3E255004F095D /* WeedTableViewCell.m */; };
 		EA1B050F18F3668A0033AB06 /* WelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA1B050E18F3668A0033AB06 /* WelcomeViewController.m */; };
+		EA38FC5F190C9A9D007D652B /* Image.m in Sources */ = {isa = PBXBuildFile; fileRef = EA38FC5E190C9A9D007D652B /* Image.m */; };
 		EAA18EDE18F0ADFD0081482D /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA18EDD18F0ADFD0081482D /* LoginViewController.m */; };
 		EAF6762C18FB62E4003BB138 /* SignupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAF6762B18FB62E4003BB138 /* SignupViewController.m */; };
 /* End PBXBuildFile section */
@@ -172,6 +173,8 @@
 		A9CA8E9E18F3E255004F095D /* WeedTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WeedTableViewCell.m; path = WeedaForiPhone/UI/WeedTableViewCell.m; sourceTree = "<group>"; };
 		EA1B050D18F3668A0033AB06 /* WelcomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WelcomeViewController.h; sourceTree = "<group>"; };
 		EA1B050E18F3668A0033AB06 /* WelcomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WelcomeViewController.m; sourceTree = "<group>"; };
+		EA38FC5D190C9A9D007D652B /* Image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Image.h; path = WeedaForiPhone/Model/Image.h; sourceTree = "<group>"; };
+		EA38FC5E190C9A9D007D652B /* Image.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Image.m; path = WeedaForiPhone/Model/Image.m; sourceTree = "<group>"; };
 		EAA18EDC18F0ADFD0081482D /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		EAA18EDD18F0ADFD0081482D /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		EAF6762A18FB62E4003BB138 /* SignupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignupViewController.h; sourceTree = "<group>"; };
@@ -314,6 +317,8 @@
 		A914CCE218CD76C500B870D8 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				EA38FC5D190C9A9D007D652B /* Image.h */,
+				EA38FC5E190C9A9D007D652B /* Image.m */,
 				A953B6FC18D6D9DB001CDD4C /* Model.xcdatamodeld */,
 				A9CA8E5718E8DB1E004F095D /* RemoteObject.h */,
 				A9CA8E5818E8DB1E004F095D /* RemoteObject.m */,
@@ -534,6 +539,7 @@
 				A9CA8E7E18F0F814004F095D /* UserViewController.m in Sources */,
 				A91A62ED18FF8F48008726E5 /* UserListViewController.m in Sources */,
 				A9CA8E6618E9132C004F095D /* AddWeedViewController.m in Sources */,
+				EA38FC5F190C9A9D007D652B /* Image.m in Sources */,
 				A914CCB218CD756200B870D8 /* main.m in Sources */,
 				A92E513A19046E2A00FC518F /* UserTableViewCell.m in Sources */,
 			);
