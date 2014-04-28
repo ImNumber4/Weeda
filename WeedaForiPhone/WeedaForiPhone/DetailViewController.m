@@ -74,6 +74,7 @@
         } else {
             [self.seed setImage:[self getImage:@"seedgray.png" width:18 height:9] forState:UIControlStateNormal];
         }
+        [self.light setImage:[self getImage:@"light.png" width:14 height:12] forState:UIControlStateNormal];
         
         [self.waterDrop removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
         [self.waterDrop addTarget:self action:@selector(waterIt:)forControlEvents:UIControlEventTouchDown];

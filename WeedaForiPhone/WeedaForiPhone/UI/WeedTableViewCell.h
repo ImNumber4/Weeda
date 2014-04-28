@@ -18,5 +18,7 @@
 @property (nonatomic, weak) IBOutlet UILabel *seedCount;
 @property (nonatomic, weak) IBOutlet UIButton *waterDrop;
 @property (nonatomic, weak) IBOutlet UILabel *waterCount;
+@property (nonatomic, weak) IBOutlet UIButton *light;
+@property (nonatomic, weak) IBOutlet UILabel *lightCount;
 
 @end

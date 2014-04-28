@@ -193,10 +193,7 @@
     [dateFormatter setDateFormat:@"MMM. dd yyyy"];
     NSString *formattedDateString = [dateFormatter stringFromDate:weed.time];
     cell.timeLabel.text = [NSString stringWithFormat:@"%@", formattedDateString];
-//    cell.userAvatar.image = [self.weedAvatarDictionary objectForKey:weed.user_id];
-//    CALayer * l = [cell.userAvatar layer];
-//    [l setMasksToBounds:YES];
-//    [l setCornerRadius:7.0];
+
     if ([weed.if_cur_user_water_it intValue] == 1) {
         [cell.waterDrop setImage:[self getImage:@"waterdrop.png" width:6 height:12] forState:UIControlStateNormal];
     } else {
@@ -207,16 +204,16 @@
     } else {
         [cell.seed setImage:[self getImage:@"seedgray.png" width:18 height:9] forState:UIControlStateNormal];
     }
-    
+    [cell.light setImage:[self getImage:@"light.png" width:14 height:12] forState:UIControlStateNormal];
     [cell.waterDrop removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
     [cell.waterDrop addTarget:self action:@selector(waterIt:)forControlEvents:UIControlEventTouchDown];
     
     [cell.seed removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
     [cell.seed addTarget:self action:@selector(seedIt:)forControlEvents:UIControlEventTouchDown];
     
+    cell.lightCount.text = [NSString stringWithFormat:@"%@", weed.seed_count];
     cell.seedCount.text = [NSString stringWithFormat:@"%@", weed.seed_count];
     cell.waterCount.text = [NSString stringWithFormat:@"%@", weed.water_count];
-    [cell sizeToFit];
 }
 
 - (void)getImageFromServer:(UIImage *)image cell:(WeedTableViewCell *)cell
