@@ -151,6 +151,9 @@ class UserController extends Controller
 			http_response_code(401);
 			header('Content-type: application/json');
 		}
+		
+		header("Content-type: application/json");
+		http_response_code(200);
 	}
 
 	public function signout() {

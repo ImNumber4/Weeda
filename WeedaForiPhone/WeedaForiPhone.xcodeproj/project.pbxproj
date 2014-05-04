@@ -60,6 +60,8 @@
 		A9CA8EA018F3E255004F095D /* WeedTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A9CA8E9E18F3E255004F095D /* WeedTableViewCell.m */; };
 		EA1B050F18F3668A0033AB06 /* WelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA1B050E18F3668A0033AB06 /* WelcomeViewController.m */; };
 		EA38FC5F190C9A9D007D652B /* Image.m in Sources */ = {isa = PBXBuildFile; fileRef = EA38FC5E190C9A9D007D652B /* Image.m */; };
+		EA38FC68190D6D26007D652B /* CropImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA38FC67190D6D26007D652B /* CropImageViewController.m */; };
+		EA38FC851917067F007D652B /* welcome.png in Resources */ = {isa = PBXBuildFile; fileRef = EA38FC841917067F007D652B /* welcome.png */; };
 		EAA18EDE18F0ADFD0081482D /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA18EDD18F0ADFD0081482D /* LoginViewController.m */; };
 		EAF6762C18FB62E4003BB138 /* SignupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAF6762B18FB62E4003BB138 /* SignupViewController.m */; };
 /* End PBXBuildFile section */
@@ -179,6 +181,9 @@
 		EA1B050E18F3668A0033AB06 /* WelcomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WelcomeViewController.m; sourceTree = "<group>"; };
 		EA38FC5D190C9A9D007D652B /* Image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Image.h; path = WeedaForiPhone/Model/Image.h; sourceTree = "<group>"; };
 		EA38FC5E190C9A9D007D652B /* Image.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Image.m; path = WeedaForiPhone/Model/Image.m; sourceTree = "<group>"; };
+		EA38FC66190D6D26007D652B /* CropImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CropImageViewController.h; sourceTree = "<group>"; };
+		EA38FC67190D6D26007D652B /* CropImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CropImageViewController.m; sourceTree = "<group>"; };
+		EA38FC841917067F007D652B /* welcome.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = welcome.png; path = WeedaForiPhone/Images/welcome.png; sourceTree = "<group>"; };
 		EAA18EDC18F0ADFD0081482D /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		EAA18EDD18F0ADFD0081482D /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		EAF6762A18FB62E4003BB138 /* SignupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignupViewController.h; sourceTree = "<group>"; };
@@ -262,6 +267,8 @@
 		A914CCAB18CD756200B870D8 /* WeedaForiPhone */ = {
 			isa = PBXGroup;
 			children = (
+				EA38FC66190D6D26007D652B /* CropImageViewController.h */,
+				EA38FC67190D6D26007D652B /* CropImageViewController.m */,
 				A9CA8E7C18F0F814004F095D /* UserViewController.h */,
 				A9CA8E7D18F0F814004F095D /* UserViewController.m */,
 				EAA18EDC18F0ADFD0081482D /* LoginViewController.h */,
@@ -350,6 +357,7 @@
 			children = (
 				A9A46823190DE2C600461E90 /* lightgray.png */,
 				A9A4680E190DDF4100461E90 /* light.png */,
+				EA38FC841917067F007D652B /* welcome.png */,
 				A9A46803190C7A6300461E90 /* seedgray.png */,
 				A9A46801190C696300461E90 /* seed.png */,
 				A92E513F19048B0400FC518F /* followed.png */,
@@ -499,6 +507,7 @@
 				A9A46802190C696300461E90 /* seed.png in Resources */,
 				A991C05418FB597900A3D2CD /* selected_weed.png in Resources */,
 				A914CCC418CD756200B870D8 /* Images.xcassets in Resources */,
+				EA38FC851917067F007D652B /* welcome.png in Resources */,
 				A991C05E18FB75A900A3D2CD /* waterdrop.png in Resources */,
 				A92E513D19047C6000FC518F /* follow.png in Resources */,
 				A92E514019048B0400FC518F /* followed.png in Resources */,
@@ -541,6 +550,7 @@
 				A9A46807190C7A9D00461E90 /* Weed.m in Sources */,
 				EA1B050F18F3668A0033AB06 /* WelcomeViewController.m in Sources */,
 				A991C04818FB3B7700A3D2CD /* TabBarController.m in Sources */,
+				EA38FC68190D6D26007D652B /* CropImageViewController.m in Sources */,
 				A914CCB618CD756200B870D8 /* AppDelegate.m in Sources */,
 				EAF6762C18FB62E4003BB138 /* SignupViewController.m in Sources */,
 				A9CA8E8F18F264BA004F095D /* User.m in Sources */,

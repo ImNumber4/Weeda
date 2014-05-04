@@ -31,6 +31,10 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    UIImageView *welcome = [[UIImageView alloc]initWithFrame:self.view.bounds];
+    welcome.image = [UIImage imageNamed:@"welcome.png"];
+    welcome.contentMode = UIViewContentModeScaleAspectFill;
+    [self.view addSubview:welcome];
 }
 
 - (void)didReceiveMemoryWarning
@@ -60,10 +64,7 @@
     }
 }
 
-
 #pragma mark - Navigation
-
-
 
 - (User *) checkCookiesAndGetCurrentUser
 {

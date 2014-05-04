@@ -9,12 +9,15 @@
 #import <RestKit/RestKit.h>
 #import "UserViewController.h"
 #import "LoginViewController.h"
+#import "CropImageViewController.h"
 #import "AppDelegate.h"
 #import "Image.h"
 
-@interface UserViewController ()
+@interface UserViewController () <CropImageDelegate>
 
-@property (nonatomic, retain) User * user;
+@property (nonatomic, retain) User *user;
+
+@property (nonatomic, retain) UIImage *userPickedImage;
 
 @end
 
@@ -62,15 +65,20 @@
 
 - (void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-    UIImage *userPickerImage = [info objectForKey:UIImagePickerControllerOriginalImage];
+    self.userPickedImage = [info objectForKey:UIImagePickerControllerOriginalImage];
+    [self dismissViewControllerAnimated:NO completion:nil];
     
-    //Upload Avatar to Server
-    [self uploadImageToServer:userPickerImage];
-    
-    self.userAvatar.contentMode = UIViewContentModeScaleAspectFill;
-    self.userAvatar.clipsToBounds = YES;
-    self.userAvatar.image = userPickerImage;
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self performSegueWithIdentifier:@"cropImage" sender:self];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([[segue identifier] isEqualToString:@"cropImage"]) {
+        UINavigationController *nav = [segue destinationViewController];
+        CropImageViewController *view = (CropImageViewController *)[nav topViewController];
+        view.image = self.userPickedImage;
+        view.delegate = self;
+    }
 }
 
 - (void) getAvatarFromServer
@@ -207,6 +215,16 @@
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
         RKLogError(@"Follow failed with error: %@", error);
     }];
+}
+
+- (void)addItemViewContrller:(CropImageViewController *)controller didFinishCropImage:(UIImage *)cropedImage
+{
+    //Upload Avatar to Server
+    [self uploadImageToServer:cropedImage];
+    
+    self.userAvatar.contentMode = UIViewContentModeScaleAspectFill;
+    self.userAvatar.clipsToBounds = YES;
+    self.userAvatar.image = cropedImage;
 }
 
 @end

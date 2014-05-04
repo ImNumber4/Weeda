@@ -1,7 +1,11 @@
 <?php
+// ini_set('display_errors',1);
+// error_reporting(E_ALL);
 
 define('DS', DIRECTORY_SEPARATOR);
 define('SYSTEM', dirname(dirname(__FILE__)));
+
+
 //Load Configuration File
 require (SYSTEM . DS . 'WeedaService/library' . DS . 'bootstrap.php');
 
