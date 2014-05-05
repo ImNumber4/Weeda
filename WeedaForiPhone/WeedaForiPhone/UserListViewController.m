@@ -26,8 +26,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    
+    [self.tableView setSeparatorInset:UIEdgeInsetsZero];
+    self.tableView.tableFooterView = [[UIView alloc] init];
     [self loadData];
 }
 

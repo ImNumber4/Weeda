@@ -6,18 +6,11 @@ class WeedController extends Controller
 
 		/* connect to the db */
 		$db_conn = new DbConnection();
-        
-        $currentUser_id = $_COOKIE['user_id'];
-		if (!isset($currentUser_id)) {
-			error_log('current user is not set');
-			header("Content-type: application/json");
-			http_response_code(400);
-			return;
-		}
+        $currentUser_id = $this->getCurrentUser();
 
 		/* grab the users from the db */
-		$query = "SELECT weed.id as weed_id, user.id as user_id, currentUserWater.user_id as if_cur_user_water_it, currentUserSeed.user_id as if_cur_user_seed_it, water_count, seed_count, weed.content as content, user.time as user_time, weed.time as weed_time, username, email, weed.deleted as weed_deleted, user.deleted as user_deleted FROM weed left join water currentUserWater on currentUserWater.weed_id=weed.id and currentUserWater.user_id=$currentUser_id left join seed currentUserSeed on currentUserSeed.weed_id=weed.id and currentUserSeed.user_id=$currentUser_id, user where user.id=weed.user_id GROUP BY weed.id";
-
+		$query = "SELECT weed.id as weed_id, user.id as user_id, currentUserWater.user_id as if_cur_user_water_it, currentUserSeed.user_id as if_cur_user_seed_it, water_count, seed_count, weed.content as content, user.time as user_time, weed.time as weed_time, username, weed.deleted as weed_deleted, user.deleted as user_deleted FROM weed left join water currentUserWater on currentUserWater.weed_id=weed.id and currentUserWater.user_id=$currentUser_id left join seed currentUserSeed on currentUserSeed.weed_id=weed.id and currentUserSeed.user_id=$currentUser_id, user where user.id=weed.user_id GROUP BY weed.id";
+		
 		$result = $db_conn->query($query);
 
 		/* create one master array of the records */
@@ -33,6 +26,37 @@ class WeedController extends Controller
 		header('Content-type: application/json');
 		http_response_code(200);
 		echo json_encode(array('weeds'=>$weeds));
+	}
+	
+	public function getLights($id) {
+		
+		$weedDAO = new WeedDAO();
+		$weeds = $weedDAO->getLights($id);
+
+		header('Content-type: application/json');
+		http_response_code(200);
+		echo json_encode(array('weeds'=>$weeds));
+	}
+	
+	public function getAncestorWeeds($id) {
+		
+		$weedDAO = new WeedDAO();
+		$weeds = $weedDAO->getAncestorWeeds($id);
+
+		header('Content-type: application/json');
+		http_response_code(200);
+		echo json_encode(array('weeds'=>$weeds));
+	}
+	
+	private function getCurrentUser(){
+		$currentUser_id = $_COOKIE['user_id'];
+		if (!isset($currentUser_id)) {
+			error_log('current user is not set');
+			header("Content-type: application/json");
+			http_response_code(400);
+			return;
+		}
+		return $currentUser_id;
 	}
 	
 	public function create() 
@@ -69,13 +93,7 @@ class WeedController extends Controller
 	
 	public function seed($weed_id) 
 	{
-		$currentUser_id = $_COOKIE['user_id'];
-		if (!isset($currentUser_id)) {
-			error_log('current user is not set');
-			header("Content-type: application/json");
-			http_response_code(400);
-			return;
-		}
+		$currentUser_id = $this->getCurrentUser();
 		$weedDAO = new WeedDAO();
 		$result = $weedDAO->setUserSeedWeed($currentUser_id, $weed_id);
 		if ($result == 0) {
@@ -90,13 +108,7 @@ class WeedController extends Controller
 	
 	public function unseed($weed_id) 
 	{		
-		$currentUser_id = $_COOKIE['user_id'];
-		if (!isset($currentUser_id)) {
-			error_log('current user is not set');
-			header("Content-type: application/json");
-			http_response_code(400);
-			return;
-		}
+		$currentUser_id = $this->getCurrentUser();
 		$weedDAO = new WeedDAO();
 		$result = $weedDAO->setUserUnseedWeed($currentUser_id, $weed_id);
 		if ($result == 0) {
@@ -111,13 +123,7 @@ class WeedController extends Controller
 	
 	public function water($weed_id) 
 	{
-		$currentUser_id = $_COOKIE['user_id'];
-		if (!isset($currentUser_id)) {
-			error_log('current user is not set');
-			header("Content-type: application/json");
-			http_response_code(400);
-			return;
-		}
+		$currentUser_id = $this->getCurrentUser();
 		$weedDAO = new WeedDAO();
 		$result = $weedDAO->setUserWaterWeed($currentUser_id, $weed_id);
 		if ($result == 0) {
@@ -132,13 +138,7 @@ class WeedController extends Controller
 	
 	public function unwater($weed_id) 
 	{		
-		$currentUser_id = $_COOKIE['user_id'];
-		if (!isset($currentUser_id)) {
-			error_log('current user is not set');
-			header("Content-type: application/json");
-			http_response_code(400);
-			return;
-		}
+		$currentUser_id = $this->getCurrentUser();
 		$weedDAO = new WeedDAO();
 		$result = $weedDAO->setUserUnwaterWeed($currentUser_id, $weed_id);
 		if ($result == 0) {

@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#define TAB_BAR_HEIGHT 50
 
 @interface TabBarController : UITabBarController
 

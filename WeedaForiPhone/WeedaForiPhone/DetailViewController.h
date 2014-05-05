@@ -8,17 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface DetailViewController : UIViewController
+@interface DetailViewController : UITableViewController
 
-@property (strong, nonatomic) Weed *weed;
-@property (weak, nonatomic) IBOutlet UILabel *weedContentLabel;
-@property (weak, nonatomic) IBOutlet UIButton *userLabel;
-@property (weak, nonatomic) IBOutlet UILabel *timeLabel;
-@property (weak, nonatomic) IBOutlet UIImageView *userAvatar;
-@property (weak, nonatomic) IBOutlet UIButton *waterCount;
-@property (weak, nonatomic) IBOutlet UIButton *seedCount;
-@property (nonatomic, weak) IBOutlet UIButton *seed;
-@property (nonatomic, weak) IBOutlet UIButton *waterDrop;
-@property (nonatomic, weak) IBOutlet UIButton *light;
-@property (nonatomic, weak) IBOutlet UIButton *lightCount;
+@property (strong, nonatomic) Weed *currentWeed;
+@property (nonatomic, retain) NSMutableArray* parentWeeds;
+@property (nonatomic, retain) NSMutableArray* lights;
+
 @end

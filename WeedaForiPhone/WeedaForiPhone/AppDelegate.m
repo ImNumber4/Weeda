@@ -85,7 +85,7 @@
     
     weedMapping.identificationAttributes = @[ @"id" ];
     
-    [weedMapping addAttributeMappingsFromDictionary:@{@"user_id" : @"user_id", @"username" : @"username", @"content" : @"content", @"water_count" : @"water_count", @"seed_count" : @"seed_count", @"if_cur_user_water_it" : @"if_cur_user_water_it", @"if_cur_user_seed_it" : @"if_cur_user_seed_it"}];
+    [weedMapping addAttributeMappingsFromDictionary:@{@"user_id" : @"user_id", @"username" : @"username", @"content" : @"content", @"water_count" : @"water_count", @"seed_count" : @"seed_count", @"if_cur_user_water_it" : @"if_cur_user_water_it", @"if_cur_user_seed_it" : @"if_cur_user_seed_it", @"light_id" : @"light_id"}];
     
     [weedMapping addAttributeMappingsFromDictionary:parentObjectMapping];
     
@@ -101,6 +101,21 @@
                                                                                            keyPath:@"weeds"
                                                                                        statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
     [manager addResponseDescriptor:weedResponseDescriptor];
+    
+    RKResponseDescriptor *getLightsResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:weedMapping
+                                                                                                method:RKRequestMethodGET
+                                                                                           pathPattern:@"weed/getLights/:id"
+                                                                                               keyPath:@"weeds"
+                                                                                           statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+    [manager addResponseDescriptor:getLightsResponseDescriptor];
+    
+    RKResponseDescriptor *getAncestorWeedsResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:weedMapping
+                                                                                                     method:RKRequestMethodGET
+                                                                                                pathPattern:@"weed/getAncestorWeeds/:id"
+                                                                                                    keyPath:@"weeds"
+                                                                                                statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+    [manager addResponseDescriptor:getAncestorWeedsResponseDescriptor];
+    
     
     RKResponseDescriptor *usersWaterWeedResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping
                                                                                                 method:RKRequestMethodGET

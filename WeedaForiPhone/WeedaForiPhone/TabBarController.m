@@ -51,6 +51,9 @@
     tabBarItem2.selectedImage = [[self getImage:@"selected_profile_icon.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     
     self.tabBar.tintColor = [UIColor colorWithRed:62.0/255.0 green:165.0/255.0 blue:64.0/255.0 alpha:1];
+    
+    [self.tabBar drawRect:CGRectMake(self.tabBar.frame.origin.x, self.tabBar.frame.origin.y, self.tabBar.frame.size.width, TAB_BAR_HEIGHT)];
+
 }
 
 - (UIImage *)getImage:(NSString *)imageName

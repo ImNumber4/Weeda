@@ -35,7 +35,8 @@
 {
     
     [super viewDidLoad];
-    
+    [self.tableView setSeparatorInset:UIEdgeInsetsZero];
+    self.tableView.tableFooterView = [[UIView alloc] init];
     UIRefreshControl *refresh = [[UIRefreshControl alloc] init];
     refresh.attributedTitle = [[NSAttributedString alloc] initWithString:@"Pull to Refresh"];
     [refresh addTarget:self action:@selector(refreshView:) forControlEvents:UIControlEventValueChanged];
@@ -297,7 +298,7 @@
     if ([[segue identifier] isEqualToString:@"showWeed"]) {
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         Weed *weed = [[self fetchedResultsController] objectAtIndexPath:indexPath];
-        [[segue destinationViewController] setWeed:weed];
+        [[segue destinationViewController] setCurrentWeed:weed];
     } else if ([[segue identifier] isEqualToString:@"addWeed"]) {
     } else if ([[segue identifier] isEqualToString:@"showUser"]) {
         CGPoint buttonPosition = [sender convertPoint:CGPointZero toView:self.tableView];

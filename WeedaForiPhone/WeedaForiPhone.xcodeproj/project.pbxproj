@@ -47,11 +47,13 @@
 		A991C05418FB597900A3D2CD /* selected_weed.png in Resources */ = {isa = PBXBuildFile; fileRef = A991C05318FB597900A3D2CD /* selected_weed.png */; };
 		A991C05718FB70D400A3D2CD /* waterdropgray.png in Resources */ = {isa = PBXBuildFile; fileRef = A991C05618FB70D400A3D2CD /* waterdropgray.png */; };
 		A991C05E18FB75A900A3D2CD /* waterdrop.png in Resources */ = {isa = PBXBuildFile; fileRef = A991C05D18FB75A900A3D2CD /* waterdrop.png */; };
+		A99A0A21191719B500E2C50B /* Weed.m in Sources */ = {isa = PBXBuildFile; fileRef = A99A0A20191719B500E2C50B /* Weed.m */; };
 		A9A46802190C696300461E90 /* seed.png in Resources */ = {isa = PBXBuildFile; fileRef = A9A46801190C696300461E90 /* seed.png */; };
 		A9A46804190C7A6300461E90 /* seedgray.png in Resources */ = {isa = PBXBuildFile; fileRef = A9A46803190C7A6300461E90 /* seedgray.png */; };
-		A9A46807190C7A9D00461E90 /* Weed.m in Sources */ = {isa = PBXBuildFile; fileRef = A9A46806190C7A9D00461E90 /* Weed.m */; };
 		A9A4680F190DDF4100461E90 /* light.png in Resources */ = {isa = PBXBuildFile; fileRef = A9A4680E190DDF4100461E90 /* light.png */; };
 		A9A46824190DE2C600461E90 /* lightgray.png in Resources */ = {isa = PBXBuildFile; fileRef = A9A46823190DE2C600461E90 /* lightgray.png */; };
+		A9A46830190E1E8E00461E90 /* WeedDetailTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A9A4682F190E1E8E00461E90 /* WeedDetailTableViewCell.m */; };
+		A9A46833190E210900461E90 /* WeedDetailControlTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A9A46832190E210900461E90 /* WeedDetailControlTableViewCell.m */; };
 		A9CA8E5918E8DB1E004F095D /* RemoteObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A9CA8E5818E8DB1E004F095D /* RemoteObject.m */; };
 		A9CA8E6618E9132C004F095D /* AddWeedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9CA8E6518E9132C004F095D /* AddWeedViewController.m */; };
 		A9CA8E7E18F0F814004F095D /* UserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9CA8E7D18F0F814004F095D /* UserViewController.m */; };
@@ -160,12 +162,16 @@
 		A991C05318FB597900A3D2CD /* selected_weed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = selected_weed.png; path = WeedaForiPhone/Images/selected_weed.png; sourceTree = "<group>"; };
 		A991C05618FB70D400A3D2CD /* waterdropgray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = waterdropgray.png; path = WeedaForiPhone/Images/waterdropgray.png; sourceTree = "<group>"; };
 		A991C05D18FB75A900A3D2CD /* waterdrop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = waterdrop.png; path = WeedaForiPhone/Images/waterdrop.png; sourceTree = "<group>"; };
+		A99A0A1F191719B500E2C50B /* Weed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Weed.h; path = WeedaForiPhone/Model/Weed.h; sourceTree = "<group>"; };
+		A99A0A20191719B500E2C50B /* Weed.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Weed.m; path = WeedaForiPhone/Model/Weed.m; sourceTree = "<group>"; };
 		A9A46801190C696300461E90 /* seed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = seed.png; path = WeedaForiPhone/Images/seed.png; sourceTree = "<group>"; };
 		A9A46803190C7A6300461E90 /* seedgray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = seedgray.png; path = WeedaForiPhone/Images/seedgray.png; sourceTree = "<group>"; };
-		A9A46805190C7A9D00461E90 /* Weed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Weed.h; path = WeedaForiPhone/Model/Weed.h; sourceTree = "<group>"; };
-		A9A46806190C7A9D00461E90 /* Weed.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Weed.m; path = WeedaForiPhone/Model/Weed.m; sourceTree = "<group>"; };
 		A9A4680E190DDF4100461E90 /* light.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = light.png; path = WeedaForiPhone/Images/light.png; sourceTree = "<group>"; };
 		A9A46823190DE2C600461E90 /* lightgray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = lightgray.png; path = WeedaForiPhone/Images/lightgray.png; sourceTree = "<group>"; };
+		A9A4682E190E1E8E00461E90 /* WeedDetailTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WeedDetailTableViewCell.h; path = WeedaForiPhone/UI/WeedDetailTableViewCell.h; sourceTree = "<group>"; };
+		A9A4682F190E1E8E00461E90 /* WeedDetailTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WeedDetailTableViewCell.m; path = WeedaForiPhone/UI/WeedDetailTableViewCell.m; sourceTree = "<group>"; };
+		A9A46831190E210900461E90 /* WeedDetailControlTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WeedDetailControlTableViewCell.h; path = WeedaForiPhone/UI/WeedDetailControlTableViewCell.h; sourceTree = "<group>"; };
+		A9A46832190E210900461E90 /* WeedDetailControlTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WeedDetailControlTableViewCell.m; path = WeedaForiPhone/UI/WeedDetailControlTableViewCell.m; sourceTree = "<group>"; };
 		A9CA8E5718E8DB1E004F095D /* RemoteObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RemoteObject.h; path = WeedaForiPhone/Model/RemoteObject.h; sourceTree = "<group>"; };
 		A9CA8E5818E8DB1E004F095D /* RemoteObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RemoteObject.m; path = WeedaForiPhone/Model/RemoteObject.m; sourceTree = "<group>"; };
 		A9CA8E6418E9132C004F095D /* AddWeedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddWeedViewController.h; sourceTree = "<group>"; };
@@ -335,8 +341,8 @@
 				A9CA8E5818E8DB1E004F095D /* RemoteObject.m */,
 				A9CA8E8D18F264BA004F095D /* User.h */,
 				A9CA8E8E18F264BA004F095D /* User.m */,
-				A9A46805190C7A9D00461E90 /* Weed.h */,
-				A9A46806190C7A9D00461E90 /* Weed.m */,
+				A99A0A1F191719B500E2C50B /* Weed.h */,
+				A99A0A20191719B500E2C50B /* Weed.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -384,6 +390,10 @@
 				A991C04F18FB517600A3D2CD /* selected_profile_icon.png */,
 				A9CA8E9D18F3E255004F095D /* WeedTableViewCell.h */,
 				A9CA8E9E18F3E255004F095D /* WeedTableViewCell.m */,
+				A9A4682E190E1E8E00461E90 /* WeedDetailTableViewCell.h */,
+				A9A4682F190E1E8E00461E90 /* WeedDetailTableViewCell.m */,
+				A9A46831190E210900461E90 /* WeedDetailControlTableViewCell.h */,
+				A9A46832190E210900461E90 /* WeedDetailControlTableViewCell.m */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -436,6 +446,13 @@
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = Weeda;
 				TargetAttributes = {
+					A914CC9F18CD756200B870D8 = {
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
+					};
 					A914CCC818CD756200B870D8 = {
 						TestTargetID = A914CC9F18CD756200B870D8;
 					};
@@ -543,11 +560,12 @@
 			files = (
 				A953B6FE18D6D9DB001CDD4C /* Model.xcdatamodeld in Sources */,
 				A914CCC218CD756200B870D8 /* DetailViewController.m in Sources */,
+				A9A46833190E210900461E90 /* WeedDetailControlTableViewCell.m in Sources */,
+				A9A46830190E1E8E00461E90 /* WeedDetailTableViewCell.m in Sources */,
 				A9CA8EA018F3E255004F095D /* WeedTableViewCell.m in Sources */,
 				A914CCBF18CD756200B870D8 /* MasterViewController.m in Sources */,
 				EAA18EDE18F0ADFD0081482D /* LoginViewController.m in Sources */,
 				A9CA8E5918E8DB1E004F095D /* RemoteObject.m in Sources */,
-				A9A46807190C7A9D00461E90 /* Weed.m in Sources */,
 				EA1B050F18F3668A0033AB06 /* WelcomeViewController.m in Sources */,
 				A991C04818FB3B7700A3D2CD /* TabBarController.m in Sources */,
 				EA38FC68190D6D26007D652B /* CropImageViewController.m in Sources */,
@@ -560,6 +578,7 @@
 				EA38FC5F190C9A9D007D652B /* Image.m in Sources */,
 				A914CCB218CD756200B870D8 /* main.m in Sources */,
 				A92E513A19046E2A00FC518F /* UserTableViewCell.m in Sources */,
+				A99A0A21191719B500E2C50B /* Weed.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
