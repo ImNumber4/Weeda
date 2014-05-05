@@ -38,9 +38,6 @@ const NSInteger WEED_CELL_HEIGHT = 55;
     [self.tableView setSeparatorInset:UIEdgeInsetsZero];
     self.tableView.tableFooterView = [[UIView alloc] init];
     self.tableView.delegate = self;
-}
-
-- (void)viewWillAppear:(BOOL)animated {
     
     [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/getLights/%@", self.currentWeed.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
         for(Weed* weed in mappingResult.array) {
@@ -49,34 +46,36 @@ const NSInteger WEED_CELL_HEIGHT = 55;
             }
         }
         [self.tableView reloadData];
-    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-        RKLogError(@"Follow failed with error: %@", error);
-    }];
-    [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/getAncestorWeeds/%@", self.currentWeed.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-        
-        NSSortDescriptor *descriptor=[[NSSortDescriptor alloc] initWithKey:@"id" ascending:YES];
-        NSArray *descriptors=[NSArray arrayWithObject: descriptor];
-        NSArray *orderedArray=[mappingResult.array sortedArrayUsingDescriptors:descriptors];
-        
-        for(Weed* weed in orderedArray) {
-            if (weed.shouldBeDeleted != nil && [weed.shouldBeDeleted intValue] == 0) {
-                [self.parentWeeds addObject:weed];
+        [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/getAncestorWeeds/%@", self.currentWeed.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+            
+            NSSortDescriptor *descriptor=[[NSSortDescriptor alloc] initWithKey:@"id" ascending:YES];
+            NSArray *descriptors=[NSArray arrayWithObject: descriptor];
+            NSArray *orderedArray=[mappingResult.array sortedArrayUsingDescriptors:descriptors];
+            
+            for(Weed* weed in orderedArray) {
+                if (weed.shouldBeDeleted != nil && [weed.shouldBeDeleted intValue] == 0) {
+                    [self.parentWeeds addObject:weed];
+                }
             }
-        }
-        
-        
-        CGFloat orginalOffset = self.tableView.contentOffset.y;
-        [self.tableView reloadData];
-        [self.tableView setContentOffset:CGPointMake(0, orginalOffset + self.parentWeeds.count * WEED_CELL_HEIGHT)];
-        CGFloat contentHeight = self.tableView.bounds.size.height + self.parentWeeds.count * WEED_CELL_HEIGHT + orginalOffset - TAB_BAR_HEIGHT + 1;
-        if (self.tableView.contentSize.height > contentHeight) {
-            contentHeight = self.tableView.contentSize.height;
-        }
-        [self.tableView setContentSize:CGSizeMake(self.tableView.contentSize.width, contentHeight)];
-        
+            
+            
+            CGFloat orginalOffset = self.tableView.contentOffset.y;
+            [self.tableView reloadData];
+            [self.tableView setContentOffset:CGPointMake(0, orginalOffset + self.parentWeeds.count * WEED_CELL_HEIGHT)];
+            CGFloat contentHeight = self.tableView.bounds.size.height + self.parentWeeds.count * WEED_CELL_HEIGHT + orginalOffset - TAB_BAR_HEIGHT + 1;
+            if (self.tableView.contentSize.height > contentHeight) {
+                contentHeight = self.tableView.contentSize.height;
+            }
+            [self.tableView setContentSize:CGSizeMake(self.tableView.contentSize.width, contentHeight)];
+            
+        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+            RKLogError(@"Follow failed with error: %@", error);
+        }];
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
         RKLogError(@"Follow failed with error: %@", error);
     }];
+    
+
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
