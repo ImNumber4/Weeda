@@ -37,12 +37,11 @@ class UserDAO extends BaseDAO
 	}
 	
 	public function username_exist($username) {
-		$db_conn = new DbConnection();
 		
 		$query = 'SELECT COUNT(*) as number FROM user where username=\'' . $username . '\'';
 		error_log('query: ' . $query);
 		
-		$result = $db_conn->query($query);
+		$result = $this->db_conn->query($query);
 		error_log('query result: ' . $result);
 		$data = mysql_fetch_assoc($result);
 		error_log($data['number']);
@@ -54,13 +53,11 @@ class UserDAO extends BaseDAO
 	}
 	
 	public function find_by_username($username) {
-		/* connect to the db */
-		$db_conn = new DbConnection();
 
 		/* grab the users from the db */
 		$query = 'SELECT * FROM user where username = \'' . $username . '\'';
 
-		$result = $db_conn->query($query);
+		$result = $this->db_conn->query($query);
 		if (mysql_num_rows($result)) {
 			$user = mysql_fetch_assoc($result);
 			return $user;
@@ -91,20 +88,18 @@ class UserDAO extends BaseDAO
 	
 	public function find_by_id($id, $currentUser_id) {
 		
-		$db_conn = new DbConnection();
-		
 		$query = "SELECT * FROM user WHERE id = ". $id;
 		
-		$result = $db_conn->query($query);
+		$result = $this->db_conn->query($query);
 		if (mysql_num_rows($result)) {
 			$user = mysql_fetch_assoc($result);
-			$followerCount = $this->getFollowerCount($db_conn, $id);
+			$followerCount = $this->getFollowerCount($id);
 			$user['followerCount'] = $followerCount;
-			$followingCount = $this->getFollowingCount($db_conn, $id);
+			$followingCount = $this->getFollowingCount($id);
 			$user['followingCount'] = $followingCount;
-			$weedCount = $this->getWeedCount($db_conn, $id);
+			$weedCount = $this->getWeedCount($id);
 			$user['weedCount'] = $weedCount;
-			$relationship = $this->getRelationship($db_conn, $currentUser_id, $id);
+			$relationship = $this->getRelationship($currentUser_id, $id);
 			$user['relationshipWithCurrentUser'] = $relationship;
 			return $user;
 		} else {
@@ -113,13 +108,12 @@ class UserDAO extends BaseDAO
 	}
 	
 	public function getUsersWaterWeed($currentUser_id, $weed_id) {
-		$db_conn = new DbConnection();
 		$query = "SELECT user.username, user.id FROM water, user WHERE water.user_id = user.id AND water.weed_id = $weed_id";
-		$result = $db_conn->query($query);
+		$result = $this->db_conn->query($query);
 		$users = array();
 		if (mysql_num_rows($result)) {
 			while($user = mysql_fetch_assoc($result)) {
-				$relationship = $this->getRelationship($db_conn, $currentUser_id, $user['id']);
+				$relationship = $this->getRelationship($currentUser_id, $user['id']);
 				$user['relationshipWithCurrentUser'] = $relationship;
 				$users[] = $user;
 			}
@@ -128,13 +122,12 @@ class UserDAO extends BaseDAO
 	}
 	
 	public function getUsersSeedWeed($currentUser_id, $weed_id) {
-		$db_conn = new DbConnection();
 		$query = "SELECT user.username, user.id FROM seed, user WHERE seed.user_id = user.id AND seed.weed_id = $weed_id";
-		$result = $db_conn->query($query);
+		$result = $this->db_conn->query($query);
 		$users = array();
 		if (mysql_num_rows($result)) {
 			while($user = mysql_fetch_assoc($result)) {
-				$relationship = $this->getRelationship($db_conn, $currentUser_id, $user['id']);
+				$relationship = $this->getRelationship($currentUser_id, $user['id']);
 				$user['relationshipWithCurrentUser'] = $relationship;
 				$users[] = $user;
 			}
@@ -142,11 +135,11 @@ class UserDAO extends BaseDAO
 		return $users;
 	}
 	
-	private function getRelationship($db_conn, $userA_id, $userB_id) {
+	private function getRelationship($userA_id, $userB_id) {
 		if($userA_id == $userB_id)
 			return 0;
-		$isAFollowingB = $this->isAFollowingB($db_conn, $userA_id, $userB_id);
-		$isBFollowingA = $this->isAFollowingB($db_conn, $userB_id, $userA_id);
+		$isAFollowingB = $this->isAFollowingB($userA_id, $userB_id);
+		$isBFollowingA = $this->isAFollowingB($userB_id, $userA_id);
 		if($isAFollowingB && $isBFollowingA){
 			return 4;
 		}else if($isAFollowingB){
@@ -161,23 +154,21 @@ class UserDAO extends BaseDAO
 	public function setAFollowB($userA_id, $userB_id) {
 		if($userA_id == $userB_id)
 			return false;
-		$db_conn = new DbConnection();
 		$query = "INSERT INTO follow VALUES($userB_id,$userA_id)";	
-		return $db_conn->query($query);
+		return $this->db_conn->query($query);
 	}
 	
 	public function setAUnfollowB($userA_id, $userB_id) {
 		if($userA_id == $userB_id)
 			return false;
-		$db_conn = new DbConnection();
 		$query = "DELETE FROM follow WHERE followee_uid = $userB_id AND follower_uid = $userA_id";	
-		return $db_conn->query($query);
+		return $this->db_conn->query($query);
 	}
 	
 	
-	private function isAFollowingB($db_conn, $userA_id, $userB_id) {
+	private function isAFollowingB($userA_id, $userB_id) {
 		$query = "SELECT count(*) as count FROM follow WHERE followee_uid = $userB_id AND follower_uid = $userA_id";	
-		$result = $db_conn->query($query);
+		$result = $this->db_conn->query($query);
 		$isAFollowingB = false;
 		$val = mysql_fetch_assoc($result)['count'];
 		if ($val > 0) {
@@ -187,11 +178,11 @@ class UserDAO extends BaseDAO
 	}
 	
 	
-	private function getFollowerCount($db_conn, $id) {
+	private function getFollowerCount($id) {
 		
 		$query = "SELECT count(*) as count FROM follow WHERE followee_uid = ". $id;
 		
-		$result = $db_conn->query($query);
+		$result = $this->db_conn->query($query);
 		if (mysql_num_rows($result)) {
 			$val = mysql_fetch_assoc($result);
 			return $val['count'];
@@ -200,11 +191,11 @@ class UserDAO extends BaseDAO
 		}
 	}
 	
-	private function getFollowingCount($db_conn, $id) {
+	private function getFollowingCount($id) {
 		
 		$query = "SELECT count(*) as count FROM follow WHERE follower_uid = ". $id;
 		
-		$result = $db_conn->query($query);
+		$result = $this->db_conn->query($query);
 		if (mysql_num_rows($result)) {
 			$val = mysql_fetch_assoc($result);
 			return $val['count'];
@@ -214,11 +205,11 @@ class UserDAO extends BaseDAO
 	}
 	
 	
-	private function getWeedCount($db_conn, $id) {
+	private function getWeedCount($id) {
 		
 		$query = "SELECT count(*) as count FROM weed WHERE deleted = 0 AND user_id = ". $id;
 		
-		$result = $db_conn->query($query);
+		$result = $this->db_conn->query($query);
 		if (mysql_num_rows($result)) {
 			$val = mysql_fetch_assoc($result);
 			return $val['count'];

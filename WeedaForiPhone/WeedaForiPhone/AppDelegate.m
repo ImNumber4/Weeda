@@ -85,7 +85,17 @@
     
     weedMapping.identificationAttributes = @[ @"id" ];
     
-    [weedMapping addAttributeMappingsFromDictionary:@{@"user_id" : @"user_id", @"username" : @"username", @"content" : @"content", @"water_count" : @"water_count", @"seed_count" : @"seed_count", @"if_cur_user_water_it" : @"if_cur_user_water_it", @"if_cur_user_seed_it" : @"if_cur_user_seed_it", @"light_id" : @"light_id"}];
+    [weedMapping addAttributeMappingsFromDictionary:@{@"user_id" : @"user_id",
+                                                      @"username" : @"username",
+                                                      @"content" : @"content",
+                                                      @"water_count" : @"water_count",
+                                                      @"seed_count" : @"seed_count",
+                                                      @"light_count" : @"light_count",
+                                                      @"if_cur_user_water_it" : @"if_cur_user_water_it",
+                                                      @"if_cur_user_seed_it" : @"if_cur_user_seed_it",
+                                                      @"if_cur_user_light_it" : @"if_cur_user_light_it",
+                                                      @"light_id" : @"light_id",
+                                                      @"root_id" : @"root_id"}];
     
     [weedMapping addAttributeMappingsFromDictionary:parentObjectMapping];
     
@@ -167,7 +177,7 @@
     [userRequestMapping addAttributeMappingsFromArray:@[@"id"]];
     
     RKObjectMapping * weedRequestMapping = [RKObjectMapping requestMapping];
-    [weedRequestMapping addAttributeMappingsFromArray:@[ @"id", @"content",@"time",@"user_id"]];
+    [weedRequestMapping addAttributeMappingsFromArray:@[ @"id", @"content",@"time",@"user_id", @"light_id", @"root_id"]];
     
     
     RKRequestDescriptor *weedRequestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:weedRequestMapping

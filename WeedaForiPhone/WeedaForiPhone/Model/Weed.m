@@ -14,10 +14,13 @@
 @dynamic content;
 @dynamic if_cur_user_seed_it;
 @dynamic if_cur_user_water_it;
+@dynamic light_id;
 @dynamic seed_count;
 @dynamic user_id;
 @dynamic username;
 @dynamic water_count;
-@dynamic light_id;
+@dynamic if_cur_user_light_it;
+@dynamic light_count;
+@dynamic root_id;
 
 @end

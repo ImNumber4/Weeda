@@ -28,8 +28,11 @@
 {
     [super viewDidLoad];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(save:)];
-    self.title = @"Add weed";
+    UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithTitle:@"Weed it" style:UIBarButtonItemStyleBordered target:self action:@selector(save:)];
+    self.navigationItem.rightBarButtonItem = saveButton;
+    if (self.lightWeed != nil) {
+        self.weedContentView.text = [NSString stringWithFormat:@"@%@ %@", self.lightWeed.username, self.weedContentView.text] ;
+    }
 }
 
 #pragma mark -
@@ -47,6 +50,14 @@
     // Normally you should use accessor methods, but using KVC here avoids the need to add a custom class to the template.
     weed.content = self.weedContentView.text;
     weed.time = [NSDate date];
+    if (self.lightWeed != nil) {
+        weed.light_id = self.lightWeed.id;
+        if (self.lightWeed.root_id != nil) {
+            weed.root_id = self.lightWeed.root_id;
+        } else {
+            weed.root_id = weed.light_id;
+        }
+    }
     
     [[RKObjectManager sharedManager] postObject:weed path:@"weed/create" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
         NSLog(@"Response: %@", mappingResult);

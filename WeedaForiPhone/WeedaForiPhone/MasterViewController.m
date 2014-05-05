@@ -25,6 +25,8 @@
 
 @implementation MasterViewController
 
+const NSInteger GLOBAL_COMPOSE_TAG = 0;
+const NSInteger NON_GLOBAL_COMPOSE_TAG = 1;
 
 - (void)awakeFromNib
 {
@@ -38,7 +40,6 @@
     [self.tableView setSeparatorInset:UIEdgeInsetsZero];
     self.tableView.tableFooterView = [[UIView alloc] init];
     UIRefreshControl *refresh = [[UIRefreshControl alloc] init];
-    refresh.attributedTitle = [[NSAttributedString alloc] initWithString:@"Pull to Refresh"];
     [refresh addTarget:self action:@selector(refreshView:) forControlEvents:UIControlEventValueChanged];
     self.refreshControl = refresh;
     
@@ -54,7 +55,8 @@
                                                                           sectionNameKeyPath:nil
                                                                                    cacheName:nil];
     
-    UIBarButtonItem *composeButton = [[UIBarButtonItem alloc] initWithImage:[self getImage:@"compose.png" width:30 height:30] style:UIBarButtonItemStylePlain target:self action:@selector(compose:)];
+    UIBarButtonItem *composeButton = [[UIBarButtonItem alloc] initWithImage:[self getImage:@"compose.png" width:30 height:30] style:UIBarButtonItemStylePlain target:self action:@selector(lightIt:)];
+    composeButton.tag = GLOBAL_COMPOSE_TAG;
     [self.navigationItem setRightBarButtonItem:composeButton];
     
     [self.fetchedResultsController setDelegate:self];
@@ -72,8 +74,6 @@
     
     // Load the object model via RestKit
     [[RKObjectManager sharedManager] getObjectsAtPath:@"weed/query" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-        RKLogInfo(@"Load complete: Table should refresh...");
-        
         [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:@"LastUpdatedAt"];
         [[NSUserDefaults standardUserDefaults] synchronize];
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
@@ -82,8 +82,8 @@
     
 }
 
--(void)compose:(id)sender {
-    [self performSegueWithIdentifier:@"addWeed" sender:self];
+-(void)lightIt:(id)sender {
+    [self performSegueWithIdentifier:@"addWeed" sender:sender];
 }
 
 
@@ -205,14 +205,22 @@
     } else {
         [cell.seed setImage:[self getImage:@"seedgray.png" width:18 height:9] forState:UIControlStateNormal];
     }
-    [cell.light setImage:[self getImage:@"light.png" width:14 height:12] forState:UIControlStateNormal];
+    if ([weed.if_cur_user_light_it intValue] == 1) {
+        [cell.light setImage:[self getImage:@"light.png" width:14 height:12] forState:UIControlStateNormal];
+    } else {
+        [cell.light setImage:[self getImage:@"lightgray.png" width:14 height:12] forState:UIControlStateNormal];
+    }
     [cell.waterDrop removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
     [cell.waterDrop addTarget:self action:@selector(waterIt:)forControlEvents:UIControlEventTouchDown];
     
     [cell.seed removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
     [cell.seed addTarget:self action:@selector(seedIt:)forControlEvents:UIControlEventTouchDown];
     
-    cell.lightCount.text = [NSString stringWithFormat:@"%@", weed.seed_count];
+    [cell.light removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+    [cell.light addTarget:self action:@selector(lightIt:)forControlEvents:UIControlEventTouchDown];
+    cell.light.tag = NON_GLOBAL_COMPOSE_TAG;
+    
+    cell.lightCount.text = [NSString stringWithFormat:@"%@", weed.light_count];
     cell.seedCount.text = [NSString stringWithFormat:@"%@", weed.seed_count];
     cell.waterCount.text = [NSString stringWithFormat:@"%@", weed.water_count];
 }
@@ -300,6 +308,14 @@
         Weed *weed = [[self fetchedResultsController] objectAtIndexPath:indexPath];
         [[segue destinationViewController] setCurrentWeed:weed];
     } else if ([[segue identifier] isEqualToString:@"addWeed"]) {
+        if ([sender tag] != GLOBAL_COMPOSE_TAG) {
+            CGPoint buttonPosition = [sender convertPoint:CGPointZero toView:self.tableView];
+            NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:buttonPosition];
+            Weed *weed = [[self fetchedResultsController] objectAtIndexPath:indexPath];
+            UINavigationController* nav = [segue destinationViewController];
+            AddWeedViewController* addWeedController = (AddWeedViewController *) nav.topViewController;
+            [addWeedController setLightWeed:weed];
+        }
     } else if ([[segue identifier] isEqualToString:@"showUser"]) {
         CGPoint buttonPosition = [sender convertPoint:CGPointZero toView:self.tableView];
         NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:buttonPosition];

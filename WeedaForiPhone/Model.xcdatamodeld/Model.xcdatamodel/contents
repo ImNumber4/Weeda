@@ -7,9 +7,12 @@
     </entity>
     <entity name="Weed" representedClassName="Weed" parentEntity="RemoteObject" syncable="YES">
         <attribute name="content" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="if_cur_user_light_it" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="if_cur_user_seed_it" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="if_cur_user_water_it" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="light_count" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="light_id" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="root_id" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="seed_count" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="user_id" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
@@ -17,6 +20,6 @@
     </entity>
     <elements>
         <element name="RemoteObject" positionX="-90" positionY="-61" width="128" height="90"/>
-        <element name="Weed" positionX="18" positionY="212" width="144" height="163"/>
+        <element name="Weed" positionX="18" positionY="212" width="144" height="210"/>
     </elements>
 </model>

@@ -13,6 +13,7 @@
 #import "WeedDetailTableViewCell.h"
 #import "WeedTableViewCell.h"
 #import "TabBarController.h"
+#import "AddWeedViewController.h"
 
 const NSInteger PARENT_WEEDS_SECTION_INDEX = 0;
 const NSInteger CURRENT_WEED_SECTION_INDEX = 1;
@@ -40,24 +41,21 @@ const NSInteger WEED_CELL_HEIGHT = 55;
     self.tableView.delegate = self;
     
     [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/getLights/%@", self.currentWeed.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-        for(Weed* weed in mappingResult.array) {
+        NSSortDescriptor *descriptor=[[NSSortDescriptor alloc] initWithKey:@"id" ascending:YES];
+        NSArray *descriptors=[NSArray arrayWithObject: descriptor];
+        for(Weed* weed in [mappingResult.array sortedArrayUsingDescriptors:descriptors]) {
             if (weed.shouldBeDeleted != nil && [weed.shouldBeDeleted intValue] == 0) {
                 [self.lights addObject:weed];
             }
         }
+        
         [self.tableView reloadData];
         [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/getAncestorWeeds/%@", self.currentWeed.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-            
-            NSSortDescriptor *descriptor=[[NSSortDescriptor alloc] initWithKey:@"id" ascending:YES];
-            NSArray *descriptors=[NSArray arrayWithObject: descriptor];
-            NSArray *orderedArray=[mappingResult.array sortedArrayUsingDescriptors:descriptors];
-            
-            for(Weed* weed in orderedArray) {
+            for(Weed* weed in [mappingResult.array sortedArrayUsingDescriptors:descriptors]) {
                 if (weed.shouldBeDeleted != nil && [weed.shouldBeDeleted intValue] == 0) {
                     [self.parentWeeds addObject:weed];
                 }
             }
-            
             
             CGFloat orginalOffset = self.tableView.contentOffset.y;
             [self.tableView reloadData];
@@ -74,8 +72,6 @@ const NSInteger WEED_CELL_HEIGHT = 55;
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
         RKLogError(@"getLights failed with error: %@", error);
     }];
-    
-
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -109,12 +105,7 @@ const NSInteger WEED_CELL_HEIGHT = 55;
         [self configureWeedDetailControlTableViewCell:cell];
         return cell;
     } else {
-        Weed *weed;
-        if ([indexPath section] == PARENT_WEEDS_SECTION_INDEX) {
-            weed = self.parentWeeds[indexPath.row];
-        } else {
-            weed = self.lights[indexPath.row];
-        }
+        Weed *weed = [self getWeed:indexPath];
         static NSString *CellIdentifier = @"WeedCell";
         WeedTableViewCell *cell = (WeedTableViewCell *) [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
         [self configureWeedTableViewCell:cell weed:weed];
@@ -122,7 +113,17 @@ const NSInteger WEED_CELL_HEIGHT = 55;
     }
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
+- (Weed *) getWeed:(NSIndexPath *)indexPath {
+    Weed *weed;
+    if ([indexPath section] == PARENT_WEEDS_SECTION_INDEX) {
+        weed = self.parentWeeds[indexPath.row];
+    } else {
+        weed = self.lights[indexPath.row];
+    }
+    return weed;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == CURRENT_WEED_SECTION_INDEX) {
     
@@ -196,6 +197,8 @@ const NSInteger WEED_CELL_HEIGHT = 55;
     else
         [cell.seedCount setEnabled:YES];
     
+    [cell.lightCount setTitle:[NSString stringWithFormat:@"%@ LIGHTS", self.currentWeed.light_count] forState:UIControlStateNormal];
+    [cell.lightCount setEnabled:NO];
     
     if ([self.currentWeed.if_cur_user_water_it intValue] == 1) {
         [cell.waterDrop setImage:[self getImage:@"waterdrop.png" width:6 height:12] forState:UIControlStateNormal];
@@ -207,14 +210,20 @@ const NSInteger WEED_CELL_HEIGHT = 55;
     } else {
         [cell.seed setImage:[self getImage:@"seedgray.png" width:18 height:9] forState:UIControlStateNormal];
     }
-    [cell.light setImage:[self getImage:@"light.png" width:14 height:12] forState:UIControlStateNormal];
+    if ([self.currentWeed.if_cur_user_light_it intValue] == 1) {
+        [cell.light setImage:[self getImage:@"light.png" width:14 height:12] forState:UIControlStateNormal];
+    } else {
+        [cell.light setImage:[self getImage:@"lightgray.png" width:14 height:12] forState:UIControlStateNormal];
+    }
     
     [cell.waterDrop removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
     [cell.waterDrop addTarget:self action:@selector(waterIt:)forControlEvents:UIControlEventTouchDown];
     
     [cell.seed removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
     [cell.seed addTarget:self action:@selector(seedIt:)forControlEvents:UIControlEventTouchDown];
-    [cell.lights setSeparatorColor:[UIColor clearColor]];
+    
+    [cell.light removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+    [cell.light addTarget:self action:@selector(lightIt:)forControlEvents:UIControlEventTouchDown];
 }
 
 - (void)waterIt:(id) sender {
@@ -266,6 +275,10 @@ const NSInteger WEED_CELL_HEIGHT = 55;
     }
 }
 
+-(void)lightIt:(id)sender {
+    [self performSegueWithIdentifier:@"addWeed" sender:sender];
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -280,6 +293,14 @@ const NSInteger WEED_CELL_HEIGHT = 55;
         [[segue destinationViewController] setWater_weed_id:self.currentWeed.id];
     } else if ([[segue identifier] isEqualToString:@"showSeedUser"]) {
         [[segue destinationViewController] setSeed_weed_id:self.currentWeed.id];
+    } else if ([[segue identifier] isEqualToString:@"addWeed"]) {
+        UINavigationController* nav = [segue destinationViewController];
+        AddWeedViewController* addWeedController = (AddWeedViewController *) nav.topViewController;
+        [addWeedController setLightWeed:self.currentWeed];
+    } else if ([[segue identifier] isEqualToString:@"showLight"]) {
+        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+        Weed *weed = [self getWeed:indexPath];
+        [[segue destinationViewController] setCurrentWeed:weed];
     }
     
 }

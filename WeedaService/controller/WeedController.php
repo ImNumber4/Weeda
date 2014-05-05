@@ -9,7 +9,7 @@ class WeedController extends Controller
         $currentUser_id = $this->getCurrentUser();
 
 		/* grab the users from the db */
-		$query = "SELECT weed.id as weed_id, user.id as user_id, currentUserWater.user_id as if_cur_user_water_it, currentUserSeed.user_id as if_cur_user_seed_it, water_count, seed_count, weed.content as content, user.time as user_time, weed.time as weed_time, username, weed.deleted as weed_deleted, user.deleted as user_deleted FROM weed left join water currentUserWater on currentUserWater.weed_id=weed.id and currentUserWater.user_id=$currentUser_id left join seed currentUserSeed on currentUserSeed.weed_id=weed.id and currentUserSeed.user_id=$currentUser_id, user where user.id=weed.user_id GROUP BY weed.id";
+		$query = "SELECT weed.id as weed_id, user.id as user_id, weed.light_id as light_id, weed.root_id as root_id, currentUserWater.user_id as if_cur_user_water_it, currentUserWeed.user_id as if_cur_user_light_it, currentUserSeed.user_id as if_cur_user_seed_it, weed.water_count as water_count, weed.seed_count as seed_count, weed.light_count as light_count, weed.content as content, user.time as user_time, weed.time as weed_time, username, weed.deleted as weed_deleted, user.deleted as user_deleted FROM weed left join weed currentUserWeed on currentUserWeed.root_id=weed.id or currentUserWeed.light_id=weed.id and currentUserWeed.user_id=$currentUser_id left join water currentUserWater on currentUserWater.weed_id=weed.id and currentUserWater.user_id=$currentUser_id left join seed currentUserSeed on currentUserSeed.weed_id=weed.id and currentUserSeed.user_id=$currentUser_id, user where user.id=weed.user_id GROUP BY weed.id";
 		
 		$result = $db_conn->query($query);
 
@@ -17,7 +17,7 @@ class WeedController extends Controller
 		$weeds = array();
 		if(mysql_num_rows($result)) {
 			while($weed = mysql_fetch_assoc($result)) {
-				$weeds[] = array('id' => $weed['weed_id'], 'content' => $weed['content'], 'user_id' => $weed['user_id'], 'username' => $weed['username'], 'time' => $weed['weed_time'], 'deleted' => $weed['weed_deleted'], 'water_count' => $weed['water_count'], 'seed_count' => $weed['seed_count'], 'if_cur_user_water_it' => $weed['if_cur_user_water_it'] == $currentUser_id, 'if_cur_user_seed_it' => $weed['if_cur_user_seed_it'] == $currentUser_id);
+				$weeds[] = array('id' => $weed['weed_id'], 'content' => $weed['content'], 'user_id' => $weed['user_id'], 'username' => $weed['username'], 'time' => $weed['weed_time'], 'light_id' => $weed['light_id'], 'root_id' => $weed['root_id'], 'deleted' => $weed['weed_deleted'], 'light_count' => $weed['light_count'], 'water_count' => $weed['water_count'], 'seed_count' => $weed['seed_count'], 'if_cur_user_water_it' => $weed['if_cur_user_water_it'] == $currentUser_id, 'if_cur_user_seed_it' => $weed['if_cur_user_seed_it'] == $currentUser_id, 'if_cur_user_light_it' => $weed['if_cur_user_light_it'] == $currentUser_id);
 			}
 		}
 
@@ -170,6 +170,8 @@ class WeedController extends Controller
 		$weed->set_time($data->time);
 		$weed->set_id($data->id);
 		$weed->set_deleted(0);
+		$weed->set_light_id($data->light_id);
+		$weed->set_root_id($data->root_id);
 		return $weed;
 	}
 	

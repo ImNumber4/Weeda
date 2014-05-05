@@ -11,6 +11,10 @@ class Weed
 	
 	private $deleted;
 	
+	private $light_id;
+	
+	private $root_id;
+	
 	public function set_id($id) {
 		$this->id = $id;
 	}
@@ -51,6 +55,26 @@ class Weed
 	public function set_deleted($deleted)
 	{
 		$this->deleted = $deleted;
+	}
+	
+	public function get_light_id()
+	{
+		return $this->light_id;
+	}
+	
+	public function set_light_id($light_id)
+	{
+		$this->light_id = $light_id;
+	}
+	
+	public function get_root_id()
+	{
+		return $this->root_id;
+	}
+	
+	public function set_root_id($root_id)
+	{
+		$this->root_id = $root_id;
 	}
 }
 ?>
