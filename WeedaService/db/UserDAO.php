@@ -72,11 +72,11 @@ class UserDAO extends BaseDAO
 	public function find_by_user_id($id) {
 		$query = "SELECT * FROM user WHERE id = " . $id;
 		
-		$result = $db_conn->query($query);
+		$result = $this->db_conn->query($query);
 		if (mysql_num_rows($result)) {
 			$user_array = mysql_fetch_assoc($result);
 			$user = new User();
-			$user->set_id($userArray['id']);
+			$user->set_id($id);
 			$user->set_username($user_array['username']);
 			$user->set_password($user_array['password']);
 			$user->set_email($user_array['email']);

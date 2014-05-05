@@ -2,6 +2,9 @@
 
 include './library/ImageHandler.php';
 
+ini_set('display_errors',1);
+error_reporting(E_ALL);
+
 class UserController extends Controller
 {
 	public function query($id) {
@@ -212,15 +215,19 @@ class UserController extends Controller
 		
 		$userDAO = new UserDAO();
 		$user = $userDAO->find_by_user_id($user_id);
+		error_log('2');		
 		if (!$user) {
 			error_log('Did not find user by user id: ' . $user_id);
+			header('Content-type: application/json');
 			http_response_code(500);
 			return;
 		}
 		$user->set_has_avatar(1);
+		error_log('3');
 		$userDAO->update($user);
+		error_log('4');
 		
-		header('Content-type:application/json');
+		header('Content-type: application/json');
 		http_response_code(200);
 	}
 	

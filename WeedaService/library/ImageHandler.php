@@ -69,6 +69,7 @@
 		} else {
 			error_log('Upload file failed: ' . $error);
 		}
+		return true;
 	}
 	
 	/**

@@ -20,7 +20,7 @@ class User
 		return $this->id;
 	}
 	
-	public function set_id() {
+	public function set_id($id) {
 		$this->id = $id;
 	}
 	
