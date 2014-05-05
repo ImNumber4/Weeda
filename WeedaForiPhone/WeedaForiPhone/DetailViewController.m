@@ -225,7 +225,7 @@ const NSInteger WEED_CELL_HEIGHT = 55;
             weed.if_cur_user_water_it = [NSNumber numberWithInt:0];
             [self reloadWeedControlCell];
         } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-            RKLogError(@"Follow failed with error: %@", error);
+            RKLogError(@"unwater failed with error: %@", error);
         }];
     } else {
         [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/water/%@", weed.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
@@ -233,7 +233,7 @@ const NSInteger WEED_CELL_HEIGHT = 55;
             weed.if_cur_user_water_it = [NSNumber numberWithInt:1];
             [self reloadWeedControlCell];
         } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-            RKLogError(@"Follow failed with error: %@", error);
+            RKLogError(@"water failed with error: %@", error);
         }];
     }
     
@@ -253,7 +253,7 @@ const NSInteger WEED_CELL_HEIGHT = 55;
             weed.if_cur_user_seed_it = [NSNumber numberWithInt:0];
             [self reloadWeedControlCell];
         } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-            RKLogError(@"Follow failed with error: %@", error);
+            RKLogError(@"unseed failed with error: %@", error);
         }];
     } else {
         [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/seed/%@", weed.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
@@ -261,7 +261,7 @@ const NSInteger WEED_CELL_HEIGHT = 55;
             weed.if_cur_user_seed_it = [NSNumber numberWithInt:1];
             [self reloadWeedControlCell];
         } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-            RKLogError(@"Follow failed with error: %@", error);
+            RKLogError(@"seed failed with error: %@", error);
         }];
     }
 }
