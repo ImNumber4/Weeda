@@ -69,10 +69,10 @@ const NSInteger WEED_CELL_HEIGHT = 55;
             [self.tableView setContentSize:CGSizeMake(self.tableView.contentSize.width, contentHeight)];
             
         } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-            RKLogError(@"Follow failed with error: %@", error);
+            RKLogError(@"getAncestorWeeds failed with error: %@", error);
         }];
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-        RKLogError(@"Follow failed with error: %@", error);
+        RKLogError(@"getLights failed with error: %@", error);
     }];
     
 
