@@ -19,11 +19,12 @@ const NSInteger PARENT_WEEDS_SECTION_INDEX = 0;
 const NSInteger CURRENT_WEED_SECTION_INDEX = 1;
 const NSInteger CURRENT_WEED_CONTROL_SECTION_INDEX = 2;
 const NSInteger CHILD_WEEDS_SECTION_INDEX = 3;
+const NSInteger PLACEHOLDER_SECTION_INDEX = 4;
 
-const NSInteger SECTION_COUNT = 4;
+const NSInteger SECTION_COUNT = 5;
 
 const NSInteger WEED_CELL_HEIGHT = 55;
-
+const NSInteger CURRENT_WEED_CONTROL_CELL_HEIGHT = 30;
 
 @interface DetailViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -60,12 +61,6 @@ const NSInteger WEED_CELL_HEIGHT = 55;
             CGFloat orginalOffset = self.tableView.contentOffset.y;
             [self.tableView reloadData];
             [self.tableView setContentOffset:CGPointMake(0, orginalOffset + self.parentWeeds.count * WEED_CELL_HEIGHT)];
-            CGFloat contentHeight = self.tableView.bounds.size.height + self.parentWeeds.count * WEED_CELL_HEIGHT + orginalOffset - TAB_BAR_HEIGHT + 1;
-            if (self.tableView.contentSize.height > contentHeight) {
-                contentHeight = self.tableView.contentSize.height;
-            }
-            [self.tableView setContentSize:CGSizeMake(self.tableView.contentSize.width, contentHeight)];
-            
         } failure:^(RKObjectRequestOperation *operation, NSError *error) {
             RKLogError(@"getAncestorWeeds failed with error: %@", error);
         }];
@@ -87,6 +82,8 @@ const NSInteger WEED_CELL_HEIGHT = 55;
         return 1;
     } else if (section == CURRENT_WEED_CONTROL_SECTION_INDEX) {
         return 1;
+    } else if (section == PLACEHOLDER_SECTION_INDEX){
+        return 1;
     } else {
         return self.lights.count;
     }
@@ -104,6 +101,10 @@ const NSInteger WEED_CELL_HEIGHT = 55;
         WeedDetailControlTableViewCell *cell = (WeedDetailControlTableViewCell *) [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
         [self configureWeedDetailControlTableViewCell:cell];
         return cell;
+    } else if ([indexPath section] == PLACEHOLDER_SECTION_INDEX) {
+        static NSString *CellIdentifier = @"PlaceHolderCell";
+        UITableViewCell *cell = (WeedTableViewCell *) [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+        return cell;
     } else {
         Weed *weed = [self getWeed:indexPath];
         static NSString *CellIdentifier = @"WeedCell";
@@ -117,6 +118,8 @@ const NSInteger WEED_CELL_HEIGHT = 55;
     Weed *weed;
     if ([indexPath section] == PARENT_WEEDS_SECTION_INDEX) {
         weed = self.parentWeeds[indexPath.row];
+    } else if ([indexPath section] == CURRENT_WEED_SECTION_INDEX) {
+        weed = self.currentWeed;
     } else {
         weed = self.lights[indexPath.row];
     }
@@ -126,24 +129,34 @@ const NSInteger WEED_CELL_HEIGHT = 55;
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == CURRENT_WEED_SECTION_INDEX) {
-    
-        UITextView *temp = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 44)]; //This initial size doesn't matter
-        temp.font = [UIFont systemFontOfSize:12.0];
-        temp.text = self.currentWeed.content;
-    
-        CGFloat textViewWidth = 200.0;
-        CGRect tempFrame = CGRectMake(0, 0, textViewWidth, 50); //The height of this frame doesn't matter.
-        CGSize tvsize = [temp sizeThatFits:CGSizeMake(tempFrame.size.width, tempFrame.size.height)]; //This calculates the necessary size so that all the text fits in the necessary width.
-    
-        //Add the height of the other UI elements inside your cell
-        return MAX(tvsize.height, 50.0) + 50.0;
+        return [self getCurrentWeedCellHeight];
     } else if ([indexPath section] == CURRENT_WEED_CONTROL_SECTION_INDEX) {
-        return 30;
+        return CURRENT_WEED_CONTROL_CELL_HEIGHT;
+    } else if ([indexPath section] == PLACEHOLDER_SECTION_INDEX) {
+        CGFloat orginalOffset = self.tableView.contentOffset.y;
+        CGFloat contentHeight = self.tableView.bounds.size.height - [self getCurrentWeedCellHeight] - self.lights.count * WEED_CELL_HEIGHT + orginalOffset - TAB_BAR_HEIGHT- CURRENT_WEED_CONTROL_CELL_HEIGHT + 1;
+        if (contentHeight > 0.0) {
+            return contentHeight;
+        }else{
+            return 0.0;
+        }
     } else {
         return WEED_CELL_HEIGHT;
     }
 }
 
+- (CGFloat)getCurrentWeedCellHeight {
+    UITextView *temp = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 44)]; //This initial size doesn't matter
+    temp.font = [UIFont systemFontOfSize:12.0];
+    temp.text = self.currentWeed.content;
+    
+    CGFloat textViewWidth = 200.0;
+    CGRect tempFrame = CGRectMake(0, 0, textViewWidth, 50); //The height of this frame doesn't matter.
+    CGSize tvsize = [temp sizeThatFits:CGSizeMake(tempFrame.size.width, tempFrame.size.height)]; //This calculates the necessary size so that all the text fits in the necessary width.
+    
+    //Add the height of the other UI elements inside your cell
+    return MAX(tvsize.height, 50.0) + 50.0;
+}
 
 - (void)configureWeedDetailTableViewCell:(WeedDetailTableViewCell *)cell
 {
@@ -151,6 +164,7 @@ const NSInteger WEED_CELL_HEIGHT = 55;
     NSString *username = self.currentWeed.username;
     NSString *nameLabel = [NSString stringWithFormat:@"@%@", username];
     [cell.userLabel setTitle:nameLabel forState:UIControlStateNormal];
+    [cell.userLabel addTarget:self action:@selector(showUser:)forControlEvents:UIControlEventTouchDown];
     
     cell.weedContentLabel.text = content;
     [cell.weedContentLabel sizeToFit];
@@ -170,6 +184,7 @@ const NSInteger WEED_CELL_HEIGHT = 55;
     [cell.weedContentLabel sizeToFit];
     NSString *nameLabel = [NSString stringWithFormat:@"@%@", weed.username];
     [cell.usernameLabel setTitle:nameLabel forState:UIControlStateNormal];
+    [cell.usernameLabel addTarget:self action:@selector(showUser:)forControlEvents:UIControlEventTouchDown];
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"MMM. dd yyyy"];
@@ -279,6 +294,11 @@ const NSInteger WEED_CELL_HEIGHT = 55;
     [self performSegueWithIdentifier:@"addWeed" sender:sender];
 }
 
+
+-(void)showUser:(id)sender {
+    [self performSegueWithIdentifier:@"showUser" sender:sender];
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -288,7 +308,10 @@ const NSInteger WEED_CELL_HEIGHT = 55;
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([[segue identifier] isEqualToString:@"showUser"]) {
-        [[segue destinationViewController] setUser_id:self.currentWeed.user_id];
+        CGPoint buttonPosition = [sender convertPoint:CGPointZero toView:self.tableView];
+        NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:buttonPosition];
+        Weed* weed = [self getWeed:indexPath];
+        [[segue destinationViewController] setUser_id:weed.user_id];
     } else if ([[segue identifier] isEqualToString:@"showWaterUser"]) {
         [[segue destinationViewController] setWater_weed_id:self.currentWeed.id];
     } else if ([[segue identifier] isEqualToString:@"showSeedUser"]) {

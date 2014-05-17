@@ -53,6 +53,7 @@
     }
     
 }
+
 - (IBAction)handleSelectAvatar:(id)sender {
     UIImagePickerController *pickerController = [[UIImagePickerController alloc] init];
     pickerController.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
@@ -71,7 +72,7 @@
     [self performSegueWithIdentifier:@"cropImage" sender:self];
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([[segue identifier] isEqualToString:@"cropImage"]) {
         UINavigationController *nav = [segue destinationViewController];
