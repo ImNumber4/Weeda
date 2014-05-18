@@ -12,7 +12,18 @@
 #import "LoginViewController.h"
 #import "MasterViewController.h"
 
-@interface WelcomeViewController ()
+@interface WelcomeViewController () {
+    
+}
+@property (weak, nonatomic) IBOutlet UITextField *txtUsername;
+@property (weak, nonatomic) IBOutlet UITextField *txtPassword;
+@property (weak, nonatomic) IBOutlet UIButton *btnSignIn;
+@property (weak, nonatomic) IBOutlet UIButton *btnSignUp;
+@property (weak, nonatomic) IBOutlet UILabel *lbForgotPw;
+
+@property (nonatomic, retain) UIImageView *titleImage;
+
+- (IBAction)backgroudTab:(id)sender;
 
 @end
 
@@ -31,10 +42,32 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    UIImageView *welcome = [[UIImageView alloc]initWithFrame:self.view.bounds];
-    welcome.image = [UIImage imageNamed:@"welcome.png"];
-    welcome.contentMode = UIViewContentModeScaleAspectFill;
-    [self.view addSubview:welcome];
+    self.view.backgroundColor = [UIColor colorWithRed:62.0/255.0 green:165.0/255.0 blue:64.0/255.0 alpha:1];
+    
+    self.titleImage = [[UIImageView alloc]initWithFrame:CGRectMake(65, 170, 192, 27)];
+    self.titleImage.image = [UIImage imageNamed:@"title.png"];
+    [self.view addSubview:self.titleImage];
+    [self.view bringSubviewToFront:self.titleImage];
+    
+    self.txtUsername.alpha = 0;
+    self.txtUsername.placeholder = @"username or email";
+    self.txtUsername.textColor = [UIColor whiteColor];
+    self.txtUsername.layer.borderColor = [[UIColor whiteColor] CGColor];
+    self.txtUsername.layer.borderWidth = 1.0;
+    self.txtUsername.layer.cornerRadius = 7.0;
+    self.txtUsername.backgroundColor = [UIColor colorWithRed:62.0/255.0 green:165.0/255.0 blue:64.0/255.0 alpha:1];
+    
+    self.txtPassword.alpha = 0;
+    self.txtPassword.placeholder = @"password";
+    self.txtPassword.textColor = [UIColor whiteColor];
+    self.txtPassword.layer.borderColor = [[UIColor whiteColor] CGColor];
+    self.txtPassword.layer.borderWidth = 1.0;
+    self.txtPassword.layer.cornerRadius = 7.0;
+    self.txtPassword.backgroundColor = [UIColor colorWithRed:62.0/255.0 green:165.0/255.0 blue:64.0/255.0 alpha:1];
+    
+    self.btnSignIn.alpha = 0;
+    self.btnSignUp.alpha = 0;
+    self.lbForgotPw.alpha = 0;
 }
 
 - (void)didReceiveMemoryWarning
@@ -45,23 +78,38 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    //check cookie and renew the cookie expire time
     User *user = [self checkCookiesAndGetCurrentUser];
-    if (!user) {
-        sleep(2);
-        [self performSegueWithIdentifier:@"login" sender:self];
+    if (user) {
+        sleep(1);
+        [self showMasterView:user];
     } else {
-        //check cookie authentication
-        //success, go to MasterView
-        
-        AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-        appDelegate.currentUser = user;
         sleep(2);
-        [self performSegueWithIdentifier:@"masterView" sender:self];
-        
-        //TODO: failure, go to LoginView
-        
+        [UIView animateWithDuration:0.5 animations:^{
+//            self.titleImageView.center = CGPointMake(self.titleImageView.center.x, 100);
+            self.titleImage.center = CGPointMake(self.titleImage.center.x, 100);
+        } completion:^(BOOL finished) {
+            [UIView animateWithDuration:0.5 animations:^{
+                self.txtUsername.alpha = 1;
+                self.txtPassword.alpha = 1;
+                self.btnSignUp.alpha = 1;
+                self.btnSignIn.alpha = 1;
+                self.lbForgotPw.alpha = 1;
+            }];
+        }];
     }
+}
+
+- (void)showMasterView:(User *)user
+{
+    //check cookie authentication
+    //success, go to MasterView
+    
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    appDelegate.currentUser = user;
+    [self performSegueWithIdentifier:@"masterView" sender:self];
+    
+    //TODO: failure, go to LoginView
+    
 }
 
 #pragma mark - Navigation
@@ -138,4 +186,106 @@
 }
 
 
+- (void) alertStatus:(NSString *)msg :(NSString *)title :(int) tag
+{
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
+                                                        message:msg
+                                                       delegate:self
+                                              cancelButtonTitle:@"Ok"
+                                              otherButtonTitles:nil, nil];
+    alertView.tag = tag;
+    [alertView show];
+}
+
+- (void) setCurrentUser
+{
+    NSArray *cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookies];
+    for (NSHTTPCookie *cookie in cookies) {
+        if ([cookie.name isEqualToString:@"user_id"]) {
+            self.currentUser.id = [NSNumber numberWithInteger:[cookie.value integerValue]];
+        } else if ([cookie.name isEqualToString:@"username"]) {
+            self.currentUser.username = cookie.value;
+        } else if ([cookie.name isEqualToString:@"password"]) {
+            self.currentUser.password = cookie.value;
+        } else {
+            NSLog(@"Extra cookie in the app, cookie name is %@", cookie.name);
+        }
+    }
+    
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    appDelegate.currentUser = self.currentUser;
+}
+
+- (IBAction)signIn:(id)sender {
+    @try {
+        if ([[self.txtUsername text] isEqualToString:@""] || [[self.txtPassword text] isEqualToString:@""]) {
+            [self alertStatus:@"Please input your Email and Password" :@"Sign In Failed." :0];
+            return;
+        }
+        
+        self.currentUser = [User alloc];
+        self.currentUser.username = [self.txtUsername text];
+        self.currentUser.password = [self.txtPassword text];
+        
+        [[RKObjectManager sharedManager] postObject:self.currentUser path:@"user/login" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+            NSLog(@"Response: %@", mappingResult);
+            [self setCurrentUser];
+            [self performSegueWithIdentifier:@"masterView" sender:self];
+        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+            NSLog(@"Failure login: %@", error.localizedDescription);
+        }];
+    }
+    @catch (NSException *exception) {
+        NSLog(@"Exception: %@", exception);
+        [self alertStatus:@"Sign in Failed." :@"Error!" :0];
+    }
+    @finally {
+        //
+    }
+}
+
+- (IBAction)signUp:(id)sender {
+    [self performSegueWithIdentifier:@"signUp" sender:self];
+}
+
+//- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+//{
+//    if ([segue.identifier isEqualToString:@"signUp"]) {
+//        WelcomeViewController *controller = segue.sourceViewController;
+//        controller.
+//    }
+//}
+
+- (NSHTTPCookie *) setCookie:(NSString *)cookieString
+{
+    NSArray *tmpArray = [cookieString componentsSeparatedByString:@";"];
+    NSArray *keyValue = [[tmpArray objectAtIndex:0] componentsSeparatedByString:@"="];
+    NSString *key = [keyValue objectAtIndex:0];
+    NSString *value = [keyValue objectAtIndex:1];
+    
+    
+    NSMutableDictionary *cookieProperties = [NSMutableDictionary dictionary];
+    [cookieProperties setObject:key forKey:NSHTTPCookieName];
+    [cookieProperties setObject:value forKey:NSHTTPCookieValue];
+    [cookieProperties setObject:@"/" forKey:NSHTTPCookiePath];
+    [cookieProperties setObject:@"0" forKey:NSHTTPCookieVersion];
+    
+    // set expiration to one month from now or any NSDate of your choosing
+    // this makes the cookie sessionless and it will persist across web sessions and app launches
+    /// if you want the cookie to be destroyed when your app exits, don't set this
+    [cookieProperties setObject:[[NSDate date] dateByAddingTimeInterval:86400 * 7] forKey:NSHTTPCookieExpires];
+    
+    NSHTTPCookie *cookie = [NSHTTPCookie cookieWithProperties:cookieProperties];
+    [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie];
+    return cookie;
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textField resignFirstResponder];
+    return YES;
+}
+
+- (IBAction)backgroudTab:(id)sender {
+        [self.view endEditing:YES];
+}
 @end

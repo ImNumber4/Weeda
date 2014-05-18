@@ -173,6 +173,7 @@ const NSInteger CURRENT_WEED_CONTROL_CELL_HEIGHT = 30;
     NSString *formattedDateString = [dateFormatter stringFromDate:self.currentWeed.time];
     cell.timeLabel.text = [NSString stringWithFormat:@"%@", formattedDateString];
     cell.userAvatar.image = [UIImage imageNamed:@"avatar.jpg"];
+//    [cell.userAvatar setImageWithUser: self.currentWeed.user_id];
     CALayer * l = [cell.userAvatar layer];
     [l setMasksToBounds:YES];
     [l setCornerRadius:7.0];

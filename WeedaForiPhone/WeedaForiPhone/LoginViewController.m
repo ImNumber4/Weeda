@@ -54,14 +54,6 @@
         self.currentUser.username = [self.txtUsername text];
         self.currentUser.password = [self.txtPassword text];
         
-//        RKObjectManager *manager = [RKObjectManager sharedManager];
-//        RKObjectMapping * loginMapping = [RKObjectMapping requestMapping];
-//        [loginMapping addAttributeMappingsFromArray:@[ @"username", @"password"]];
-//        RKRequestDescriptor *loginRequestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:loginMapping
-//                                                                                       objectClass:[User class]
-//                                                                                       rootKeyPath:nil
-//                                                                                            method:RKRequestMethodPOST];
-//        [manager addRequestDescriptor:loginRequestDescriptor];
         [[RKObjectManager sharedManager] postObject:self.currentUser path:@"user/login" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
             NSLog(@"Response: %@", mappingResult);
             [self setCurrentUser];

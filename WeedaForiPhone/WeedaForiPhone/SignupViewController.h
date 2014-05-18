@@ -20,7 +20,10 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *btnSignup;
 
-- (IBAction) cancel: (id) sender;
+@property (weak, nonatomic) IBOutlet UIImageView *titleImageView;
+
 - (IBAction)signupClicked:(id)sender;
+- (IBAction)cancel:(id)sender;
+
 
 @end

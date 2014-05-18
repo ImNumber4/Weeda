@@ -125,7 +125,7 @@
         [[NSHTTPCookieStorage sharedHTTPCookieStorage] deleteCookie:cookie];
     }
     
-    UIViewController *controller = [self.storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
+    UIViewController *controller = [self.storyboard instantiateViewControllerWithIdentifier:@"WelcomeViewController"];
     [self presentViewController:controller animated:YES completion:nil];
 }
 

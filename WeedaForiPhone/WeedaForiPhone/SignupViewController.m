@@ -34,7 +34,36 @@ bool availableUsername = false;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     // Do any additional setup after loading the view.
+    self.titleImageView.image = [UIImage imageNamed:@"title.png"];
+    [self.view bringSubviewToFront:self.titleImageView];
+    
+    self.view.backgroundColor = [UIColor colorWithRed:62.0/255.0 green:165.0/255.0 blue:64.0/255.0 alpha:1];
+    
+    self.txtUsername.placeholder = @"username";
+    self.txtUsername.textColor = [UIColor whiteColor];
+    self.txtUsername.layer.borderColor = [[UIColor whiteColor] CGColor];
+    self.txtUsername.layer.borderWidth = 1.0;
+    self.txtUsername.layer.cornerRadius = 7.0;
+    self.txtUsername.backgroundColor = [UIColor colorWithRed:62.0/255.0 green:165.0/255.0 blue:64.0/255.0 alpha:1];
+    
+    self.txtPassword.placeholder = @"password";
+    self.txtPassword.textColor = [UIColor whiteColor];
+    self.txtPassword.layer.borderColor = [[UIColor whiteColor] CGColor];
+    self.txtPassword.layer.borderWidth = 1.0;
+    self.txtPassword.layer.cornerRadius = 7.0;
+    self.txtPassword.backgroundColor = [UIColor colorWithRed:62.0/255.0 green:165.0/255.0 blue:64.0/255.0 alpha:1];
+    
+    self.txtEmail.placeholder = @"email";
+    self.txtEmail.textColor = [UIColor whiteColor];
+    self.txtEmail.layer.borderColor = [[UIColor whiteColor] CGColor];
+    self.txtEmail.layer.borderWidth = 1.0;
+    self.txtEmail.layer.cornerRadius = 7.0;
+    self.txtEmail.backgroundColor = [UIColor colorWithRed:62.0/255.0 green:165.0/255.0 blue:64.0/255.0 alpha:1];
+    
+    [self.txtUsername becomeFirstResponder];
+
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)];
     
     [self.btnSignup setEnabled:NO];
@@ -45,10 +74,6 @@ bool availableUsername = false;
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-- (IBAction) cancel: (id) sender {
-    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (IBAction)signupClicked:(id)sender {
@@ -68,6 +93,10 @@ bool availableUsername = false;
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
         RKLogError(@"Load failed with error: %@", error);
     }];
+}
+
+- (IBAction)cancel:(id)sender {
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 /*

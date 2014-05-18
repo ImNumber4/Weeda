@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "WLUIImageView.h"
 
 @interface UserTableViewCell : UITableViewCell
 
