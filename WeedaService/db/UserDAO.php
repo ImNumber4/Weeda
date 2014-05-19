@@ -37,10 +37,7 @@ class UserDAO extends BaseDAO
 	}
 	
 	public function username_exist($username) {
-		
 		$query = 'SELECT COUNT(*) as number FROM user where username=\'' . $username . '\'';
-		error_log('query: ' . $query);
-		
 		$result = $this->db_conn->query($query);
 		error_log('query result: ' . $result);
 		$data = mysql_fetch_assoc($result);
@@ -50,6 +47,30 @@ class UserDAO extends BaseDAO
 		} else {
 			return true;
 		}
+	}
+	
+	public function get_uernames_with_prefix($prefix, $count_limit) {		
+		$query = 'SELECT id, username FROM user where username like \'' . $prefix . '%\' limit ' . $count_limit;
+		$result = $this->db_conn->query($query);
+		$users = array();
+		if (mysql_num_rows($result)) {
+			while($user = mysql_fetch_assoc($result)) {
+				$users[] = $user;
+			}
+		} 
+		return $users;
+	}
+	
+	public function get_following_usernames($currentUser, $count_limit) {		
+		$query = 'SELECT user.id, user.username FROM follow, user where follow.followee_uid = user.id AND follow.follower_uid = '. $currentUser . ' LIMIT ' . $count_limit;
+		$result = $this->db_conn->query($query);
+		$users = array();
+		if (mysql_num_rows($result)) {
+			while($user = mysql_fetch_assoc($result)) {
+				$users[] = $user;
+			}
+		} 
+		return $users;
 	}
 	
 	public function find_by_username($username) {

@@ -12,6 +12,8 @@
 @interface AddWeedViewController :  UIViewController
 @property (weak, nonatomic) IBOutlet UITextView *weedContentView;
 @property (nonatomic, retain) Weed * lightWeed;
+@property (nonatomic, retain) IBOutlet UITableView *userList;
+@property (strong) NSArray *users;
 
 - (IBAction) save: (id) sender;
 - (IBAction) cancel: (id) sender;

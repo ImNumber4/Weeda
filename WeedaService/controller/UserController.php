@@ -34,6 +34,26 @@ class UserController extends Controller
 		echo json_encode(array('user' => $user));
 	}
 	
+	public function getUsernamesByPrefix($prefix){
+		$userDAO = new UserDAO();
+		$currentUser_id = $this->getCurrentUser();
+		$count = 10;
+		$users = $userDAO->get_uernames_with_prefix($prefix, $count); 
+		header("Content-type: application/json");
+		http_response_code(200);
+		echo json_encode(array('users' => $users));
+	}
+	
+	public function getFollowingUsers(){
+		$userDAO = new UserDAO();
+		$currentUser_id = $this->getCurrentUser();
+		$count = 10;
+		$users = $userDAO->get_following_usernames($currentUser_id, $count);
+		header("Content-type: application/json");
+		http_response_code(200);
+		echo json_encode(array('users' => $users));
+	}
+	
 	public function getUsersWaterWeed($weed_id) {
 		$currentUser_id = $_COOKIE['user_id'];
 		if (!isset($currentUser_id)) {

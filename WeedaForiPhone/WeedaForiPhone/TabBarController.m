@@ -34,21 +34,25 @@
     UITabBar *tabBar = self.tabBar;
     UITabBarItem *tabBarItem1 = [tabBar.items objectAtIndex:0];
     UITabBarItem *tabBarItem2 = [tabBar.items objectAtIndex:1];
+    UITabBarItem *tabBarItem3 = [tabBar.items objectAtIndex:2];
     
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     
-    UINavigationController *nav2 = [self.viewControllers objectAtIndex:1];
-    UserViewController *userView = (UserViewController *)nav2.topViewController;
+    UINavigationController *userViewNav = [self.viewControllers objectAtIndex:2];
+    UserViewController *userView = (UserViewController *)userViewNav.topViewController;
     [userView setUser_id:appDelegate.currentUser.id];
     
     tabBarItem1.title = @"Weeds";
-    tabBarItem2.title = @"Me";
+    tabBarItem2.title = @"Discover";
+    tabBarItem3.title = @"Me";
     
     
     tabBarItem1.selectedImage = [[self getImage:@"selected_weed.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     tabBarItem1.image = [[self getImage:@"weed.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    tabBarItem2.image = [[self getImage:@"profile_icon.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    tabBarItem2.selectedImage = [[self getImage:@"selected_profile_icon.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    tabBarItem2.image = [[self getImage:@"map.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    tabBarItem2.selectedImage = [[self getImage:@"selected_map.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    tabBarItem3.image = [[self getImage:@"profile_icon.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    tabBarItem3.selectedImage = [[self getImage:@"selected_profile_icon.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     
     self.tabBar.tintColor = [UIColor colorWithRed:62.0/255.0 green:165.0/255.0 blue:64.0/255.0 alpha:1];
     

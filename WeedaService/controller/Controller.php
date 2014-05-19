@@ -17,6 +17,17 @@ class Controller
 	    // $this->_template = new Template($controller, $action);
 	}
 	
+	protected function getCurrentUser(){
+		$currentUser_id = $_COOKIE['user_id'];
+		if (!isset($currentUser_id)) {
+			error_log('current user is not set');
+			header("Content-type: application/json");
+			http_response_code(400);
+			return;
+		}
+		return $currentUser_id;
+	}
+	
 	// function set($name,$value) {
 	//         $this->_template->set($name,$value);
 	// }

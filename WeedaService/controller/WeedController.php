@@ -1,5 +1,5 @@
 <?php
-
+error_reporting(E_ALL);
 class WeedController extends Controller
 {
 	public function query() {
@@ -46,17 +46,6 @@ class WeedController extends Controller
 		header('Content-type: application/json');
 		http_response_code(200);
 		echo json_encode(array('weeds'=>$weeds));
-	}
-	
-	private function getCurrentUser(){
-		$currentUser_id = $_COOKIE['user_id'];
-		if (!isset($currentUser_id)) {
-			error_log('current user is not set');
-			header("Content-type: application/json");
-			http_response_code(400);
-			return;
-		}
-		return $currentUser_id;
 	}
 	
 	public function create() 
