@@ -37,7 +37,7 @@
 
 - (void)setupRestKit{
     
-    RKObjectManager *manager = [RKObjectManager managerWithBaseURL:[NSURL URLWithString:@"http://localhost/"]];
+    RKObjectManager *manager = [RKObjectManager managerWithBaseURL:[NSURL URLWithString:@"http://www.cannablaze.com/"]];
     
     //[[manager HTTPClient] setDefaultHeader:@"X-Parse-REST-API-Key" value:@"your key"];
     //[[manager HTTPClient] setDefaultHeader:@"X-Parse-Application-Id" value:@"your key"];
