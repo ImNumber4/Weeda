@@ -141,6 +141,22 @@
     
     [manager addResponseDescriptor:usersSeedWeedResponseDescriptor];
     
+    RKResponseDescriptor *getUsernamesByPrefixResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping
+                                                                                                         method:RKRequestMethodGET
+                                                                                                    pathPattern:@"user/getUsernamesByPrefix/:prefix"
+                                                                                                        keyPath:@"users"
+                                                                                                    statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+    
+    [manager addResponseDescriptor:getUsernamesByPrefixResponseDescriptor];
+    
+    RKResponseDescriptor *getFollowingUsersResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping
+                                                                                                         method:RKRequestMethodGET
+                                                                                                    pathPattern:@"user/getFollowingUsers"
+                                                                                                        keyPath:@"users"
+                                                                                                    statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+    
+    [manager addResponseDescriptor:getFollowingUsersResponseDescriptor];
+    
     
     RKResponseDescriptor *userResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping
                                                                                                 method:RKRequestMethodGET
