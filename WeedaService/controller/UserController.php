@@ -34,6 +34,32 @@ class UserController extends Controller
 		echo json_encode(array('user' => $user));
 	}
 	
+	public function registerDevice($device_id) {
+		if (!isset($device_id)) {
+			error_log('Input error, device_id is null.');
+			http_response_code(400);
+			return;
+		}
+		
+		$currentUser_id = $_COOKIE['user_id'];
+		if (!isset($currentUser_id)) {
+			error_log('current user is not set');
+			header("Content-type: application/json");
+			http_response_code(400);
+			return;
+		}
+		
+		$userDAO = new UserDAO();
+		$result = $userDAO->setUserDevice($currentUser_id, $currentUser_id);
+		if (!$result) {
+			http_response_code(500);
+			return;
+		}
+		
+		header("Content-type: application/json");
+		http_response_code(200);
+	}
+	
 	public function getUsernamesByPrefix($prefix){
 		$userDAO = new UserDAO();
 		$currentUser_id = $this->getCurrentUser();

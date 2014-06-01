@@ -13,5 +13,6 @@
 @property (strong, nonatomic) UIWindow *window;
 
 @property (nonatomic, retain) User * currentUser;
+@property (nonatomic, retain) NSString * deviceToken;
 
 @end

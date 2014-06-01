@@ -1,9 +1,10 @@
 <?php
+ini_set('display_errors',1);
 error_reporting(E_ALL);
 class WeedController extends Controller
 {
 	public function query() {
-
+		
 		/* connect to the db */
 		$db_conn = new DbConnection();
         $currentUser_id = $this->getCurrentUser();
