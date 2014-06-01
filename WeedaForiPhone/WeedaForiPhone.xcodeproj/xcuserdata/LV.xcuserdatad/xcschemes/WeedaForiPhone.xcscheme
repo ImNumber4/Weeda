@@ -24,8 +24,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "A914CC9F18CD756200B870D8"
-               BuildableName = "WeedaForiPhone.app"
-               BlueprintName = "WeedaForiPhone"
+               BuildableName = "Weeda.app"
+               BlueprintName = "Weeda"
                ReferencedContainer = "container:WeedaForiPhone.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -52,8 +52,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "A914CC9F18CD756200B870D8"
-            BuildableName = "WeedaForiPhone.app"
-            BlueprintName = "WeedaForiPhone"
+            BuildableName = "Weeda.app"
+            BlueprintName = "Weeda"
             ReferencedContainer = "container:WeedaForiPhone.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -71,8 +71,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "A914CC9F18CD756200B870D8"
-            BuildableName = "WeedaForiPhone.app"
-            BlueprintName = "WeedaForiPhone"
+            BuildableName = "Weeda.app"
+            BlueprintName = "Weeda"
             ReferencedContainer = "container:WeedaForiPhone.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -89,8 +89,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "A914CC9F18CD756200B870D8"
-            BuildableName = "WeedaForiPhone.app"
-            BlueprintName = "WeedaForiPhone"
+            BuildableName = "Weeda.app"
+            BlueprintName = "Weeda"
             ReferencedContainer = "container:WeedaForiPhone.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

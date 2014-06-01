@@ -122,7 +122,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		A914CCA018CD756200B870D8 /* WeedaForiPhone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeedaForiPhone.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A914CCA018CD756200B870D8 /* Weeda.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Weeda.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A914CCA318CD756200B870D8 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		A914CCA518CD756200B870D8 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		A914CCA718CD756200B870D8 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -264,7 +264,7 @@
 		A914CCA118CD756200B870D8 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				A914CCA018CD756200B870D8 /* WeedaForiPhone.app */,
+				A914CCA018CD756200B870D8 /* Weeda.app */,
 				A914CCC918CD756200B870D8 /* WeedaForiPhoneTests.xctest */,
 			);
 			name = Products;
@@ -428,9 +428,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		A914CC9F18CD756200B870D8 /* WeedaForiPhone */ = {
+		A914CC9F18CD756200B870D8 /* Weeda */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A914CCDB18CD756200B870D8 /* Build configuration list for PBXNativeTarget "WeedaForiPhone" */;
+			buildConfigurationList = A914CCDB18CD756200B870D8 /* Build configuration list for PBXNativeTarget "Weeda" */;
 			buildPhases = (
 				A914CC9C18CD756200B870D8 /* Sources */,
 				A914CC9D18CD756200B870D8 /* Frameworks */,
@@ -441,9 +441,9 @@
 			dependencies = (
 				A953B6EC18D6D7A1001CDD4C /* PBXTargetDependency */,
 			);
-			name = WeedaForiPhone;
+			name = Weeda;
 			productName = WeedaForiPhone;
-			productReference = A914CCA018CD756200B870D8 /* WeedaForiPhone.app */;
+			productReference = A914CCA018CD756200B870D8 /* Weeda.app */;
 			productType = "com.apple.product-type.application";
 		};
 		A914CCC818CD756200B870D8 /* WeedaForiPhoneTests */ = {
@@ -474,6 +474,7 @@
 				ORGANIZATIONNAME = Weeda;
 				TargetAttributes = {
 					A914CC9F18CD756200B870D8 = {
+						DevelopmentTeam = Y3A2ZZ64DE;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -504,7 +505,7 @@
 			);
 			projectRoot = "";
 			targets = (
-				A914CC9F18CD756200B870D8 /* WeedaForiPhone */,
+				A914CC9F18CD756200B870D8 /* Weeda */,
 				A914CCC818CD756200B870D8 /* WeedaForiPhoneTests */,
 			);
 		};
@@ -629,7 +630,7 @@
 /* Begin PBXTargetDependency section */
 		A914CCD018CD756200B870D8 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = A914CC9F18CD756200B870D8 /* WeedaForiPhone */;
+			target = A914CC9F18CD756200B870D8 /* Weeda */;
 			targetProxy = A914CCCF18CD756200B870D8 /* PBXContainerItemProxy */;
 		};
 		A953B6EC18D6D7A1001CDD4C /* PBXTargetDependency */ = {
@@ -683,7 +684,7 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Weeda LaVida (YDEFKTQ47Z)";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -699,8 +700,9 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				ONLY_ACTIVE_ARCH = YES;
+				PROVISIONING_PROFILE = "D16937DF-CDF6-4E24-93D9-B6F02CF041A0";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -721,7 +723,8 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Weeda LaVida (YDEFKTQ47Z)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Weeda LaVida (YDEFKTQ47Z)";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -731,7 +734,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				PROVISIONING_PROFILE = "D16937DF-CDF6-4E24-93D9-B6F02CF041A0";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -741,6 +745,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Weeda LaVida (YDEFKTQ47Z)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Weeda LaVida (YDEFKTQ47Z)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "WeedaForiPhone/WeedaForiPhone-Prefix.pch";
 				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"";
@@ -748,6 +754,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "D16937DF-CDF6-4E24-93D9-B6F02CF041A0";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -756,6 +763,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Weeda LaVida (YDEFKTQ47Z)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Weeda LaVida (YDEFKTQ47Z)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "WeedaForiPhone/WeedaForiPhone-Prefix.pch";
 				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"";
@@ -763,6 +772,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "D16937DF-CDF6-4E24-93D9-B6F02CF041A0";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -819,7 +829,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A914CCDB18CD756200B870D8 /* Build configuration list for PBXNativeTarget "WeedaForiPhone" */ = {
+		A914CCDB18CD756200B870D8 /* Build configuration list for PBXNativeTarget "Weeda" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A914CCDC18CD756200B870D8 /* Debug */,

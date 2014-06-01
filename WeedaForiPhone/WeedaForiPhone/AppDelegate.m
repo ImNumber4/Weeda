@@ -26,13 +26,21 @@
     // Override point for customization after application launch.
     [self setupRestKit];
     
-    //UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
-    //LoginViewController *loginViewController = (LoginViewController *)navigationController.topViewController;
-    //loginViewController.currentUser = currentUser;
-    //MasterViewController *controller = (MasterViewController *)navigationController.topViewController;
-    //controller.currentUser = currentUser;
+    // Let the device know we want to receive push notifications
+	[[UIApplication sharedApplication] registerForRemoteNotificationTypes:
+    (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
     
     return YES;
+}
+
+- (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken
+{
+	NSLog(@"My token is: %@", deviceToken);
+}
+
+- (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError*)error
+{
+	NSLog(@"Failed to get token, error: %@", error);
 }
 
 - (void)setupRestKit{
