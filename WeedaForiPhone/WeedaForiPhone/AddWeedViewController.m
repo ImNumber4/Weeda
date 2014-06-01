@@ -54,9 +54,15 @@
     NSRange spaceRange = [[textView text] rangeOfString:@" " options:NSBackwardsSearch];
     NSRange lineBreakRange = [[textView text] rangeOfString:@"\n" options:NSBackwardsSearch];
     int lastSpaceIndex = (int)spaceRange.location;
+    if (lastSpaceIndex == NSNotFound) {
+        lastSpaceIndex = -1;
+    }
     int lastLineBreakIndex = (int)lineBreakRange.location;
+    if (lastLineBreakIndex == NSNotFound) {
+        lastLineBreakIndex = -1;
+    }
     NSString *separator = (lastSpaceIndex > lastLineBreakIndex)?@" ":@"\n";
-
+    
     NSArray *allWords = [[textView text] componentsSeparatedByString: separator];
     NSString *mostRecentWord = [allWords lastObject];
 

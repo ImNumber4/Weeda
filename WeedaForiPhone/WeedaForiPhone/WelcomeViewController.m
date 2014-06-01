@@ -213,10 +213,12 @@
     }
     
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"user/registerDevice/%@", appDelegate.deviceToken] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-        RKLogError(@"registerDevice failed with error: %@", error);
-    }];
+    if (appDelegate.deviceToken) {
+        [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"user/registerDevice/%@", appDelegate.deviceToken] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+            RKLogError(@"registerDevice failed with error: %@", error);
+        }];
+    }
     appDelegate.currentUser = self.currentUser;
 }
 
@@ -284,10 +286,6 @@
     return cookie;
 }
 
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    [textField resignFirstResponder];
-    return YES;
-}
 
 - (IBAction)backgroudTab:(id)sender {
         [self.view endEditing:YES];
