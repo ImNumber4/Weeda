@@ -108,7 +108,7 @@ class UserDAO extends BaseDAO
 	}
 	
 	public function setUserDevice($user_id, $device_id) {
-		$query = "SELECT * FROM device WHERE user_id = $user_id and device_id = $device_id";
+		$query = "SELECT * FROM device WHERE user_id = $user_id and device_id = \'$device_id\'";
 		
 		$result = $this->db_conn->query($query);
 		if (mysql_num_rows($result)) {
