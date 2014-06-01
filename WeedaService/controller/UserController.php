@@ -50,7 +50,7 @@ class UserController extends Controller
 		}
 		
 		$userDAO = new UserDAO();
-		$result = $userDAO->setUserDevice($currentUser_id, $currentUser_id);
+		$result = $userDAO->setUserDevice($currentUser_id, $device_id);
 		if (!$result) {
 			http_response_code(500);
 			return;

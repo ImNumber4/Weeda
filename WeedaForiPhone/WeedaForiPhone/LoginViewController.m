@@ -107,13 +107,6 @@
         }
     }
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    
-    [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/registerDevice/%@", appDelegate.deviceToken] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-        RKLogError(@"registerDevice failed with error: %@", error);
-    }];
-    
-    
     appDelegate.currentUser = self.currentUser;
 }
 
