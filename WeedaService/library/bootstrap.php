@@ -8,10 +8,13 @@ define('CONTROLLER', 'controller');
 define('MODEL', 'model');
 // name of folder that db class in
 define('DB', 'db');
+// name of folder that exception class in
+define('EXCEPTION', 'exception');
 // application absolute path to source files (should reside on a folder one level behind the public one)
 define('CONTROLLERDIR', @realpath(dirname(__FILE__).'/../'.CONTROLLER).'/');
 define('MODELDIR', @realpath(dirname(__FILE__).'/../'.MODEL).'/');
 define('DBDIR', @realpath(dirname(__FILE__).'/../'.DB).'/');
+define('EXCEPTIONDIR', @realpath(dirname(__FILE__).'/../'.EXCEPTION).'/');
 
 // function to autoload classes (getting rid of include() calls)
 function __autoload($class)
@@ -37,6 +40,13 @@ function __autoload($class)
 		if (file_exists($db_file)) {
 			error_log("require: ".$db_file);
 			require($db_file);
+			return;
+		}
+		
+		$exception_file = EXCEPTIONDIR.$class.'.php';
+		if (file_exists($exception_file)) {
+			error_log("require: ".$exception_file);
+			require($exception_file);
 			return;
 		}
 	} catch (Exception $e) {
