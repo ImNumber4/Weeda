@@ -13,12 +13,7 @@ class UserDAO extends BaseDAO
 				. $user->get_email() . '\',\'' 
 				. $user->get_time() . '\',' 
 				. $user->get_deleted() . ')';
-		error_log('insert query:' . $query);
 		$result = $this->db_conn->insert($query);
-		if ($result == 0) {
-			error_log("SQL failed. Query: " . $query);
-		}
-		
 		return $result;
 	}
 	
@@ -29,19 +24,13 @@ class UserDAO extends BaseDAO
 				. $user->get_deleted() . ', has_avatar = ' 
 				. $user->get_has_avatar() . ' WHERE id = ' . $user->get_id();
 
-		$result = $this->db_conn->query($query);
-		if ($result == 0) {
-			error_log("SQL failed. Query: " . $query);
-		}
-		return $result;
+		$this->db_conn->query($query);
 	}
 	
 	public function username_exist($username) {
 		$query = 'SELECT COUNT(*) as number FROM user where username=\'' . $username . '\'';
 		$result = $this->db_conn->query($query);
-		error_log('query result: ' . $result);
 		$data = mysql_fetch_assoc($result);
-		error_log($data['number']);
 		if ($data['number'] == 0) {
 			return false;
 		} else {
@@ -112,10 +101,10 @@ class UserDAO extends BaseDAO
 		
 		$result = $this->db_conn->query($query);
 		if (mysql_num_rows($result)) {
-			return true;
+			//already exists
 		} else {
 			$query = "INSERT INTO device VALUES($user_id,'$device_id')";	
-			return $this->db_conn->query($query);
+			$this->db_conn->insert($query);
 		}
 	}
 	
@@ -188,14 +177,14 @@ class UserDAO extends BaseDAO
 		if($userA_id == $userB_id)
 			return false;
 		$query = "INSERT INTO follow VALUES($userB_id,$userA_id)";	
-		return $this->db_conn->query($query);
+		$this->db_conn->query($query);
 	}
 	
 	public function setAUnfollowB($userA_id, $userB_id) {
 		if($userA_id == $userB_id)
 			return false;
 		$query = "DELETE FROM follow WHERE followee_uid = $userB_id AND follower_uid = $userA_id";	
-		return $this->db_conn->query($query);
+		$this->db_conn->query($query);
 	}
 	
 	

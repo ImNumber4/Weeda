@@ -14,8 +14,13 @@ class DbConnection
 	
 	function __construct() {
 		/* connect to the db */
-		$this->db_conn = mysql_connect($this->host, $this->username, $this->password) or die('Cannot connect to the DB');
-		mysql_select_db($this->database, $this->db_conn) or die('Cannot select the DB');
+		$this->db_conn = mysql_connect($this->host, $this->username, $this->password);
+		if (!$this->db_conn) {
+			throw new DependencyFailureException("Failed to connect to database");
+		}
+		if (!mysql_select_db($this->database, $this->db_conn)) {
+			throw new DependencyFailureException("Failed to select database");
+		}
 	}
 	
 	function __destruct() {
@@ -33,8 +38,12 @@ class DbConnection
 			$this->init_connection();
 		}
 		
-		$result = mysql_query($query, $this->db_conn) or die('Errant query:  '.$query);
-		return $result;
+		$result = mysql_query($query, $this->db_conn);
+		if ($result) {
+			return $result;
+		} else {
+			throw new DependencyFailureException("Failed to execute query $query");
+		}
 	}
 	
 	public function insert($query) {
@@ -45,7 +54,7 @@ class DbConnection
 		$result = mysql_query($query, $this->db_conn);
 		if (!$result)
 		{
-			return 0;
+			throw new DependencyFailureException("Failed to execute insertion $query");
 		}
 		$id = mysql_insert_id($this->db_conn);
 		return $id;

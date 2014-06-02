@@ -7,11 +7,7 @@ class WeedDAO extends BaseDAO
 	public function create($weed)
 	{
 		$query = 'INSERT INTO weed (content, user_id, time, deleted, light_id, root_id, water_count,seed_count,light_count) VALUES (\'' . $weed->get_content() . '\',\'' . $weed->get_user_id() . '\',\'' . $weed->get_time() . '\',' . $weed->get_deleted() .','. $weed->get_light_id() .','. $weed->get_root_id() . ',0,0,0)';
-		error_log('insert query:' . $query);
 		$result = $this->db_conn->insert($query);
-		if ($result == 0) {
-			error_log("SQL failed. Query: " . $query);
-		}
 		$fectchId = $weed->get_light_id();
 		while (true) {
 			if(!$fectchId) break;
@@ -90,53 +86,41 @@ class WeedDAO extends BaseDAO
 	public function update($weed)
 	{
 		$query = 'UPDATE weed SET content = \'' . $weed->get_content() . '\',time = \'' . $weed->get_time() . '\', deleted = \'' . $weed->get_deleted() . '\' WHERE id = ' . $weed->get_id();
-		error_log('update query: ' . $query);
 		$result = $this->db_conn->query($query);
-		if (!$result) {
-			error_log("SQL failed. Query: " . $query);
-			return false;
-		}
-		return true;
 	}
 	
 	public function delete($id)
 	{
 		$query = 'UPDATE weed SET deleted = 1 WHERE id = ' . $id;
-		error_log('update query: ' . $query);
 		$result = $this->db_conn->query($query);
-		if (!$result) {
-			error_log("SQL failed. Query: " . $query);
-			return false;
-		}
-		return true;
 	}
 	
 	public function setUserSeedWeed($user_id, $weed_id) {
 		$query = "UPDATE weed SET seed_count =  seed_count + 1 WHERE id = $weed_id";
 		$this->db_conn->query($query);	
 		$query = "INSERT INTO seed VALUES($weed_id,$user_id)";	
-		return $this->db_conn->query($query);
+		$this->db_conn->query($query);
 	}
 	
 	public function setUserUnseedWeed($user_id, $weed_id) {
 		$query = "UPDATE weed SET seed_count =  seed_count - 1 WHERE id = $weed_id";
 		$this->db_conn->query($query);
 		$query = "DELETE FROM seed WHERE user_id = $user_id AND weed_id = $weed_id";
-		return $this->db_conn->query($query);
+		$this->db_conn->query($query);
 	}
 	
 	public function setUserWaterWeed($user_id, $weed_id) {
 		$query = "UPDATE weed SET water_count =  water_count + 1 WHERE id = $weed_id";
 		$this->db_conn->query($query);	
 		$query = "INSERT INTO water VALUES($weed_id,$user_id)";	
-		return $this->db_conn->query($query);
+		$this->db_conn->query($query);
 	}
 	
 	public function setUserUnwaterWeed($user_id, $weed_id) {
 		$query = "UPDATE weed SET water_count =  water_count - 1 WHERE id = $weed_id";
 		$this->db_conn->query($query);
 		$query = "DELETE FROM water WHERE user_id = $user_id AND weed_id = $weed_id";
-		return $this->db_conn->query($query);
+		$this->db_conn->query($query);
 	}
 }
 

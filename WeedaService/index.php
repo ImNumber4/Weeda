@@ -5,7 +5,6 @@
 define('DS', DIRECTORY_SEPARATOR);
 define('SYSTEM', dirname(dirname(__FILE__)));
 
-
 //Load Configuration File
 require (SYSTEM . DS . 'WeedaService/library' . DS . 'bootstrap.php');
 
@@ -26,6 +25,8 @@ Hook($url);
 
 function Hook($url) {
 	
+	header('Content-Type: application/json');
+	
     $urlArr = array();
 
     $urlArr = explode("/",$url);
@@ -39,7 +40,6 @@ function Hook($url) {
         if ($action != 'login' && $action != 'signup' && $action != 'username' ) {
         	$currentUser_id = $_COOKIE['user_id'];
         	if (!isset($currentUser_id)) {
-        		header('Content-Type: application/json');
         		http_response_code(401);
         		return;
         	}
@@ -51,16 +51,26 @@ function Hook($url) {
 		
 		try {
 			$dispatch = new $controller($model,$controllerName,$action);
+			
+	        if ((int)method_exists($controller, $action)) {
+            	$response = call_user_func_array(array($dispatch,$action),$stringParameter);
+				http_response_code(200);
+				echo $response;
+	        } else {
+				http_response_code(405);
+				echo "Method does not exist.";
+	        }
+		} catch (InvalidRequestException $e) {
+			error_log($e->toString());
+			http_response_code(400);
+			echo $e->getMessage();
 		} catch (Exception $e) {
-			error_log($e->getMessage());
+			error_log($e->toString());
+			http_response_code(500);
+			echo $e->getMessage();
 		}
-		
-        if ((int)method_exists($controller, $action)) {
-            call_user_func_array(array($dispatch,$action),$stringParameter);
-        } else {
-			echo "Method does not exist.";
-        }
     }else{
+		http_response_code(400);
 		echo "Url Arr is empty.";
     }
 }

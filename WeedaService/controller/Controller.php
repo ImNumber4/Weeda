@@ -20,10 +20,7 @@ class Controller
 	protected function getCurrentUser(){
 		$currentUser_id = $_COOKIE['user_id'];
 		if (!isset($currentUser_id)) {
-			error_log('current user is not set');
-			header("Content-type: application/json");
-			http_response_code(400);
-			return;
+			throw new DependencyDataMissingException('current user is not set');
 		}
 		return $currentUser_id;
 	}

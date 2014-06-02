@@ -7,161 +7,97 @@ error_reporting(E_ALL);
 
 class UserController extends Controller
 {
+	protected $user_dao;
+	
+    function __construct($model, $controller, $action) 
+    {
+		parent::__construct($model, $controller, $action);
+		$this->user_dao = new UserDao();
+    }
+	
 	public function query($id) {
 		if (!isset($id)) {
-			error_log('Input error, id is null.');
-			http_response_code(400);
-			return;
+			throw new InvalidRequestException('Input error, id is null.');
 		}
 		
-		$currentUser_id = $_COOKIE['user_id'];
-		if (!isset($currentUser_id)) {
-			error_log('current user is not set');
-			header("Content-type: application/json");
-			http_response_code(400);
-			return;
-		}
+		$currentUser_id = $this->getCurrentUser();
 		
-		$userDAO = new UserDAO();
-		$user = $userDAO->find_by_id($id, $currentUser_id);
-		if (!$user) {
-			http_response_code(500);
-			return;
-		}
-		
-		header("Content-type: application/json");
-		http_response_code(200);
-		echo json_encode(array('user' => $user));
+		$user = $this->user_dao->find_by_id($id, $currentUser_id);
+		if($user)
+			return json_encode(array('user' => $user));
 	}
 	
 	public function registerDevice($device_id) {
 		if (!isset($device_id)) {
-			error_log('Input error, device_id is null.');
-			http_response_code(400);
-			return;
+			throw new InvalidRequestException('Input error, device_id is null.');
 		}
 		
-		$currentUser_id = $_COOKIE['user_id'];
-		if (!isset($currentUser_id)) {
-			error_log('current user is not set');
-			header("Content-type: application/json");
-			http_response_code(400);
-			return;
-		}
-		
-		$userDAO = new UserDAO();
-		$result = $userDAO->setUserDevice($currentUser_id, $device_id);
-		if (!$result) {
-			http_response_code(500);
-			return;
-		}
-		
-		header("Content-type: application/json");
-		http_response_code(200);
+		$currentUser_id = $this->getCurrentUser();
+		$result = $this->user_dao->setUserDevice($currentUser_id, $device_id);
 	}
 	
 	public function getUsernamesByPrefix($prefix){
-		$userDAO = new UserDAO();
 		$currentUser_id = $this->getCurrentUser();
 		$count = 10;
-		$users = $userDAO->get_uernames_with_prefix($prefix, $count); 
-		header("Content-type: application/json");
-		http_response_code(200);
-		echo json_encode(array('users' => $users));
+		$users = $this->user_dao->get_uernames_with_prefix($prefix, $count); 
+		if ($users)
+			return json_encode(array('users' => $users));
+		else
+			return json_encode(array('users' => []));
+		
 	}
 	
 	public function getFollowingUsers(){
-		$userDAO = new UserDAO();
 		$currentUser_id = $this->getCurrentUser();
 		$count = 10;
-		$users = $userDAO->get_following_usernames($currentUser_id, $count);
-		header("Content-type: application/json");
-		http_response_code(200);
-		echo json_encode(array('users' => $users));
+		$users = $this->user_dao->get_following_usernames($currentUser_id, $count);
+		if ($users)
+			return json_encode(array('users' => $users));
+		else
+			return json_encode(array('users' => []));
 	}
 	
 	public function getUsersWaterWeed($weed_id) {
-		$currentUser_id = $_COOKIE['user_id'];
-		if (!isset($currentUser_id)) {
-			error_log('current user is not set');
-			header("Content-type: application/json");
-			http_response_code(400);
-			return;
+		if (!isset($weed_id)) {
+			throw new InvalidRequestException('Input error, weed_id is null.');
 		}
-		$userDAO = new UserDAO();
-		$users = $userDAO->getUsersWaterWeed($currentUser_id, $weed_id);
-		header('Content-type: application/json');
-		http_response_code(200);
-		echo json_encode(array('users'=>$users));
+		$currentUser_id = $this->getCurrentUser();
+		$users = $this->user_dao->getUsersWaterWeed($currentUser_id, $weed_id);
+		if ($users)
+			return json_encode(array('users' => $users));
+		else
+			return json_encode(array('users' => []));
 	}
 	
 	public function getUsersSeedWeed($weed_id) {
-		$currentUser_id = $_COOKIE['user_id'];
-		if (!isset($currentUser_id)) {
-			error_log('current user is not set');
-			header("Content-type: application/json");
-			http_response_code(400);
-			return;
+		if (!isset($weed_id)) {
+			throw new InvalidRequestException('Input error, weed_id is null.');
 		}
-		$userDAO = new UserDAO();
-		$users = $userDAO->getUsersSeedWeed($currentUser_id, $weed_id);
-		header('Content-type: application/json');
-		http_response_code(200);
-		echo json_encode(array('users'=>$users));
+		$currentUser_id = $this->getCurrentUser();
+		$users = $this->user_dao->getUsersSeedWeed($currentUser_id, $weed_id);
+		if ($users)
+			return json_encode(array('users' => $users));
+		else
+			return json_encode(array('users' => []));
 	}
 	
 	public function follow($id) {
 		if (!isset($id)) {
-			error_log('Input error, id is null.');
-			header("Content-type: application/json");
-			http_response_code(400);
-			return;
+			throw new InvalidRequestException('Input error, id is null.');
 		}
-		$currentUser_id = $_COOKIE['user_id'];
-		if (!isset($currentUser_id)) {
-			error_log('current user is not set');
-			header("Content-type: application/json");
-			http_response_code(400);
-			return;
-		}
-		$userDAO = new UserDAO();
-		if ($userDAO->setAFollowB($currentUser_id, $id)) {
-			header("Content-type: application/json");
-			return $this->query($id);
-		} else {
-			error_log("failed to set currentUser=" . $currentUser_id . " to follow user " . $id);
-			header("Content-type: application/json");
-			http_response_code(500);
-			return;
-		}
+		$currentUser_id = $this->getCurrentUser();
+		$this->user_dao->setAFollowB($currentUser_id, $id);
+		return $this->query($id);
 	}
 	
 	public function unfollow($id) {
 		if (!isset($id)) {
-			error_log('Input error, id is null.');
-			header("Content-type: application/json");
-			http_response_code(400);
-			return;
+			throw new InvalidRequestException('Input error, id is null.');
 		}
-		$currentUser_id = $_COOKIE['user_id'];
-		if (!isset($currentUser_id)) {
-			error_log('current user is not set');
-			header("Content-type: application/json");
-			http_response_code(400);
-			return;
-		}
-		$userDAO = new UserDAO();
-		if ($userDAO->setAUnfollowB($currentUser_id, $id)) {
-			header("Content-type: application/json");
-			return $this->query($id);
-		} else {
-			error_log('failed to set currentUser='. $currentUser_id. ' to unfollow user '. $id);
-			header("Content-type: application/json");
-			http_response_code(500);
-			return;
-		}
+		$currentUser_id = $this->getCurrentUser();
+		$this->user_dao->setAUnfollowB($currentUser_id, $id);
+		return $this->query($id);
 	}
-	
 	
 	public function login() {
 		$data = json_decode(file_get_contents("php://input"));
@@ -169,22 +105,16 @@ class UserController extends Controller
 		$password = $data->password;
 		
 		if (!isset($username)) {
-			error_log('Input para error, username is null');
-			http_response_code(400);
-			return;
+			throw new InvalidRequestException('Input para error, username is null');
 		}
 		
 		if (!isset($password)) {
-			error_log('Input para error, password is null');
-			http_response_code(400);
-			return;
+			throw new InvalidRequestException('Input para error, password is null');
 		}
 		
-		$userDAO = new UserDAO();
-		$user = $userDAO->find_by_username($username);
+		$user = $this->user_dao->find_by_username($username);
 		if ($user == null) {
-			error_log('Did not find user by username:' . $username);
-			return;
+			throw new InvalidRequestException("Did not find user by username:$username");
 		}
 		
 		if ($password == $user['password']) {
@@ -192,61 +122,37 @@ class UserController extends Controller
 			setcookie('user_id', $user['id'], time() + (86400 * 7), '/');
 			setcookie('username', $user['username'], time() + (86400 * 7), '/');
 			setcookie('password', $user['password'], time() + (86400 * 7), '/');
-			header('Content-type: application/json');
-			http_response_code(200);
-			echo json_encode(array("user" => $user));
+			return json_encode(array("user" => $user));
 		} else {
-			//username password is wrong.
-			http_response_code(401);
-			header('Content-type: application/json');
+			throw new InvalidRequestException('user/password do not match record.');
 		}
-		
-		header("Content-type: application/json");
-		http_response_code(200);
 	}
 
-	public function signout() {
-		$user_id = $_COOKIE['user_id'];
-		if (!isset($user_id)) {
+	public function signout() {		
+		try {
+			$currentUser_id = $this->getCurrentUser();
+			setcookie('user_id', '', time() - 3600);
+		} catch (DependencyDataMissingException $e) {
 			//already log out.
 			return;
 		}
-		
-		setcookie('user_id', '', time() - 3600);
 	}
 	
 	public function signup() {
 		$user = $this->parse_body_request();
-		if ($user == null) {
-			http_response_code(500);
-			return;
-		}
 		
-		$userDAO = new UserDAO();
-		$result = $userDAO->create($user);
-		if ($result == 0) {
-			//return 500
-			error_log("Create weed failed.");
-			http_response_code(500);
-			return;
-		}
+		$result = $this->user_dao->create($user);
 		
 		$user->set_id($result);
 		setcookie('user_id', $result, time() + (86400 * 7), '/');
 		setcookie('username', $user->get_username(), time() + (86400 * 7), '/');
 		setcookie('password', $user->get_password(), time() + (86400 * 7), '/');	
-		header('Content-type: application/json');
-		http_response_code(200);
-		echo json_encode(array('user' => $user));
+		
+		return json_encode(array('user' => $user));
 	}
 	
 	public function upload() {
-		$user_id = $_COOKIE['user_id'];
-		if (!isset($user_id)) {
-			error_log('Did get the user id.');
-			http_response_code(401);
-			return;
-		}
+		$user_id = $this->getCurrentUser();
 		
 		error_log('Image name: ' . $_FILES['avatar']['name']);
 		error_log('Image type: ' . $_FILES['avatar']['type']);
@@ -259,8 +165,7 @@ class UserController extends Controller
 			return;
 		}
 		
-		$userDAO = new UserDAO();
-		$user = $userDAO->find_by_user_id($user_id);
+		$user = $this->user_dao->find_by_user_id($user_id);
 		error_log('2');		
 		if (!$user) {
 			error_log('Did not find user by user id: ' . $user_id);
@@ -270,7 +175,7 @@ class UserController extends Controller
 		}
 		$user->set_has_avatar(1);
 		error_log('3');
-		$userDAO->update($user);
+		$this->user_dao->update($user);
 		error_log('4');
 		
 		header('Content-type: application/json');
@@ -279,55 +184,38 @@ class UserController extends Controller
 	
 	public function username($username) {
 		if (!isset($username)) {
-			error_log('Input error, username is null');
-			http_response_code(400);
-			return;
+			throw new InvalidRequestException('Input error, username is null');
 		}
-		$userDAO = new UserDAO();
-		$exist = $userDAO->username_exist($username);
-		
-		header("Content-type: application/json");
-		http_response_code(200);
-		echo json_encode(array('exist' => $exist));
+		$exist = $this->user_dao->username_exist($username);
+		return json_encode(array('exist' => $exist));
 	}
 	
 	public function avatar($user_id) {
 // 		$currentUser_id = $_COOKIE['user_id'];
 		if (!isset($user_id)) {
-			error_log('current user is not set');
-			header("Content-type: application/json");
-			http_response_code(400);
-			return;
+			throw new InvalidRequestException('current user is not set');
 		}
 		
 		//Get the user avatar
 		$avatar = getAvatarFromServer($user_id, 50);
 		if (!$avatar) {
-			error_log('Get avatar failed.');
-			header("Content-type: application/json");
-			http_response_code(500);
-			return;
+			throw new DependencyFailureException('Get avatar failed.');
 		}
 		$image['url'] = 'http://localhost/upload/xx/xx/avatar.jpeg';
 		$image['image'] = $avatar;
 		
-		header('Content-type: application/json');
-		http_response_code(200);
-		echo json_encode(array('image' => $image));
+		return json_encode(array('image' => $image));
 	}
 	
 	private function parse_body_request() {
 		if ($_SERVER['REQUEST_METHOD'] != 'POST' && $_SERVER['REQUEST_METHOD'] != 'PUT') {
-			//request method error, return 400
-			error_log("Request method error, should use POST or PUT.");
-			return null;
+			throw new InvalidRequestException('request has to be either POST or PUT.');
 		}
 		
 		$data = json_decode(file_get_contents('php://input'));
-		if (!$this->check_para($data)) {
-			//return 400
-			error_log("Input error.");
-			return null;
+		$invalidReason = $this->check_para($data);
+		if ($invalidReason) {
+			throw new InvalidRequestException("Inputs are not valid due to $invalidReason");
 		}
 		
 		$user = new User();
@@ -342,29 +230,25 @@ class UserController extends Controller
 	private function check_para($data) {
 		$username = trim($data->username);
 		if ($username == '') {
-			error_log('Input error, username is null.');
-			return false;
+			return 'Input error, username is null.';
 		}
 		
 		$password = trim($data->password);
 		if ($password == '') {
-			error_log('Input error, password is null');
-			return false;
+			return 'Input error, password is null';
 		}
 		
 		$email = trim($data->email);
 		if ($email == '') {
-			error_log('Input error, email is null');
-			return false;
+			return 'Input error, email is null';
 		}
 		
 		$time = trim($data->time);
 		if ($time == '') {
-			error_log('Input error, time is null');
-			return false;
+			return 'Input error, time is null';
 		}
 		
-		return true;
+		return null;
 	}
 }
 ?>
