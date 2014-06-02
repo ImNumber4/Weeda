@@ -12,7 +12,7 @@ class UserController extends Controller
     function __construct($model, $controller, $action) 
     {
 		parent::__construct($model, $controller, $action);
-		$this->user_dao = new UserDao();
+		$this->user_dao = new UserDAO();
     }
 	
 	public function query($id) {
