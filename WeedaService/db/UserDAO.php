@@ -108,6 +108,30 @@ class UserDAO extends BaseDAO
 		}
 	}
 	
+	public function getUserDevicesByUserId($user_id) {		
+		$query = "SELECT device_id FROM device WHERE user_id = $user_id";
+		$result = $this->db_conn->query($query);
+		$devices = array();
+		if (mysql_num_rows($result)) {
+			while($device = mysql_fetch_assoc($result)) {
+				$devices[] = $device;
+			}
+		} 
+		return $devices;
+	}
+	
+	public function getUserDevicesByUsername($username) {		
+		$query = "SELECT device.device_id as device_id FROM device, user WHERE device.user_id = user.id AND user.username = '$username'";
+		$result = $this->db_conn->query($query);
+		$devices = array();
+		if (mysql_num_rows($result)) {
+			while($device = mysql_fetch_assoc($result)) {
+				$devices[] = $device;
+			}
+		} 
+		return $devices;
+	}
+	
 	public function find_by_id($id, $currentUser_id) {
 		
 		$query = "SELECT * FROM user WHERE id = ". $id;

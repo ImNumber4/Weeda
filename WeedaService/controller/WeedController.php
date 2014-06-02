@@ -22,11 +22,7 @@ class WeedController extends Controller
 			}
 		}
 
-		/* output in necessary format */
-
-		header('Content-type: application/json');
-		http_response_code(200);
-		echo json_encode(array('weeds'=>$weeds));
+		return json_encode(array('weeds'=>$weeds));
 	}
 	
 	public function getLights($id) {
@@ -34,9 +30,7 @@ class WeedController extends Controller
 		$weedDAO = new WeedDAO();
 		$weeds = $weedDAO->getLights($id);
 
-		header('Content-type: application/json');
-		http_response_code(200);
-		echo json_encode(array('weeds'=>$weeds));
+		return json_encode(array('weeds'=>$weeds));
 	}
 	
 	public function getAncestorWeeds($id) {
@@ -44,9 +38,7 @@ class WeedController extends Controller
 		$weedDAO = new WeedDAO();
 		$weeds = $weedDAO->getAncestorWeeds($id);
 
-		header('Content-type: application/json');
-		http_response_code(200);
-		echo json_encode(array('weeds'=>$weeds));
+		return json_encode(array('weeds'=>$weeds));
 	}
 	
 	public function create() 
@@ -56,29 +48,28 @@ class WeedController extends Controller
 		
 		$weedDAO = new WeedDAO();
 		$result = $weedDAO->create($weed);
-		if ($result == 0) {
-			//return 500
-			error_log("Create weed failed.");
-			http_response_code(500);
-			return;
+		
+		$userDao = new UserDAO();
+		$currentUsername = $this->getCurrentUsername();
+		$tokens = preg_split('/\s+/', $weed->get_content());
+		
+		foreach ($tokens as &$token) {
+			if(strpos($token, '@') === 0) {
+				$username = substr($token, 1);
+				$devices = $userDao->getUserDevicesByUsername($username);
+				foreach ($devices as &$device) {
+				    NotificationHelper::sendMessage($device['device_id'], '@' . $currentUsername . ' mentioned you in weed: ' . $weed->get_content());
+				}
+			}
 		}
-		header('Content-type: application/json');
-		http_response_code(200);
-		echo json_encode(array('id' => $result));
+		return json_encode(array('id' => $result));
 	}
 	
 	public function delete($id)
 	{
 		$weedDAO = new WeedDAO();
 
-		if (!$weedDAO->delete($id)) {
-			//return 400
-			http_response_code(400);
-			return;
-		}
-		error_log("Delete success.");
-		header('Content-type: application/json');
-		http_response_code(200);
+		$weedDAO->delete($id);
 	}
 	
 	public function seed($weed_id) 
@@ -86,14 +77,6 @@ class WeedController extends Controller
 		$currentUser_id = $this->getCurrentUser();
 		$weedDAO = new WeedDAO();
 		$result = $weedDAO->setUserSeedWeed($currentUser_id, $weed_id);
-		if ($result == 0) {
-			//return 500
-			error_log("seed $weed_id failed.");
-			http_response_code(500);
-			return;
-		}
-		header('Content-type: application/json');
-		http_response_code(200);
 	}
 	
 	public function unseed($weed_id) 
@@ -101,14 +84,6 @@ class WeedController extends Controller
 		$currentUser_id = $this->getCurrentUser();
 		$weedDAO = new WeedDAO();
 		$result = $weedDAO->setUserUnseedWeed($currentUser_id, $weed_id);
-		if ($result == 0) {
-			//return 500
-			error_log("unseed $weed_id failed.");
-			http_response_code(500);
-			return;
-		}
-		header('Content-type: application/json');
-		http_response_code(200);
 	}
 	
 	public function water($weed_id) 
@@ -116,14 +91,6 @@ class WeedController extends Controller
 		$currentUser_id = $this->getCurrentUser();
 		$weedDAO = new WeedDAO();
 		$result = $weedDAO->setUserWaterWeed($currentUser_id, $weed_id);
-		if ($result == 0) {
-			//return 500
-			error_log("water $weed_id failed.");
-			http_response_code(500);
-			return;
-		}
-		header('Content-type: application/json');
-		http_response_code(200);
 	}
 	
 	public function unwater($weed_id) 
@@ -131,27 +98,17 @@ class WeedController extends Controller
 		$currentUser_id = $this->getCurrentUser();
 		$weedDAO = new WeedDAO();
 		$result = $weedDAO->setUserUnwaterWeed($currentUser_id, $weed_id);
-		if ($result == 0) {
-			//return 500
-			error_log("unwater $weed_id failed.");
-			http_response_code(500);
-			return;
-		}
-		header('Content-type: application/json');
-		http_response_code(200);
 	}
 	
 	private function parse_request_body() {
 		if ($_SERVER['REQUEST_METHOD'] != 'POST' && $_SERVER['REQUEST_METHOD'] != 'PUT') {
-			//request method error, return 403
-			error_log("Request method error, should use POST or PUT.");
-			return null;
+			throw new InvalidRequestException('request has to be either POST or PUT.');
 		}
 		
 		$data = json_decode(file_get_contents('php://input'));
-		if (!$this->check_para($data)) {
-			header('Content-type: application/json');
-			http_response_code(400);
+		$invalidReason = $this->check_para($data);
+		if ($invalidReason) {
+			throw new InvalidRequestException("Inputs are not valid due to $invalidReason");
 		}
 		
 		$weed = new Weed();
@@ -170,22 +127,19 @@ class WeedController extends Controller
 	{	
 		$content = trim($data->content);
 		if ($content == '') {
-			error_log('Input error, content is null');
-			return null;
+			return 'Input error, content is null';
 		}
 			
 		$time = trim($data->time);
 		if ($time == '') {
-			error_log('Input error, time is null');
-			return null;
+			return 'Input error, time is null';
 		}
 		
 		$user_id = trim($data->user_id);
 		if ($user_id == '') {
-			error_log('Input error, userid is null');
-			return null;
+			return 'Input error, userid is null';
 		}
-		return true;		
+		return null;		
 	}
 }
 ?>

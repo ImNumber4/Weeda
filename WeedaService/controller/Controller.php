@@ -25,6 +25,15 @@ class Controller
 		return $currentUser_id;
 	}
 	
+		
+	protected function getCurrentUsername(){
+		$currentUsername= $_COOKIE['username'];
+		if (!isset($currentUsername)) {
+			throw new DependencyDataMissingException('current username is not set');
+		}
+		return $currentUsername;
+	}
+	
 	// function set($name,$value) {
 	//         $this->_template->set($name,$value);
 	// }
