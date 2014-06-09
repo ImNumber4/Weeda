@@ -230,11 +230,11 @@ const NSInteger NON_GLOBAL_COMPOSE_TAG = 1;
     cell.userAvatar.contentMode = UIViewContentModeScaleAspectFill;
     cell.userAvatar.clipsToBounds = YES;
     if (!image) {
-        cell.userAvatar.image = [UIImage imageNamed:@"avatar.jpg"];
+        cell.userAvatar.image = [self getImage:@"avatar.jpg" width:40 height:40];
     } else {
-        cell.userAvatar.image = image;
-
+        cell.userAvatar.image = [self decorateImage:image width:40 height:40];
     }
+    
     CALayer * l = [cell.userAvatar layer];
     [l setMasksToBounds:YES];
     [l setCornerRadius:7.0];
@@ -243,6 +243,14 @@ const NSInteger NON_GLOBAL_COMPOSE_TAG = 1;
 - (UIImage *)getImage:(NSString *)imageName width:(int)width height:(int) height
 {
     UIImage * image = [UIImage imageNamed:imageName];
+    CGSize sacleSize = CGSizeMake(width, height);
+    UIGraphicsBeginImageContextWithOptions(sacleSize, NO, 0.0);
+    [image drawInRect:CGRectMake(0, 0, sacleSize.width, sacleSize.height)];
+    return UIGraphicsGetImageFromCurrentImageContext();
+}
+
+- (UIImage *)decorateImage:(UIImage *)image width:(int)width height:(int) height
+{
     CGSize sacleSize = CGSizeMake(width, height);
     UIGraphicsBeginImageContextWithOptions(sacleSize, NO, 0.0);
     [image drawInRect:CGRectMake(0, 0, sacleSize.width, sacleSize.height)];
