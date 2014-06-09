@@ -26,6 +26,9 @@ const NSInteger SECTION_COUNT = 5;
 const NSInteger WEED_CELL_HEIGHT = 55;
 const NSInteger CURRENT_WEED_CONTROL_CELL_HEIGHT = 30;
 
+const NSInteger SHOW_SEED_USERS = 1;
+const NSInteger SHOW_WATER_USERS = 2;
+
 @interface DetailViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @end
@@ -205,13 +208,18 @@ const NSInteger CURRENT_WEED_CONTROL_CELL_HEIGHT = 30;
         [cell.waterCount setEnabled:NO];
     else
         [cell.waterCount setEnabled:YES];
-    
+    cell.waterCount.tag = SHOW_WATER_USERS;
+    [cell.waterCount removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+    [cell.waterCount addTarget:self action:@selector(showUsers:)forControlEvents:UIControlEventTouchDown];
     
     [cell.seedCount setTitle:[NSString stringWithFormat:@"%@ SEEDS", self.currentWeed.seed_count] forState:UIControlStateNormal];
     if([self.currentWeed.seed_count intValue] <= 0)
         [cell.seedCount setEnabled:NO];
     else
         [cell.seedCount setEnabled:YES];
+    cell.seedCount.tag = SHOW_SEED_USERS;
+    [cell.seedCount removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+    [cell.seedCount addTarget:self action:@selector(showUsers:)forControlEvents:UIControlEventTouchDown];
     
     [cell.lightCount setTitle:[NSString stringWithFormat:@"%@ LIGHTS", self.currentWeed.light_count] forState:UIControlStateNormal];
     [cell.lightCount setEnabled:NO];
@@ -295,6 +303,9 @@ const NSInteger CURRENT_WEED_CONTROL_CELL_HEIGHT = 30;
     [self performSegueWithIdentifier:@"addWeed" sender:sender];
 }
 
+-(void)showUsers:(id)sender {
+    [self performSegueWithIdentifier:@"showUsers" sender:sender];
+}
 
 -(void)showUser:(id)sender {
     [self performSegueWithIdentifier:@"showUser" sender:sender];
@@ -313,10 +324,12 @@ const NSInteger CURRENT_WEED_CONTROL_CELL_HEIGHT = 30;
         NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:buttonPosition];
         Weed* weed = [self getWeed:indexPath];
         [[segue destinationViewController] setUser_id:weed.user_id];
-    } else if ([[segue identifier] isEqualToString:@"showWaterUser"]) {
-        [[segue destinationViewController] setWater_weed_id:self.currentWeed.id];
-    } else if ([[segue identifier] isEqualToString:@"showSeedUser"]) {
-        [[segue destinationViewController] setSeed_weed_id:self.currentWeed.id];
+    } else if ([[segue identifier] isEqualToString:@"showUsers"]) {
+        if ([sender tag] == SHOW_WATER_USERS) {
+            [[segue destinationViewController] setWater_weed_id:self.currentWeed.id];
+        } else {
+            [[segue destinationViewController] setSeed_weed_id:self.currentWeed.id];
+        }
     } else if ([[segue identifier] isEqualToString:@"addWeed"]) {
         UINavigationController* nav = [segue destinationViewController];
         AddWeedViewController* addWeedController = (AddWeedViewController *) nav.topViewController;
@@ -326,7 +339,6 @@ const NSInteger CURRENT_WEED_CONTROL_CELL_HEIGHT = 30;
         Weed *weed = [self getWeed:indexPath];
         [[segue destinationViewController] setCurrentWeed:weed];
     }
-    
 }
 
 - (UIImage *)getImage:(NSString *)imageName width:(int)width height:(int) height

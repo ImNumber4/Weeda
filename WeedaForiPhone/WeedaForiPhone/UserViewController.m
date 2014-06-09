@@ -23,6 +23,8 @@
 
 @implementation UserViewController
 
+const NSInteger SHOW_FOLLOWERS = 1;
+const NSInteger SHOW_FOLLOWINGS = 2;
 
 - (void)viewDidLoad
 {
