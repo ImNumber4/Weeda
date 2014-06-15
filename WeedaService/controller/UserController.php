@@ -48,7 +48,8 @@ class UserController extends Controller
 	}
 	
 	public function getFollowingUsers($user, $count){
-		$users = $this->user_dao->get_following_usernames($user, $count);
+		$currentUser_id = $this->getCurrentUser();
+		$users = $this->user_dao->get_following_usernames($user, $currentUser_id, $count);
 		if ($users)
 			return json_encode(array('users' => $users));
 		else
@@ -56,7 +57,8 @@ class UserController extends Controller
 	}
 	
 	public function getFollowers($user, $count){
-		$users = $this->user_dao->get_follower_usernames($user, $count);
+		$currentUser_id = $this->getCurrentUser();
+		$users = $this->user_dao->get_follower_usernames($user, $currentUser_id, $count);
 		if ($users)
 			return json_encode(array('users' => $users));
 		else
