@@ -69,12 +69,13 @@
     if([mostRecentWord hasPrefix:@"@"]){
         NSString *usernamePrefix = [mostRecentWord substringFromIndex:1];
         if ([usernamePrefix isEqualToString:@""]) {
-            [[RKObjectManager sharedManager] getObjectsAtPath:@"user/getFollowingUsers" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+            AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+            [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"user/getFollowingUsers/%@/%d",appDelegate.currentUser.id, 10] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                 self.users = mappingResult.array;
                 [self.userList reloadData];
                 [self adjustWeedContentView:false];
             } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-                RKLogError(@"Load failed with error: %@", error);
+                RKLogError(@"Load getFollowingUsers failed with error: %@", error);
             }];
         } else {
             [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"user/getUsernamesByPrefix/%@", usernamePrefix] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
@@ -82,7 +83,7 @@
                 [self.userList reloadData];
                 [self adjustWeedContentView:false];
             } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-                RKLogError(@"Load failed with error: %@", error);
+                RKLogError(@"Load getUsernamesByPrefix failed with error: %@", error);
             }];
         }
     }else{

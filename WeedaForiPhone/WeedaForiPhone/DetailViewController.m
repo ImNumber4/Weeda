@@ -304,7 +304,18 @@ const NSInteger SHOW_WATER_USERS = 2;
 }
 
 -(void)showUsers:(id)sender {
-    [self performSegueWithIdentifier:@"showUsers" sender:sender];
+    NSString * feedUrl;
+    if ([sender tag] == SHOW_WATER_USERS) {
+        feedUrl = [NSString stringWithFormat:@"user/getUsersWaterWeed/%@", self.currentWeed.id];
+    } else {
+        feedUrl = [NSString stringWithFormat:@"user/getUsersSeedWeed/%@", self.currentWeed.id];
+    }
+    [[RKObjectManager sharedManager] getObjectsAtPath:feedUrl parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+        self.users = mappingResult.array;
+        [self performSegueWithIdentifier:@"showUsers" sender:sender];
+    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        RKLogError(@"Load failed with error: %@", error);
+    }];
 }
 
 -(void)showUser:(id)sender {
@@ -326,10 +337,11 @@ const NSInteger SHOW_WATER_USERS = 2;
         [[segue destinationViewController] setUser_id:weed.user_id];
     } else if ([[segue identifier] isEqualToString:@"showUsers"]) {
         if ([sender tag] == SHOW_WATER_USERS) {
-            [[segue destinationViewController] setWater_weed_id:self.currentWeed.id];
+            [[segue destinationViewController] setTitle:@"Seeded by"];
         } else {
-            [[segue destinationViewController] setSeed_weed_id:self.currentWeed.id];
+            [[segue destinationViewController] setTitle:@"Watered by"];
         }
+        [[segue destinationViewController] setUsers:self.users];
     } else if ([[segue identifier] isEqualToString:@"addWeed"]) {
         UINavigationController* nav = [segue destinationViewController];
         AddWeedViewController* addWeedController = (AddWeedViewController *) nav.topViewController;

@@ -50,12 +50,28 @@ class UserDAO extends BaseDAO
 		return $users;
 	}
 	
-	public function get_following_usernames($currentUser, $count_limit) {		
-		$query = 'SELECT user.id, user.username FROM follow, user where follow.followee_uid = user.id AND follow.follower_uid = '. $currentUser . ' LIMIT ' . $count_limit;
+	public function get_following_usernames($user_id, $count_limit) {		
+		$query = 'SELECT user.id as id, user.username as username FROM follow join user on follow.followee_uid = user.id where follow.follower_uid = '. $user_id . ' LIMIT ' . $count_limit;
 		$result = $this->db_conn->query($query);
 		$users = array();
 		if (mysql_num_rows($result)) {
 			while($user = mysql_fetch_assoc($result)) {
+				$relationship = $this->getRelationship($user_id, $user['id']);
+				$user['relationshipWithCurrentUser'] = $relationship;
+				$users[] = $user;
+			}
+		} 
+		return $users;
+	}
+	
+	public function get_follower_usernames($user_id, $count_limit) {		
+		$query = 'SELECT user.id as id, user.username as username FROM follow join user on follow.follower_uid = user.id where follow.followee_uid = '. $user_id . ' LIMIT ' . $count_limit;
+		$result = $this->db_conn->query($query);
+		$users = array();
+		if (mysql_num_rows($result)) {
+			while($user = mysql_fetch_assoc($result)) {
+				$relationship = $this->getRelationship($user_id, $user['id']);
+				$user['relationshipWithCurrentUser'] = $relationship;
 				$users[] = $user;
 			}
 		} 
@@ -223,12 +239,12 @@ class UserDAO extends BaseDAO
 		return $isAFollowingB;
 	}
 	
-	
 	private function getFollowerCount($id) {
 		
 		$query = "SELECT count(*) as count FROM follow WHERE followee_uid = ". $id;
 		
 		$result = $this->db_conn->query($query);
+		
 		if (mysql_num_rows($result)) {
 			$val = mysql_fetch_assoc($result);
 			return $val['count'];

@@ -2,8 +2,8 @@
 
 include './library/ImageHandler.php';
 
-ini_set('display_errors',1);
-error_reporting(E_ALL);
+//ini_set('display_errors',1);
+//error_reporting(E_ALL);
 
 class UserController extends Controller
 {
@@ -47,10 +47,16 @@ class UserController extends Controller
 		
 	}
 	
-	public function getFollowingUsers(){
-		$currentUser_id = $this->getCurrentUser();
-		$count = 10;
-		$users = $this->user_dao->get_following_usernames($currentUser_id, $count);
+	public function getFollowingUsers($user, $count){
+		$users = $this->user_dao->get_following_usernames($user, $count);
+		if ($users)
+			return json_encode(array('users' => $users));
+		else
+			return json_encode(array('users' => []));
+	}
+	
+	public function getFollowers($user, $count){
+		$users = $this->user_dao->get_follower_usernames($user, $count);
 		if ($users)
 			return json_encode(array('users' => $users));
 		else

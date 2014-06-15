@@ -9,7 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface UserListViewController : UITableViewController  <NSFetchedResultsControllerDelegate>
-@property (nonatomic, retain) NSNumber * water_weed_id;
-@property (nonatomic, retain) NSNumber * seed_weed_id;
 @property (strong) NSArray *users;
 @end

@@ -14,4 +14,6 @@
 @property (nonatomic, retain) NSMutableArray* parentWeeds;
 @property (nonatomic, retain) NSMutableArray* lights;
 
+@property (strong) NSArray *users;
+
 @end

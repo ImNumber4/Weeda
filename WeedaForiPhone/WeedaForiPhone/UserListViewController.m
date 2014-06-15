@@ -33,26 +33,7 @@
 
 - (void)loadData
 {
-    if(self.seed_weed_id != nil) {
-        // Load the object model via RestKit
-        self.title = @"Seeded by";
-        [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"user/getUsersSeedWeed/%@", self.seed_weed_id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-            self.users = mappingResult.array;
-            [self.tableView reloadData];
-        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-            RKLogError(@"Load failed with error: %@", error);
-        }];
-    } else if(self.water_weed_id != nil) {
-        self.title = @"Watered by";
-        // Load the object model via RestKit
-        [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"user/getUsersWaterWeed/%@", self.water_weed_id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-            self.users = mappingResult.array;
-            [self.tableView reloadData];
-        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-            RKLogError(@"Load failed with error: %@", error);
-        }];
-    }
-    
+    [self.tableView reloadData];
 }
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller

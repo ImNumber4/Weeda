@@ -54,6 +54,10 @@ const NSInteger SHOW_FOLLOWINGS = 2;
         
     }
     
+    [self.followerCountLabel addTarget:self action:@selector(showUsers:)forControlEvents:UIControlEventTouchDown];
+    self.followerCountLabel.tag = SHOW_FOLLOWERS;
+    [self.followingCountLabel addTarget:self action:@selector(showUsers:)forControlEvents:UIControlEventTouchDown];
+    self.followingCountLabel.tag = SHOW_FOLLOWINGS;
 }
 
 - (IBAction)handleSelectAvatar:(id)sender {
@@ -81,6 +85,13 @@ const NSInteger SHOW_FOLLOWINGS = 2;
         CropImageViewController *view = (CropImageViewController *)[nav topViewController];
         view.image = self.userPickedImage;
         view.delegate = self;
+    } else if([[segue identifier] isEqualToString:@"showUsers"]) {
+        if ([sender tag] == SHOW_FOLLOWERS) {
+            [[segue destinationViewController] setTitle:@"Followed by"];
+        } else {
+            [[segue destinationViewController] setTitle:@"Following"];
+        }
+        [[segue destinationViewController] setUsers:self.users];
     }
 }
 
@@ -167,15 +178,32 @@ const NSInteger SHOW_FOLLOWINGS = 2;
     [dateFormatter setDateFormat:@"MMM. yyyy"];
     NSString *formattedDateString = [dateFormatter stringFromDate:self.user.time];
     self.timeLabel.text = [NSString stringWithFormat:@"Memeber since: %@", formattedDateString];
-    self.weedCountLabel.text = [NSString stringWithFormat:@"%@", self.user.weedCount];
-    self.followerCountLabel.text = [NSString stringWithFormat:@"%@", self.user.followerCount];
-    self.followingCountLabel.text = [NSString stringWithFormat:@"%@", self.user.followingCount];
+    [self.weedCountLabel setTitle:[NSString stringWithFormat:@"%@", self.user.weedCount] forState:UIControlStateNormal];
+    [self.followerCountLabel setTitle:[NSString stringWithFormat:@"%@", self.user.followerCount] forState:UIControlStateNormal];
+    [self.followingCountLabel setTitle:[NSString stringWithFormat:@"%@", self.user.followingCount] forState:UIControlStateNormal];
     if ([self.user.relationshipWithCurrentUser intValue] == 0) {
         [self makeEditProfileButton];
     } else if ([self.user.relationshipWithCurrentUser intValue] < 3){
         [self makeFollowButton];
     } else {
         [self makeFollowingButton];
+    }
+}
+
+-(void) showUsers:(id)sender {
+    if (self.user) {
+        NSString * feedUrl;
+        if ([sender tag] == SHOW_FOLLOWERS) {
+            feedUrl = [NSString stringWithFormat:@"user/getFollowers/%@/%d", self.user.id, 10];
+        } else {
+            feedUrl = [NSString stringWithFormat:@"user/getFollowingUsers/%@/%d", self.user.id, 10];
+        }
+        [[RKObjectManager sharedManager] getObjectsAtPath:feedUrl parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+            self.users = mappingResult.array;
+            [self performSegueWithIdentifier:@"showUsers" sender:sender];
+        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+            RKLogError(@"Load failed with error: %@", error);
+        }];
     }
 }
 

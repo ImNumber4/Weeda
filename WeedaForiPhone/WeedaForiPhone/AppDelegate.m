@@ -165,11 +165,19 @@
     
     RKResponseDescriptor *getFollowingUsersResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping
                                                                                                          method:RKRequestMethodGET
-                                                                                                    pathPattern:@"user/getFollowingUsers"
+                                                                                                    pathPattern:@"user/getFollowingUsers/:user_id/:count"
                                                                                                         keyPath:@"users"
                                                                                                     statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
     
     [manager addResponseDescriptor:getFollowingUsersResponseDescriptor];
+    
+    RKResponseDescriptor *getFollowersResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping
+                                                                                                             method:RKRequestMethodGET
+                                                                                                        pathPattern:@"user/getFollowers/:user_id/:count"
+                                                                                                            keyPath:@"users"
+                                                                                                        statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+    
+    [manager addResponseDescriptor:getFollowersResponseDescriptor];
     
     
     RKResponseDescriptor *userResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping
