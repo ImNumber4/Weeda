@@ -86,6 +86,10 @@ const NSInteger NON_GLOBAL_COMPOSE_TAG = 1;
     [self performSegueWithIdentifier:@"addWeed" sender:sender];
 }
 
+-(void)showUser:(id)sender {
+    [self performSegueWithIdentifier:@"showUser" sender:sender];
+}
+
 
 -(void)refreshView:(UIRefreshControl *)refresh {
     refresh.attributedTitle = [[NSAttributedString alloc] initWithString:@"Refreshing data..."];
@@ -185,31 +189,7 @@ const NSInteger NON_GLOBAL_COMPOSE_TAG = 1;
 
 - (void)decorateCellWithWeed:(Weed *)weed cell:(WeedTableViewCell *)cell
 {
-    cell.weedContentLabel.text = [NSString stringWithFormat:@"%@", weed.content];
-    [cell.weedContentLabel sizeToFit];
-    NSString *nameLabel = [NSString stringWithFormat:@"@%@", weed.username];
-    [cell.usernameLabel setTitle:nameLabel forState:UIControlStateNormal];
-    
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"MMM. dd yyyy"];
-    NSString *formattedDateString = [dateFormatter stringFromDate:weed.time];
-    cell.timeLabel.text = [NSString stringWithFormat:@"%@", formattedDateString];
-
-    if ([weed.if_cur_user_water_it intValue] == 1) {
-        [cell.waterDrop setImage:[self getImage:@"waterdrop.png" width:6 height:12] forState:UIControlStateNormal];
-    } else {
-        [cell.waterDrop setImage:[self getImage:@"waterdropgray.png" width:6 height:12] forState:UIControlStateNormal];
-    }
-    if ([weed.if_cur_user_seed_it intValue] == 1) {
-        [cell.seed setImage:[self getImage:@"seed.png" width:18 height:9] forState:UIControlStateNormal];
-    } else {
-        [cell.seed setImage:[self getImage:@"seedgray.png" width:18 height:9] forState:UIControlStateNormal];
-    }
-    if ([weed.if_cur_user_light_it intValue] == 1) {
-        [cell.light setImage:[self getImage:@"light.png" width:14 height:12] forState:UIControlStateNormal];
-    } else {
-        [cell.light setImage:[self getImage:@"lightgray.png" width:14 height:12] forState:UIControlStateNormal];
-    }
+    [cell decorateCellWithWeed:weed];
     [cell.waterDrop removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
     [cell.waterDrop addTarget:self action:@selector(waterIt:)forControlEvents:UIControlEventTouchDown];
     
@@ -218,11 +198,11 @@ const NSInteger NON_GLOBAL_COMPOSE_TAG = 1;
     
     [cell.light removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
     [cell.light addTarget:self action:@selector(lightIt:)forControlEvents:UIControlEventTouchDown];
-    cell.light.tag = NON_GLOBAL_COMPOSE_TAG;
     
-    cell.lightCount.text = [NSString stringWithFormat:@"%@", weed.light_count];
-    cell.seedCount.text = [NSString stringWithFormat:@"%@", weed.seed_count];
-    cell.waterCount.text = [NSString stringWithFormat:@"%@", weed.water_count];
+    [cell.usernameLabel removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+    [cell.usernameLabel addTarget:self action:@selector(showUser:)forControlEvents:UIControlEventTouchDown];
+    
+    cell.light.tag = NON_GLOBAL_COMPOSE_TAG;
 }
 
 - (void)getImageFromServer:(UIImage *)image cell:(WeedTableViewCell *)cell

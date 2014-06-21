@@ -11,7 +11,7 @@
 @interface WeedTableViewCell : UITableViewCell
 
 @property (nonatomic, weak) IBOutlet UIButton *usernameLabel;
-@property (nonatomic, weak) IBOutlet UILabel *weedContentLabel;
+@property (nonatomic, weak) IBOutlet UITextView *weedContentLabel;
 @property (nonatomic, weak) IBOutlet UILabel *timeLabel;
 @property (nonatomic, weak) IBOutlet UIImageView *userAvatar;
 @property (nonatomic, weak) IBOutlet UIButton *seed;
@@ -20,5 +20,10 @@
 @property (nonatomic, weak) IBOutlet UILabel *waterCount;
 @property (nonatomic, weak) IBOutlet UIButton *light;
 @property (nonatomic, weak) IBOutlet UILabel *lightCount;
+
+@property (nonatomic, weak) IBOutlet UIView *view;
+
+- (void)hideControls;
+- (void)decorateCellWithWeed:(Weed *)weed;
 
 @end

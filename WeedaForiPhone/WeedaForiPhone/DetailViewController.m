@@ -11,7 +11,7 @@
 #import "UserListViewController.h"
 #import "WeedDetailControlTableViewCell.h"
 #import "WeedDetailTableViewCell.h"
-#import "WeedTableViewCell.h"
+#import "WeedBasicTableViewCell.h"
 #import "TabBarController.h"
 #import "AddWeedViewController.h"
 
@@ -23,7 +23,7 @@ const NSInteger PLACEHOLDER_SECTION_INDEX = 4;
 
 const NSInteger SECTION_COUNT = 5;
 
-const NSInteger WEED_CELL_HEIGHT = 55;
+const NSInteger WEED_CELL_HEIGHT = 50;
 const NSInteger CURRENT_WEED_CONTROL_CELL_HEIGHT = 30;
 
 const NSInteger SHOW_SEED_USERS = 1;
@@ -62,8 +62,9 @@ const NSInteger SHOW_WATER_USERS = 2;
             }
             
             CGFloat orginalOffset = self.tableView.contentOffset.y;
-            [self.tableView reloadData];
+            
             [self.tableView setContentOffset:CGPointMake(0, orginalOffset + self.parentWeeds.count * WEED_CELL_HEIGHT)];
+            [self.tableView reloadData];
         } failure:^(RKObjectRequestOperation *operation, NSError *error) {
             RKLogError(@"getAncestorWeeds failed with error: %@", error);
         }];
@@ -106,12 +107,12 @@ const NSInteger SHOW_WATER_USERS = 2;
         return cell;
     } else if ([indexPath section] == PLACEHOLDER_SECTION_INDEX) {
         static NSString *CellIdentifier = @"PlaceHolderCell";
-        UITableViewCell *cell = (WeedTableViewCell *) [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+        UITableViewCell *cell = (WeedBasicTableViewCell *) [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
         return cell;
     } else {
         Weed *weed = [self getWeed:indexPath];
         static NSString *CellIdentifier = @"WeedCell";
-        WeedTableViewCell *cell = (WeedTableViewCell *) [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+        WeedBasicTableViewCell *cell = (WeedBasicTableViewCell *) [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
         [self configureWeedTableViewCell:cell weed:weed];
         return cell;
     }
@@ -137,7 +138,7 @@ const NSInteger SHOW_WATER_USERS = 2;
         return CURRENT_WEED_CONTROL_CELL_HEIGHT;
     } else if ([indexPath section] == PLACEHOLDER_SECTION_INDEX) {
         CGFloat orginalOffset = self.tableView.contentOffset.y;
-        CGFloat contentHeight = self.tableView.bounds.size.height - [self getCurrentWeedCellHeight] - self.lights.count * WEED_CELL_HEIGHT + orginalOffset - TAB_BAR_HEIGHT- CURRENT_WEED_CONTROL_CELL_HEIGHT + 1;
+        CGFloat contentHeight = self.tableView.bounds.size.height - [self getCurrentWeedCellHeight] - (self.parentWeeds.count + self.lights.count) * WEED_CELL_HEIGHT + orginalOffset - TAB_BAR_HEIGHT- CURRENT_WEED_CONTROL_CELL_HEIGHT + 1;
         if (contentHeight > 0.0) {
             return contentHeight;
         }else{
@@ -182,22 +183,9 @@ const NSInteger SHOW_WATER_USERS = 2;
     [l setCornerRadius:7.0];
 }
 
-- (void)configureWeedTableViewCell:(WeedTableViewCell *)cell weed:(Weed *)weed
+- (void)configureWeedTableViewCell:(WeedBasicTableViewCell *)cell weed:(Weed *)weed
 {
-    cell.weedContentLabel.text = [NSString stringWithFormat:@"%@", weed.content];
-    [cell.weedContentLabel sizeToFit];
-    NSString *nameLabel = [NSString stringWithFormat:@"@%@", weed.username];
-    [cell.usernameLabel setTitle:nameLabel forState:UIControlStateNormal];
-    [cell.usernameLabel addTarget:self action:@selector(showUser:)forControlEvents:UIControlEventTouchDown];
-    
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"MMM. dd yyyy"];
-    NSString *formattedDateString = [dateFormatter stringFromDate:weed.time];
-    cell.timeLabel.text = [NSString stringWithFormat:@"%@", formattedDateString];
-    cell.userAvatar.image = [self getImage:@"avatar.jpg" width:40 height:40];
-    CALayer * l = [cell.userAvatar layer];
-    [l setMasksToBounds:YES];
-    [l setCornerRadius:7.0];
+    [cell decorateCellWithWeed:weed];
     cell.backgroundColor = [UIColor colorWithRed:240.0/255.0 green:240.0/255.0 blue:240.0/255.0 alpha:1];
 }
 
