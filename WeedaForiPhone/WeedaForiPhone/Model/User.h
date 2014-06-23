@@ -26,5 +26,8 @@
 @property (nonatomic, retain) NSNumber * relationshipWithCurrentUser;
 @property (nonatomic, retain) NSSet *weeds;
 @property (nonatomic, retain) NSNumber *hasAvatar;
+@property (nonatomic, retain) NSNumber *latitude;
+@property (nonatomic, retain) NSNumber *longitude;
+
 
 @end

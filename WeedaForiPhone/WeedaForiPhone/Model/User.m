@@ -25,5 +25,7 @@
 @synthesize relationshipWithCurrentUser;
 @synthesize weeds;
 @synthesize hasAvatar;
+@synthesize latitude;
+@synthesize longitude;
 
 @end

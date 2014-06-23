@@ -254,7 +254,16 @@ const NSInteger SHOW_FOLLOWINGS = 2;
     CGRect tempFrame = CGRectMake(0, 0, self.description.frame.size.width, 50);
     CGSize tvsize = [self.description sizeThatFits:CGSizeMake(tempFrame.size.width, tempFrame.size.height)];
     [self.description setFrame:CGRectMake(self.description.frame.origin.x, self.description.frame.origin.y, self.description.frame.size.width, tvsize.height)];
-    [self.tableView setFrame:CGRectMake(self.tableView.frame.origin.x, self.description.frame.origin.y + self.description.frame.size.height + 5, self.description.frame.size.width, self.tableView.frame.size.height)];
+    [self.location setFrame:CGRectMake(self.location.frame.origin.x, self.description.frame.origin.y + self.description.frame.size.height + 5, self.description.frame.size.width, self.location.frame.size.height)];
+    
+    CLLocationCoordinate2D zoomLocation;
+    zoomLocation.latitude = self.user.latitude.doubleValue;
+    zoomLocation.longitude= self.user.longitude.doubleValue;
+    MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(zoomLocation, 3000, 3000);
+    [self.location setRegion:viewRegion animated:YES];
+    
+    [self.tableView setFrame:CGRectMake(self.tableView.frame.origin.x, self.location.frame.origin.y + self.location.frame.size.height + 5, self.location.frame.size.width, self.tableView.frame.size.height)];
+    
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"MMM. yyyy"];
     NSString *formattedDateString = [dateFormatter stringFromDate:self.user.time];

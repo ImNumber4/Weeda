@@ -89,6 +89,8 @@
                                                       @"username" : @"username",
                                                       @"email" : @"email",
                                                       @"description" : @"description",
+                                                      @"latitude" : @"latitude",
+                                                      @"longitude" : @"longitude",
                                                       @"weedCount" : @"weedCount",
                                                       @"followerCount" : @"followerCount",
                                                       @"followingCount" : @"followingCount",
