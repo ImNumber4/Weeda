@@ -20,6 +20,7 @@
 @synthesize followerCount;
 @synthesize followingCount;
 @synthesize username;
+@synthesize description;
 @synthesize weedCount;
 @synthesize relationshipWithCurrentUser;
 @synthesize weeds;

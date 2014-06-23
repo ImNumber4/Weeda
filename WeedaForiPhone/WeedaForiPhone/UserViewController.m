@@ -12,12 +12,16 @@
 #import "CropImageViewController.h"
 #import "AppDelegate.h"
 #import "Image.h"
+#import "WeedTableViewCell.h"
+#import "DetailViewController.h"
 
 @interface UserViewController () <CropImageDelegate>
 
 @property (nonatomic, retain) User *user;
 
 @property (nonatomic, retain) UIImage *userPickedImage;
+
+@property (nonatomic, retain) NSMutableArray *weeds;
 
 @end
 
@@ -26,9 +30,9 @@
 const NSInteger SHOW_FOLLOWERS = 1;
 const NSInteger SHOW_FOLLOWINGS = 2;
 
-- (void)viewDidLoad
+- (void)viewDidAppear:(BOOL)animated
 {
-    [super viewDidLoad];
+    [super viewDidAppear:animated];
     // Do any additional setup after loading the view.
     
     //Get User Profile
@@ -58,6 +62,74 @@ const NSInteger SHOW_FOLLOWINGS = 2;
     self.followerCountLabel.tag = SHOW_FOLLOWERS;
     [self.followingCountLabel addTarget:self action:@selector(showUsers:)forControlEvents:UIControlEventTouchDown];
     self.followingCountLabel.tag = SHOW_FOLLOWINGS;
+    
+    [self.tableView setSeparatorInset:UIEdgeInsetsZero];
+    self.tableView.tableFooterView = [[UIView alloc] init];
+    [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/query/%@", self.user_id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+        NSSortDescriptor *descriptor=[[NSSortDescriptor alloc] initWithKey:@"time" ascending:NO];
+        NSArray *descriptors=[NSArray arrayWithObject: descriptor];
+        self.weeds = [[NSMutableArray alloc] init];
+        for(Weed* weed in [mappingResult.array sortedArrayUsingDescriptors:descriptors]) {
+            if (weed.shouldBeDeleted != nil && [weed.shouldBeDeleted intValue] == 0) {
+                [self.weeds addObject:weed];
+            }
+        }
+        [self.tableView reloadData];
+    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        RKLogError(@"Load failed with error: %@", error);
+    }];
+}
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return NO;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return self.weeds.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *CellIdentifier = @"WeedTableCell";
+    WeedTableViewCell *cell = (WeedTableViewCell *) [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    Weed *weed = [self.weeds objectAtIndex:indexPath.row];
+    
+    [self decorateCellWithWeed:weed cell:cell];
+    return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
+{
+    
+    Weed *weed = [self.weeds objectAtIndex:indexPath.row];
+    
+    UITextView *temp = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 44)]; //This initial size doesn't matter
+    temp.font = [UIFont systemFontOfSize:12.0];
+    temp.text = weed.content;
+    
+    CGFloat textViewWidth = 200.0;
+    CGRect tempFrame = CGRectMake(0, 0, textViewWidth, 50); //The height of this frame doesn't matter.
+    CGSize tvsize = [temp sizeThatFits:CGSizeMake(tempFrame.size.width, tempFrame.size.height)]; //This calculates the necessary size so that all the text fits in the necessary width.
+    
+    //Add the height of the other UI elements inside your cell
+    return MAX(tvsize.height, 50.0) + 20.0;
+}
+
+- (void)decorateCellWithWeed:(Weed *)weed cell:(WeedTableViewCell *)cell
+{
+    [cell decorateCellWithWeed:weed];
+    [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"user/avatar/%@", weed.user_id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+        if (mappingResult.array.count > 0) {
+            Image *image = [mappingResult.array objectAtIndex:0];
+            [cell.userAvatar setImage:image.image];
+            CALayer * l = [cell.userAvatar layer];
+            [l setMasksToBounds:YES];
+            [l setCornerRadius:7.0];
+        }
+    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+    }];
 }
 
 - (IBAction)handleSelectAvatar:(id)sender {
@@ -92,6 +164,10 @@ const NSInteger SHOW_FOLLOWINGS = 2;
             [[segue destinationViewController] setTitle:@"Following"];
         }
         [[segue destinationViewController] setUsers:self.users];
+    } else if ([[segue identifier] isEqualToString:@"showWeed"]) {
+        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+        Weed *weed = [self.weeds objectAtIndex:indexPath.row];
+        [[segue destinationViewController] setCurrentWeed:weed];
     }
 }
 
@@ -174,6 +250,11 @@ const NSInteger SHOW_FOLLOWINGS = 2;
 - (void)updateView
 {
     self.navigationController.navigationBar.topItem.title = [NSString stringWithFormat:@"%@", self.user.username];
+    self.description.text = self.user.description;
+    CGRect tempFrame = CGRectMake(0, 0, self.description.frame.size.width, 50);
+    CGSize tvsize = [self.description sizeThatFits:CGSizeMake(tempFrame.size.width, tempFrame.size.height)];
+    [self.description setFrame:CGRectMake(self.description.frame.origin.x, self.description.frame.origin.y, self.description.frame.size.width, tvsize.height)];
+    [self.tableView setFrame:CGRectMake(self.tableView.frame.origin.x, self.description.frame.origin.y + self.description.frame.size.height + 5, self.description.frame.size.width, self.tableView.frame.size.height)];
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"MMM. yyyy"];
     NSString *formattedDateString = [dateFormatter stringFromDate:self.user.time];

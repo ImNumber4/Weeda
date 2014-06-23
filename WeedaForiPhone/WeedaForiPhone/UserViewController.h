@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MasterViewController.h"
 
 @interface UserViewController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
@@ -17,6 +18,9 @@
 @property (weak, nonatomic) IBOutlet UIButton *followingCountLabel;
 @property (weak, nonatomic) IBOutlet UIButton *followerCountLabel;
 @property (weak, nonatomic) IBOutlet UIButton *followButton;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UITextView *description;
+
 @property (strong) NSArray *users;
 
 @end

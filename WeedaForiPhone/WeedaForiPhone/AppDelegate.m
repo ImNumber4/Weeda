@@ -88,6 +88,7 @@
                                                       @"deleted" : @"shouldBeDeleted",
                                                       @"username" : @"username",
                                                       @"email" : @"email",
+                                                      @"description" : @"description",
                                                       @"weedCount" : @"weedCount",
                                                       @"followerCount" : @"followerCount",
                                                       @"followingCount" : @"followingCount",
@@ -123,6 +124,14 @@
                                                                                            keyPath:@"weeds"
                                                                                        statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
     [manager addResponseDescriptor:weedResponseDescriptor];
+    
+    RKResponseDescriptor *weedByUserResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:weedMapping
+                                                                                                method:RKRequestMethodGET
+                                                                                           pathPattern:@"weed/query/:user_id"
+                                                                                               keyPath:@"weeds"
+                                                                                           statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+    [manager addResponseDescriptor:weedByUserResponseDescriptor];
+    
     
     RKResponseDescriptor *getLightsResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:weedMapping
                                                                                                 method:RKRequestMethodGET

@@ -21,6 +21,7 @@
 @property (nonatomic, retain) NSNumber * followerCount;
 @property (nonatomic, retain) NSNumber * followingCount;
 @property (nonatomic, retain) NSString * username;
+@property (nonatomic, retain) NSString * description;
 @property (nonatomic, retain) NSNumber * weedCount;
 @property (nonatomic, retain) NSNumber * relationshipWithCurrentUser;
 @property (nonatomic, retain) NSSet *weeds;

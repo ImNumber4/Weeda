@@ -37,7 +37,7 @@
 - (void)decorateCellWithWeed:(Weed *)weed
 {
     [self.view setFrame:CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.frame.size.width, self.frame.size.height)];
-    self.weedContentLabel.text = [NSString stringWithFormat:@"%@", weed.content];
+    self.weedContentLabel.text = weed.content;
     [self.weedContentLabel setFrame:CGRectMake(self.weedContentLabel.frame.origin.x, self.weedContentLabel.frame.origin.y, self.weedContentLabel.frame.size.width, self.weedContentLabel.contentSize.height)];
     
     NSString *nameLabel = [NSString stringWithFormat:@"@%@", weed.username];

@@ -29,7 +29,7 @@
                         </constraints>
                     </imageView>
                     <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yyD-c4-MTS">
-                        <rect key="frame" x="53" y="6" width="189" height="20"/>
+                        <rect key="frame" x="53" y="6" width="189" height="15"/>
                         <fontDescription key="fontDescription" type="boldSystem" pointSize="10"/>
                         <state key="normal" title="Button">
                             <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
