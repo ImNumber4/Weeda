@@ -51,7 +51,8 @@
 
 - (void)setupRestKit{
     
-    RKObjectManager *manager = [RKObjectManager managerWithBaseURL:[NSURL URLWithString:@"http://www.cannablaze.com/"]];
+//    RKObjectManager *manager = [RKObjectManager managerWithBaseURL:[NSURL URLWithString:@"http://www.cannablaze.com/"]];
+    RKObjectManager *manager = [RKObjectManager managerWithBaseURL:[NSURL URLWithString:@"http://localhost/"]];
     
     //[[manager HTTPClient] setDefaultHeader:@"X-Parse-REST-API-Key" value:@"your key"];
     //[[manager HTTPClient] setDefaultHeader:@"X-Parse-Application-Id" value:@"your key"];
@@ -232,6 +233,9 @@
                                                                                    rootKeyPath:nil
                                                                                         method:RKRequestMethodPOST];
     [[RKObjectManager sharedManager] addRequestDescriptor:weedRequestDescriptor];
+    
+    RKResponseDescriptor *weedCreatingResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:weedMapping method:RKRequestMethodPOST pathPattern:@"weed/create" keyPath:nil statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+    [manager addResponseDescriptor:weedCreatingResponseDescriptor];
     
     //For checking username
     RKObjectMapping * checkMapping = [RKObjectMapping requestMapping];

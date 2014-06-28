@@ -145,9 +145,10 @@ const NSInteger SHOW_FOLLOWINGS = 2;
 - (void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
     self.userPickedImage = [info objectForKey:UIImagePickerControllerOriginalImage];
-    [self dismissViewControllerAnimated:NO completion:nil];
-    
-    [self performSegueWithIdentifier:@"cropImage" sender:self];
+
+    [self dismissViewControllerAnimated:YES completion:^{
+         [self performSegueWithIdentifier:@"cropImage" sender:self];
+    }];
 }
 
 - (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -177,7 +178,6 @@ const NSInteger SHOW_FOLLOWINGS = 2;
         [self updateUserAvatar:nil];
     } else {
         [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"user/avatar/%@", self.user.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-            NSLog(@"Update User Avatar...");
             Image *image = [mappingResult.array objectAtIndex:0];
             [self updateUserAvatar:image.image];
         } failure:^(RKObjectRequestOperation *operation, NSError *error) {

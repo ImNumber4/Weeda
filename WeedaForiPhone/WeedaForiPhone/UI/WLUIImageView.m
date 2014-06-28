@@ -9,9 +9,7 @@
 #import "WLUIImageView.h"
 #import "Image.h"
 
-@interface WLUIImageView () {
-
-}
+@interface WLUIImageView ()
 
 @property (nonatomic, retain) NSNumber *userId;
 

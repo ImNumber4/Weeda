@@ -19,33 +19,33 @@ define('EXCEPTIONDIR', @realpath(dirname(__FILE__).'/../'.EXCEPTION).'/');
 // function to autoload classes (getting rid of include() calls)
 function __autoload($class)
 {
-	error_log('Init class '. $class);
+	error_log('Init class '. $class, 3, "/var/log/apache2/weeda_warning_log");
 	
 	try {
 		$file = CONTROLLERDIR.$class.'.php';
 		if (file_exists($file)) {
-			error_log("require: ".$file);
+			error_log("require: ".$file, 3, "/var/log/apache2/weeda_warning_log");
 			require($file);
 			return;
 		}
 
 		$model_file = MODELDIR.$class.'.php';
 		if (file_exists($model_file)) {
-			error_log("require: ".$model_file);
+			error_log("require: ".$model_file, 3, "/var/log/apache2/weeda_warning_log");
 			require($model_file);
 			return;
 		}
 
 		$db_file = DBDIR.$class.'.php';
 		if (file_exists($db_file)) {
-			error_log("require: ".$db_file);
+			error_log("require: ".$db_file, 3, "/var/log/apache2/weeda_warning_log");
 			require($db_file);
 			return;
 		}
 		
 		$exception_file = EXCEPTIONDIR.$class.'.php';
 		if (file_exists($exception_file)) {
-			error_log("require: ".$exception_file);
+			error_log("require: ".$exception_file, 3, "/var/log/apache2/weeda_warning_log");
 			require($exception_file);
 			return;
 		}

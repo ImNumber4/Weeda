@@ -173,8 +173,7 @@ class UserController extends Controller
 			return;
 		}
 		
-		$user = $this->user_dao->find_by_user_id($user_id);
-		error_log('2');		
+		$user = $this->user_dao->find_by_user_id($user_id);	
 		if (!$user) {
 			error_log('Did not find user by user id: ' . $user_id);
 			header('Content-type: application/json');
@@ -182,9 +181,7 @@ class UserController extends Controller
 			return;
 		}
 		$user->set_has_avatar(1);
-		error_log('3');
 		$this->user_dao->update($user);
-		error_log('4');
 		
 		header('Content-type: application/json');
 		http_response_code(200);

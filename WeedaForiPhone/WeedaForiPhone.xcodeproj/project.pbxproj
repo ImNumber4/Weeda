@@ -75,7 +75,15 @@
 		EA38FC68190D6D26007D652B /* CropImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA38FC67190D6D26007D652B /* CropImageViewController.m */; };
 		EA38FC851917067F007D652B /* welcome.png in Resources */ = {isa = PBXBuildFile; fileRef = EA38FC841917067F007D652B /* welcome.png */; };
 		EA38FC8B191719D3007D652B /* WLUIImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = EA38FC8A191719D3007D652B /* WLUIImageView.m */; };
+		EA76A4F8194E75C400B60F04 /* caremar.png in Resources */ = {isa = PBXBuildFile; fileRef = EA76A4F7194E75C400B60F04 /* caremar.png */; };
+		EA76A4FD194E77A100B60F04 /* picture.png in Resources */ = {isa = PBXBuildFile; fileRef = EA76A4FC194E77A100B60F04 /* picture.png */; };
+		EA76A500194E923200B60F04 /* WeedAddingToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = EA76A4FF194E923200B60F04 /* WeedAddingToolbar.m */; };
+		EA76A504194E927500B60F04 /* WeedAddingToolbar.xib in Resources */ = {isa = PBXBuildFile; fileRef = EA76A503194E927500B60F04 /* WeedAddingToolbar.xib */; };
+		EA76A507194E94AF00B60F04 /* WeedAddingImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = EA76A506194E94AF00B60F04 /* WeedAddingImageView.m */; };
+		EA76A50E1952833900B60F04 /* WeedAddingImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EA76A50C1952833900B60F04 /* WeedAddingImageCell.m */; };
+		EA76A50F1952833900B60F04 /* WeedAddingImageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EA76A50D1952833900B60F04 /* WeedAddingImageCell.xib */; };
 		EAA18EDE18F0ADFD0081482D /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA18EDD18F0ADFD0081482D /* LoginViewController.m */; };
+		EAB1CB82195A6AAD00BB4BBA /* delete.png in Resources */ = {isa = PBXBuildFile; fileRef = EAB1CB81195A6AAD00BB4BBA /* delete.png */; };
 		EAF6762C18FB62E4003BB138 /* SignupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAF6762B18FB62E4003BB138 /* SignupViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -214,8 +222,19 @@
 		EA38FC841917067F007D652B /* welcome.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = welcome.png; path = WeedaForiPhone/Images/welcome.png; sourceTree = "<group>"; };
 		EA38FC89191719D3007D652B /* WLUIImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WLUIImageView.h; path = WeedaForiPhone/UI/WLUIImageView.h; sourceTree = "<group>"; };
 		EA38FC8A191719D3007D652B /* WLUIImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WLUIImageView.m; path = WeedaForiPhone/UI/WLUIImageView.m; sourceTree = "<group>"; };
+		EA76A4F7194E75C400B60F04 /* caremar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = caremar.png; path = WeedaForiPhone/Images/caremar.png; sourceTree = "<group>"; };
+		EA76A4FC194E77A100B60F04 /* picture.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = picture.png; path = WeedaForiPhone/Images/picture.png; sourceTree = "<group>"; };
+		EA76A4FE194E923200B60F04 /* WeedAddingToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WeedAddingToolbar.h; path = WeedaForiPhone/UI/WeedAddingToolbar.h; sourceTree = "<group>"; };
+		EA76A4FF194E923200B60F04 /* WeedAddingToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WeedAddingToolbar.m; path = WeedaForiPhone/UI/WeedAddingToolbar.m; sourceTree = "<group>"; };
+		EA76A503194E927500B60F04 /* WeedAddingToolbar.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = WeedAddingToolbar.xib; path = WeedaForiPhone/UI/WeedAddingToolbar.xib; sourceTree = "<group>"; };
+		EA76A505194E94AF00B60F04 /* WeedAddingImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WeedAddingImageView.h; path = WeedaForiPhone/UI/WeedAddingImageView.h; sourceTree = "<group>"; };
+		EA76A506194E94AF00B60F04 /* WeedAddingImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WeedAddingImageView.m; path = WeedaForiPhone/UI/WeedAddingImageView.m; sourceTree = "<group>"; };
+		EA76A50B1952833900B60F04 /* WeedAddingImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WeedAddingImageCell.h; path = WeedaForiPhone/UI/WeedAddingImageCell.h; sourceTree = "<group>"; };
+		EA76A50C1952833900B60F04 /* WeedAddingImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WeedAddingImageCell.m; path = WeedaForiPhone/UI/WeedAddingImageCell.m; sourceTree = "<group>"; };
+		EA76A50D1952833900B60F04 /* WeedAddingImageCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = WeedAddingImageCell.xib; path = WeedaForiPhone/UI/WeedAddingImageCell.xib; sourceTree = "<group>"; };
 		EAA18EDC18F0ADFD0081482D /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		EAA18EDD18F0ADFD0081482D /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
+		EAB1CB81195A6AAD00BB4BBA /* delete.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = delete.png; sourceTree = "<group>"; };
 		EAF6762A18FB62E4003BB138 /* SignupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignupViewController.h; sourceTree = "<group>"; };
 		EAF6762B18FB62E4003BB138 /* SignupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignupViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -388,6 +407,8 @@
 			isa = PBXGroup;
 			children = (
 				A991C04F18FB517600A3D2CD /* selected_profile_icon.png */,
+				EA76A4FC194E77A100B60F04 /* picture.png */,
+				EA76A4F7194E75C400B60F04 /* caremar.png */,
 				A9180C4C192B329D00668E4F /* setting_icon.png */,
 				A9180C4A192B327600668E4F /* spotlight_icon.png */,
 				A9180C45192B2EAF00668E4F /* icon.png */,
@@ -397,6 +418,7 @@
 				A9A4680E190DDF4100461E90 /* light.png */,
 				EA152C5E19187D9F009E5337 /* title.png */,
 				EA38FC841917067F007D652B /* welcome.png */,
+				EAB1CB81195A6AAD00BB4BBA /* delete.png */,
 				A9A46803190C7A6300461E90 /* seedgray.png */,
 				A9A46801190C696300461E90 /* seed.png */,
 				A92E513F19048B0400FC518F /* followed.png */,
@@ -418,6 +440,8 @@
 		A9CA8E9A18F3E01C004F095D /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				EA76A505194E94AF00B60F04 /* WeedAddingImageView.h */,
+				EA76A506194E94AF00B60F04 /* WeedAddingImageView.m */,
 				EA38FC89191719D3007D652B /* WLUIImageView.h */,
 				EA38FC8A191719D3007D652B /* WLUIImageView.m */,
 				A92E513819046E2A00FC518F /* UserTableViewCell.h */,
@@ -432,6 +456,12 @@
 				A91816C5195637B400E7DD02 /* WeedBasicTableViewCell.h */,
 				A91816C6195637B400E7DD02 /* WeedBasicTableViewCell.m */,
 				A91816C7195637B400E7DD02 /* WeedBasicTableViewCell.xib */,
+				EA76A4FE194E923200B60F04 /* WeedAddingToolbar.h */,
+				EA76A4FF194E923200B60F04 /* WeedAddingToolbar.m */,
+				EA76A503194E927500B60F04 /* WeedAddingToolbar.xib */,
+				EA76A50B1952833900B60F04 /* WeedAddingImageCell.h */,
+				EA76A50C1952833900B60F04 /* WeedAddingImageCell.m */,
+				EA76A50D1952833900B60F04 /* WeedAddingImageCell.xib */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -559,6 +589,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A9B45DDE194EAC40007AFB06 /* WeedTableViewCell.xib in Resources */,
+				EA76A50F1952833900B60F04 /* WeedAddingImageCell.xib in Resources */,
 				A9A4680F190DDF4100461E90 /* light.png in Resources */,
 				A9180C4B192B327600668E4F /* spotlight_icon.png in Resources */,
 				A9CA8E9718F3DD67004F095D /* avatar.jpg in Resources */,
@@ -568,9 +599,13 @@
 				A914CCC418CD756200B870D8 /* Images.xcassets in Resources */,
 				EA38FC851917067F007D652B /* welcome.png in Resources */,
 				A991C05E18FB75A900A3D2CD /* waterdrop.png in Resources */,
+				EA76A504194E927500B60F04 /* WeedAddingToolbar.xib in Resources */,
+				EA76A4F8194E75C400B60F04 /* caremar.png in Resources */,
 				A92E513D19047C6000FC518F /* follow.png in Resources */,
 				A92E514019048B0400FC518F /* followed.png in Resources */,
 				A914CCB018CD756200B870D8 /* InfoPlist.strings in Resources */,
+				EA76A4FD194E77A100B60F04 /* picture.png in Resources */,
+				EAB1CB82195A6AAD00BB4BBA /* delete.png in Resources */,
 				EA152C5F19187D9F009E5337 /* title.png in Resources */,
 				A91A62FA1903602B008726E5 /* wrong.png in Resources */,
 				A9A46804190C7A6300461E90 /* seedgray.png in Resources */,
@@ -611,10 +646,13 @@
 				A9A46833190E210900461E90 /* WeedDetailControlTableViewCell.m in Sources */,
 				A9A46830190E1E8E00461E90 /* WeedDetailTableViewCell.m in Sources */,
 				A91816C8195637B400E7DD02 /* WeedBasicTableViewCell.m in Sources */,
+				EA76A50E1952833900B60F04 /* WeedAddingImageCell.m in Sources */,
+				EA76A507194E94AF00B60F04 /* WeedAddingImageView.m in Sources */,
 				A9CA8EA018F3E255004F095D /* WeedTableViewCell.m in Sources */,
 				A914CCBF18CD756200B870D8 /* MasterViewController.m in Sources */,
 				EAA18EDE18F0ADFD0081482D /* LoginViewController.m in Sources */,
 				A9CA8E5918E8DB1E004F095D /* RemoteObject.m in Sources */,
+				EA76A500194E923200B60F04 /* WeedAddingToolbar.m in Sources */,
 				EA1B050F18F3668A0033AB06 /* WelcomeViewController.m in Sources */,
 				A991C04818FB3B7700A3D2CD /* TabBarController.m in Sources */,
 				EA38FC68190D6D26007D652B /* CropImageViewController.m in Sources */,
@@ -759,8 +797,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Weeda LaVida (YDEFKTQ47Z)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Weeda LaVida (YDEFKTQ47Z)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "WeedaForiPhone/WeedaForiPhone-Prefix.pch";
 				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"";
@@ -768,7 +806,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "D16937DF-CDF6-4E24-93D9-B6F02CF041A0";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -777,8 +815,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Weeda LaVida (YDEFKTQ47Z)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Weeda LaVida (YDEFKTQ47Z)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "WeedaForiPhone/WeedaForiPhone-Prefix.pch";
 				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"";
@@ -786,7 +824,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "D16937DF-CDF6-4E24-93D9-B6F02CF041A0";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

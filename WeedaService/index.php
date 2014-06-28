@@ -8,8 +8,8 @@ define('SYSTEM', dirname(dirname(__FILE__)));
 //Load Configuration File
 require (SYSTEM . DS . 'WeedaService/library' . DS . 'bootstrap.php');
 
-error_log('Http request: ');
-error_log(get_http_raw());
+// error_log('Http request: ');
+// error_log(get_http_raw());
 
 //Get URL
 $url = isset($_GET['url']) ? $_GET['url']: '';

@@ -8,9 +8,25 @@
 #import "AppDelegate.h"
 #import "AddWeedViewController.h"
 #import "UserTableViewCell.h"
+#import "WeedAddingToolbar.h"
+#import "WeedAddingImageView.h"
+#import "WeedAddingImageCell.h"
+#import "image.h"
 #import <RestKit/RestKit.h>
 
-@interface AddWeedViewController () <UITextViewDelegate, UITableViewDelegate, UITableViewDataSource>
+@interface AddWeedViewController () <UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UICollectionViewDelegate,UICollectionViewDataSource,UIGestureRecognizerDelegate, WeedAddingToolbarDelegate, WeedAddingImageViewDelegate>
+
+@property (nonatomic, retain) WeedAddingToolbar *toolbar;
+
+@property (nonatomic, retain) UIImage *pickedImage;
+
+@property (nonatomic, retain) WeedAddingImageView *pickImageView;
+
+@property (nonatomic, strong) NSMutableArray *dataArray;
+
+@property (nonatomic, retain) UICollectionView *imageCollectionView;
+
+@property (nonatomic, weak) UIPanGestureRecognizer *pan;
 
 @end
 
@@ -21,6 +37,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        
     }
     return self;
 }
@@ -47,6 +64,31 @@
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillBeHidden:)
                                                  name:UIKeyboardWillHideNotification object:nil];
+    
+    self.toolbar = [[WeedAddingToolbar alloc]init];
+    self.toolbar.delegate = self;
+    [self.view addSubview:self.toolbar];
+    [self.view bringSubviewToFront:self.toolbar];
+    
+    UICollectionViewFlowLayout *layout=[[UICollectionViewFlowLayout alloc] init];
+    layout.itemSize = CGSizeMake(100, 100);
+    layout.minimumLineSpacing = 3;
+    layout.minimumInteritemSpacing = 3;
+    layout.sectionInset = UIEdgeInsetsMake(0, 5, 0, 0);
+    layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+    self.imageCollectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 0, 320, 100) collectionViewLayout:layout];
+    [self.imageCollectionView setDelegate:self];
+    [self.imageCollectionView setDataSource:self];
+    [self.imageCollectionView registerNib:[UINib nibWithNibName:@"WeedAddingImageCell" bundle:nil] forCellWithReuseIdentifier:@"imageCell"];
+    [self.imageCollectionView setBackgroundColor:[UIColor whiteColor]];
+    [self.view addSubview:self.imageCollectionView];
+    self.dataArray = [[NSMutableArray alloc]initWithCapacity:9];
+    
+    //create pan gesture
+    UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
+    pan.delegate = self;
+    [self.view addGestureRecognizer:pan];
+    self.pan = pan;
 }
 
 - (void)textViewDidChange:(UITextView *)textView
@@ -120,6 +162,7 @@
 {
     CGRect keyboardFrameInWindowsCoordinates;
     [[[aNotification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] getValue:&keyboardFrameInWindowsCoordinates];
+    CGPoint kbPosition = keyboardFrameInWindowsCoordinates.origin;
     CGSize kbSize = keyboardFrameInWindowsCoordinates.size;
     
     UIEdgeInsets userListContentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0.0);
@@ -129,6 +172,8 @@
     self.weedContentView.contentInset = weedContentViewContentInsets;
     self.weedContentView.scrollIndicatorInsets = weedContentViewContentInsets;
     
+    self.toolbar.center = CGPointMake(self.toolbar.bounds.size.width / 2, kbPosition.y - (self.toolbar.bounds.size.height / 2));
+    self.imageCollectionView.center = CGPointMake(self.toolbar.center.x, self.toolbar.center.y - (self.toolbar.bounds.size.height / 2) - (self.imageCollectionView.bounds.size.height / 2));
 }
 
 // Called when the UIKeyboardWillHideNotification is sent
@@ -137,6 +182,10 @@
     UIEdgeInsets contentInsets = UIEdgeInsetsZero;
     self.userList.contentInset = contentInsets;
     self.userList.scrollIndicatorInsets = contentInsets;
+    self.toolbar.center = CGPointMake(self.toolbar.bounds.size.width / 2, self.view.superview.bounds.size.height - (self.toolbar.bounds.size.height / 2));
+    NSLog(@"Toolbar: %f----%f", self.toolbar.center.x, self.toolbar.center.y);
+    self.imageCollectionView.center = CGPointMake(self.toolbar.center.x, self.toolbar.center.y - (self.toolbar.bounds.size.height / 2) - (self.imageCollectionView.bounds.size.height / 2));
+    NSLog(@"CollectionView: %f----%f", self.imageCollectionView.center.x, self.imageCollectionView.center.y);
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -207,11 +256,39 @@
     
     [[RKObjectManager sharedManager] postObject:weed path:@"weed/create" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
         NSLog(@"Response: %@", mappingResult);
+        Weed *newWeed = mappingResult.firstObject;
+        weed.id = newWeed.id;
+        if (self.dataArray.count > 0) {
+            [self uploadImageToServer:weed];
+        }
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
         NSLog(@"Failure saving post: %@", error.localizedDescription);
     }];
     
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)uploadImageToServer:(Weed *)weed
+{
+    for (int i = 0; i < self.dataArray.count; i++) {
+        Image *image = [Image new];
+        NSMutableURLRequest *request = [[RKObjectManager sharedManager] multipartFormRequestWithObject:image method:RKRequestMethodPOST path:[NSString stringWithFormat:@"weed/upload/%@", weed.id] parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+            [formData appendPartWithFileData:UIImageJPEGRepresentation([self.dataArray objectAtIndex:i], 90)
+                                        name:@"image"
+                                    fileName:[NSString stringWithFormat:@"%d.jpeg", i]
+                                    mimeType:@"image/jpeg"];
+//            [formData appendPartWithFormData:[NSKeyedArchiver archivedDataWithRootObject:weed.user_id] name:@"user_id"];
+//            [formData appendPartWithFormData:[NSKeyedArchiver archivedDataWithRootObject:weed.id] name:@"weed_id"];
+        }];
+        
+        RKObjectRequestOperation *operation = [[RKObjectManager sharedManager] objectRequestOperationWithRequest:request success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+            
+        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+            NSLog(@"%@", error);
+        }];
+        
+        [[RKObjectManager sharedManager] enqueueObjectRequestOperation:operation];
+    }
 }
 
 - (IBAction) cancel: (id) sender {
@@ -224,6 +301,67 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+- (void)pressPickingPicture:(WeedAddingToolbar *)view
+{
+    UIImagePickerController *pickerController = [[UIImagePickerController alloc] init];
+    pickerController.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+    pickerController.mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeSavedPhotosAlbum];
+    pickerController.allowsEditing = NO;
+    pickerController.delegate = self;
+    
+    [self presentViewController:pickerController animated:YES completion:nil];
+}
+
+- (void)pressTakingPicture:(WeedAddingToolbar *)view
+{
+
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    UIImage *pickImage = [info objectForKey:UIImagePickerControllerOriginalImage];
+    [self dismissViewControllerAnimated:YES completion:nil];
+    
+    [self.dataArray addObject: pickImage];
+    [self.imageCollectionView reloadData];
+    
+    [self.weedContentView becomeFirstResponder];
+}
+
+#pragma mark -- WeedAddingImageViewDelegate
+
+- (void)pressDelete:(WeedAddingImageView *)view
+{
+    [self.dataArray removeObject:view.image];
+    [self.imageCollectionView reloadData];
+}
+
+#pragma mark -- UICollectionViewDataSource
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    return self.dataArray.count;
+}
+
+- (WeedAddingImageCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    WeedAddingImageCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"imageCell" forIndexPath:indexPath];
+    if (cell) {
+        cell.pickImageView.image = [self.dataArray objectAtIndex:indexPath.item];
+        cell.pickImageView.delegate = self;
+    }
+    return cell;
+}
+
+- (void)handlePan:(UIPanGestureRecognizer *)gesture
+{
+    CGPoint horizontal = [gesture velocityInView:self.view];
+    if (horizontal.y > 0) {
+        [self.weedContentView endEditing:YES];
+    }
+}
+
 
 /*
 #pragma mark - Navigation

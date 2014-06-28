@@ -1,6 +1,10 @@
 <?php
-//ini_set('display_errors',1);
-//error_reporting(E_ALL);
+
+ini_set('display_errors',1);
+error_reporting(E_ALL);
+
+include './library/ImageHandler.php';
+
 class WeedController extends Controller
 {
 	public function query($user_id) {
@@ -66,7 +70,29 @@ class WeedController extends Controller
 				}
 			}
 		}
+		error_log('Create weed successed!');
+		header('Content-type: application/json');
+		http_response_code(200);
 		return json_encode(array('id' => $result));
+	}
+	
+	public function upload($weed_id)
+	{
+		$user_id = $this->getCurrentUser();
+		
+		error_log('Image name: ' . $_FILES['image']['name']);
+		error_log('Image type: ' . $_FILES['image']['type']);
+		error_log('Image size: ' . $_FILES['image']['size']);
+		error_log('Image tmp name: ' . $_FILES['image']['tmp_name']);
+
+		if (!saveImageForWeedsToServer($_FILES['image'], $user_id, $weed_id)) {
+			header('Content-type: application/json');
+			http_response_code(500);
+			return;
+		}
+
+		header('Content-type: application/json');
+		http_response_code(200);
 	}
 	
 	public function delete($id)
