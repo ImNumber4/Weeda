@@ -183,8 +183,12 @@ const NSInteger NON_GLOBAL_COMPOSE_TAG = 1;
     CGRect tempFrame = CGRectMake(0, 0, textViewWidth, 50); //The height of this frame doesn't matter.
     CGSize tvsize = [temp sizeThatFits:CGSizeMake(tempFrame.size.width, tempFrame.size.height)]; //This calculates the necessary size so that all the text fits in the necessary width.
     
-    //Add the height of the other UI elements inside your cell    
-    return MAX(tvsize.height, 50.0) + 20.0;
+    //Add the height of the other UI elements inside your cell
+    if ([weed.image_count intValue] > 0) {
+        return MAX(tvsize.height, 50.0) + 20.0 + 260.0; //For Image View
+    } else {
+        return MAX(tvsize.height, 50.0) + 20.0;
+    }
 }
 
 - (void)decorateCellWithWeed:(Weed *)weed cell:(WeedTableViewCell *)cell

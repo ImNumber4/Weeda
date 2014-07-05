@@ -15,6 +15,8 @@ class Weed
 	
 	private $root_id;
 	
+	private $image_count;
+	
 	public function set_id($id) {
 		$this->id = $id;
 	}
@@ -75,6 +77,16 @@ class Weed
 	public function set_root_id($root_id)
 	{
 		$this->root_id = $root_id;
+	}
+	
+	public function get_image_count()
+	{
+		return $this->image_count;
+	}
+	
+	public function set_image_count($image_count)
+	{
+		$this->image_count = $image_count;
 	}
 }
 ?>

@@ -18,7 +18,6 @@
         [deleteButton setBackgroundImage:[UIImage imageNamed:@"delete.png"] forState:(UIControlStateNormal)];
         [deleteButton addTarget:self action:@selector(deletePhoto:) forControlEvents:UIControlEventTouchUpInside];
         deleteButton.frame = CGRectMake(frame.size.width - 20, 5, 15, 15);
-//        deleteButton.center = CGPointMake(frame.size.width, 0);
         deleteButton.contentMode = UIViewContentModeScaleAspectFit;
         
         deleteButton.userInteractionEnabled = YES;

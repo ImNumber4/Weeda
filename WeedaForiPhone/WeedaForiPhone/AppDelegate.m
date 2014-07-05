@@ -112,7 +112,8 @@
                                                       @"if_cur_user_seed_it" : @"if_cur_user_seed_it",
                                                       @"if_cur_user_light_it" : @"if_cur_user_light_it",
                                                       @"light_id" : @"light_id",
-                                                      @"root_id" : @"root_id"}];
+                                                      @"root_id" : @"root_id",
+                                                      @"image_count" : @"image_count"}];
     
     [weedMapping addAttributeMappingsFromDictionary:parentObjectMapping];
     
@@ -293,6 +294,10 @@
     imageMapping.valueTransformer = imageTransformer;
     [imageObjectMapping addPropertyMapping:imageMapping];
     RKResponseDescriptor *imageResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:imageObjectMapping method:RKRequestMethodGET pathPattern:@"user/avatar/:id" keyPath:@"image" statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+    
+    RKResponseDescriptor *imageWeedResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:imageObjectMapping method:RKRequestMethodGET pathPattern:@"image/query/:id" keyPath:@"image" statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+    
+    [[RKObjectManager sharedManager] addResponseDescriptor:imageWeedResponseDescriptor];
     [[RKObjectManager sharedManager] addResponseDescriptor:imageResponseDescriptor];
 }
 

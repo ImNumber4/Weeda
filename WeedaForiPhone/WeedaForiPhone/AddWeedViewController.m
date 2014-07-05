@@ -84,6 +84,8 @@
     [self.view addSubview:self.imageCollectionView];
     self.dataArray = [[NSMutableArray alloc]initWithCapacity:9];
     
+    [self.view bringSubviewToFront:self.userList];
+    
     //create pan gesture
     UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
     pan.delegate = self;
@@ -183,9 +185,7 @@
     self.userList.contentInset = contentInsets;
     self.userList.scrollIndicatorInsets = contentInsets;
     self.toolbar.center = CGPointMake(self.toolbar.bounds.size.width / 2, self.view.superview.bounds.size.height - (self.toolbar.bounds.size.height / 2));
-    NSLog(@"Toolbar: %f----%f", self.toolbar.center.x, self.toolbar.center.y);
     self.imageCollectionView.center = CGPointMake(self.toolbar.center.x, self.toolbar.center.y - (self.toolbar.bounds.size.height / 2) - (self.imageCollectionView.bounds.size.height / 2));
-    NSLog(@"CollectionView: %f----%f", self.imageCollectionView.center.x, self.imageCollectionView.center.y);
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -245,6 +245,7 @@
     // Normally you should use accessor methods, but using KVC here avoids the need to add a custom class to the template.
     weed.content = self.weedContentView.text;
     weed.time = [NSDate date];
+    weed.image_count = [NSNumber numberWithUnsignedInteger:self.dataArray.count];
     if (self.lightWeed != nil) {
         weed.light_id = self.lightWeed.id;
         if (self.lightWeed.root_id != nil) {

@@ -8,7 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface WeedTableViewCell : UITableViewCell
+@interface WeedTableViewCell : UITableViewCell <UICollectionViewDelegate, UICollectionViewDataSource> {
+    int _imageCount;
+    Weed *_weedTmp;
+}
 
 @property (nonatomic, weak) IBOutlet UIButton *usernameLabel;
 @property (nonatomic, weak) IBOutlet UITextView *weedContentLabel;
@@ -22,6 +25,8 @@
 @property (nonatomic, weak) IBOutlet UILabel *lightCount;
 
 @property (nonatomic, weak) IBOutlet UIView *view;
+
+@property (nonatomic, retain) UICollectionView *imageCollectionView;
 
 - (void)hideControls;
 - (void)decorateCellWithWeed:(Weed *)weed;

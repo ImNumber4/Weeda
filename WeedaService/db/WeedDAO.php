@@ -6,7 +6,7 @@ class WeedDAO extends BaseDAO
 {
 	public function create($weed)
 	{
-		$query = 'INSERT INTO weed (content, user_id, time, deleted, light_id, root_id, water_count,seed_count,light_count) VALUES (\'' . $weed->get_content() . '\',\'' . $weed->get_user_id() . '\',\'' . $weed->get_time() . '\',' . $weed->get_deleted() .','. $weed->get_light_id() .','. $weed->get_root_id() . ',0,0,0)';
+		$query = 'INSERT INTO weed (content, user_id, time, deleted, light_id, root_id, water_count,seed_count,light_count,image_count) VALUES (\'' . $weed->get_content() . '\',\'' . $weed->get_user_id() . '\',\'' . $weed->get_time() . '\',' . $weed->get_deleted() .','. $weed->get_light_id() .','. $weed->get_root_id() . ',0,0,0,' . $weed->get_image_count() . ')';
 		$result = $this->db_conn->insert($query);
 		$fectchId = $weed->get_light_id();
 		while (true) {

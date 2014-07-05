@@ -24,5 +24,6 @@
 @property (nonatomic, retain) NSNumber * if_cur_user_light_it;
 @property (nonatomic, retain) NSNumber * light_count;
 @property (nonatomic, retain) NSNumber * root_id;
+@property (nonatomic, retain) NSNumber * image_count;
 
 @end

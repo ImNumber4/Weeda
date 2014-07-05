@@ -7,8 +7,11 @@
 //
 
 #import "WeedTableViewCell.h"
+#import "WeedShowImageCell.h"
+#import "Image.h"
 
 @implementation WeedTableViewCell
+
 
 - (void)awakeFromNib
 {
@@ -66,6 +69,81 @@
     self.lightCount.text = [NSString stringWithFormat:@"%@", weed.light_count];
     self.seedCount.text = [NSString stringWithFormat:@"%@", weed.seed_count];
     self.waterCount.text = [NSString stringWithFormat:@"%@", weed.water_count];
+    
+    if ([weed.image_count intValue] > 0) {
+        _weedTmp = weed;
+        _imageCount = [weed.image_count intValue];
+//        self.imageCollectionView.hidden = NO;
+        
+        [self createImageCollectionView];
+        
+        self.imageCollectionView.center = CGPointMake(320 / 2, self.view.frame.size.height - 20 - 10 - self.imageCollectionView.frame.size.height / 2);
+        
+    }
+}
+
+- (void)createImageCollectionView
+{
+    UICollectionViewFlowLayout *layout=[[UICollectionViewFlowLayout alloc] init];
+    layout.itemSize = CGSizeMake(280, 230);
+    layout.minimumLineSpacing = 5;
+    layout.minimumInteritemSpacing = 5;
+    layout.sectionInset = UIEdgeInsetsMake(0, (self.superview.bounds.size.width - layout.itemSize.width) / 2, 0, (self.superview.bounds.size.width - layout.itemSize.width) / 2);
+    layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+    self.imageCollectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 0, 320, 230) collectionViewLayout:layout];
+    [self.imageCollectionView setDelegate:self];
+    [self.imageCollectionView setDataSource:self];
+    [self.imageCollectionView registerNib:[UINib nibWithNibName:@"WeedShowImageCell" bundle:nil] forCellWithReuseIdentifier:@"imageCell"];
+    [self.imageCollectionView setBackgroundColor:[UIColor whiteColor]];
+    
+//    CGFloat collectionViewHeight = CGRectGetHeight(self.imageCollectionView.bounds);
+//    [self.imageCollectionView setContentInset:UIEdgeInsetsMake(collectionViewHeight/2, 0, collectionViewHeight/2, 0) ];
+    
+    [self addSubview:self.imageCollectionView];
+//    self.imageCollectionView.hidden = YES;
+}
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    return _imageCount;
+}
+
+- (WeedShowImageCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    WeedShowImageCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"imageCell" forIndexPath:indexPath];
+    
+    NSLog(@"url: image/query/weed_%@_%@_%ld", _weedTmp.user_id, _weedTmp.id, indexPath.row);
+    
+    cell.backgroundColor = [UIColor grayColor];
+
+    //Get Weeds Image
+    [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"image/query/weed_%@_%@_%ld", _weedTmp.user_id, _weedTmp.id, indexPath.row] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+        Image *image = [mappingResult.array objectAtIndex:0];
+        cell.imageView.image = image.image;
+    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        NSLog(@"Get image Failed: %@", error);
+    }];
+    
+    return cell;
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    [collectionView scrollToItemAtIndexPath:indexPath
+                           atScrollPosition:UICollectionViewScrollPositionCenteredVertically
+                                   animated:YES];
+}
+
+- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    [collectionView scrollToItemAtIndexPath:indexPath
+                           atScrollPosition:UICollectionViewScrollPositionCenteredVertically
+                                   animated:YES];
+}
+
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
+{
+    return UIEdgeInsetsMake(0, (self.superview.bounds.size.width - 280) / 2, 0, (self.superview.bounds.size.width - 280) / 2);
 }
 
 @end
