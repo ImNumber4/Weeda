@@ -22,5 +22,6 @@
 @dynamic if_cur_user_light_it;
 @dynamic light_count;
 @dynamic root_id;
+@dynamic image_count;
 
 @end

@@ -225,7 +225,7 @@
     [userRequestMapping addAttributeMappingsFromArray:@[@"id"]];
     
     RKObjectMapping * weedRequestMapping = [RKObjectMapping requestMapping];
-    [weedRequestMapping addAttributeMappingsFromArray:@[ @"id", @"content",@"time",@"user_id", @"light_id", @"root_id"]];
+    [weedRequestMapping addAttributeMappingsFromArray:@[ @"id", @"content",@"time",@"user_id", @"light_id", @"root_id", @"image_count"]];
     
     
     RKRequestDescriptor *weedRequestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:weedRequestMapping
