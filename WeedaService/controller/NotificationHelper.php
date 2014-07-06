@@ -22,7 +22,7 @@ class NotificationHelper
 		if (!$fp)
 			exit("Failed to connect: $err $errstr" . PHP_EOL);
 
-		echo 'Connected to APNS' . PHP_EOL;
+		error_log('Connected to APNS' . PHP_EOL);
 
 		// Create the payload body
 		$body['aps'] = array(
