@@ -10,7 +10,7 @@
 #import "MasterViewController.h"
 #import <MapKit/MapKit.h>
 
-@interface UserViewController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@interface UserViewController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, MKMapViewDelegate>
 
 @property (nonatomic, retain) NSNumber * user_id;
 @property (weak, nonatomic) IBOutlet UILabel *timeLabel;

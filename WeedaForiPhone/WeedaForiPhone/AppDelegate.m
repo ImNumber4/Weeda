@@ -30,7 +30,7 @@
     NSComparisonResult order = [[UIDevice currentDevice].systemVersion compare: @"8.0" options: NSNumericSearch];
     if (order == NSOrderedSame || order == NSOrderedDescending) {
         UIUserNotificationSettings* notificationSettings = [UIUserNotificationSettings settingsForTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert) categories:nil];
-        [[UIApplication sharedApplication]registerUserNotificationSettings:notificationSettings];
+        [[UIApplication sharedApplication] registerUserNotificationSettings:notificationSettings];
         [[UIApplication sharedApplication] registerForRemoteNotifications];
     } else {
         [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
@@ -86,9 +86,17 @@
                                                       @"id" : @"id",
                                                       @"time" : @"time",
                                                       @"deleted" : @"shouldBeDeleted",
+                                                      @"user_type": @"userType",
                                                       @"username" : @"username",
                                                       @"email" : @"email",
                                                       @"description" : @"description",
+                                                      @"storename" : @"storename",
+                                                      @"address_street" : @"street",
+                                                      @"address_city" : @"city",
+                                                      @"address_state" : @"state",
+                                                      @"address_country" : @"country",
+                                                      @"address_zip" : @"zip",
+                                                      @"phone" : @"phone",
                                                       @"latitude" : @"latitude",
                                                       @"longitude" : @"longitude",
                                                       @"weedCount" : @"weedCount",
@@ -166,6 +174,15 @@
                                                                                             statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
     
     [manager addResponseDescriptor:usersSeedWeedResponseDescriptor];
+    
+    RKResponseDescriptor *queryUsersWithCoordinatesResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping
+                                                                                                         method:RKRequestMethodGET
+                                                                                                    pathPattern:@"user/queryUsersWithCoordinates/:latitude/:longitude:/range"
+                                                                                                        keyPath:@"users"
+                                                                                                    statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+    
+    [manager addResponseDescriptor:queryUsersWithCoordinatesResponseDescriptor];
+
     
     RKResponseDescriptor *getUsernamesByPrefixResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping
                                                                                                          method:RKRequestMethodGET

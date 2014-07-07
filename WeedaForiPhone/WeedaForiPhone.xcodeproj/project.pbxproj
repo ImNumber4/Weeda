@@ -48,6 +48,12 @@
 		A959D30719282A9A0085F6C1 /* map.png in Resources */ = {isa = PBXBuildFile; fileRef = A959D30619282A9A0085F6C1 /* map.png */; };
 		A959D30C19282DE50085F6C1 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A959D30B19282DE50085F6C1 /* MapKit.framework */; };
 		A959D30E19282DFE0085F6C1 /* selected_map.png in Resources */ = {isa = PBXBuildFile; fileRef = A959D30D19282DFE0085F6C1 /* selected_map.png */; };
+		A9645DDB196A0A6C00DDE2DB /* DiscoverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9645DDA196A0A6C00DDE2DB /* DiscoverViewController.m */; };
+		A98A89B8195FB168005A5871 /* dispensary_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A98A89B7195FB168005A5871 /* dispensary_icon.png */; };
+		A98A89C2195FCAC6005A5871 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A98A89C1195FCAC6005A5871 /* AddressBook.framework */; };
+		A98A89C51960C46D005A5871 /* VendorMKAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = A98A89C41960C46D005A5871 /* VendorMKAnnotationView.m */; };
+		A98A89D419615B5B005A5871 /* VendorCallOutView.m in Sources */ = {isa = PBXBuildFile; fileRef = A98A89D219615B5B005A5871 /* VendorCallOutView.m */; };
+		A98A89D819615C99005A5871 /* VendorCallOutView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A98A89D719615C99005A5871 /* VendorCallOutView.xib */; };
 		A991C04818FB3B7700A3D2CD /* TabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = A991C04718FB3B7700A3D2CD /* TabBarController.m */; };
 		A991C04E18FB42EC00A3D2CD /* profile_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A991C04D18FB42EC00A3D2CD /* profile_icon.png */; };
 		A991C05018FB517600A3D2CD /* selected_profile_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A991C04F18FB517600A3D2CD /* selected_profile_icon.png */; };
@@ -185,6 +191,15 @@
 		A959D30619282A9A0085F6C1 /* map.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = map.png; path = WeedaForiPhone/Images/map.png; sourceTree = "<group>"; };
 		A959D30B19282DE50085F6C1 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		A959D30D19282DFE0085F6C1 /* selected_map.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = selected_map.png; path = WeedaForiPhone/Images/selected_map.png; sourceTree = "<group>"; };
+		A9645DD9196A0A6C00DDE2DB /* DiscoverViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscoverViewController.h; sourceTree = "<group>"; };
+		A9645DDA196A0A6C00DDE2DB /* DiscoverViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiscoverViewController.m; sourceTree = "<group>"; };
+		A98A89B7195FB168005A5871 /* dispensary_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = dispensary_icon.png; path = WeedaForiPhone/Images/dispensary_icon.png; sourceTree = "<group>"; };
+		A98A89C1195FCAC6005A5871 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
+		A98A89C31960C46D005A5871 /* VendorMKAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VendorMKAnnotationView.h; path = WeedaForiPhone/UI/VendorMKAnnotationView.h; sourceTree = "<group>"; };
+		A98A89C41960C46D005A5871 /* VendorMKAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VendorMKAnnotationView.m; path = WeedaForiPhone/UI/VendorMKAnnotationView.m; sourceTree = "<group>"; };
+		A98A89D019615B5B005A5871 /* VendorCallOutView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VendorCallOutView.h; sourceTree = "<group>"; };
+		A98A89D219615B5B005A5871 /* VendorCallOutView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VendorCallOutView.m; sourceTree = "<group>"; };
+		A98A89D719615C99005A5871 /* VendorCallOutView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VendorCallOutView.xib; sourceTree = "<group>"; };
 		A991C04618FB3B7700A3D2CD /* TabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TabBarController.h; sourceTree = "<group>"; };
 		A991C04718FB3B7700A3D2CD /* TabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TabBarController.m; sourceTree = "<group>"; };
 		A991C04D18FB42EC00A3D2CD /* profile_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = profile_icon.png; path = WeedaForiPhone/Images/profile_icon.png; sourceTree = "<group>"; };
@@ -252,6 +267,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A98A89C2195FCAC6005A5871 /* AddressBook.framework in Frameworks */,
 				A959D30C19282DE50085F6C1 /* MapKit.framework in Frameworks */,
 				A953B70B18DF8E42001CDD4C /* libRestKit.a in Frameworks */,
 				A953B6F818D6D7DB001CDD4C /* SystemConfiguration.framework in Frameworks */,
@@ -307,6 +323,7 @@
 		A914CCA218CD756200B870D8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A98A89C1195FCAC6005A5871 /* AddressBook.framework */,
 				A959D30B19282DE50085F6C1 /* MapKit.framework */,
 				A953B6F718D6D7DB001CDD4C /* SystemConfiguration.framework */,
 				A953B6F518D6D7D2001CDD4C /* Security.framework */,
@@ -351,6 +368,8 @@
 				EAF6762B18FB62E4003BB138 /* SignupViewController.m */,
 				A91A62EB18FF8F48008726E5 /* UserListViewController.h */,
 				A91A62EC18FF8F48008726E5 /* UserListViewController.m */,
+				A9645DD9196A0A6C00DDE2DB /* DiscoverViewController.h */,
+				A9645DDA196A0A6C00DDE2DB /* DiscoverViewController.m */,
 			);
 			path = WeedaForiPhone;
 			sourceTree = "<group>";
@@ -414,6 +433,7 @@
 		A9CA8E9218F3DAC6004F095D /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				A98A89B7195FB168005A5871 /* dispensary_icon.png */,
 				A991C04F18FB517600A3D2CD /* selected_profile_icon.png */,
 				EA76A4FC194E77A100B60F04 /* picture.png */,
 				EA76A4F7194E75C400B60F04 /* caremar.png */,
@@ -475,6 +495,11 @@
 				EA4DB149196114D6005ED7F7 /* WeedShowImageCell.h */,
 				EA4DB14A196114D6005ED7F7 /* WeedShowImageCell.m */,
 				EA4DB14B196114D6005ED7F7 /* WeedShowImageCell.xib */,
+				A98A89C31960C46D005A5871 /* VendorMKAnnotationView.h */,
+				A98A89C41960C46D005A5871 /* VendorMKAnnotationView.m */,
+				A98A89D019615B5B005A5871 /* VendorCallOutView.h */,
+				A98A89D719615C99005A5871 /* VendorCallOutView.xib */,
+				A98A89D219615B5B005A5871 /* VendorCallOutView.m */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -611,6 +636,7 @@
 				A991C05418FB597900A3D2CD /* selected_weed.png in Resources */,
 				A914CCC418CD756200B870D8 /* Images.xcassets in Resources */,
 				EA38FC851917067F007D652B /* welcome.png in Resources */,
+				A98A89D819615C99005A5871 /* VendorCallOutView.xib in Resources */,
 				A991C05E18FB75A900A3D2CD /* waterdrop.png in Resources */,
 				EA76A504194E927500B60F04 /* WeedAddingToolbar.xib in Resources */,
 				EA76A4F8194E75C400B60F04 /* caremar.png in Resources */,
@@ -630,6 +656,7 @@
 				A9180C4D192B329D00668E4F /* setting_icon.png in Resources */,
 				A959D30719282A9A0085F6C1 /* map.png in Resources */,
 				A9A46824190DE2C600461E90 /* lightgray.png in Resources */,
+				A98A89B8195FB168005A5871 /* dispensary_icon.png in Resources */,
 				A991C04E18FB42EC00A3D2CD /* profile_icon.png in Resources */,
 				A9180C46192B2EAF00668E4F /* icon.png in Resources */,
 				A91816C9195637B400E7DD02 /* WeedBasicTableViewCell.xib in Resources */,
@@ -673,7 +700,9 @@
 				A914CCB618CD756200B870D8 /* AppDelegate.m in Sources */,
 				EAF6762C18FB62E4003BB138 /* SignupViewController.m in Sources */,
 				A9CA8E8F18F264BA004F095D /* User.m in Sources */,
+				A9645DDB196A0A6C00DDE2DB /* DiscoverViewController.m in Sources */,
 				EAAE7B4B19611295003F0C65 /* WeedImageView.m in Sources */,
+				A98A89D419615B5B005A5871 /* VendorCallOutView.m in Sources */,
 				A9CA8E7E18F0F814004F095D /* UserViewController.m in Sources */,
 				A91A62ED18FF8F48008726E5 /* UserListViewController.m in Sources */,
 				A9CA8E6618E9132C004F095D /* AddWeedViewController.m in Sources */,
@@ -682,6 +711,7 @@
 				A914CCB218CD756200B870D8 /* main.m in Sources */,
 				A92E513A19046E2A00FC518F /* UserTableViewCell.m in Sources */,
 				A99A0A3119173C9F00E2C50B /* Weed.m in Sources */,
+				A98A89C51960C46D005A5871 /* VendorMKAnnotationView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

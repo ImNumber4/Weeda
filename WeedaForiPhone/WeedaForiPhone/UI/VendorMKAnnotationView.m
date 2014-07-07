@@ -1,0 +1,109 @@
+//
+//  VendorMKAnnotationView.m
+//  WeedaForiPhone
+//
+//  Created by Chaoqing LV on 6/29/14.
+//  Copyright (c) 2014 Weeda. All rights reserved.
+//
+
+#import "VendorMKAnnotationView.h"
+
+@implementation VendorMKAnnotationView
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        // Initialization code
+    }
+    return self;
+}
+
+- (id)initWithAnnotation:(id<MKAnnotation>)annotation reuseIdentifier:(NSString *)reuseIdentifier {
+    self = [super initWithAnnotation:annotation reuseIdentifier:reuseIdentifier];
+    if (self) {
+        self.image = [self getImage:@"dispensary_icon.png" width:30 height:30];
+        self.canShowCallout = NO;
+        self.enabled = YES;
+    }
+    
+    return self;
+}
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated
+{
+    [super setSelected:selected animated:animated];
+    
+    if(selected)
+    {
+        if (!self.calloutView) {
+            CGRect viewRect = CGRectMake(30, -10, 160, 50);
+            self.calloutView = [[VendorCallOutView alloc] initWithFrame:viewRect];
+            self.calloutView.storename.userInteractionEnabled = YES;
+            self.calloutView.address.userInteractionEnabled = YES;
+            self.calloutView.phone.userInteractionEnabled = YES;
+            [self.calloutView.phone addTarget:self action:@selector(phoneClicked:)forControlEvents:UIControlEventTouchDown];
+            [self.calloutView.direction addTarget:self action:@selector(directionClicked:)forControlEvents:UIControlEventTouchDown];
+        }
+        if ([self.annotation isKindOfClass:[User class]]) {
+            User * user = (User *)self.annotation;
+            if (user.phone) {
+                self.calloutView.phone.enabled = YES;
+                self.calloutView.phone.backgroundColor = [UIColor colorWithRed:62.0/255.0 green:165.0/255.0 blue:64.0/255.0 alpha:1];
+            }else{
+                self.calloutView.phone.enabled = NO;
+                self.calloutView.phone.backgroundColor = [UIColor lightGrayColor];
+            }
+            self.calloutView.storename.text = user.storename;
+            self.calloutView.address.text = [NSString stringWithFormat:@"%@, %@, %@, %@", user.street, user.city, user.state, user.zip];
+        }
+        [self addSubview:self.calloutView];
+    }
+    else
+    {
+        [self.calloutView removeFromSuperview];
+    }
+}
+
+-(UIView*)hitTest:(CGPoint)point withEvent:(UIEvent*)event
+{
+    UIView *hitView = [super hitTest:point withEvent:event];
+    if (hitView == nil && self.selected) {
+        CGPoint pointInAnnotationView = [self convertPoint:point toView:self.calloutView];
+        UIView *calloutView = self.calloutView.view;
+        hitView = [calloutView hitTest:pointInAnnotationView withEvent:event];
+    }
+    return hitView;
+}
+
+
+- (void) directionClicked:(id)sender {
+    [[((User *)self.annotation) mapItem] openInMapsWithLaunchOptions:nil];
+}
+
+- (void) phoneClicked:(id)sender {
+    NSURL *URL = [NSURL URLWithString: [NSString stringWithFormat:@"tel://%@", ((User *)self.annotation).phone]];
+    [[UIApplication sharedApplication] openURL:URL];
+}
+
+
+- (UIImage *)getImage:(NSString *)imageName width:(int)width height:(int) height
+{
+    UIImage * image = [UIImage imageNamed:imageName];
+    CGSize sacleSize = CGSizeMake(width, height);
+    UIGraphicsBeginImageContextWithOptions(sacleSize, NO, 0.0);
+    [image drawInRect:CGRectMake(0, 0, sacleSize.width, sacleSize.height)];
+    return UIGraphicsGetImageFromCurrentImageContext();
+}
+
+
+/*
+// Only override drawRect: if you perform custom drawing.
+// An empty implementation adversely affects performance during animation.
+- (void)drawRect:(CGRect)rect
+{
+    // Drawing code
+}
+*/
+
+@end

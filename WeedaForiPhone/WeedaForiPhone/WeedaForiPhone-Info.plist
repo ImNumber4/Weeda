@@ -60,5 +60,9 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Weeda</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Weeda</string>
 </dict>
 </plist>

@@ -27,6 +27,16 @@ class UserController extends Controller
 			return json_encode(array('user' => $user));
 	}
 	
+	public function queryUsersWithCoordinates($latitude, $longitude, $range) {
+		if (!isset($latitude) || !isset($longitude)) {
+			throw new InvalidRequestException('Input error, latitude or longitude is null.');
+		}
+		
+		$user = $this->user_dao->get_users_with_coordinate($latitude, $longitude, $range);
+		if($user)
+			return json_encode(array('user' => $user));
+	}
+	
 	public function registerDevice($device_id) {
 		if (!isset($device_id)) {
 			throw new InvalidRequestException('Input error, device_id is null.');
@@ -173,7 +183,8 @@ class UserController extends Controller
 			return;
 		}
 		
-		$user = $this->user_dao->find_by_user_id($user_id);	
+		$user = $this->user_dao->find_by_user_id($user_id);
+		error_log('2');		
 		if (!$user) {
 			error_log('Did not find user by user id: ' . $user_id);
 			header('Content-type: application/json');
@@ -181,7 +192,9 @@ class UserController extends Controller
 			return;
 		}
 		$user->set_has_avatar(1);
+		error_log('3');
 		$this->user_dao->update($user);
+		error_log('4');
 		
 		header('Content-type: application/json');
 		http_response_code(200);

@@ -12,8 +12,9 @@
 #import "CropImageViewController.h"
 #import "AppDelegate.h"
 #import "Image.h"
-#import "WeedTableViewCell.h"
+#import "WeedBasicTableViewCell.h"
 #import "DetailViewController.h"
+#import "VendorMKAnnotationView.h"
 
 @interface UserViewController () <CropImageDelegate>
 
@@ -80,6 +81,33 @@ const NSInteger SHOW_FOLLOWINGS = 2;
     }];
 }
 
+- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation {
+    static NSString *identifier = @"User";
+    if ([annotation isKindOfClass:[User class]]) {
+        VendorMKAnnotationView *annotationView = (VendorMKAnnotationView *) [self.location dequeueReusableAnnotationViewWithIdentifier:identifier];
+        if (annotationView == nil) {
+            annotationView = [[VendorMKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
+            annotationView.enabled = YES;
+            
+        } else {
+            [annotationView setAnnotation:annotation];
+        }
+        [annotationView setSelected:YES animated:YES];
+        return annotationView;
+    }
+    
+    return nil;
+}
+
+- (UIImage *)getImage:(NSString *)imageName width:(int)width height:(int) height
+{
+    UIImage * image = [UIImage imageNamed:imageName];
+    CGSize sacleSize = CGSizeMake(width, height);
+    UIGraphicsBeginImageContextWithOptions(sacleSize, NO, 0.0);
+    [image drawInRect:CGRectMake(0, 0, sacleSize.width, sacleSize.height)];
+    return UIGraphicsGetImageFromCurrentImageContext();
+}
+
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return NO;
@@ -93,31 +121,14 @@ const NSInteger SHOW_FOLLOWINGS = 2;
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"WeedTableCell";
-    WeedTableViewCell *cell = (WeedTableViewCell *) [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    WeedBasicTableViewCell *cell = (WeedBasicTableViewCell *) [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     Weed *weed = [self.weeds objectAtIndex:indexPath.row];
     
     [self decorateCellWithWeed:weed cell:cell];
     return cell;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
-{
-    
-    Weed *weed = [self.weeds objectAtIndex:indexPath.row];
-    
-    UITextView *temp = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 44)]; //This initial size doesn't matter
-    temp.font = [UIFont systemFontOfSize:12.0];
-    temp.text = weed.content;
-    
-    CGFloat textViewWidth = 200.0;
-    CGRect tempFrame = CGRectMake(0, 0, textViewWidth, 50); //The height of this frame doesn't matter.
-    CGSize tvsize = [temp sizeThatFits:CGSizeMake(tempFrame.size.width, tempFrame.size.height)]; //This calculates the necessary size so that all the text fits in the necessary width.
-    
-    //Add the height of the other UI elements inside your cell
-    return MAX(tvsize.height, 50.0) + 20.0;
-}
-
-- (void)decorateCellWithWeed:(Weed *)weed cell:(WeedTableViewCell *)cell
+- (void)decorateCellWithWeed:(Weed *)weed cell:(WeedBasicTableViewCell *)cell
 {
     [cell decorateCellWithWeed:weed];
     [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"user/avatar/%@", weed.user_id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
@@ -255,14 +266,22 @@ const NSInteger SHOW_FOLLOWINGS = 2;
     CGSize tvsize = [self.description sizeThatFits:CGSizeMake(tempFrame.size.width, tempFrame.size.height)];
     [self.description setFrame:CGRectMake(self.description.frame.origin.x, self.description.frame.origin.y, self.description.frame.size.width, tvsize.height)];
     [self.location setFrame:CGRectMake(self.location.frame.origin.x, self.description.frame.origin.y + self.description.frame.size.height + 5, self.description.frame.size.width, self.location.frame.size.height)];
-    
-    CLLocationCoordinate2D zoomLocation;
-    zoomLocation.latitude = self.user.latitude.doubleValue;
-    zoomLocation.longitude= self.user.longitude.doubleValue;
-    MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(zoomLocation, 3000, 3000);
-    [self.location setRegion:viewRegion animated:YES];
-    
-    [self.tableView setFrame:CGRectMake(self.tableView.frame.origin.x, self.location.frame.origin.y + self.location.frame.size.height + 5, self.location.frame.size.width, self.tableView.frame.size.height)];
+    if(![@"user" isEqualToString:[self.user.userType lowercaseString]]) {
+        self.location.hidden = NO;
+        CLLocationCoordinate2D zoomLocation;
+        zoomLocation.latitude = self.user.latitude.doubleValue;
+        zoomLocation.longitude= self.user.longitude.doubleValue + 0.002;//move the zoom location left a little bit so we can have the annotation callout in the middle
+        MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(zoomLocation, 200, 200);
+        [self.location setRegion:viewRegion animated:YES];
+        for (id<MKAnnotation> annotation in self.location.annotations) {
+            [self.location removeAnnotation:annotation];
+        }
+        [self.location addAnnotation:self.user];
+        [self.tableView setFrame:CGRectMake(self.tableView.frame.origin.x, self.location.frame.origin.y + self.location.frame.size.height + 5, self.tableView.frame.size.width, self.tableView.frame.size.height)];
+    } else {
+        self.location.hidden = YES;
+        [self.tableView setFrame:CGRectMake(self.tableView.frame.origin.x, self.description.frame.origin.y + self.description.frame.size.height + 5, self.tableView.frame.size.width, self.tableView.frame.size.height)];
+    }
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"MMM. yyyy"];
