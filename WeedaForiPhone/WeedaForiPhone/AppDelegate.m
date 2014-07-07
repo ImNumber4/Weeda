@@ -177,7 +177,7 @@
     
     RKResponseDescriptor *queryUsersWithCoordinatesResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping
                                                                                                          method:RKRequestMethodGET
-                                                                                                    pathPattern:@"user/queryUsersWithCoordinates/:latitude/:longitude:/range"
+                                                                                                    pathPattern:@"user/queryUsersWithCoordinates/:latitude/:longitude:/:range"
                                                                                                         keyPath:@"users"
                                                                                                     statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
     

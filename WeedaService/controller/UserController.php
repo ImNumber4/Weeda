@@ -32,9 +32,9 @@ class UserController extends Controller
 			throw new InvalidRequestException('Input error, latitude or longitude is null.');
 		}
 		
-		$user = $this->user_dao->get_users_with_coordinate($latitude, $longitude, $range);
-		if($user)
-			return json_encode(array('user' => $user));
+		$users = $this->user_dao->get_users_with_coordinate($latitude, $longitude, $range);
+		if($users)
+			return json_encode(array('users' => $users));
 	}
 	
 	public function registerDevice($device_id) {
