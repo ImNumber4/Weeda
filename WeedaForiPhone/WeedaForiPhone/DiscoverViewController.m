@@ -7,6 +7,7 @@
 //
 
 #import "DiscoverViewController.h"
+#import "VendorMKAnnotationView.h"
 
 @interface DiscoverViewController ()
 
@@ -54,12 +55,30 @@
     [errorAlert show];
     NSLog(@"Error: %@",error.description);
 }
+
+- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation {
+    static NSString *identifier = @"User";
+    if ([annotation isKindOfClass:[User class]]) {
+        VendorMKAnnotationView *annotationView = (VendorMKAnnotationView *) [self.mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
+        if (annotationView == nil) {
+            annotationView = [[VendorMKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
+            annotationView.enabled = YES;
+            
+        } else {
+            [annotationView setAnnotation:annotation];
+        }
+        return annotationView;
+    }
+    
+    return nil;
+}
+
 -(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
     [self.locationManager stopUpdatingLocation];
     CLLocation *crnLoc = [locations lastObject];
     CLLocationCoordinate2D zoomLocation= crnLoc.coordinate;
-    MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(zoomLocation, 200, 200);
+    MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(zoomLocation, 3000, 3000);
     NSString * feedUrl = [NSString stringWithFormat:@"user/queryUsersWithCoordinates/%f/%f/2", crnLoc.coordinate.latitude, crnLoc.coordinate.longitude];
     [[RKObjectManager sharedManager] getObjectsAtPath:feedUrl parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
         
