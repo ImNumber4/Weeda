@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6154.21" systemVersion="14A261i" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="95h-tk-Uat">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6185.7" systemVersion="14A283o" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="95h-tk-Uat">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6153.13"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6181.2"/>
     </dependencies>
     <scenes>
         <!--Navigation Controller-->
@@ -89,7 +89,7 @@
             </objects>
             <point key="canvasLocation" x="-1651" y="-832"/>
         </scene>
-        <!--Discover View Controller - Item-->
+        <!--Item-->
         <scene sceneID="Rrf-PO-Ook">
             <objects>
                 <viewController id="15J-rx-ePU" customClass="DiscoverViewController" sceneMemberID="viewController">
@@ -117,7 +117,7 @@
             </objects>
             <point key="canvasLocation" x="269" y="874"/>
         </scene>
-        <!--Navigation Controller - Item-->
+        <!--Item-->
         <scene sceneID="cUi-kZ-frf">
             <objects>
                 <navigationController id="rS3-R9-Ivy" sceneMemberID="viewController">
@@ -133,7 +133,7 @@
             </objects>
             <point key="canvasLocation" x="281" y="175"/>
         </scene>
-        <!--Navigation Controller - Item-->
+        <!--Item-->
         <scene sceneID="1Wf-0U-gkl">
             <objects>
                 <navigationController definesPresentationContext="YES" id="Cux-3E-mIJ" sceneMemberID="viewController">
@@ -149,7 +149,7 @@
             </objects>
             <point key="canvasLocation" x="442" y="-779"/>
         </scene>
-        <!--Master View Controller - Weeds-->
+        <!--Weeds-->
         <scene sceneID="VgW-fR-Quf">
             <objects>
                 <tableViewController title="Weeds" id="pGg-6v-bdr" customClass="MasterViewController" sceneMemberID="viewController">
@@ -188,7 +188,7 @@
             </objects>
             <point key="canvasLocation" x="858" y="175"/>
         </scene>
-        <!--Detail View Controller - Weed-->
+        <!--Weed-->
         <scene sceneID="7wn-T2-doA">
             <objects>
                 <tableViewController autoresizesArchivedViewToFullSize="NO" title="Weed" id="6ro-Wi-h5r" customClass="DetailViewController" sceneMemberID="viewController">
@@ -395,7 +395,7 @@
             </objects>
             <point key="canvasLocation" x="2663" y="175"/>
         </scene>
-        <!--User View Controller - Profile-->
+        <!--Profile-->
         <scene sceneID="16z-tA-IpX">
             <objects>
                 <viewController id="UY4-39-rji" customClass="UserViewController" sceneMemberID="viewController">
@@ -608,7 +608,7 @@
             </objects>
             <point key="canvasLocation" x="3066" y="-779"/>
         </scene>
-        <!--Signup View Controller - Sign Up-->
+        <!--Sign Up-->
         <scene sceneID="ZfZ-Hu-wIG">
             <objects>
                 <viewController id="f9f-e9-Bqs" customClass="SignupViewController" sceneMemberID="viewController">
@@ -734,7 +734,7 @@
             </objects>
             <point key="canvasLocation" x="2161" y="1255"/>
         </scene>
-        <!--Add Weed View Controller - Add weed-->
+        <!--Add weed-->
         <scene sceneID="pyh-c2-iUW">
             <objects>
                 <viewController title="Add weed" id="t7z-DZ-Kwv" customClass="AddWeedViewController" sceneMemberID="viewController">
@@ -812,7 +812,10 @@
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination"/>
+        <simulatedScreenMetrics key="destination">
+            <size key="portraitSize" width="320" height="480"/>
+            <size key="landscapeSize" width="480" height="320"/>
+        </simulatedScreenMetrics>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="aBn-FK-paW"/>
