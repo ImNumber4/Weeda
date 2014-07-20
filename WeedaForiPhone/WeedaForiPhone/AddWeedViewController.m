@@ -215,7 +215,6 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     User *user = [self.users objectAtIndex:indexPath.row];
-    NSLog(@"%@", user.username);
     NSRange lastAtCharacter = [[self.weedContentView text] rangeOfString:@"@" options:NSBackwardsSearch];
     self.weedContentView.text = [NSString stringWithFormat:@"%@%@ ", [self.weedContentView.text substringToIndex:lastAtCharacter.location + 1], user.username];
     [self adjustWeedContentView:true];

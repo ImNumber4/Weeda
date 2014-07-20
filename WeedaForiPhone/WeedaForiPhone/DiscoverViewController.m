@@ -9,11 +9,18 @@
 #import "DiscoverViewController.h"
 #import "VendorMKAnnotationView.h"
 
-@interface DiscoverViewController ()
+@interface DiscoverViewController () <UITableViewDelegate, UITableViewDataSource>
+
+@property (nonatomic, strong) CLLocation *curLocation;
 
 @end
 
 @implementation DiscoverViewController
+
+const NSInteger STORE_SEARCH = 0;
+const NSInteger LOCATION_SEARCH = 1;
+
+const double REGION_SPAN = 2.0;
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -27,20 +34,68 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.locationManager = [[CLLocationManager alloc]init]; // initializing locationManager
-    NSComparisonResult order = [[UIDevice currentDevice].systemVersion compare: @"8.0" options: NSNumericSearch];
-    if (order == NSOrderedSame || order == NSOrderedDescending) {
-        [self.locationManager requestAlwaysAuthorization];
-    }
-    
     self.mapView.delegate = self;
-    self.locationManager.delegate = self; // we set the delegate of locationManager to self.
-    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest; // setting the accuracy
-    [self.locationManager startUpdatingLocation];
+    self.storeSearch.delegate = self;
+    self.storeSearch.tag = STORE_SEARCH;
+    self.location.delegate = self;
+    self.location.tag = LOCATION_SEARCH;
+    self.suggestions = [[NSMutableArray alloc] init];
+    [self.storeSearch setImage:[UIImage imageNamed: @"search_icon.png"] forSearchBarIcon:UISearchBarIconSearch state:UIControlStateNormal];
+    [self.searchInCurrentLocation addTarget:self action:@selector(searchInCurrentLocation:)forControlEvents:UIControlEventTouchDown];
+    [self.searchInArea addTarget:self action:@selector(searchInArea:)forControlEvents:UIControlEventTouchDown];
+    [self.storeSearch becomeFirstResponder];
+    [self searchInCurrentLocation:nil];
+    self.geocoder = [[CLGeocoder alloc] init];
+    UITapGestureRecognizer *singleFingerTap =
+    [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
+    [self.mapView addGestureRecognizer:singleFingerTap];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWasShown:)
+                                                 name:UIKeyboardDidShowNotification object:nil];
+    [self hideSuggestionList];
+    [self enableSearchButton:self.storeSearch];
+    [self enableSearchButton:self.location];
+    
 }
 
-- (void)viewDidAppear:(BOOL)animated
+- (void) enableSearchButton:(UISearchBar *)searchBar {
+    UITextField *searchBarTextField = nil;
+    for (UIView *mainview in searchBar.subviews)
+    {
+        for (UIView *subview in mainview.subviews) {
+            if ([subview isKindOfClass:[UITextField class]])
+            {
+                searchBarTextField = (UITextField *)subview;
+                break;
+            }
+            
+        }
+    }
+    searchBarTextField.enablesReturnKeyAutomatically = NO;
+}
+
+- (void)handleSingleTap:(UITapGestureRecognizer *)recognizer {
+    [self.location endEditing:YES];
+    [self.storeSearch endEditing:YES];
+}
+
+- (void)searchInArea:(id) sender
 {
+    [self updateStores:self.mapView.region];
+}
+
+- (void)searchInCurrentLocation:(id) sender
+{
+    if (self.locationManager == nil) {
+        self.locationManager = [[CLLocationManager alloc]init]; // initializing locationManager
+        NSComparisonResult order = [[UIDevice currentDevice].systemVersion compare: @"8.0" options: NSNumericSearch];
+        if (order == NSOrderedSame || order == NSOrderedDescending) {
+            [self.locationManager requestAlwaysAuthorization];
+        }
+        self.locationManager.delegate = self; // we set the delegate of locationManager to self.
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyBest; // setting the accuracy
+        [self.locationManager startUpdatingLocation];
+    }
     [self.locationManager startUpdatingLocation];
 }
 
@@ -50,10 +105,89 @@
     // Dispose of any resources that can be recreated.
 }
 
--(void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error{
+- (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar
+{
+    self.location.hidden = YES;
+    self.locationBackground.hidden = YES;
+    [self hideSuggestionList];
+    
+}
+
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
+{
+    self.location.hidden = NO;
+    self.locationBackground.hidden = NO;
+}
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
+{
+    [searchBar endEditing:YES];
+    if ([self.location.text isEqualToString: @""]) {
+        [self searchInCurrentLocation:nil];
+    } else {
+        [self.geocoder geocodeAddressString:self.location.text
+                      completionHandler:^(NSArray* placemarks, NSError* error){
+                          if (placemarks && placemarks.count > 0) {
+                              CLPlacemark *placeMark = [placemarks objectAtIndex:0];
+                              [self updateRegionAndStores:placeMark.location.coordinate];
+                              self.curLocation = placeMark.location;
+                          } else {
+                              UIAlertView *errorAlert = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Sorry, we couldn't locate the place specified by you. Please make sure you enter correct address." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+                              [errorAlert show];
+                          }
+                      }
+         ];
+    }
+}
+
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+
+    if (searchBar.tag == LOCATION_SEARCH) {
+        NSString *location = searchText;
+        [self.geocoder geocodeAddressString:location
+                     completionHandler:^(NSArray* placemarks, NSError* error){
+                         [self hideSuggestionList];
+                         if (placemarks && placemarks.count > 0) {
+                             for (CLPlacemark *placeMark in placemarks) {
+                                 NSString *address = @"";
+                                 for (NSString *subAddress in [placeMark.addressDictionary objectForKey:@"FormattedAddressLines"]){
+                                     address = [address stringByAppendingString:subAddress];
+                                     address = [address stringByAppendingString:@", "];
+                                 }
+                                 [self.suggestions addObject:[address substringToIndex:address.length - 2]];
+                             }
+                             [self showSuggestionList:LOCATION_SEARCH];
+                         }
+                     }
+         ];
+    }
+}
+
+// Called when the UIKeyboardDidShowNotification is sent.
+- (void)keyboardWasShown:(NSNotification*)aNotification
+{
+    CGRect keyboardFrameInWindowsCoordinates;
+    [[[aNotification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] getValue:&keyboardFrameInWindowsCoordinates];
+    CGPoint kbPosition = keyboardFrameInWindowsCoordinates.origin;
+    [self.suggestionList setFrame:CGRectMake(self.suggestionList.frame.origin.x, self.suggestionList.frame.origin.y, self.suggestionList.frame.size.width, kbPosition.y - self.suggestionList.frame.origin.y)];
+}
+
+- (void) showSuggestionList: (NSInteger) target {
+    self.suggestionList.hidden = NO;
+    self.suggestionList.tag = target;
+    [self.suggestionList reloadData];
+}
+
+- (void) hideSuggestionList {
+    self.suggestionList.hidden = YES;
+    [self.suggestions removeAllObjects];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error{
     UIAlertView *errorAlert = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Failed to retrieve your location. Please make sure you have internet connection." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
     [errorAlert show];
-    NSLog(@"Error: %@",error.description);
+    self.locationManager = nil;
+    NSLog(@"Error: %@", error.description);
 }
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation {
@@ -76,10 +210,41 @@
 -(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
     [self.locationManager stopUpdatingLocation];
-    CLLocation *crnLoc = [locations lastObject];
-    CLLocationCoordinate2D zoomLocation= crnLoc.coordinate;
-    MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(zoomLocation, 3000, 3000);
-    NSString * feedUrl = [NSString stringWithFormat:@"user/queryUsersWithCoordinates/%f/%f/2", crnLoc.coordinate.latitude, crnLoc.coordinate.longitude];
+    self.curLocation = [locations lastObject];
+    [self updateRegionAndStores:self.curLocation.coordinate];
+}
+
+- (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated
+{
+    if (self.curLocation != nil &&
+        self.curLocation.coordinate.latitude > self.mapView.region.center.latitude - self.mapView.region.span.latitudeDelta &&
+        self.curLocation.coordinate.latitude < self.mapView.region.center.latitude + self.mapView.region.span.latitudeDelta &&
+        self.curLocation.coordinate.longitude > self.mapView.region.center.longitude - self.mapView.region.span.longitudeDelta &&
+        self.curLocation.coordinate.longitude < self.mapView.region.center.longitude + self.mapView.region.span.longitudeDelta) {
+        [self.location setImage:[UIImage imageNamed: @"current_location.png"] forSearchBarIcon:UISearchBarIconSearch state:UIControlStateNormal];
+    } else {
+        [self.location setImage:[UIImage imageNamed: @"current_location_gray.png"] forSearchBarIcon:UISearchBarIconSearch state:UIControlStateNormal];
+    }
+    //[self updateStores];
+}
+
+- (void)updateRegionAndStores: (CLLocationCoordinate2D) coordinate
+{
+    CLLocationCoordinate2D zoomLocation= coordinate;
+    MKCoordinateSpan span;
+    if (self.mapView.region.span.latitudeDelta > REGION_SPAN) {
+        span = MKCoordinateSpanMake(REGION_SPAN, REGION_SPAN);
+    } else {
+        span = self.mapView.region.span;
+    }
+    MKCoordinateRegion region = MKCoordinateRegionMake(zoomLocation, span);
+    [self.mapView setRegion:region animated:YES];
+    [self updateStores:region];
+}
+
+- (void)updateStores: (MKCoordinateRegion) region
+{
+    NSString * feedUrl = [NSString stringWithFormat:@"user/queryUsersWithCoordinates/%f/%f/%f", region.center.latitude, region.center.longitude, fmax(region.span.latitudeDelta, region.span.longitudeDelta)];
     [[RKObjectManager sharedManager] getObjectsAtPath:feedUrl parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
         
         for (id<MKAnnotation> annotation in self.mapView.annotations) {
@@ -92,8 +257,39 @@
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
         RKLogError(@"Load failed with error: %@", error);
     }];
-    [self.mapView setRegion:viewRegion animated:YES];
-    
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return self.suggestions.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"SuggestionCell" forIndexPath:indexPath];
+    NSString *suggestion = [self.suggestions objectAtIndex:indexPath.row];
+    [cell.textLabel setFont:[UIFont systemFontOfSize:12.0]];
+    [cell.textLabel setText:suggestion];
+    return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSString *suggestion = [self.suggestions objectAtIndex:indexPath.row];
+    if (self.suggestionList.tag == LOCATION_SEARCH) {
+        [self.location setText:suggestion];
+    }
+    [self hideSuggestionList];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 25;
 }
 
 /*

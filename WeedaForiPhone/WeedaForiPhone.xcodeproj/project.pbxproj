@@ -49,6 +49,8 @@
 		A959D30C19282DE50085F6C1 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A959D30B19282DE50085F6C1 /* MapKit.framework */; };
 		A959D30E19282DFE0085F6C1 /* selected_map.png in Resources */ = {isa = PBXBuildFile; fileRef = A959D30D19282DFE0085F6C1 /* selected_map.png */; };
 		A9645DDB196A0A6C00DDE2DB /* DiscoverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9645DDA196A0A6C00DDE2DB /* DiscoverViewController.m */; };
+		A986EFC5197230B700174AE4 /* current_location.png in Resources */ = {isa = PBXBuildFile; fileRef = A986EFC4197230B700174AE4 /* current_location.png */; };
+		A986EFC719723CEA00174AE4 /* current_location_gray.png in Resources */ = {isa = PBXBuildFile; fileRef = A986EFC619723CEA00174AE4 /* current_location_gray.png */; };
 		A98A89B8195FB168005A5871 /* dispensary_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A98A89B7195FB168005A5871 /* dispensary_icon.png */; };
 		A98A89C2195FCAC6005A5871 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A98A89C1195FCAC6005A5871 /* AddressBook.framework */; };
 		A98A89C51960C46D005A5871 /* VendorMKAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = A98A89C41960C46D005A5871 /* VendorMKAnnotationView.m */; };
@@ -75,6 +77,7 @@
 		A9CA8E8F18F264BA004F095D /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = A9CA8E8E18F264BA004F095D /* User.m */; };
 		A9CA8E9718F3DD67004F095D /* avatar.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A9CA8E9618F3DD67004F095D /* avatar.jpg */; };
 		A9CA8EA018F3E255004F095D /* WeedTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A9CA8E9E18F3E255004F095D /* WeedTableViewCell.m */; };
+		A9D5A05819736F100099664B /* search_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A9D5A05719736F100099664B /* search_icon.png */; };
 		EA152C5F19187D9F009E5337 /* title.png in Resources */ = {isa = PBXBuildFile; fileRef = EA152C5E19187D9F009E5337 /* title.png */; };
 		EA1B050F18F3668A0033AB06 /* WelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA1B050E18F3668A0033AB06 /* WelcomeViewController.m */; };
 		EA38FC5F190C9A9D007D652B /* Image.m in Sources */ = {isa = PBXBuildFile; fileRef = EA38FC5E190C9A9D007D652B /* Image.m */; };
@@ -193,6 +196,8 @@
 		A959D30D19282DFE0085F6C1 /* selected_map.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = selected_map.png; path = WeedaForiPhone/Images/selected_map.png; sourceTree = "<group>"; };
 		A9645DD9196A0A6C00DDE2DB /* DiscoverViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscoverViewController.h; sourceTree = "<group>"; };
 		A9645DDA196A0A6C00DDE2DB /* DiscoverViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiscoverViewController.m; sourceTree = "<group>"; };
+		A986EFC4197230B700174AE4 /* current_location.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = current_location.png; path = WeedaForiPhone/Images/current_location.png; sourceTree = "<group>"; };
+		A986EFC619723CEA00174AE4 /* current_location_gray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = current_location_gray.png; path = WeedaForiPhone/Images/current_location_gray.png; sourceTree = "<group>"; };
 		A98A89B7195FB168005A5871 /* dispensary_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = dispensary_icon.png; path = WeedaForiPhone/Images/dispensary_icon.png; sourceTree = "<group>"; };
 		A98A89C1195FCAC6005A5871 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		A98A89C31960C46D005A5871 /* VendorMKAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VendorMKAnnotationView.h; path = WeedaForiPhone/UI/VendorMKAnnotationView.h; sourceTree = "<group>"; };
@@ -230,6 +235,7 @@
 		A9CA8E9618F3DD67004F095D /* avatar.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = avatar.jpg; path = WeedaForiPhone/Images/avatar.jpg; sourceTree = "<group>"; };
 		A9CA8E9D18F3E255004F095D /* WeedTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WeedTableViewCell.h; path = WeedaForiPhone/UI/WeedTableViewCell.h; sourceTree = "<group>"; };
 		A9CA8E9E18F3E255004F095D /* WeedTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WeedTableViewCell.m; path = WeedaForiPhone/UI/WeedTableViewCell.m; sourceTree = "<group>"; };
+		A9D5A05719736F100099664B /* search_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = search_icon.png; path = WeedaForiPhone/Images/search_icon.png; sourceTree = "<group>"; };
 		EA152C5E19187D9F009E5337 /* title.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = title.png; path = WeedaForiPhone/Images/title.png; sourceTree = "<group>"; };
 		EA1B050D18F3668A0033AB06 /* WelcomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WelcomeViewController.h; sourceTree = "<group>"; };
 		EA1B050E18F3668A0033AB06 /* WelcomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WelcomeViewController.m; sourceTree = "<group>"; };
@@ -433,6 +439,9 @@
 		A9CA8E9218F3DAC6004F095D /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				A9D5A05719736F100099664B /* search_icon.png */,
+				A986EFC619723CEA00174AE4 /* current_location_gray.png */,
+				A986EFC4197230B700174AE4 /* current_location.png */,
 				A98A89B7195FB168005A5871 /* dispensary_icon.png */,
 				A991C04F18FB517600A3D2CD /* selected_profile_icon.png */,
 				EA76A4FC194E77A100B60F04 /* picture.png */,
@@ -644,10 +653,13 @@
 				A92E514019048B0400FC518F /* followed.png in Resources */,
 				A914CCB018CD756200B870D8 /* InfoPlist.strings in Resources */,
 				EA76A4FD194E77A100B60F04 /* picture.png in Resources */,
+				A986EFC5197230B700174AE4 /* current_location.png in Resources */,
 				EAB1CB82195A6AAD00BB4BBA /* delete.png in Resources */,
 				EA152C5F19187D9F009E5337 /* title.png in Resources */,
 				A91A62FA1903602B008726E5 /* wrong.png in Resources */,
+				A986EFC719723CEA00174AE4 /* current_location_gray.png in Resources */,
 				A9A46804190C7A6300461E90 /* seedgray.png in Resources */,
+				A9D5A05819736F100099664B /* search_icon.png in Resources */,
 				A991C05218FB58D600A3D2CD /* weed.png in Resources */,
 				EA4DB14D196114D6005ED7F7 /* WeedShowImageCell.xib in Resources */,
 				A91A62F819035FCC008726E5 /* ok.png in Resources */,

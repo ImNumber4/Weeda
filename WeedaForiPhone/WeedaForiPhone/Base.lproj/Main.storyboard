@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6185.7" systemVersion="14A283o" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="95h-tk-Uat">
     <dependencies>
+        <deployment defaultVersion="1808" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6181.2"/>
     </dependencies>
     <scenes>
@@ -92,7 +93,7 @@
         <!--Item-->
         <scene sceneID="Rrf-PO-Ook">
             <objects>
-                <viewController id="15J-rx-ePU" customClass="DiscoverViewController" sceneMemberID="viewController">
+                <viewController hidesBottomBarWhenPushed="YES" id="15J-rx-ePU" customClass="DiscoverViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="fMq-p0-ssR"/>
                         <viewControllerLayoutGuide type="bottom" id="Y6c-l0-iqt"/>
@@ -104,18 +105,96 @@
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" mapType="standard" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qa1-p6-ecX">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="522"/>
                             </mapView>
+                            <view alpha="0.75" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0xb-Yz-OGf">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="58"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                            <view alpha="0.75" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lAn-oj-BCU">
+                                <rect key="frame" x="0.0" y="58" width="320" height="32"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                            <searchBar contentMode="redraw" fixedFrame="YES" searchBarStyle="minimal" placeholder="Store name that you are looking for" translatesAutoresizingMaskIntoConstraints="NO" id="Sfm-Mz-VBY">
+                                <rect key="frame" x="0.0" y="17" width="320" height="44"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="search" enablesReturnKeyAutomatically="YES"/>
+                            </searchBar>
+                            <searchBar contentMode="redraw" fixedFrame="YES" searchBarStyle="minimal" placeholder="Current location" translatesAutoresizingMaskIntoConstraints="NO" id="ndZ-wS-fdD">
+                                <rect key="frame" x="0.0" y="48" width="320" height="44"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="search" enablesReturnKeyAutomatically="YES"/>
+                            </searchBar>
+                            <tableView clipsSubviews="YES" alpha="0.75" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="xEl-wG-Gbe">
+                                <rect key="frame" x="0.0" y="90" width="320" height="262"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell contentMode="scaleToFill" ambiguous="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="SuggestionCell" rowHeight="25" id="U9k-Pg-Rvs">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="U9k-Pg-Rvs" id="Ppw-4t-cYY">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="15J-rx-ePU" id="KIG-w0-gDV"/>
+                                    <outlet property="delegate" destination="15J-rx-ePU" id="VRz-mI-e4n"/>
+                                </connections>
+                            </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="N9z-pu-xPb">
+                                <rect key="frame" x="0.0" y="396" width="160" height="35"/>
+                                <color key="backgroundColor" red="0.24313727020000001" green="0.64705884459999996" blue="0.2470588386" alpha="1" colorSpace="deviceRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="35" id="87J-8Z-yBl"/>
+                                    <constraint firstAttribute="width" constant="160" id="sFX-aW-O3g"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                <state key="normal" title="this area">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eTz-7D-13i">
+                                <rect key="frame" x="160" y="396" width="160" height="35"/>
+                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="160" id="nDJ-d5-5Km"/>
+                                    <constraint firstAttribute="height" constant="35" id="nsd-99-i0m"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                <state key="normal" title="my current location">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999999999999973" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="  Redo search in" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="md0-Db-x3d">
+                                <rect key="frame" x="0.0" y="374" width="320" height="21"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                <color key="textColor" red="0.24313727020000001" green="0.64705884459999996" blue="0.2470588386" alpha="1" colorSpace="deviceRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="N9z-pu-xPb" firstAttribute="top" secondItem="md0-Db-x3d" secondAttribute="bottom" id="Jel-ns-Ed7"/>
+                            <constraint firstItem="Y6c-l0-iqt" firstAttribute="top" secondItem="N9z-pu-xPb" secondAttribute="bottom" id="g7q-az-uSO"/>
+                            <constraint firstItem="Y6c-l0-iqt" firstAttribute="top" secondItem="eTz-7D-13i" secondAttribute="bottom" id="jII-2s-koI"/>
+                        </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Item" id="mja-5o-PC2"/>
                     <navigationItem key="navigationItem" id="lZ7-of-ont"/>
                     <connections>
+                        <outlet property="location" destination="ndZ-wS-fdD" id="zhu-Dj-TK8"/>
+                        <outlet property="locationBackground" destination="lAn-oj-BCU" id="EDx-Y1-ODr"/>
                         <outlet property="mapView" destination="qa1-p6-ecX" id="wfF-Zf-StK"/>
+                        <outlet property="searchBackground" destination="0xb-Yz-OGf" id="BiT-d8-lqa"/>
+                        <outlet property="searchInArea" destination="N9z-pu-xPb" id="ACm-z0-ZW7"/>
+                        <outlet property="searchInCurrentLocation" destination="eTz-7D-13i" id="d1O-qW-2C4"/>
+                        <outlet property="storeSearch" destination="Sfm-Mz-VBY" id="0Ez-py-085"/>
+                        <outlet property="suggestionList" destination="xEl-wG-Gbe" id="9Lj-hh-1sJ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="up0-Q7-kJU" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="269" y="874"/>
+            <point key="canvasLocation" x="269" y="861"/>
         </scene>
         <!--Item-->
         <scene sceneID="cUi-kZ-frf">
@@ -805,9 +884,9 @@
         </scene>
     </scenes>
     <resources>
-        <image name="light.png" width="512" height="445"/>
+        <image name="light.png" width="60" height="58"/>
         <image name="seed.png" width="512" height="307"/>
-        <image name="waterdrop.png" width="591" height="980"/>
+        <image name="waterdrop.png" width="50" height="90"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

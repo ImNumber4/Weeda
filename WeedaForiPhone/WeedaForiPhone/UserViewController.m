@@ -277,6 +277,7 @@ const NSInteger SHOW_FOLLOWINGS = 2;
             [self.location removeAnnotation:annotation];
         }
         [self.location addAnnotation:self.user];
+        NSLog(@"self.location.frame.size.height %f, %f, %f", self.location.frame.size.height, self.location.frame.origin.y, self.tableView.frame.origin.y);
         [self.tableView setFrame:CGRectMake(self.tableView.frame.origin.x, self.location.frame.origin.y + self.location.frame.size.height + 5, self.tableView.frame.size.width, self.tableView.frame.size.height)];
     } else {
         self.location.hidden = YES;
