@@ -211,6 +211,7 @@ const double REGION_SPAN = 2.0;
 {
     [self.locationManager stopUpdatingLocation];
     self.curLocation = [locations lastObject];
+    [self.location setText:@""];
     [self updateRegionAndStores:self.curLocation.coordinate];
 }
 
