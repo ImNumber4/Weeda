@@ -245,7 +245,7 @@ const double REGION_SPAN = 2.0;
 
 - (void)updateStores: (MKCoordinateRegion) region
 {
-    NSString * feedUrl = [NSString stringWithFormat:@"user/queryUsersWithCoordinates/%f/%f/%f", region.center.latitude, region.center.longitude, fmax(region.span.latitudeDelta, region.span.longitudeDelta)];
+    NSString * feedUrl = [NSString stringWithFormat:@"user/queryUsersWithCoordinates/%f/%f/%f/%@", region.center.latitude, region.center.longitude, fmax(region.span.latitudeDelta, region.span.longitudeDelta), self.storeSearch.text];
     [[RKObjectManager sharedManager] getObjectsAtPath:feedUrl parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
         
         for (id<MKAnnotation> annotation in self.mapView.annotations) {

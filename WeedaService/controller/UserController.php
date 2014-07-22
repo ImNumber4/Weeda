@@ -27,12 +27,12 @@ class UserController extends Controller
 			return json_encode(array('user' => $user));
 	}
 	
-	public function queryUsersWithCoordinates($latitude, $longitude, $range) {
-		if (!isset($latitude) || !isset($longitude)) {
-			throw new InvalidRequestException('Input error, latitude or longitude is null.');
+	public function queryUsersWithCoordinates($latitude, $longitude, $range, $search_key) {
+		if (!isset($latitude) || !isset($longitude) || !isset($range)) {
+			throw new InvalidRequestException('Input error, latitude or longitude or range is null.');
 		}
 		
-		$users = $this->user_dao->get_users_with_coordinate($latitude, $longitude, $range);
+		$users = $this->user_dao->get_users_with_coordinate($latitude, $longitude, $range, $search_key);
 		if($users)
 			return json_encode(array('users' => $users));
 	}

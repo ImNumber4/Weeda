@@ -177,11 +177,19 @@
     
     RKResponseDescriptor *queryUsersWithCoordinatesResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping
                                                                                                          method:RKRequestMethodGET
-                                                                                                    pathPattern:@"user/queryUsersWithCoordinates/:latitude/:longitude/:range"
+                                                                                                    pathPattern:@"user/queryUsersWithCoordinates/:latitude/:longitude/:range/"
                                                                                                         keyPath:@"users"
                                                                                                     statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
     
     [manager addResponseDescriptor:queryUsersWithCoordinatesResponseDescriptor];
+    
+    RKResponseDescriptor *queryUsersWithCoordinatesAndSearchKeyResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping
+                                                                                                                     method:RKRequestMethodGET
+                                                                                                                pathPattern:@"user/queryUsersWithCoordinates/:latitude/:longitude/:range/:search_key"
+                                                                                                                    keyPath:@"users"
+                                                                                                                statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+    
+    [manager addResponseDescriptor:queryUsersWithCoordinatesAndSearchKeyResponseDescriptor];
 
     
     RKResponseDescriptor *getUsernamesByPrefixResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping

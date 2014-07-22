@@ -38,12 +38,15 @@ class UserDAO extends BaseDAO
 		}
 	}
 	
-	public function get_users_with_coordinate($latitude, $longitude, $range) {
+	public function get_users_with_coordinate($latitude, $longitude, $range, $search_key) {
 		$latitude_lower_bound = $latitude - $range;
 		$latitude_upper_bound = $latitude + $range;
 		$longitude_lower_bound = $longitude - $range;
 		$longitude_upper_bound = $longitude + $range;
 		$query = "SELECT * FROM user where latitude > $latitude_lower_bound and latitude < $latitude_upper_bound and longitude > $longitude_lower_bound && longitude < $longitude_upper_bound && user_type <> 'user'";
+		if (isset($search_key)) {
+			$query = "$query && storename like '%$search_key%'";
+		}
 		$result = $this->db_conn->query($query);
 		$users = array();
 		if (mysql_num_rows($result)) {
