@@ -13,7 +13,7 @@
 @property (nonatomic, weak) IBOutlet UIButton *phone;
 @property (nonatomic, weak) IBOutlet UIButton *direction;
 @property (nonatomic, weak) IBOutlet UILabel *address;
-@property (nonatomic, weak) IBOutlet UILabel *storename;
+@property (nonatomic, weak) IBOutlet UIButton *storename;
 
 @property (nonatomic, weak) IBOutlet UIView *view;
 

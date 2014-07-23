@@ -10,8 +10,14 @@
 #import <UIKit/UIKit.h>
 #import "VendorCallOutView.h"
 
+@protocol VendorMKAnnotationViewDelegate <NSObject>
+@required
+- (void) annotationPressed:(MKAnnotationView *)annotationView;
+@end
+
 @interface VendorMKAnnotationView : MKAnnotationView
 
 @property (nonatomic, retain) VendorCallOutView * calloutView;
+@property (nonatomic, weak)id<VendorMKAnnotationViewDelegate> delegate;
 
 @end

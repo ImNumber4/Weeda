@@ -261,11 +261,11 @@ const NSInteger SHOW_FOLLOWINGS = 2;
 - (void)updateView
 {
     self.navigationController.navigationBar.topItem.title = [NSString stringWithFormat:@"%@", self.user.username];
-    self.description.text = self.user.description;
-    CGRect tempFrame = CGRectMake(0, 0, self.description.frame.size.width, 50);
-    CGSize tvsize = [self.description sizeThatFits:CGSizeMake(tempFrame.size.width, tempFrame.size.height)];
-    [self.description setFrame:CGRectMake(self.description.frame.origin.x, self.description.frame.origin.y, self.description.frame.size.width, tvsize.height)];
-    [self.location setFrame:CGRectMake(self.location.frame.origin.x, self.description.frame.origin.y + self.description.frame.size.height + 5, self.description.frame.size.width, self.location.frame.size.height)];
+    self.userDescription.text = self.user.description;
+    CGRect tempFrame = CGRectMake(0, 0, self.userDescription.frame.size.width, 50);
+    CGSize tvsize = [self.userDescription sizeThatFits:CGSizeMake(tempFrame.size.width, tempFrame.size.height)];
+    [self.userDescription setFrame:CGRectMake(self.userDescription.frame.origin.x, self.userDescription.frame.origin.y, self.userDescription.frame.size.width, tvsize.height)];
+    [self.location setFrame:CGRectMake(self.location.frame.origin.x, self.userDescription.frame.origin.y + self.userDescription.frame.size.height + 5, self.userDescription.frame.size.width, self.location.frame.size.height)];
     if(![@"user" isEqualToString:[self.user.userType lowercaseString]]) {
         self.location.hidden = NO;
         CLLocationCoordinate2D zoomLocation;
@@ -277,11 +277,10 @@ const NSInteger SHOW_FOLLOWINGS = 2;
             [self.location removeAnnotation:annotation];
         }
         [self.location addAnnotation:self.user];
-        NSLog(@"self.location.frame.size.height %f, %f, %f", self.location.frame.size.height, self.location.frame.origin.y, self.tableView.frame.origin.y);
         [self.tableView setFrame:CGRectMake(self.tableView.frame.origin.x, self.location.frame.origin.y + self.location.frame.size.height + 5, self.tableView.frame.size.width, self.tableView.frame.size.height)];
     } else {
         self.location.hidden = YES;
-        [self.tableView setFrame:CGRectMake(self.tableView.frame.origin.x, self.description.frame.origin.y + self.description.frame.size.height + 5, self.tableView.frame.size.width, self.tableView.frame.size.height)];
+        [self.tableView setFrame:CGRectMake(self.tableView.frame.origin.x, self.userDescription.frame.origin.y + self.userDescription.frame.size.height + 5, self.tableView.frame.size.width, self.tableView.frame.size.height)];
     }
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];

@@ -42,6 +42,7 @@
             self.calloutView.storename.userInteractionEnabled = YES;
             self.calloutView.address.userInteractionEnabled = YES;
             self.calloutView.phone.userInteractionEnabled = YES;
+            [self.calloutView.storename addTarget:self action:@selector(viewPressed:)forControlEvents:UIControlEventTouchDown];
             [self.calloutView.phone addTarget:self action:@selector(phoneClicked:)forControlEvents:UIControlEventTouchDown];
             [self.calloutView.direction addTarget:self action:@selector(directionClicked:)forControlEvents:UIControlEventTouchDown];
         }
@@ -54,7 +55,7 @@
                 self.calloutView.phone.enabled = NO;
                 self.calloutView.phone.backgroundColor = [UIColor lightGrayColor];
             }
-            self.calloutView.storename.text = user.storename;
+            [self.calloutView.storename setTitle:user.storename forState:UIControlStateNormal];
             self.calloutView.address.text = [NSString stringWithFormat:@"%@, %@, %@, %@", user.street, user.city, user.state, user.zip];
         }
         [self addSubview:self.calloutView];
@@ -79,6 +80,10 @@
 
 - (void) directionClicked:(id)sender {
     [[((User *)self.annotation) mapItem] openInMapsWithLaunchOptions:nil];
+}
+
+- (void) viewPressed:(UIGestureRecognizer *)sender {
+    [self.delegate annotationPressed:self];
 }
 
 - (void) phoneClicked:(id)sender {

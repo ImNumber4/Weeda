@@ -8,8 +8,9 @@
 
 #import "DiscoverViewController.h"
 #import "VendorMKAnnotationView.h"
+#import "UserViewController.h"
 
-@interface DiscoverViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface DiscoverViewController () <UITableViewDelegate, UITableViewDataSource, VendorMKAnnotationViewDelegate>
 
 @property (nonatomic, strong) CLLocation *curLocation;
 
@@ -34,6 +35,7 @@ const double REGION_SPAN = 2.0;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     self.mapView.delegate = self;
     self.storeSearch.delegate = self;
     self.storeSearch.tag = STORE_SEARCH;
@@ -46,8 +48,7 @@ const double REGION_SPAN = 2.0;
     [self.storeSearch becomeFirstResponder];
     [self searchInCurrentLocation:nil];
     self.geocoder = [[CLGeocoder alloc] init];
-    UITapGestureRecognizer *singleFingerTap =
-    [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
+    UITapGestureRecognizer *singleFingerTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
     [self.mapView addGestureRecognizer:singleFingerTap];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWasShown:)
@@ -56,6 +57,13 @@ const double REGION_SPAN = 2.0;
     [self enableSearchButton:self.storeSearch];
     [self enableSearchButton:self.location];
     
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
+}
+- (void)viewWillDisappear:(BOOL)animated {
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 
 - (void) enableSearchButton:(UISearchBar *)searchBar {
@@ -197,7 +205,7 @@ const double REGION_SPAN = 2.0;
         if (annotationView == nil) {
             annotationView = [[VendorMKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
             annotationView.enabled = YES;
-            
+            annotationView.delegate = self;
         } else {
             [annotationView setAnnotation:annotation];
         }
@@ -205,6 +213,12 @@ const double REGION_SPAN = 2.0;
     }
     
     return nil;
+}
+
+- (void) annotationPressed:(MKAnnotationView *)annotationView {
+    if ([annotationView.annotation isKindOfClass:[User class]]) {
+        [self performSegueWithIdentifier:@"showUser" sender:((User *) annotationView.annotation).id];
+    }
 }
 
 -(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
@@ -293,15 +307,11 @@ const double REGION_SPAN = 2.0;
     return 25;
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    if ([[segue identifier] isEqualToString:@"showUser"]) {
+        [ [segue destinationViewController] setUser_id:sender];
+    }
 }
-*/
 
 @end
