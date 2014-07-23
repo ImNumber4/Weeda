@@ -144,13 +144,16 @@ const NSInteger SHOW_FOLLOWINGS = 2;
 }
 
 - (IBAction)handleSelectAvatar:(id)sender {
-    UIImagePickerController *pickerController = [[UIImagePickerController alloc] init];
-    pickerController.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
-    pickerController.mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeSavedPhotosAlbum];
-    pickerController.allowsEditing = NO;
-    pickerController.delegate = self;
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    if ([self.user_id isEqualToNumber:appDelegate.currentUser.id]) {
+        UIImagePickerController *pickerController = [[UIImagePickerController alloc] init];
+        pickerController.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+        pickerController.mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeSavedPhotosAlbum];
+        pickerController.allowsEditing = NO;
+        pickerController.delegate = self;
     
-    [self presentViewController:pickerController animated:YES completion:nil];
+        [self presentViewController:pickerController animated:YES completion:nil];
+    }
 }
 
 - (void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
