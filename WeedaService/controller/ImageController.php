@@ -16,10 +16,9 @@ class ImageController extends Controller
 			throw new InvalidRequestException('Image not exist');
 		}
 		
-		$image['url'] = $image_url;
-		$image['image'] = $weed_image;
-		
-		return json_encode(array('image' => $image));
+		header('Content-Type: image/jpeg');
+		imagejpeg($weed_image, null, 100);
+		imagedestroy($weed_image);
 	}
 	
 	private function getImageForServer($image_url)
@@ -44,7 +43,12 @@ class ImageController extends Controller
 			}
 			$filename = $this->get_weed_image_filename($user_id, $weed_id, $count);
 		} else if ($type == 'avatar') {
-			# code...
+			$user_id = array_shift($url_arr);
+			if (!user_id) {
+				error_log('Invalid url, url: ' . $image_url);
+				return null;
+			}
+			$filename = $this->get_avatar_filename($user_id);
 		} else {
 			error_log('Invalid image type, type: ' . $type);
 			return null;
@@ -55,18 +59,17 @@ class ImageController extends Controller
 			error_log('Get Image failed - Loading error.');
 			return null;
 		}
-		ob_start();
-		imagejpeg($image, null, 100);
-		$contents =  ob_get_contents();
-		ob_end_clean();
-		
-		imagedestroy($image);
-		return base64_encode($contents);
+		return $image;
 	}
 	
 	private function get_weed_image_filename($user_id, $weed_id, $count)
 	{
 		return $this->UPLOAD_BASE_PATH . $user_id . '/' . $weed_id . '/' . $count . '.jpeg';
+	}
+	
+	private function get_avatar_filename($user_id)
+	{
+		return $this->UPLOAD_BASE_PATH . $user_id . '/avatar/avatar.jpeg';
 	}
 }
 

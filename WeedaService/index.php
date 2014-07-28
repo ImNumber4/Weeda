@@ -40,6 +40,7 @@ function Hook($url) {
         if ($action != 'login' && $action != 'signup' && $action != 'username' ) {
         	$currentUser_id = $_COOKIE['user_id'];
         	if (!isset($currentUser_id)) {
+				error_log('Please log first. url: ' . $url);
         		http_response_code(401);
         		return;
         	}

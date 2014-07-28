@@ -14,12 +14,14 @@
 #import <RestKit/RestKit.h>
 #import "Weed.h"
 #import "User.h"
-#import "Image.h"
+#import "WeedImage.h"
 
 
 @interface MasterViewController () <UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate>
 
 @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
+
+@property (nonatomic, strong) NSFetchedResultsController *imageFetchedController;
 
 @end
 
@@ -151,20 +153,6 @@ const NSInteger NON_GLOBAL_COMPOSE_TAG = 1;
     static NSString *CellIdentifier = @"WeedTableCell";
     WeedTableViewCell *cell = (WeedTableViewCell *) [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     Weed *weed = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    
-    //Get Avatar and Weeds Image
-    [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"user/avatar/%@", weed.user_id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-        NSLog(@"Get Avatar success.");
-        if (mappingResult.array.count > 0) {
-            Image *image = [mappingResult.array objectAtIndex:0];
-            [self getImageFromServer:image.image cell:cell];
-        } else {
-            [self getImageFromServer:nil cell:cell];
-        }
-    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-        [self getImageFromServer:nil cell:cell];
-    }];
     
     [self decorateCellWithWeed:weed cell:cell];
     return cell;

@@ -7,6 +7,9 @@
 //
 
 #import "WeedBasicTableViewCell.h"
+#import "WeedImageController.h"
+
+#import <SDWebImage/UIImageView+WebCache.h>
 
 @implementation WeedBasicTableViewCell
 
@@ -36,7 +39,7 @@
     NSString *formattedDateString = [dateFormatter stringFromDate:weed.time];
     self.timeLabel.text = [NSString stringWithFormat:@"%@", formattedDateString];
     
-    self.userAvatar.image = [UIImage imageNamed:@"avatar.jpg"];
+    [self.userAvatar sd_setImageWithURL:[WeedImageController imageURLOfAvatar:weed.user_id] placeholderImage:[UIImage imageNamed:@"avatar.jpg"] options:SDWebImageHandleCookies];
     CALayer * l = [self.userAvatar layer];
     [l setMasksToBounds:YES];
     [l setCornerRadius:7.0];

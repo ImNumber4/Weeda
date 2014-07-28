@@ -80,7 +80,7 @@
 		A9D5A05819736F100099664B /* search_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A9D5A05719736F100099664B /* search_icon.png */; };
 		EA152C5F19187D9F009E5337 /* title.png in Resources */ = {isa = PBXBuildFile; fileRef = EA152C5E19187D9F009E5337 /* title.png */; };
 		EA1B050F18F3668A0033AB06 /* WelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA1B050E18F3668A0033AB06 /* WelcomeViewController.m */; };
-		EA38FC5F190C9A9D007D652B /* Image.m in Sources */ = {isa = PBXBuildFile; fileRef = EA38FC5E190C9A9D007D652B /* Image.m */; };
+		EA38FC5F190C9A9D007D652B /* WeedImage.m in Sources */ = {isa = PBXBuildFile; fileRef = EA38FC5E190C9A9D007D652B /* WeedImage.m */; };
 		EA38FC68190D6D26007D652B /* CropImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA38FC67190D6D26007D652B /* CropImageViewController.m */; };
 		EA38FC851917067F007D652B /* welcome.png in Resources */ = {isa = PBXBuildFile; fileRef = EA38FC841917067F007D652B /* welcome.png */; };
 		EA38FC8B191719D3007D652B /* WLUIImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = EA38FC8A191719D3007D652B /* WLUIImageView.m */; };
@@ -96,6 +96,9 @@
 		EAA18EDE18F0ADFD0081482D /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA18EDD18F0ADFD0081482D /* LoginViewController.m */; };
 		EAAE7B4B19611295003F0C65 /* WeedImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = EAAE7B4A19611295003F0C65 /* WeedImageView.m */; };
 		EAB1CB82195A6AAD00BB4BBA /* delete.png in Resources */ = {isa = PBXBuildFile; fileRef = EAB1CB81195A6AAD00BB4BBA /* delete.png */; };
+		EAB57B0C197B6F3F00C79E05 /* libSDWebImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EAB57AF0197B6BD500C79E05 /* libSDWebImage.a */; };
+		EAC6AAF0197B616A00017240 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAC6AACA19798F1100017240 /* ImageIO.framework */; };
+		EACD1157197CA76F00E45475 /* WeedImageController.m in Sources */ = {isa = PBXBuildFile; fileRef = EACD1156197CA76F00E45475 /* WeedImageController.m */; };
 		EAF6762C18FB62E4003BB138 /* SignupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAF6762B18FB62E4003BB138 /* SignupViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -141,6 +144,34 @@
 			proxyType = 1;
 			remoteGlobalIDString = 25160D1514564E810060A5C5;
 			remoteInfo = RestKit;
+		};
+		EAB57AEF197B6BD500C79E05 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EAB57AE8197B6BD500C79E05 /* SDWebImage.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 53761325155AD0D5005750A4;
+			remoteInfo = SDWebImage;
+		};
+		EAB57AF1197B6BD500C79E05 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EAB57AE8197B6BD500C79E05 /* SDWebImage.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 537D95C117ECC1FE0097C263;
+			remoteInfo = "SDWebImage+WebP";
+		};
+		EAB57AF3197B6BD500C79E05 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EAB57AE8197B6BD500C79E05 /* SDWebImage.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 531041E0157EAFA400BBABC3;
+			remoteInfo = "SDWebImage+MKAnnotation";
+		};
+		EAB57B02197B6F2E00C79E05 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EAB57AE8197B6BD500C79E05 /* SDWebImage.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 53761307155AD0D5005750A4;
+			remoteInfo = SDWebImage;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -239,8 +270,8 @@
 		EA152C5E19187D9F009E5337 /* title.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = title.png; path = WeedaForiPhone/Images/title.png; sourceTree = "<group>"; };
 		EA1B050D18F3668A0033AB06 /* WelcomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WelcomeViewController.h; sourceTree = "<group>"; };
 		EA1B050E18F3668A0033AB06 /* WelcomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WelcomeViewController.m; sourceTree = "<group>"; };
-		EA38FC5D190C9A9D007D652B /* Image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Image.h; path = WeedaForiPhone/Model/Image.h; sourceTree = "<group>"; };
-		EA38FC5E190C9A9D007D652B /* Image.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Image.m; path = WeedaForiPhone/Model/Image.m; sourceTree = "<group>"; };
+		EA38FC5D190C9A9D007D652B /* WeedImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WeedImage.h; path = WeedaForiPhone/Model/WeedImage.h; sourceTree = "<group>"; };
+		EA38FC5E190C9A9D007D652B /* WeedImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WeedImage.m; path = WeedaForiPhone/Model/WeedImage.m; sourceTree = "<group>"; };
 		EA38FC66190D6D26007D652B /* CropImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CropImageViewController.h; sourceTree = "<group>"; };
 		EA38FC67190D6D26007D652B /* CropImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CropImageViewController.m; sourceTree = "<group>"; };
 		EA38FC841917067F007D652B /* welcome.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = welcome.png; path = WeedaForiPhone/Images/welcome.png; sourceTree = "<group>"; };
@@ -264,6 +295,10 @@
 		EAAE7B4919611295003F0C65 /* WeedImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WeedImageView.h; path = WeedaForiPhone/UI/WeedImageView.h; sourceTree = "<group>"; };
 		EAAE7B4A19611295003F0C65 /* WeedImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WeedImageView.m; path = WeedaForiPhone/UI/WeedImageView.m; sourceTree = "<group>"; };
 		EAB1CB81195A6AAD00BB4BBA /* delete.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = delete.png; sourceTree = "<group>"; };
+		EAB57AE8197B6BD500C79E05 /* SDWebImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDWebImage.xcodeproj; path = SDWebImage/SDWebImage.xcodeproj; sourceTree = "<group>"; };
+		EAC6AACA19798F1100017240 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		EACD1155197CA76F00E45475 /* WeedImageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WeedImageController.h; path = WeedaForiPhone/Library/WeedImageController.h; sourceTree = "<group>"; };
+		EACD1156197CA76F00E45475 /* WeedImageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WeedImageController.m; path = WeedaForiPhone/Library/WeedImageController.m; sourceTree = "<group>"; };
 		EAF6762A18FB62E4003BB138 /* SignupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignupViewController.h; sourceTree = "<group>"; };
 		EAF6762B18FB62E4003BB138 /* SignupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignupViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -274,6 +309,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				A98A89C2195FCAC6005A5871 /* AddressBook.framework in Frameworks */,
+				EAB57B0C197B6F3F00C79E05 /* libSDWebImage.a in Frameworks */,
+				EAC6AAF0197B616A00017240 /* ImageIO.framework in Frameworks */,
 				A959D30C19282DE50085F6C1 /* MapKit.framework in Frameworks */,
 				A953B70B18DF8E42001CDD4C /* libRestKit.a in Frameworks */,
 				A953B6F818D6D7DB001CDD4C /* SystemConfiguration.framework in Frameworks */,
@@ -306,8 +343,10 @@
 		A914CC9718CD756200B870D8 = {
 			isa = PBXGroup;
 			children = (
+				EAB57AE8197B6BD500C79E05 /* SDWebImage.xcodeproj */,
 				A953B6DC18D6D794001CDD4C /* RestKit.xcodeproj */,
 				A914CCE218CD76C500B870D8 /* Model */,
+				EACD114E197CA72900E45475 /* Library */,
 				A9CA8E9A18F3E01C004F095D /* UI */,
 				A9CA8E9218F3DAC6004F095D /* Images */,
 				A914CCAB18CD756200B870D8 /* WeedaForiPhone */,
@@ -330,6 +369,7 @@
 			isa = PBXGroup;
 			children = (
 				A98A89C1195FCAC6005A5871 /* AddressBook.framework */,
+				EAC6AACA19798F1100017240 /* ImageIO.framework */,
 				A959D30B19282DE50085F6C1 /* MapKit.framework */,
 				A953B6F718D6D7DB001CDD4C /* SystemConfiguration.framework */,
 				A953B6F518D6D7D2001CDD4C /* Security.framework */,
@@ -412,8 +452,8 @@
 		A914CCE218CD76C500B870D8 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				EA38FC5D190C9A9D007D652B /* Image.h */,
-				EA38FC5E190C9A9D007D652B /* Image.m */,
+				EA38FC5D190C9A9D007D652B /* WeedImage.h */,
+				EA38FC5E190C9A9D007D652B /* WeedImage.m */,
 				A953B6FC18D6D9DB001CDD4C /* Model.xcdatamodeld */,
 				A9CA8E5718E8DB1E004F095D /* RemoteObject.h */,
 				A9CA8E5818E8DB1E004F095D /* RemoteObject.m */,
@@ -513,6 +553,25 @@
 			name = UI;
 			sourceTree = "<group>";
 		};
+		EAB57AE9197B6BD500C79E05 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				EAB57AF0197B6BD500C79E05 /* libSDWebImage.a */,
+				EAB57AF2197B6BD500C79E05 /* libSDWebImage+WebP.a */,
+				EAB57AF4197B6BD500C79E05 /* libSDWebImage+MKAnnotation.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		EACD114E197CA72900E45475 /* Library */ = {
+			isa = PBXGroup;
+			children = (
+				EACD1155197CA76F00E45475 /* WeedImageController.h */,
+				EACD1156197CA76F00E45475 /* WeedImageController.m */,
+			);
+			name = Library;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -527,6 +586,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				EAB57B03197B6F2E00C79E05 /* PBXTargetDependency */,
 				A953B6EC18D6D7A1001CDD4C /* PBXTargetDependency */,
 			);
 			name = Weeda;
@@ -590,6 +650,10 @@
 					ProductGroup = A953B6DD18D6D794001CDD4C /* Products */;
 					ProjectRef = A953B6DC18D6D794001CDD4C /* RestKit.xcodeproj */;
 				},
+				{
+					ProductGroup = EAB57AE9197B6BD500C79E05 /* Products */;
+					ProjectRef = EAB57AE8197B6BD500C79E05 /* SDWebImage.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
@@ -626,6 +690,27 @@
 			fileType = wrapper.cfbundle;
 			path = RestKitFrameworkTests.octest;
 			remoteRef = A953B6E918D6D794001CDD4C /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		EAB57AF0197B6BD500C79E05 /* libSDWebImage.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libSDWebImage.a;
+			remoteRef = EAB57AEF197B6BD500C79E05 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		EAB57AF2197B6BD500C79E05 /* libSDWebImage+WebP.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libSDWebImage+WebP.a";
+			remoteRef = EAB57AF1197B6BD500C79E05 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		EAB57AF4197B6BD500C79E05 /* libSDWebImage+MKAnnotation.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libSDWebImage+MKAnnotation.a";
+			remoteRef = EAB57AF3197B6BD500C79E05 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -694,6 +779,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A953B6FE18D6D9DB001CDD4C /* Model.xcdatamodeld in Sources */,
+				EACD1157197CA76F00E45475 /* WeedImageController.m in Sources */,
 				EA38FC8B191719D3007D652B /* WLUIImageView.m in Sources */,
 				A914CCC218CD756200B870D8 /* DetailViewController.m in Sources */,
 				A9A46833190E210900461E90 /* WeedDetailControlTableViewCell.m in Sources */,
@@ -719,7 +805,7 @@
 				A91A62ED18FF8F48008726E5 /* UserListViewController.m in Sources */,
 				A9CA8E6618E9132C004F095D /* AddWeedViewController.m in Sources */,
 				EA4DB14C196114D6005ED7F7 /* WeedShowImageCell.m in Sources */,
-				EA38FC5F190C9A9D007D652B /* Image.m in Sources */,
+				EA38FC5F190C9A9D007D652B /* WeedImage.m in Sources */,
 				A914CCB218CD756200B870D8 /* main.m in Sources */,
 				A92E513A19046E2A00FC518F /* UserTableViewCell.m in Sources */,
 				A99A0A3119173C9F00E2C50B /* Weed.m in Sources */,
@@ -747,6 +833,11 @@
 			isa = PBXTargetDependency;
 			name = RestKit;
 			targetProxy = A953B6EB18D6D7A1001CDD4C /* PBXContainerItemProxy */;
+		};
+		EAB57B03197B6F2E00C79E05 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = SDWebImage;
+			targetProxy = EAB57B02197B6F2E00C79E05 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

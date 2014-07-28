@@ -8,7 +8,10 @@
 
 #import "WeedTableViewCell.h"
 #import "WeedShowImageCell.h"
-#import "Image.h"
+#import "WeedImage.h"
+#import "WeedImageController.h"
+#import <SDWebImage/UIImageView+WebCache.h>
+#import <SDWebImage/SDWebImageManager.h>
 
 @implementation WeedTableViewCell
 
@@ -18,6 +21,12 @@
     [[NSBundle mainBundle] loadNibNamed:@"WeedTableViewCell" owner:self options:nil];
     self.bounds = self.view.bounds;
     [self addSubview:self.view];
+    
+    self.userAvatar.contentMode = UIViewContentModeScaleAspectFill;
+    self.userAvatar.clipsToBounds = YES;
+    CALayer * l = [self.userAvatar layer];
+    [l setMasksToBounds:YES];
+    [l setCornerRadius:7.0];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
@@ -70,6 +79,8 @@
     self.seedCount.text = [NSString stringWithFormat:@"%@", weed.seed_count];
     self.waterCount.text = [NSString stringWithFormat:@"%@", weed.water_count];
     
+    [self.userAvatar sd_setImageWithURL:[WeedImageController imageURLOfAvatar:weed.user_id] placeholderImage:[UIImage imageNamed:@"avatar.jpg"] options:SDWebImageHandleCookies];
+    
     if ([weed.image_count intValue] > 0) {
         _weedTmp = weed;
         _imageCount = [weed.image_count intValue];
@@ -111,18 +122,33 @@
 - (WeedShowImageCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     WeedShowImageCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"imageCell" forIndexPath:indexPath];
-    
-    NSLog(@"url: image/query/weed_%@_%@_%ld", _weedTmp.user_id, _weedTmp.id, indexPath.row);
-    
-    cell.backgroundColor = [UIColor grayColor];
+    if (cell) {
+        NSString *url = [NSString stringWithFormat:@"http://www.cannablaze.com/image/query/weed_%@_%@_%ld", _weedTmp.user_id, _weedTmp.id, (long)indexPath.row];
+        cell.backgroundColor = [UIColor grayColor];
+        
+        NSLog(@"Weed URL: %@", url);
+        [cell.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:nil options:SDWebImageHandleCookies];
 
-    //Get Weeds Image
-    [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"image/query/weed_%@_%@_%ld", _weedTmp.user_id, _weedTmp.id, indexPath.row] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-        Image *image = [mappingResult.array objectAtIndex:0];
-        cell.imageView.image = image.image;
-    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-        NSLog(@"Get image Failed: %@", error);
-    }];
+//        [[SDWebImageManager sharedManager] downloadImageWithURL:[NSURL URLWithString:url] options:SDWebImageHandleCookies progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+//            return;
+//        } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+//            if (image && finished) {
+//                cell.imageView.image = image;
+//            }
+//        }];
+    }
+    
+//    NSLog(@"url: image/query/weed_%@_%@_%ld", _weedTmp.user_id, _weedTmp.id, indexPath.row);
+//    
+//    cell.backgroundColor = [UIColor grayColor];
+//
+//    //Get Weeds Image
+//    [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"image/query/weed_%@_%@_%ld", _weedTmp.user_id, _weedTmp.id, indexPath.row] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+//        WeedImage *image = [mappingResult.array objectAtIndex:0];
+//        cell.imageView.image = image.image;
+//    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+//        NSLog(@"Get image Failed: %@", error);
+//    }];
     
     return cell;
 }

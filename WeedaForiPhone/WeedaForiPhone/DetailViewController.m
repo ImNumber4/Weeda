@@ -14,6 +14,9 @@
 #import "WeedBasicTableViewCell.h"
 #import "TabBarController.h"
 #import "AddWeedViewController.h"
+#import "WeedImageController.h"
+
+#import <SDWebImage/UIImageView+WebCache.h>
 
 const NSInteger PARENT_WEEDS_SECTION_INDEX = 0;
 const NSInteger CURRENT_WEED_SECTION_INDEX = 1;
@@ -176,12 +179,23 @@ const NSInteger SHOW_WATER_USERS = 2;
     [dateFormatter setDateFormat:@"MMM. dd yyyy hh:mm"];
     NSString *formattedDateString = [dateFormatter stringFromDate:self.currentWeed.time];
     cell.timeLabel.text = [NSString stringWithFormat:@"%@", formattedDateString];
-    cell.userAvatar.image = [self getImage:@"avatar.jpg" width:40 height:40];
+//    cell.userAvatar.image = [self getImage:@"avatar.jpg" width:40 height:40];
 //    [cell.userAvatar setImageWithUser: self.currentWeed.user_id];
+    [cell.userAvatar sd_setImageWithURL:[WeedImageController imageURLOfAvatar:self.currentWeed.user_id] placeholderImage:[UIImage imageNamed:@"avatar.jpg"] options:SDWebImageHandleCookies];
     CALayer * l = [cell.userAvatar layer];
     [l setMasksToBounds:YES];
     [l setCornerRadius:7.0];
+    
 }
+
+//- (void)createImageCollectionViewCell:(WeedDetailTableViewCell *)cell
+//{
+//    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc]init];
+//    layout.itemSize = CGSizeMake(cell.superview.window.frame.size.width, 300);
+//    layout.minimumLineSpacing = 5;
+//    layout.minimumInteritemSpacing = 5;
+//    layout.scrollDirection = UICollectionViewScrollDirectionVertical;
+//}
 
 - (void)configureWeedTableViewCell:(WeedBasicTableViewCell *)cell weed:(Weed *)weed
 {

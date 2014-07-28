@@ -11,7 +11,7 @@
 #import "WeedAddingToolbar.h"
 #import "WeedAddingImageView.h"
 #import "WeedAddingImageCell.h"
-#import "image.h"
+#import "WeedImage.h"
 #import <RestKit/RestKit.h>
 
 @interface AddWeedViewController () <UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UICollectionViewDelegate,UICollectionViewDataSource,UIGestureRecognizerDelegate, WeedAddingToolbarDelegate, WeedAddingImageViewDelegate>
@@ -270,15 +270,17 @@
 
 - (void)uploadImageToServer:(Weed *)weed
 {
+    RKManagedObjectStore *objectStore = [[RKObjectManager sharedManager] managedObjectStore];
+    
     for (int i = 0; i < self.dataArray.count; i++) {
-        Image *image = [Image new];
-        NSMutableURLRequest *request = [[RKObjectManager sharedManager] multipartFormRequestWithObject:image method:RKRequestMethodPOST path:[NSString stringWithFormat:@"weed/upload/%@", weed.id] parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        WeedImage *weedImage = [NSEntityDescription insertNewObjectForEntityForName:@"WeedImage" inManagedObjectContext:objectStore.mainQueueManagedObjectContext];
+        weedImage.image = [self.dataArray objectAtIndex:i];
+        
+        NSMutableURLRequest *request = [[RKObjectManager sharedManager] multipartFormRequestWithObject:weedImage method:RKRequestMethodPOST path:[NSString stringWithFormat:@"weed/upload/%@", weed.id] parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
             [formData appendPartWithFileData:UIImageJPEGRepresentation([self.dataArray objectAtIndex:i], 90)
                                         name:@"image"
                                     fileName:[NSString stringWithFormat:@"%d.jpeg", i]
                                     mimeType:@"image/jpeg"];
-//            [formData appendPartWithFormData:[NSKeyedArchiver archivedDataWithRootObject:weed.user_id] name:@"user_id"];
-//            [formData appendPartWithFormData:[NSKeyedArchiver archivedDataWithRootObject:weed.id] name:@"weed_id"];
         }];
         
         RKObjectRequestOperation *operation = [[RKObjectManager sharedManager] objectRequestOperationWithRequest:request success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {

@@ -11,10 +11,14 @@
 #import "LoginViewController.h"
 #import "CropImageViewController.h"
 #import "AppDelegate.h"
-#import "Image.h"
 #import "WeedBasicTableViewCell.h"
+#import "WeedImage.h"
+#import "WeedTableViewCell.h"
 #import "DetailViewController.h"
 #import "VendorMKAnnotationView.h"
+#import "WeedImageController.h"
+
+#import <SDWebImage/UIImageView+WebCache.h>
 
 @interface UserViewController () <CropImageDelegate>
 
@@ -36,13 +40,12 @@ const NSInteger SHOW_FOLLOWINGS = 2;
     [super viewDidAppear:animated];
     // Do any additional setup after loading the view.
     
+    [self updateUserAvatar];
+    
     //Get User Profile
     [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"user/query/%@", self.user_id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
         self.user = [mappingResult.array objectAtIndex:0];
         [self updateView];
-        
-        //Get User Avatar
-        [self getAvatarFromServer];
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
         RKLogError(@"Load failed with error: %@", error);
     }];
@@ -131,16 +134,6 @@ const NSInteger SHOW_FOLLOWINGS = 2;
 - (void)decorateCellWithWeed:(Weed *)weed cell:(WeedBasicTableViewCell *)cell
 {
     [cell decorateCellWithWeed:weed];
-    [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"user/avatar/%@", weed.user_id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-        if (mappingResult.array.count > 0) {
-            Image *image = [mappingResult.array objectAtIndex:0];
-            [cell.userAvatar setImage:image.image];
-            CALayer * l = [cell.userAvatar layer];
-            [l setMasksToBounds:YES];
-            [l setCornerRadius:7.0];
-        }
-    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-    }];
 }
 
 - (IBAction)handleSelectAvatar:(id)sender {
@@ -183,20 +176,6 @@ const NSInteger SHOW_FOLLOWINGS = 2;
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         Weed *weed = [self.weeds objectAtIndex:indexPath.row];
         [[segue destinationViewController] setCurrentWeed:weed];
-    }
-}
-
-- (void) getAvatarFromServer
-{
-    if (self.user.hasAvatar == 0) {
-        [self updateUserAvatar:nil];
-    } else {
-        [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"user/avatar/%@", self.user.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-            Image *image = [mappingResult.array objectAtIndex:0];
-            [self updateUserAvatar:image.image];
-        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-            NSLog(@"Get Avatar Failed: %@", error);
-        }];
     }
 }
 
@@ -319,16 +298,12 @@ const NSInteger SHOW_FOLLOWINGS = 2;
     }
 }
 
-- (void)updateUserAvatar:(UIImage *)image
+- (void)updateUserAvatar
 {
     self.userAvatar.contentMode = UIViewContentModeScaleAspectFill;
     self.userAvatar.clipsToBounds = YES;
     
-    if (!image) {
-        self.userAvatar.image = [UIImage imageNamed:@"avatar.jpg"];
-    } else {
-        self.userAvatar.image = image;
-    }
+    [self.userAvatar sd_setImageWithURL:[WeedImageController imageURLOfAvatar:self.user_id] placeholderImage:[UIImage imageNamed:@"avatar.png"] options:SDWebImageHandleCookies];
     
     CALayer * l = [self.userAvatar layer];
     [l setMasksToBounds:YES];

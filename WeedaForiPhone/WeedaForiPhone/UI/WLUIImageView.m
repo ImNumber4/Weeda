@@ -7,7 +7,7 @@
 //
 
 #import "WLUIImageView.h"
-#import "Image.h"
+#import "WeedImage.h"
 
 @interface WLUIImageView ()
 
@@ -73,7 +73,7 @@
 {
     [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"user/follow/%@", self.userId] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
         NSLog(@"Update User Avatar...");
-        Image *newImage = [mappingResult.array objectAtIndex:0];
+        WeedImage *newImage = [mappingResult.array objectAtIndex:0];
         self.image = newImage.image;
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
         NSLog(@"Get Avatar Failed: %@", error);

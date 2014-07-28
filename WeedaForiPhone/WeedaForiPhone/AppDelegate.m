@@ -13,7 +13,7 @@
 #import <RestKit/RestKit.h>
 #import "Weed.h"
 #import "User.h"
-#import "Image.h"
+#import "WeedImage.h"
 
 @interface AppDelegate ()
 
@@ -66,8 +66,6 @@
     NSManagedObjectModel *managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
     RKManagedObjectStore *managedObjectStore = [[RKManagedObjectStore alloc] initWithManagedObjectModel:managedObjectModel];
     manager.managedObjectStore = managedObjectStore;
-    
-    
     
     RKObjectMapping *errorMapping = [RKObjectMapping mappingForClass:[RKErrorMessage class]];
     [errorMapping addPropertyMapping:
@@ -276,7 +274,7 @@
     [manager addResponseDescriptor:signupResponseDescriptor];
     
     //Adding Image response descriptor
-    [self addImageHttpResponser];
+    [self addImageHttpResponser:managedObjectStore];
     
     /**
      Complete Core Data stack initialization
@@ -298,9 +296,9 @@
     
 }
 
-- (void) addImageHttpResponser
+- (void) addImageHttpResponser:(RKManagedObjectStore *)managedObjectStore
 {
-    RKObjectMapping *imageObjectMapping = [RKObjectMapping mappingForClass:[Image class]];
+    RKObjectMapping *imageObjectMapping = [RKObjectMapping mappingForClass:[WeedImage class]];
     [imageObjectMapping addAttributeMappingsFromDictionary:@{@"url": @"url"}];
     
     RKAttributeMapping *imageMapping = [RKAttributeMapping attributeMappingFromKeyPath:@"image" toKeyPath:@"image"];

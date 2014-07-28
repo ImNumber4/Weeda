@@ -6,11 +6,12 @@
 //  Copyright (c) 2014年 Weeda. All rights reserved.
 //
 
-#import "Image.h"
+#import "WeedImage.h"
 
-@implementation Image
+@implementation WeedImage
 
-@synthesize url;
-@synthesize image;
+@dynamic url;
+@dynamic image;
+@dynamic isBig;
 
 @end
