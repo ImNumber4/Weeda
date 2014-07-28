@@ -1,3 +1,6 @@
 [submodule "WeedaForiPhone/RestKit"]
 	path = WeedaForiPhone/RestKit
 	url = git://github.com/RestKit/RestKit.git
+[submodule "WeedaForiPhone/SDWebImage"]
+	path = WeedaForiPhone/SDWebImage
+	url = https://github.com/rs/SDWebImage.git
