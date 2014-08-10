@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6185.11" systemVersion="14A298i" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="95h-tk-Uat">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6205" systemVersion="14A314h" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="95h-tk-Uat">
     <dependencies>
         <deployment defaultVersion="1808" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6190.4"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6198"/>
     </dependencies>
     <scenes>
         <!--Navigation Controller-->
@@ -472,7 +472,7 @@
                                             </userDefinedRuntimeAttributes>
                                         </button>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="KDh-G7-sm2">
-                                            <rect key="frame" x="20" y="7" width="30" height="30"/>
+                                            <rect key="frame" x="20" y="5" width="35" height="35"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         </imageView>
                                     </subviews>
@@ -982,9 +982,9 @@
     <inferredMetricsTieBreakers>
         <segue reference="dcA-N1-b4z"/>
         <segue reference="i1k-fC-0aj"/>
-        <segue reference="JEh-w8-48C"/>
         <segue reference="Cu1-Di-ade"/>
         <segue reference="Th6-6F-Dxp"/>
+        <segue reference="TQg-xg-4RQ"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="0.24313727021217346" green="0.64705884456634521" blue="0.24705883860588074" alpha="1" colorSpace="deviceRGB"/>
 </document>

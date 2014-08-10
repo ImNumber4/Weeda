@@ -8,6 +8,8 @@
 
 #import "UserListViewController.h"
 #import "UserTableViewCell.h"
+#import "WeedImageController.h"
+#import <SDWebImage/UIImageView+WebCache.h>
 
 @interface UserListViewController ()
 @end
@@ -64,11 +66,10 @@
 }
 
 - (void)decorateCellWithUser:(User *)user cell:(UserTableViewCell *)cell {
-    cell.userAvatar.image = [UIImage imageNamed:@"avatar.jpg"];
+    [cell.userAvatar sd_setImageWithURL:[WeedImageController imageURLOfAvatar:user.id] placeholderImage:[UIImage imageNamed:@"avatar.jpg"] options:SDWebImageHandleCookies];
     CALayer * l = [cell.userAvatar layer];
     [l setMasksToBounds:YES];
     [l setCornerRadius:7.0];
-    // Configure the cell...
     
     NSString *nameLabel = [NSString stringWithFormat:@"@%@", user.username];
     cell.usernameLabel.text = nameLabel;

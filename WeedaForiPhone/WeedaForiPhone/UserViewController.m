@@ -68,11 +68,10 @@ const NSInteger SHOW_FOLLOWINGS = 2;
     [super viewDidAppear:animated];
     // Do any additional setup after loading the view.
     
-    [self updateUserAvatar];
-    
     //Get User Profile
     [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"user/query/%@", self.user_id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
         self.user = [mappingResult.array objectAtIndex:0];
+        [self updateUserAvatar];
         [self updateView];
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
         RKLogError(@"Load failed with error: %@", error);
@@ -315,15 +314,8 @@ const NSInteger SHOW_FOLLOWINGS = 2;
 {
     self.userAvatar.contentMode = UIViewContentModeScaleAspectFill;
     self.userAvatar.clipsToBounds = YES;
-    if (self.user.has_avatar) {
-        [self.userAvatar sd_setImageWithURL:[WeedImageController imageURLOfAvatar:self.user_id] placeholderImage:[UIImage imageNamed:@"avatar.png"] options:SDWebImageHandleCookies];
-    } else {
-        self.userAvatar.image = [UIImage imageNamed:@"avatar.jpg"];
-        CALayer * l = [self.userAvatar layer];
-        [l setMasksToBounds:YES];
-        [l setCornerRadius:7.0];
-    }
     
+    [self.userAvatar sd_setImageWithURL:[WeedImageController imageURLOfAvatar:self.user_id] placeholderImage:[UIImage imageNamed:@"avatar.jpg"] options:SDWebImageHandleCookies];
     
     CALayer * l = [self.userAvatar layer];
     [l setMasksToBounds:YES];
