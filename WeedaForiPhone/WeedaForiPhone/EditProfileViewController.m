@@ -35,6 +35,7 @@ const NSInteger COUNTRY_ROW = 6;
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillBeHidden:)
                                                  name:UIKeyboardWillHideNotification object:nil];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)];
     UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithTitle:@"Save" style:UIBarButtonItemStyleBordered target:self action:@selector(save:)];
     self.navigationItem.rightBarButtonItem = saveButton;
 }
@@ -186,7 +187,7 @@ const NSInteger COUNTRY_ROW = 6;
 
 - (void)keyboardWillBeHidden:(NSNotification*)aNotification
 {
-    UIEdgeInsets contentInsets = UIEdgeInsetsMake(self.table.contentInset.top, 0.0, TAB_BAR_HEIGHT, 0.0);
+    UIEdgeInsets contentInsets = UIEdgeInsetsMake(self.table.contentInset.top, 0.0, 0.0, 0.0);
     self.table.contentInset = contentInsets;
     self.table.scrollIndicatorInsets = contentInsets;
     
@@ -201,7 +202,12 @@ const NSInteger COUNTRY_ROW = 6;
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
         NSLog(@"Failure saving post: %@", error.localizedDescription);
     }];
-    [self.navigationController popToRootViewControllerAnimated:TRUE];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
+
+- (IBAction) cancel: (id) sender {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
 
 @end

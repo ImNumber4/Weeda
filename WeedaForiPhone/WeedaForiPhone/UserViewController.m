@@ -186,8 +186,10 @@ const NSInteger SHOW_FOLLOWINGS = 2;
         Weed *weed = [self.weeds objectAtIndex:indexPath.row];
         [[segue destinationViewController] setCurrentWeed:weed];
     } else if ([[segue identifier] isEqualToString:@"editProfile"]) {
-        [[segue destinationViewController] setTitle:@"Edit Profile"];
-        [[segue destinationViewController] setUserObject:self.user];
+        UINavigationController* nav = [segue destinationViewController];
+        EditProfileViewController* editProfileViewController = (EditProfileViewController *) nav.topViewController;
+        [editProfileViewController setTitle:@"Edit Profile"];
+        [editProfileViewController setUserObject:self.user];
     }
 }
 

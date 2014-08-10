@@ -647,7 +647,7 @@
                         <outlet property="weedCountLabel" destination="DOP-si-5x5" id="gXL-er-7hv"/>
                         <segue destination="cE6-OT-Fvo" kind="modal" identifier="cropImage" id="fNi-3r-yho"/>
                         <segue destination="kcP-Br-rTe" kind="push" identifier="showUsers" id="gr4-Yl-zIz"/>
-                        <segue destination="fJr-Fq-UNS" kind="push" identifier="editProfile" id="bAZ-BQ-nLk"/>
+                        <segue destination="Yp8-Ok-QlB" kind="modal" identifier="editProfile" modalTransitionStyle="coverVertical" id="we0-76-yLy"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eoY-9M-DDM" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -658,6 +658,22 @@
                 </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1682" y="-569"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="BBJ-UD-j9P">
+            <objects>
+                <navigationController id="Yp8-Ok-QlB" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="7qa-Mp-HGb">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="fJr-Fq-UNS" kind="relationship" relationship="rootViewController" id="MQq-sP-BxN"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qUw-k2-F3G" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2326" y="-1121"/>
         </scene>
         <!--Edit Profile Controller-->
         <scene sceneID="YJq-SF-ZDc">
@@ -981,10 +997,10 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="dcA-N1-b4z"/>
-        <segue reference="i1k-fC-0aj"/>
-        <segue reference="Cu1-Di-ade"/>
-        <segue reference="Th6-6F-Dxp"/>
+        <segue reference="gr4-Yl-zIz"/>
         <segue reference="TQg-xg-4RQ"/>
+        <segue reference="dSx-Us-Hdx"/>
+        <segue reference="Th6-6F-Dxp"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="0.24313727021217346" green="0.64705884456634521" blue="0.24705883860588074" alpha="1" colorSpace="deviceRGB"/>
 </document>
