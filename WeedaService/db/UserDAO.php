@@ -18,10 +18,30 @@ class UserDAO extends BaseDAO
 	}
 	
 	public function update($user) {
-		$query = 'UPDATE user SET email = \'' 
-				. $user->get_email() . '\',time = \'' 
-				. $user->get_time() . '\', deleted = ' 
-				. $user->get_deleted() . ', has_avatar = ' 
+		$query = 'UPDATE user SET '
+			.'email = \'' . $user->get_email() . '\', '
+			.'username = \'' . $user->get_username() . '\', '
+			.'description = \'' . $user->get_description() . '\'';
+		
+		if ($user->get_user_type() && strtolower($user->get_user_type()) != 'user') {
+			$query = $query . ', storename = \'' . $user->get_storename() . '\', '
+				.'address_street = \'' . $user->get_address_street() . '\', '
+				.'address_city = \'' . $user->get_address_city() . '\', '
+				.'address_state = \'' . $user->get_address_state() . '\', '
+				.'address_country = \'' . $user->get_address_country() . '\', '
+				.'address_zip = \'' . $user->get_address_zip() . '\', '
+				.'phone = \'' . $user->get_phone() . '\', '
+				.'latitude = ' . $user->get_latitude() . ', '
+				.'longitude = ' . $user->get_longitude();
+				//user type should be updated separately, should not allow user to modify it
+		}
+			
+	    $query = $query . ' WHERE id = ' . $user->get_id();
+		$this->db_conn->query($query);
+	}
+	
+	public function update_has_avatar($user) {
+		$query = 'UPDATE user SET has_avatar = ' 
 				. $user->get_has_avatar() . ' WHERE id = ' . $user->get_id();
 
 		$this->db_conn->query($query);

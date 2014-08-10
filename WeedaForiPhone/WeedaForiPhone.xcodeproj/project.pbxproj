@@ -78,6 +78,10 @@
 		A9CA8E9718F3DD67004F095D /* avatar.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A9CA8E9618F3DD67004F095D /* avatar.jpg */; };
 		A9CA8EA018F3E255004F095D /* WeedTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A9CA8E9E18F3E255004F095D /* WeedTableViewCell.m */; };
 		A9D5A05819736F100099664B /* search_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A9D5A05719736F100099664B /* search_icon.png */; };
+		A9E6867119860366002CD4C9 /* UserViewController in Resources */ = {isa = PBXBuildFile; fileRef = A9E6867019860366002CD4C9 /* UserViewController */; };
+		A9FB79F31985A4C100DB35CB /* EditProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9FB79F21985A4C100DB35CB /* EditProfileViewController.m */; };
+		A9FB79F91985A94500DB35CB /* UserInfoEditableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A9FB79F81985A94500DB35CB /* UserInfoEditableCell.m */; };
+		A9FB79FB1985A97000DB35CB /* UserInfoEditableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9FB79FA1985A97000DB35CB /* UserInfoEditableCell.xib */; };
 		EA152C5F19187D9F009E5337 /* title.png in Resources */ = {isa = PBXBuildFile; fileRef = EA152C5E19187D9F009E5337 /* title.png */; };
 		EA1B050F18F3668A0033AB06 /* WelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA1B050E18F3668A0033AB06 /* WelcomeViewController.m */; };
 		EA38FC5F190C9A9D007D652B /* WeedImage.m in Sources */ = {isa = PBXBuildFile; fileRef = EA38FC5E190C9A9D007D652B /* WeedImage.m */; };
@@ -267,6 +271,12 @@
 		A9CA8E9D18F3E255004F095D /* WeedTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WeedTableViewCell.h; path = WeedaForiPhone/UI/WeedTableViewCell.h; sourceTree = "<group>"; };
 		A9CA8E9E18F3E255004F095D /* WeedTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WeedTableViewCell.m; path = WeedaForiPhone/UI/WeedTableViewCell.m; sourceTree = "<group>"; };
 		A9D5A05719736F100099664B /* search_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = search_icon.png; path = WeedaForiPhone/Images/search_icon.png; sourceTree = "<group>"; };
+		A9E6867019860366002CD4C9 /* UserViewController */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = UserViewController; sourceTree = "<group>"; };
+		A9FB79F11985A4C100DB35CB /* EditProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditProfileViewController.h; sourceTree = "<group>"; };
+		A9FB79F21985A4C100DB35CB /* EditProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditProfileViewController.m; sourceTree = "<group>"; };
+		A9FB79F71985A94500DB35CB /* UserInfoEditableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserInfoEditableCell.h; path = WeedaForiPhone/UI/UserInfoEditableCell.h; sourceTree = "<group>"; };
+		A9FB79F81985A94500DB35CB /* UserInfoEditableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserInfoEditableCell.m; path = WeedaForiPhone/UI/UserInfoEditableCell.m; sourceTree = "<group>"; };
+		A9FB79FA1985A97000DB35CB /* UserInfoEditableCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = UserInfoEditableCell.xib; path = WeedaForiPhone/UI/UserInfoEditableCell.xib; sourceTree = "<group>"; };
 		EA152C5E19187D9F009E5337 /* title.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = title.png; path = WeedaForiPhone/Images/title.png; sourceTree = "<group>"; };
 		EA1B050D18F3668A0033AB06 /* WelcomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WelcomeViewController.h; sourceTree = "<group>"; };
 		EA1B050E18F3668A0033AB06 /* WelcomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WelcomeViewController.m; sourceTree = "<group>"; };
@@ -393,6 +403,7 @@
 				EA38FC67190D6D26007D652B /* CropImageViewController.m */,
 				A9CA8E7C18F0F814004F095D /* UserViewController.h */,
 				A9CA8E7D18F0F814004F095D /* UserViewController.m */,
+				A9E6867019860366002CD4C9 /* UserViewController */,
 				EAA18EDC18F0ADFD0081482D /* LoginViewController.h */,
 				EAA18EDD18F0ADFD0081482D /* LoginViewController.m */,
 				A9CA8E6418E9132C004F095D /* AddWeedViewController.h */,
@@ -416,6 +427,8 @@
 				A91A62EC18FF8F48008726E5 /* UserListViewController.m */,
 				A9645DD9196A0A6C00DDE2DB /* DiscoverViewController.h */,
 				A9645DDA196A0A6C00DDE2DB /* DiscoverViewController.m */,
+				A9FB79F11985A4C100DB35CB /* EditProfileViewController.h */,
+				A9FB79F21985A4C100DB35CB /* EditProfileViewController.m */,
 			);
 			path = WeedaForiPhone;
 			sourceTree = "<group>";
@@ -549,6 +562,9 @@
 				A98A89D019615B5B005A5871 /* VendorCallOutView.h */,
 				A98A89D719615C99005A5871 /* VendorCallOutView.xib */,
 				A98A89D219615B5B005A5871 /* VendorCallOutView.m */,
+				A9FB79F71985A94500DB35CB /* UserInfoEditableCell.h */,
+				A9FB79F81985A94500DB35CB /* UserInfoEditableCell.m */,
+				A9FB79FA1985A97000DB35CB /* UserInfoEditableCell.xib */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -749,8 +765,10 @@
 				EA4DB14D196114D6005ED7F7 /* WeedShowImageCell.xib in Resources */,
 				A91A62F819035FCC008726E5 /* ok.png in Resources */,
 				A91A62E318FD1B1C008726E5 /* compose.png in Resources */,
+				A9FB79FB1985A97000DB35CB /* UserInfoEditableCell.xib in Resources */,
 				A991C05018FB517600A3D2CD /* selected_profile_icon.png in Resources */,
 				A9180C4D192B329D00668E4F /* setting_icon.png in Resources */,
+				A9E6867119860366002CD4C9 /* UserViewController in Resources */,
 				A959D30719282A9A0085F6C1 /* map.png in Resources */,
 				A9A46824190DE2C600461E90 /* lightgray.png in Resources */,
 				A98A89B8195FB168005A5871 /* dispensary_icon.png in Resources */,
@@ -791,6 +809,7 @@
 				A914CCBF18CD756200B870D8 /* MasterViewController.m in Sources */,
 				EAA18EDE18F0ADFD0081482D /* LoginViewController.m in Sources */,
 				A9CA8E5918E8DB1E004F095D /* RemoteObject.m in Sources */,
+				A9FB79F31985A4C100DB35CB /* EditProfileViewController.m in Sources */,
 				EA76A500194E923200B60F04 /* WeedAddingToolbar.m in Sources */,
 				EA1B050F18F3668A0033AB06 /* WelcomeViewController.m in Sources */,
 				A991C04818FB3B7700A3D2CD /* TabBarController.m in Sources */,
@@ -810,6 +829,7 @@
 				A92E513A19046E2A00FC518F /* UserTableViewCell.m in Sources */,
 				A99A0A3119173C9F00E2C50B /* Weed.m in Sources */,
 				A98A89C51960C46D005A5871 /* VendorMKAnnotationView.m in Sources */,
+				A9FB79F91985A94500DB35CB /* UserInfoEditableCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

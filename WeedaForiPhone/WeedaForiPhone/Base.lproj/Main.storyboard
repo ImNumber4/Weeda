@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6185.7" systemVersion="14A298i" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="95h-tk-Uat">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6185.11" systemVersion="14A298i" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="95h-tk-Uat">
     <dependencies>
         <deployment defaultVersion="1808" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6181.2"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6190.4"/>
     </dependencies>
     <scenes>
         <!--Navigation Controller-->
@@ -91,10 +91,10 @@
             </objects>
             <point key="canvasLocation" x="-1651" y="-832"/>
         </scene>
-        <!--Item-->
+        <!--Discover View Controller-->
         <scene sceneID="Rrf-PO-Ook">
             <objects>
-                <viewController id="15J-rx-ePU" customClass="DiscoverViewController" sceneMemberID="viewController">
+                <viewController title="Discover View Controller" id="15J-rx-ePU" customClass="DiscoverViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="exF-jw-raA">
                         <rect key="frame" x="0.0" y="64" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -190,10 +190,10 @@
             </objects>
             <point key="canvasLocation" x="1123" y="-1229"/>
         </scene>
-        <!--Item-->
+        <!--Discover View Navigation Controller-->
         <scene sceneID="7Pg-Jr-QoB">
             <objects>
-                <navigationController id="fvu-gh-sz0" sceneMemberID="viewController">
+                <navigationController title="Discover View Navigation Controller" id="fvu-gh-sz0" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Item" id="TBX-KQ-yo4"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="OFm-tl-dSt">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -207,10 +207,10 @@
             </objects>
             <point key="canvasLocation" x="281" y="-1229"/>
         </scene>
-        <!--Item-->
+        <!--Weeds Navigation Controller-->
         <scene sceneID="cUi-kZ-frf">
             <objects>
-                <navigationController id="rS3-R9-Ivy" sceneMemberID="viewController">
+                <navigationController title="Weeds Navigation Controller" id="rS3-R9-Ivy" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Item" id="1L0-5V-pZh"/>
                     <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="yXu-0R-QUA">
                         <autoresizingMask key="autoresizingMask"/>
@@ -223,10 +223,10 @@
             </objects>
             <point key="canvasLocation" x="281" y="175"/>
         </scene>
-        <!--Item-->
+        <!--User Navigation Controller-->
         <scene sceneID="1Wf-0U-gkl">
             <objects>
-                <navigationController definesPresentationContext="YES" id="Cux-3E-mIJ" sceneMemberID="viewController">
+                <navigationController title="User Navigation Controller" definesPresentationContext="YES" id="Cux-3E-mIJ" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Item" id="d5O-Tf-uHN"/>
                     <navigationItem key="navigationItem" id="tUT-80-3fd"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="6W1-GR-b0a">
@@ -625,6 +625,10 @@
                                     <outlet property="delegate" destination="UY4-39-rji" id="HAT-6d-Te7"/>
                                 </connections>
                             </tableView>
+                            <imageView userInteractionEnabled="NO" alpha="0.80000000000000004" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="caremar.png" id="p1F-TD-SVd">
+                                <rect key="frame" x="49" y="114" width="15" height="15"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
@@ -638,10 +642,12 @@
                         <outlet property="tableView" destination="44t-Tf-H5u" id="rPD-Kg-Azd"/>
                         <outlet property="timeLabel" destination="Ezv-Vx-0RH" id="a0e-aw-ZWN"/>
                         <outlet property="userAvatar" destination="8hV-4I-7MM" id="MuM-kc-fln"/>
+                        <outlet property="userAvatarCamera" destination="p1F-TD-SVd" id="07m-Aa-1Nc"/>
                         <outlet property="userDescription" destination="zVj-7G-XWn" id="3Y2-hy-UhU"/>
                         <outlet property="weedCountLabel" destination="DOP-si-5x5" id="gXL-er-7hv"/>
                         <segue destination="cE6-OT-Fvo" kind="modal" identifier="cropImage" id="fNi-3r-yho"/>
                         <segue destination="kcP-Br-rTe" kind="push" identifier="showUsers" id="gr4-Yl-zIz"/>
+                        <segue destination="fJr-Fq-UNS" kind="push" identifier="editProfile" id="bAZ-BQ-nLk"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eoY-9M-DDM" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -652,6 +658,45 @@
                 </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1682" y="-569"/>
+        </scene>
+        <!--Edit Profile Controller-->
+        <scene sceneID="YJq-SF-ZDc">
+            <objects>
+                <viewController title="Edit Profile Controller" id="fJr-Fq-UNS" customClass="EditProfileViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="dAb-P2-epd">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="70" sectionHeaderHeight="22" sectionFooterHeight="22" id="9ek-Lp-8Kn">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="UserInfoEditableCell" rowHeight="45" id="XQa-MN-2Rm" customClass="UserInfoEditableCell">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="XQa-MN-2Rm" id="gr8-QU-lda">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="fJr-Fq-UNS" id="wfB-ob-oiG"/>
+                                    <outlet property="delegate" destination="fJr-Fq-UNS" id="Z3h-X8-sbG"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="ViC-TN-eIy"/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="table" destination="9ek-Lp-8Kn" id="xub-iN-Xey"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="o8h-fS-CNO" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2759" y="-1121"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="mPU-Df-T4H">
@@ -921,6 +966,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="caremar.png" width="76" height="76"/>
         <image name="light.png" width="60" height="58"/>
         <image name="seed.png" width="512" height="307"/>
         <image name="waterdrop.png" width="50" height="90"/>

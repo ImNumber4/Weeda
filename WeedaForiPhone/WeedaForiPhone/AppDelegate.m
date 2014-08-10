@@ -79,30 +79,37 @@
 
     RKObjectMapping *userMapping = [RKObjectMapping mappingForClass:[User class]];
     
+    NSDictionary * userMappingDictionary = @{
+                                                     @"id" : @"id",
+                                                     @"time" : @"time",
+                                                     @"username" : @"username",
+                                                     @"password" : @"password",
+                                                     @"email" : @"email",
+                                                     @"storename" : @"storename",
+                                                     @"address_street" : @"address_street",
+                                                     @"address_city" : @"address_city",
+                                                     @"address_state" : @"address_state",
+                                                     @"address_country" : @"address_country",
+                                                     @"address_zip" : @"address_zip",
+                                                     @"phone" : @"phone",
+                                                     @"latitude" : @"latitude",
+                                                     @"longitude" : @"longitude",
+                                                     @"weedCount" : @"weedCount",
+                                                     @"followerCount" : @"followerCount",
+                                                     @"followingCount" : @"followingCount",
+                                                     @"relationshipWithCurrentUser" : @"relationshipWithCurrentUser",
+                                                     @"user_type" : @"user_type",
+                                                     @"has_avatar" : @"has_avatar"
+                                                     };
     
-    [userMapping addAttributeMappingsFromDictionary:@{
-                                                      @"id" : @"id",
-                                                      @"time" : @"time",
-                                                      @"deleted" : @"shouldBeDeleted",
-                                                      @"user_type": @"userType",
-                                                      @"username" : @"username",
-                                                      @"email" : @"email",
-                                                      @"description" : @"description",
-                                                      @"storename" : @"storename",
-                                                      @"address_street" : @"street",
-                                                      @"address_city" : @"city",
-                                                      @"address_state" : @"state",
-                                                      @"address_country" : @"country",
-                                                      @"address_zip" : @"zip",
-                                                      @"phone" : @"phone",
-                                                      @"latitude" : @"latitude",
-                                                      @"longitude" : @"longitude",
-                                                      @"weedCount" : @"weedCount",
-                                                      @"followerCount" : @"followerCount",
-                                                      @"followingCount" : @"followingCount",
-                                                      @"relationshipWithCurrentUser" : @"relationshipWithCurrentUser",
-                                                      @"has_avatar" : @"hasAvatar"
-                                                      }];
+    NSMutableDictionary * userResponseMappingDictionary = [NSMutableDictionary dictionaryWithDictionary:userMappingDictionary];
+    [userResponseMappingDictionary setValue:@"shouldBeDeleted" forKey:@"deleted"];
+    [userResponseMappingDictionary setValue:@"userDescription" forKey:@"description"];
+    NSMutableDictionary * userRequestMappingDictionary = [NSMutableDictionary dictionaryWithDictionary:userMappingDictionary];
+    [userRequestMappingDictionary setValue:@"deleted" forKey:@"shouldBeDeleted"];
+    [userRequestMappingDictionary setValue:@"description" forKey:@"userDescription"];
+    
+    [userMapping addAttributeMappingsFromDictionary:userResponseMappingDictionary];
     
     RKEntityMapping *weedMapping = [RKEntityMapping mappingForEntityForName:NSStringFromClass([Weed class]) inManagedObjectStore:managedObjectStore];
     
@@ -244,9 +251,6 @@
     [manager addResponseDescriptor:loginResponseDescriptor];
     
     
-    RKObjectMapping *userRequestMapping = [RKObjectMapping requestMapping];
-    [userRequestMapping addAttributeMappingsFromArray:@[@"id"]];
-    
     RKObjectMapping * weedRequestMapping = [RKObjectMapping requestMapping];
     [weedRequestMapping addAttributeMappingsFromArray:@[ @"id", @"content",@"time",@"user_id", @"light_id", @"root_id", @"image_count"]];
     
@@ -260,15 +264,18 @@
     RKResponseDescriptor *weedCreatingResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:weedMapping method:RKRequestMethodPOST pathPattern:@"weed/create" keyPath:nil statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
     [manager addResponseDescriptor:weedCreatingResponseDescriptor];
     
+    
     //For checking username
-    RKObjectMapping * checkMapping = [RKObjectMapping requestMapping];
-    [checkMapping addAttributeMappingsFromArray:@[@"username", @"password", @"email", @"time"]];
-    RKRequestDescriptor *checkRequestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:checkMapping
+    RKObjectMapping *userRequestMapping = [RKObjectMapping requestMapping];
+    [userRequestMapping addAttributeMappingsFromDictionary:userRequestMappingDictionary];
+    RKRequestDescriptor *userRequestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:userRequestMapping
                                                                                         objectClass:[User class]
                                                                                         rootKeyPath:nil
                                                                                              method:RKRequestMethodPOST];
     
-    [manager addRequestDescriptor:checkRequestDescriptor];
+    [manager addRequestDescriptor:userRequestDescriptor];
+    RKResponseDescriptor *updateUserResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping method:RKRequestMethodPOST pathPattern:@"user/update" keyPath:@"user" statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+    [manager addResponseDescriptor:updateUserResponseDescriptor];
     
     RKResponseDescriptor *signupResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping method:RKRequestMethodPOST pathPattern:@"user/signup" keyPath:@"user" statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
     [manager addResponseDescriptor:signupResponseDescriptor];

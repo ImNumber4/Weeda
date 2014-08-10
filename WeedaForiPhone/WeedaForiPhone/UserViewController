@@ -261,7 +261,7 @@ const NSInteger SHOW_FOLLOWINGS = 2;
     CGSize tvsize = [self.userDescription sizeThatFits:CGSizeMake(tempFrame.size.width, tempFrame.size.height)];
     [self.userDescription setFrame:CGRectMake(self.userDescription.frame.origin.x, self.userDescription.frame.origin.y, self.userDescription.frame.size.width, tvsize.height)];
     [self.location setFrame:CGRectMake(self.location.frame.origin.x, self.userDescription.frame.origin.y + self.userDescription.frame.size.height + 5, self.userDescription.frame.size.width, self.location.frame.size.height)];
-    if(![USER_TYPE_USER isEqualToString:[self.user.user_type lowercaseString]]) {
+    if(![USER_TYPE_USER isEqualToString:[self.user.userType lowercaseString]]) {
         self.location.hidden = NO;
         CLLocationCoordinate2D zoomLocation;
         zoomLocation.latitude = self.user.latitude.doubleValue;
@@ -315,15 +315,8 @@ const NSInteger SHOW_FOLLOWINGS = 2;
 {
     self.userAvatar.contentMode = UIViewContentModeScaleAspectFill;
     self.userAvatar.clipsToBounds = YES;
-    if (self.user.has_avatar) {
-        [self.userAvatar sd_setImageWithURL:[WeedImageController imageURLOfAvatar:self.user_id] placeholderImage:[UIImage imageNamed:@"avatar.png"] options:SDWebImageHandleCookies];
-    } else {
-        self.userAvatar.image = [UIImage imageNamed:@"avatar.jpg"];
-        CALayer * l = [self.userAvatar layer];
-        [l setMasksToBounds:YES];
-        [l setCornerRadius:7.0];
-    }
     
+    [self.userAvatar sd_setImageWithURL:[WeedImageController imageURLOfAvatar:self.user_id] placeholderImage:[UIImage imageNamed:@"avatar.png"] options:SDWebImageHandleCookies];
     
     CALayer * l = [self.userAvatar layer];
     [l setMasksToBounds:YES];

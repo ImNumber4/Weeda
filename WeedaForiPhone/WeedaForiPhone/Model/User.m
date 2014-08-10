@@ -21,21 +21,21 @@
 @synthesize followerCount;
 @synthesize followingCount;
 @synthesize username;
-@synthesize description;
+@synthesize userDescription;
 @synthesize phone;
-@synthesize street;
-@synthesize city;
-@synthesize state;
-@synthesize country;
-@synthesize zip;
+@synthesize address_street;
+@synthesize address_city;
+@synthesize address_state;
+@synthesize address_country;
+@synthesize address_zip;
 @synthesize storename;
 @synthesize weedCount;
 @synthesize relationshipWithCurrentUser;
 @synthesize weeds;
-@synthesize hasAvatar;
+@synthesize has_avatar;
 @synthesize latitude;
 @synthesize longitude;
-@synthesize userType;
+@synthesize user_type;
 
 - (NSString *)title {
     return self.username;
@@ -49,7 +49,7 @@
 }
 
 - (MKMapItem*)mapItem {
-    NSDictionary *addressDict = @{(NSString*)kABPersonAddressStreetKey :[NSString stringWithFormat:@"%@, %@, %@, %@", self.street, self.city, self.state, self.zip]};
+    NSDictionary *addressDict = @{(NSString*)kABPersonAddressStreetKey :[NSString stringWithFormat:@"%@, %@, %@, %@", self.address_street, self.address_city, self.address_state, self.address_zip]};
     
     MKPlacemark *placemark = [[MKPlacemark alloc]
                               initWithCoordinate:self.coordinate

@@ -56,7 +56,7 @@
                 self.calloutView.phone.backgroundColor = [UIColor lightGrayColor];
             }
             [self.calloutView.storename setTitle:user.storename forState:UIControlStateNormal];
-            self.calloutView.address.text = [NSString stringWithFormat:@"%@, %@, %@, %@", user.street, user.city, user.state, user.zip];
+            self.calloutView.address.text = [NSString stringWithFormat:@"%@, %@, %@, %@", user.address_street, user.address_city, user.address_state, user.address_zip];
         }
         [self addSubview:self.calloutView];
     }

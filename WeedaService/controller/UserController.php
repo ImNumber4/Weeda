@@ -158,15 +158,27 @@ class UserController extends Controller
 	
 	public function signup() {
 		$user = $this->parse_body_request();
-		
 		$result = $this->user_dao->create($user);
-		
 		$user->set_id($result);
-		setcookie('user_id', $result, time() + (86400 * 7), '/');
-		setcookie('username', $user->get_username(), time() + (86400 * 7), '/');
-		setcookie('password', $user->get_password(), time() + (86400 * 7), '/');	
+		$this->update_cookie($user);	
 		
 		return json_encode(array('user' => $user));
+	}
+	
+	private function update_cookie($user){
+		setcookie('user_id', $user->get_id(), time() + (86400 * 7), '/');
+		setcookie('username', $user->get_username(), time() + (86400 * 7), '/');
+		setcookie('password', $user->get_password(), time() + (86400 * 7), '/');
+	}
+	
+	public function update() {
+		$user = $this->parse_body_request();
+		$user_id = $this->getCurrentUser();
+		if ($user_id != $user->get_id()) {
+			throw new InvalidRequestException('Current user id is '. $user_id . ' and it is trying to modify user data for user id ' . $user->get_id() . '.');
+		}
+		$result = $this->user_dao->update($user);
+		$this->update_cookie($user);
 	}
 	
 	public function upload() {
@@ -183,8 +195,7 @@ class UserController extends Controller
 			return;
 		}
 		
-		$user = $this->user_dao->find_by_user_id($user_id);
-		error_log('2');		
+		$user = $this->user_dao->find_by_user_id($user_id);	
 		if (!$user) {
 			error_log('Did not find user by user id: ' . $user_id);
 			header('Content-type: application/json');
@@ -192,9 +203,7 @@ class UserController extends Controller
 			return;
 		}
 		$user->set_has_avatar(1);
-		error_log('3');
-		$this->user_dao->update($user);
-		error_log('4');
+		$this->user_dao->update_has_avatar($user);
 		
 		header('Content-type: application/json');
 		http_response_code(200);
@@ -237,11 +246,23 @@ class UserController extends Controller
 		}
 		
 		$user = new User();
+		$user->set_id($data->id);
 		$user->set_username($data->username);
 		$user->set_password($data->password);
 		$user->set_email($data->email);
 		$user->set_time($data->time);
-		$user->set_deleted(0);
+		if(!$data->deleted)
+			$user->set_deleted(0);
+		else
+			$user->set_deleted($data->deleted);
+		$user->set_has_avatar($data->has_avatar);
+		$user->set_description($data->description);
+		$user->set_address_city($data->address_city);
+		$user->set_address_state($data->address_state);
+		$user->set_address_country($data->address_country);
+		$user->set_address_zip($data->address_zip);
+		$user->set_phone($data->phone);
+		$user->set_user_type($data->user_type);
 		return $user;
 	}
 	

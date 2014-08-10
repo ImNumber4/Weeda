@@ -11,6 +11,8 @@
 #import "RemoteObject.h"
 #import <MapKit/MapKit.h>
 
+#define USER_TYPE_USER @"user"
+
 @interface User : NSObject <MKAnnotation>
 @property (nonatomic, retain) NSNumber * shouldBeDeleted;
 @property (nonatomic, retain) NSNumber * id;
@@ -20,21 +22,21 @@
 @property (nonatomic, retain) NSNumber * followerCount;
 @property (nonatomic, retain) NSNumber * followingCount;
 @property (nonatomic, retain) NSString * username;
-@property (nonatomic, retain) NSString * description;
+@property (nonatomic, retain) NSString * userDescription;
 @property (nonatomic, retain) NSString * phone;
 @property (nonatomic, retain) NSString * storename;
-@property (nonatomic, retain) NSString * street;
-@property (nonatomic, retain) NSString * city;
-@property (nonatomic, retain) NSString * state;
-@property (nonatomic, retain) NSString * country;
-@property (nonatomic, retain) NSString * zip;
+@property (nonatomic, retain) NSString * address_street;
+@property (nonatomic, retain) NSString * address_city;
+@property (nonatomic, retain) NSString * address_state;
+@property (nonatomic, retain) NSString * address_country;
+@property (nonatomic, retain) NSString * address_zip;
 @property (nonatomic, retain) NSNumber * weedCount;
 @property (nonatomic, retain) NSNumber * relationshipWithCurrentUser;
 @property (nonatomic, retain) NSSet *weeds;
-@property (nonatomic, retain) NSNumber *hasAvatar;
+@property (nonatomic, retain) NSNumber *has_avatar;
 @property (nonatomic, retain) NSNumber *latitude;
 @property (nonatomic, retain) NSNumber *longitude;
-@property (nonatomic, retain) NSString * userType;
+@property (nonatomic, retain) NSString * user_type;
 
 
 - (MKMapItem*)mapItem;
