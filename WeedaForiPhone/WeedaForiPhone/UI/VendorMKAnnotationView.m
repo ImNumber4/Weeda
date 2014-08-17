@@ -50,11 +50,12 @@
             User * user = (User *)self.annotation;
             if (user.phone) {
                 self.calloutView.phone.enabled = YES;
-                self.calloutView.phone.backgroundColor = [UIColor colorWithRed:62.0/255.0 green:165.0/255.0 blue:64.0/255.0 alpha:1];
+                self.calloutView.phone.backgroundColor = [ColorDefinition greenColor];
             }else{
                 self.calloutView.phone.enabled = NO;
-                self.calloutView.phone.backgroundColor = [UIColor lightGrayColor];
+                self.calloutView.phone.backgroundColor = [ColorDefinition grayColor];
             }
+            self.calloutView.direction.backgroundColor = [ColorDefinition blueColor];
             [self.calloutView.storename setTitle:user.storename forState:UIControlStateNormal];
             self.calloutView.address.text = [NSString stringWithFormat:@"%@, %@, %@, %@", user.address_street, user.address_city, user.address_state, user.address_zip];
         }

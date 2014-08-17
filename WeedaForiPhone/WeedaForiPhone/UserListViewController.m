@@ -88,7 +88,7 @@
     [button setImage:[UIImage imageNamed:@"follow.png"] forState:UIControlStateNormal];
     button.tintColor = [UIColor whiteColor];
     //blue
-    button.backgroundColor = [UIColor colorWithRed:105.0/255.0 green:210.0/255.0 blue:245.0/255.0 alpha:1];
+    button.backgroundColor = [ColorDefinition blueColor];
     [button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
     [button addTarget:self action:@selector(follow:) forControlEvents:UIControlEventTouchUpInside];
 }
@@ -98,7 +98,7 @@
     [button setImage:[UIImage imageNamed:@"followed.png"] forState:UIControlStateNormal];
     button.tintColor = [UIColor whiteColor];
     //green
-    button.backgroundColor = [UIColor colorWithRed:62.0/255.0 green:165.0/255.0 blue:64.0/255.0 alpha:1];
+    button.backgroundColor = [ColorDefinition greenColor];
     [button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
     [button addTarget:self action:@selector(unfollow:) forControlEvents:UIControlEventTouchUpInside];
 }

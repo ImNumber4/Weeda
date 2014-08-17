@@ -10,6 +10,8 @@
 	<string>WeedaForiPhone</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
+		<key>272F684BDB48C12FB82F63EFB90FF2436BBA2473</key>
+		<string>http://git.chromium.org/webm/libwebp.git</string>
 		<key>47A63E07BF2C4AE0426F985EBA351C687092A209</key>
 		<string>https://github.com/blakewatters/TransitionKit.git</string>
 		<key>7AFB0A53-E2CC-41FA-A776-D9377407C059</key>
@@ -31,22 +33,24 @@
 	<string>WeedaForiPhone/WeedaForiPhone.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
+		<key>272F684BDB48C12FB82F63EFB90FF2436BBA2473</key>
+		<string>../../../WeedaForiPhone/SDWebImage/Vendors/libwebp</string>
 		<key>47A63E07BF2C4AE0426F985EBA351C687092A209</key>
-		<string>../../../WeedaForiPhone/RestKit/Vendor/TransitionKit/</string>
+		<string>../../../WeedaForiPhone/RestKit/Vendor/TransitionKit</string>
 		<key>7AFB0A53-E2CC-41FA-A776-D9377407C059</key>
-		<string>../../../../../../RestKit/Vendor/ISO8601DateFormatterValueTransformer</string>
+		<string>../../../../RestKit/Vendor/ISO8601DateFormatterValueTransformer</string>
 		<key>822670D72DA6CB3E094E900F0D31C5A6027736AD</key>
-		<string>../../../WeedaForiPhone/RestKit/Vendor/ISO8601DateFormatterValueTransformer/</string>
+		<string>../../../WeedaForiPhone/RestKit/Vendor/ISO8601DateFormatterValueTransformer</string>
 		<key>B4A2CA0E82E9AE44702AB02729DCFB235C2643C9</key>
-		<string>../../../WeedaForiPhone/RestKit/Vendor/RKValueTransformers/</string>
+		<string>../../../WeedaForiPhone/RestKit/Vendor/RKValueTransformers</string>
 		<key>CDACBF8F5BE1FCB496C766F2406B8F01C40F14F1</key>
 		<string>../../..</string>
 		<key>D78740BB5B159EA13C82AB5AF1D92A0F3C627237</key>
-		<string>../../../WeedaForiPhone/RestKit/</string>
+		<string>../../../WeedaForiPhone/RestKit</string>
 		<key>DD20A1A48C66B5213E0FEBB87A95EF51D6C6F3E8</key>
-		<string>../../../WeedaForiPhone/RestKit/Vendor/AFNetworking/</string>
+		<string>../../../WeedaForiPhone/RestKit/Vendor/AFNetworking</string>
 		<key>E28E36D423EC87798E52E2BF482E9F7A1E6479D6</key>
-		<string>../../../WeedaForiPhone/SDWebImage/</string>
+		<string>../../../WeedaForiPhone/SDWebImage</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/ImNumber4/Weeda.git</string>
@@ -68,6 +72,14 @@
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>822670D72DA6CB3E094E900F0D31C5A6027736AD</string>
+			<key>IDESourceControlWCCName</key>
+			<string>ISO8601DateFormatterValueTransformer</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
 			<string>7AFB0A53-E2CC-41FA-A776-D9377407C059</string>
 			<key>IDESourceControlWCCName</key>
 			<string>ISO8601DateFormatterValueTransformer</string>
@@ -76,9 +88,9 @@
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>822670D72DA6CB3E094E900F0D31C5A6027736AD</string>
+			<string>272F684BDB48C12FB82F63EFB90FF2436BBA2473</string>
 			<key>IDESourceControlWCCName</key>
-			<string>ISO8601DateFormatterValueTransformer</string>
+			<string>libwebp</string>
 		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>

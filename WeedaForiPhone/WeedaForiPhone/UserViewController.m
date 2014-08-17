@@ -234,7 +234,7 @@ const NSInteger SHOW_FOLLOWINGS = 2;
 - (void)makeFollowButton
 {
     [self.followButton setTitle:@"+Follow" forState:UIControlStateNormal];
-    self.followButton.backgroundColor = [UIColor colorWithRed:105.0/255.0 green:210.0/255.0 blue:245.0/255.0 alpha:1];
+    self.followButton.backgroundColor = [ColorDefinition blueColor];
     [self.followButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
     [self.followButton addTarget:self action:@selector(follow:) forControlEvents:UIControlEventTouchUpInside];
 }
@@ -242,7 +242,7 @@ const NSInteger SHOW_FOLLOWINGS = 2;
 - (void)makeFollowingButton
 {
     [self.followButton setTitle:@"Following" forState:UIControlStateNormal];
-    self.followButton.backgroundColor = [UIColor colorWithRed:62.0/255.0 green:165.0/255.0 blue:64.0/255.0 alpha:1];
+    self.followButton.backgroundColor = [ColorDefinition greenColor];
     [self.followButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
     [self.followButton addTarget:self action:@selector(unfollow:) forControlEvents:UIControlEventTouchUpInside];
 }
@@ -250,7 +250,7 @@ const NSInteger SHOW_FOLLOWINGS = 2;
 - (void)makeEditProfileButton
 {
     [self.followButton setTitle:@"Edit Profile" forState:UIControlStateNormal];
-    self.followButton.backgroundColor = [UIColor colorWithRed:200.0/255.0 green:200.0/255.0 blue:200.0/255.0 alpha:1];
+    self.followButton.backgroundColor = [ColorDefinition grayColor];
     [self.followButton addTarget:self action:@selector(editProfile:) forControlEvents:UIControlEventTouchUpInside];
 }
 

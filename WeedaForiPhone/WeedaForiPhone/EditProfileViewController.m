@@ -8,6 +8,11 @@
 
 #import "EditProfileViewController.h"
 #import "TabBarController.h"
+#import "BlurView.h"
+
+@interface EditProfileViewController ()
+@property (nonatomic, strong) UIView *blurView;
+@end
 
 @implementation EditProfileViewController
 
@@ -26,6 +31,7 @@ const NSInteger ZIP_ROW = 5;
 const NSInteger COUNTRY_ROW = 6;
 
 
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.table.tableFooterView = [[UIView alloc] init];
@@ -38,6 +44,7 @@ const NSInteger COUNTRY_ROW = 6;
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)];
     UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithTitle:@"Save" style:UIBarButtonItemStyleBordered target:self action:@selector(save:)];
     self.navigationItem.rightBarButtonItem = saveButton;
+    
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -196,17 +203,83 @@ const NSInteger COUNTRY_ROW = 6;
 - (IBAction) save: (id) sender
 {
     [self.view endEditing:YES];
+    [self.navigationItem.rightBarButtonItem setEnabled:NO];
+    [self.navigationItem.leftBarButtonItem setEnabled:NO];
     
+    self.blurView = [[BlurView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+    self.blurView.tag = 1001;
+    UIImage * image = [UIImage imageNamed:@"Yes.png"];
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+    [self.blurView addSubview:imageView];
+    imageView.hidden = YES;
+    [imageView setFrame:CGRectMake(0.0, 0.0, 40.0, 40.0)];
+    [imageView setCenter:CGPointMake(self.blurView.center.x, self.blurView.center.y - 150)];
+    UITextView *label = [[UITextView alloc] initWithFrame:CGRectMake(0.0, 0.0, 250.0, 50.0)];
+    label.text = @"Updating...";
+    [label setFont:[UIFont systemFontOfSize:12]];
+    [label setTextAlignment:NSTextAlignmentCenter];
+    label.backgroundColor = [UIColor clearColor];
+    [label setEditable:NO];
+    [label setSelectable:NO];
+    [self.blurView addSubview:label];
+    [self.view addSubview:self.blurView];
+    [label setCenter:CGPointMake(imageView.center.x, imageView.center.y)];
+    [label setFrame:CGRectMake(label.frame.origin.x, imageView.frame.origin.y + imageView.frame.size.height + 10, label.frame.size.width, label.frame.size.height)];
     [[RKObjectManager sharedManager] postObject:self.userObject path:@"user/update" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-        NSLog(@"Successfully updated profile.");
+        imageView.hidden = NO;
+        if(mappingResult.array != nil && [mappingResult.array count] > 0) {
+            
+            [imageView setImage:[UIImage imageNamed:@"No.png"]];
+            [label setTextAlignment:NSTextAlignmentLeft];
+            label.text = @"Failed to update profile. The following things need to be corrected:";
+            CGSize tvsize = [label sizeThatFits:CGSizeMake(label.frame.size.width, label.frame.size.height)];
+            [label setFrame:CGRectMake(label.frame.origin.x, label.frame.origin.y, label.frame.size.width, tvsize.height)];
+            
+            UITextView *errorMessageView = [[UITextView alloc] initWithFrame:CGRectMake(0.0, 0.0, 250.0, 50.0)];
+            NSMutableString *errorMessage = [[NSMutableString alloc] init];
+            for (RKErrorMessage *error in mappingResult.array) {
+                [errorMessage appendString:@" * "];
+                [errorMessage appendString:error.errorMessage];
+                [errorMessage appendString:@"\n"];
+            }
+            errorMessageView.text = errorMessage;
+            [self.blurView addSubview:errorMessageView];
+            tvsize = [errorMessageView sizeThatFits:CGSizeMake(label.frame.size.width, label.frame.size.height)];
+            [errorMessageView setFrame:CGRectMake(label.frame.origin.x, label.frame.origin.y + label.frame.size.height + 10, label.frame.size.width, MIN(200.0,tvsize.height))];
+            [errorMessageView setFont:[UIFont systemFontOfSize:12]];
+            [errorMessageView setTextAlignment:NSTextAlignmentLeft];
+            errorMessageView.backgroundColor = [UIColor clearColor];
+            [errorMessageView setEditable:NO];
+            [errorMessageView setSelectable:NO];
+            
+            UIButton *okayButton = [[UIButton alloc] initWithFrame:CGRectMake(0.0, 0.0, 100.0, 25.0)];
+            [okayButton setTitle:@"Got it" forState:UIControlStateNormal];
+            [okayButton.titleLabel setFont:[UIFont systemFontOfSize:12]];
+            [okayButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+            [okayButton setBackgroundColor:[ColorDefinition blueColor]];
+            [self.blurView addSubview:okayButton];
+            [okayButton setCenter:CGPointMake(self.blurView.center.x, self.blurView.center.y)];
+            [okayButton setFrame:CGRectMake(okayButton.frame.origin.x, errorMessageView.frame.origin.y + errorMessageView.frame.size.height + 10, okayButton.frame.size.width, okayButton.frame.size.height)];
+            [okayButton addTarget:self action:@selector(okayClicked:) forControlEvents:UIControlEventTouchUpInside];
+            [self.navigationItem.leftBarButtonItem setEnabled:YES];
+        } else {
+            label.text = @"Successfully updated profile.";
+            [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(cancel:) userInfo:nil repeats:YES];
+        }
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-        NSLog(@"Failure saving post: %@", error.localizedDescription);
+        NSLog(@"Failed to save post: %@", error.localizedRecoverySuggestion);
+        [self.navigationItem.rightBarButtonItem setEnabled:YES];
+        [self.navigationItem.leftBarButtonItem setEnabled:YES];
     }];
-    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (IBAction) cancel: (id) sender {
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (IBAction) okayClicked: (id) sender {
+    [self.blurView removeFromSuperview];
+    [self.navigationItem.rightBarButtonItem setEnabled:YES];
 }
 
 

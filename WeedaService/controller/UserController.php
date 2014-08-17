@@ -179,6 +179,8 @@ class UserController extends Controller
 		}
 		$result = $this->user_dao->update($user);
 		$this->update_cookie($user);
+		$errors = array();
+		return json_encode(array('errors' => $errors));
 	}
 	
 	public function upload() {
