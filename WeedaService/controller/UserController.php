@@ -259,12 +259,16 @@ class UserController extends Controller
 			$user->set_deleted($data->deleted);
 		$user->set_has_avatar($data->has_avatar);
 		$user->set_description($data->description);
+		$user->set_storename($data->storename);
+		$user->set_address_street($data->address_street);
 		$user->set_address_city($data->address_city);
 		$user->set_address_state($data->address_state);
 		$user->set_address_country($data->address_country);
 		$user->set_address_zip($data->address_zip);
 		$user->set_phone($data->phone);
 		$user->set_user_type($data->user_type);
+		$user->set_latitude($data->latitude);
+		$user->set_longitude($data->longitude);
 		return $user;
 	}
 	
