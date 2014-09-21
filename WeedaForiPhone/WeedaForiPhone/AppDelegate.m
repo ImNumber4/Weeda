@@ -133,152 +133,156 @@
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"shouldBeDeleted = TRUE || id < 0"];
     weedMapping.deletionPredicate = predicate;
     
+    RKEntityMapping *messageMapping = [RKEntityMapping mappingForEntityForName:NSStringFromClass([Message class]) inManagedObjectStore:managedObjectStore];
+    
+    messageMapping.identificationAttributes = @[ @"id" ];
+    
+    
+    NSDictionary *messageObjectMapping = @{
+                                           @"sender_id" : @"sender_id",
+                                           @"participant_id" : @"participant_id",
+                                           @"participant_username" : @"participant_username",
+                                           @"message" : @"message",
+                                           @"type" : @"type",
+                                           @"is_read" : @"is_read",
+                                           @"related_weed_id" : @"related_weed_id"
+                                          };
+    
+    [messageMapping addAttributeMappingsFromDictionary:messageObjectMapping];
+    
+    [messageMapping addAttributeMappingsFromDictionary:parentObjectMapping];
+    
+    messageMapping.deletionPredicate = predicate;
+    
     // Register our mappings with the provider
-    RKResponseDescriptor *weedResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:weedMapping
+    [manager addResponseDescriptor:[RKResponseDescriptor responseDescriptorWithMapping:weedMapping
                                                                                             method:RKRequestMethodGET
                                                                                        pathPattern:@"weed/query"
                                                                                            keyPath:@"weeds"
-                                                                                       statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
-    [manager addResponseDescriptor:weedResponseDescriptor];
+                                                                                       statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)]];
     
-    RKResponseDescriptor *weedByUserResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:weedMapping
+    [manager addResponseDescriptor:[RKResponseDescriptor responseDescriptorWithMapping:weedMapping
+                                                                                                method:RKRequestMethodGET
+                                                                                           pathPattern:@"weed/queryById/:weed_id"
+                                                                                               keyPath:@"weeds"
+                                                                                           statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)]];
+    
+    [manager addResponseDescriptor:[RKResponseDescriptor responseDescriptorWithMapping:weedMapping
                                                                                                 method:RKRequestMethodGET
                                                                                            pathPattern:@"weed/query/:user_id"
                                                                                                keyPath:@"weeds"
-                                                                                           statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
-    [manager addResponseDescriptor:weedByUserResponseDescriptor];
+                                                                                           statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)]];
     
     
-    RKResponseDescriptor *getLightsResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:weedMapping
+    [manager addResponseDescriptor:[RKResponseDescriptor responseDescriptorWithMapping:weedMapping
                                                                                                 method:RKRequestMethodGET
                                                                                            pathPattern:@"weed/getLights/:id"
                                                                                                keyPath:@"weeds"
-                                                                                           statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
-    [manager addResponseDescriptor:getLightsResponseDescriptor];
+                                                                                           statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)]];
     
-    RKResponseDescriptor *getAncestorWeedsResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:weedMapping
+    [manager addResponseDescriptor:[RKResponseDescriptor responseDescriptorWithMapping:weedMapping
                                                                                                      method:RKRequestMethodGET
                                                                                                 pathPattern:@"weed/getAncestorWeeds/:id"
                                                                                                     keyPath:@"weeds"
-                                                                                                statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
-    [manager addResponseDescriptor:getAncestorWeedsResponseDescriptor];
+                                                                                                statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)]];
     
-    
-    RKResponseDescriptor *usersWaterWeedResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping
+    [manager addResponseDescriptor:[RKResponseDescriptor responseDescriptorWithMapping:userMapping
                                                                                                 method:RKRequestMethodGET
                                                                                            pathPattern:@"user/getUsersWaterWeed/:id"
                                                                                                keyPath:@"users"
-                                                                                           statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+                                                                                           statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)]];
     
-    [manager addResponseDescriptor:usersWaterWeedResponseDescriptor];
-    
-    RKResponseDescriptor *usersSeedWeedResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping
+    [manager addResponseDescriptor:[RKResponseDescriptor responseDescriptorWithMapping:userMapping
                                                                                                  method:RKRequestMethodGET
                                                                                             pathPattern:@"user/getUsersSeedWeed/:id"
                                                                                                 keyPath:@"users"
-                                                                                            statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+                                                                                            statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)]];
     
-    [manager addResponseDescriptor:usersSeedWeedResponseDescriptor];
-    
-    RKResponseDescriptor *queryUsersWithCoordinatesResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping
+    [manager addResponseDescriptor:[RKResponseDescriptor responseDescriptorWithMapping:userMapping
                                                                                                          method:RKRequestMethodGET
                                                                                                     pathPattern:@"user/queryUsersWithCoordinates/:latitude/:longitude/:range/"
                                                                                                         keyPath:@"users"
-                                                                                                    statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+                                                                                                    statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)]];
     
-    [manager addResponseDescriptor:queryUsersWithCoordinatesResponseDescriptor];
-    
-    RKResponseDescriptor *queryUsersWithCoordinatesAndSearchKeyResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping
+    [manager addResponseDescriptor:[RKResponseDescriptor responseDescriptorWithMapping:userMapping
                                                                                                                      method:RKRequestMethodGET
                                                                                                                 pathPattern:@"user/queryUsersWithCoordinates/:latitude/:longitude/:range/:search_key"
                                                                                                                     keyPath:@"users"
-                                                                                                                statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
-    
-    [manager addResponseDescriptor:queryUsersWithCoordinatesAndSearchKeyResponseDescriptor];
+                                                                                                                statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)]];
 
     
-    RKResponseDescriptor *getUsernamesByPrefixResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping
+    [manager addResponseDescriptor:[RKResponseDescriptor responseDescriptorWithMapping:userMapping
                                                                                                          method:RKRequestMethodGET
                                                                                                     pathPattern:@"user/getUsernamesByPrefix/:prefix"
                                                                                                         keyPath:@"users"
-                                                                                                    statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+                                                                                                    statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)]];
     
-    [manager addResponseDescriptor:getUsernamesByPrefixResponseDescriptor];
-    
-    RKResponseDescriptor *getFollowingUsersResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping
+    [manager addResponseDescriptor:[RKResponseDescriptor responseDescriptorWithMapping:userMapping
                                                                                                          method:RKRequestMethodGET
                                                                                                     pathPattern:@"user/getFollowingUsers/:user_id/:count"
                                                                                                         keyPath:@"users"
-                                                                                                    statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+                                                                                                    statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)]];
     
-    [manager addResponseDescriptor:getFollowingUsersResponseDescriptor];
-    
-    RKResponseDescriptor *getFollowersResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping
+    [manager addResponseDescriptor:[RKResponseDescriptor responseDescriptorWithMapping:userMapping
                                                                                                              method:RKRequestMethodGET
                                                                                                         pathPattern:@"user/getFollowers/:user_id/:count"
                                                                                                             keyPath:@"users"
-                                                                                                        statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+                                                                                                        statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)]];
     
-    [manager addResponseDescriptor:getFollowersResponseDescriptor];
-    
-    
-    RKResponseDescriptor *userResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping
+    [manager addResponseDescriptor:[RKResponseDescriptor responseDescriptorWithMapping:userMapping
                                                                                                 method:RKRequestMethodGET
                                                                                            pathPattern:@"user/query/:id"
                                                                                                keyPath:@"user"
-                                                                                           statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
-    [manager addResponseDescriptor:userResponseDescriptor];
+                                                                                           statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)]];
     
-    RKResponseDescriptor *followResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping
+    [manager addResponseDescriptor:[RKResponseDescriptor responseDescriptorWithMapping:userMapping
                                                                                                 method:RKRequestMethodGET
                                                                                            pathPattern:@"user/follow/:id"
                                                                                                keyPath:@"user"
-                                                                                           statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
-    [manager addResponseDescriptor:followResponseDescriptor];
+                                                                                           statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)]];
     
-    RKResponseDescriptor *unfollowResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping
+    [manager addResponseDescriptor:[RKResponseDescriptor responseDescriptorWithMapping:userMapping
                                                                                                   method:RKRequestMethodGET
                                                                                              pathPattern:@"user/unfollow/:id"
                                                                                                  keyPath:@"user"
-                                                                                             statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
-    [manager addResponseDescriptor:unfollowResponseDescriptor];
+                                                                                             statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)]];
     
-    RKResponseDescriptor *loginResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping
+    [manager addResponseDescriptor:[RKResponseDescriptor responseDescriptorWithMapping:userMapping
                                                                                                  method:RKRequestMethodPOST
                                                                                              pathPattern:@"user/login"
                                                                                                 keyPath:@"user"
-                                                                                            statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
-    [manager addResponseDescriptor:loginResponseDescriptor];
+                                                                                            statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)]];
+    
+    [manager addResponseDescriptor: [RKResponseDescriptor responseDescriptorWithMapping:messageMapping
+                                                                                 method:RKRequestMethodGET
+                                                                            pathPattern:@"message/query"
+                                                                                keyPath:@"messages"
+                                                                            statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)]];
     
     
     RKObjectMapping * weedRequestMapping = [RKObjectMapping requestMapping];
     [weedRequestMapping addAttributeMappingsFromArray:@[ @"id", @"content",@"time",@"user_id", @"light_id", @"root_id", @"image_count"]];
     
     
-    RKRequestDescriptor *weedRequestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:weedRequestMapping
+    [manager addRequestDescriptor:[RKRequestDescriptor requestDescriptorWithMapping:weedRequestMapping
                                                                                    objectClass:[Weed class]
                                                                                    rootKeyPath:nil
-                                                                                        method:RKRequestMethodPOST];
-    [[RKObjectManager sharedManager] addRequestDescriptor:weedRequestDescriptor];
+                                                                                        method:RKRequestMethodPOST]];
     
-    RKResponseDescriptor *weedCreatingResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:weedMapping method:RKRequestMethodPOST pathPattern:@"weed/create" keyPath:nil statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
-    [manager addResponseDescriptor:weedCreatingResponseDescriptor];
+    [manager addResponseDescriptor:[RKResponseDescriptor responseDescriptorWithMapping:weedMapping method:RKRequestMethodPOST pathPattern:@"weed/create" keyPath:nil statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)]];
     
     
     //For checking username
     RKObjectMapping *userRequestMapping = [RKObjectMapping requestMapping];
     [userRequestMapping addAttributeMappingsFromDictionary:userRequestMappingDictionary];
-    RKRequestDescriptor *userRequestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:userRequestMapping
+    [manager addRequestDescriptor:[RKRequestDescriptor requestDescriptorWithMapping:userRequestMapping
                                                                                         objectClass:[User class]
                                                                                         rootKeyPath:nil
-                                                                                             method:RKRequestMethodPOST];
+                                                                                             method:RKRequestMethodPOST]];
+
+    [manager addResponseDescriptor:[RKResponseDescriptor responseDescriptorWithMapping:errorMapping method:RKRequestMethodPOST pathPattern:@"user/update" keyPath:@"errors" statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)] ];
     
-    [manager addRequestDescriptor:userRequestDescriptor];
-    RKResponseDescriptor *updateUserResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:errorMapping method:RKRequestMethodPOST pathPattern:@"user/update" keyPath:@"errors" statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
-    [manager addResponseDescriptor:updateUserResponseDescriptor];
-    
-    RKResponseDescriptor *signupResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping method:RKRequestMethodPOST pathPattern:@"user/signup" keyPath:@"user" statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
-    [manager addResponseDescriptor:signupResponseDescriptor];
+    [manager addResponseDescriptor:[RKResponseDescriptor responseDescriptorWithMapping:userMapping method:RKRequestMethodPOST pathPattern:@"user/signup" keyPath:@"user" statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)] ];
     
     //Adding Image response descriptor
     [self addImageHttpResponser:managedObjectStore];

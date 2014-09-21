@@ -12,4 +12,5 @@
 + (UIColor *) blueColor;
 + (UIColor *) grayColor;
 + (UIColor *) greenColor;
++ (UIColor *) lightGreenColor;
 @end

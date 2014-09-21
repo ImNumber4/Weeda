@@ -21,8 +21,6 @@
 
 @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
 
-@property (nonatomic, strong) NSFetchedResultsController *imageFetchedController;
-
 @end
 
 @implementation MasterViewController

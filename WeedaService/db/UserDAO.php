@@ -4,7 +4,6 @@
 */
 class UserDAO extends BaseDAO
 {
-	private $user;
 	
 	public function create($user) {
 		$query = 'INSERT INTO user (username, password, email, time, deleted) VALUES (\'' 

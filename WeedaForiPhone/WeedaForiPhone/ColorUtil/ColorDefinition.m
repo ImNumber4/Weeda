@@ -22,4 +22,8 @@
     return [UIColor colorWithRed:62.0/255.0 green:165.0/255.0 blue:64.0/255.0 alpha:1];
 }
 
++ (UIColor *) lightGreenColor {
+    return [UIColor colorWithRed:62.0/255.0 green:165.0/255.0 blue:64.0/255.0 alpha:0.1];
+}
+
 @end

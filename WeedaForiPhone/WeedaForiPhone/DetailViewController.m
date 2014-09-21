@@ -199,7 +199,7 @@ const NSInteger SHOW_WATER_USERS = 2;
 
 - (void)configureWeedTableViewCell:(WeedBasicTableViewCell *)cell weed:(Weed *)weed
 {
-    [cell decorateCellWithWeed:weed];
+    [cell decorateCellWithWeed:weed.content username:weed.username time:weed.time user_id:weed.user_id];
     [cell.usernameLabel removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
     [cell.usernameLabel addTarget:self action:@selector(showUser:)forControlEvents:UIControlEventTouchDown];
     cell.backgroundColor = [UIColor colorWithRed:240.0/255.0 green:240.0/255.0 blue:240.0/255.0 alpha:1];

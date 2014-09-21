@@ -35,24 +35,28 @@
     UITabBarItem *tabBarItem1 = [tabBar.items objectAtIndex:0];
     UITabBarItem *tabBarItem2 = [tabBar.items objectAtIndex:1];
     UITabBarItem *tabBarItem3 = [tabBar.items objectAtIndex:2];
+    UITabBarItem *tabBarItem4 = [tabBar.items objectAtIndex:3];
     
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     
-    UINavigationController *userViewNav = [self.viewControllers objectAtIndex:2];
+    UINavigationController *userViewNav = [self.viewControllers objectAtIndex:3];
     UserViewController *userView = (UserViewController *)userViewNav.topViewController;
     [userView setUser_id:appDelegate.currentUser.id];
     
     tabBarItem1.title = @"Weeds";
-    tabBarItem2.title = @"Discover";
-    tabBarItem3.title = @"Me";
+    tabBarItem2.title = @"Messages";
+    tabBarItem3.title = @"Discover";
+    tabBarItem4.title = @"Me";
     
     
     tabBarItem1.selectedImage = [[self getImage:@"selected_weed.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     tabBarItem1.image = [[self getImage:@"weed.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    tabBarItem2.image = [[self getImage:@"map.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    tabBarItem2.selectedImage = [[self getImage:@"selected_map.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    tabBarItem3.image = [[self getImage:@"profile_icon.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    tabBarItem3.selectedImage = [[self getImage:@"selected_profile_icon.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    tabBarItem2.image = [[self getImage:@"message.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    tabBarItem2.selectedImage = [[self getImage:@"selected_message.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    tabBarItem3.image = [[self getImage:@"map.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    tabBarItem3.selectedImage = [[self getImage:@"selected_map.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    tabBarItem4.image = [[self getImage:@"profile_icon.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    tabBarItem4.selectedImage = [[self getImage:@"selected_profile_icon.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     
     self.tabBar.tintColor = [ColorDefinition greenColor];
     

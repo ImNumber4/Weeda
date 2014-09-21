@@ -4,47 +4,42 @@
 //error_reporting(E_ALL);
 
 include './library/ImageHandler.php';
+include './library/NotificationHelper.php';
 
 class WeedController extends Controller
 {
+	protected $weed_dao;
+	protected $user_dao;
+	
+    function __construct($model, $controller, $action) 
+    {
+		parent::__construct($model, $controller, $action);
+		$this->weed_dao = new WeedDAO();
+		$this->user_dao = new UserDAO();
+    }
+	
 	public function query($user_id) {
-		
-		/* connect to the db */
-		$db_conn = new DbConnection();
-        $currentUser_id = $this->getCurrentUser();
-		
-		$userIdFilter = "";
-		if($user_id)
-			$userIdFilter = " and weed.user_id=$user_id";
-
-		/* grab the users from the db */
-		$query = "SELECT weed.id as weed_id, user.id as user_id, weed.light_id as light_id, weed.root_id as root_id, currentUserWater.user_id as if_cur_user_water_it, currentUserWeed.user_id as if_cur_user_light_it, currentUserSeed.user_id as if_cur_user_seed_it, weed.water_count as water_count, weed.seed_count as seed_count, weed.light_count as light_count, weed.content as content, user.time as user_time, weed.time as weed_time, username, weed.deleted as weed_deleted, user.deleted as user_deleted, weed.image_count as image_count FROM weed left join weed currentUserWeed on currentUserWeed.root_id=weed.id or currentUserWeed.light_id=weed.id and currentUserWeed.user_id=$currentUser_id left join water currentUserWater on currentUserWater.weed_id=weed.id and currentUserWater.user_id=$currentUser_id left join seed currentUserSeed on currentUserSeed.weed_id=weed.id and currentUserSeed.user_id=$currentUser_id, user where user.id=weed.user_id$userIdFilter GROUP BY weed.id";
-		
-		$result = $db_conn->query($query);
-
-		/* create one master array of the records */
-		$weeds = array();
-		if(mysql_num_rows($result)) {
-			while($weed = mysql_fetch_assoc($result)) {
-				$weeds[] = array('id' => $weed['weed_id'], 'content' => $weed['content'], 'user_id' => $weed['user_id'], 'username' => $weed['username'], 'time' => $weed['weed_time'], 'light_id' => $weed['light_id'], 'root_id' => $weed['root_id'], 'deleted' => $weed['weed_deleted'], 'light_count' => $weed['light_count'], 'water_count' => $weed['water_count'], 'seed_count' => $weed['seed_count'], 'if_cur_user_water_it' => $weed['if_cur_user_water_it'] == $currentUser_id, 'if_cur_user_seed_it' => $weed['if_cur_user_seed_it'] == $currentUser_id, 'if_cur_user_light_it' => $weed['if_cur_user_light_it'] == $currentUser_id, 'image_count' => $weed['image_count']);
-			}
-		}
-
+		$current_user_id = $this->getCurrentUser();
+		$weeds = $this->weed_dao->query($current_user_id, $user_id, null);
+		return json_encode(array('weeds'=>$weeds));
+	}
+	
+	public function queryById($weed_id) {
+		$current_user_id = $this->getCurrentUser();
+		$weeds = $this->weed_dao->query($current_user_id, null, $weed_id);
 		return json_encode(array('weeds'=>$weeds));
 	}
 	
 	public function getLights($id) {
 		
-		$weedDAO = new WeedDAO();
-		$weeds = $weedDAO->getLights($id);
+		$weeds = $this->weed_dao->getLights($id);
 
 		return json_encode(array('weeds'=>$weeds));
 	}
 	
 	public function getAncestorWeeds($id) {
-		
-		$weedDAO = new WeedDAO();
-		$weeds = $weedDAO->getAncestorWeeds($id);
+
+		$weeds = $this->weed_dao->getAncestorWeeds($id);
 
 		return json_encode(array('weeds'=>$weeds));
 	}
@@ -54,17 +49,15 @@ class WeedController extends Controller
 		//parse request body
 		$weed = $this->parse_request_body();
 		
-		$weedDAO = new WeedDAO();
-		$result = $weedDAO->create($weed);
+		$result = $this->weed_dao->create($weed);
 		
-		$userDao = new UserDAO();
 		$currentUsername = $this->getCurrentUsername();
 		$tokens = preg_split('/\s+/', $weed->get_content());
 		
 		foreach ($tokens as &$token) {
 			if(strpos($token, '@') === 0) {
 				$username = substr($token, 1);
-				$devices = $userDao->getUserDevicesByUsername($username);
+				$devices = $this->user_daos->getUserDevicesByUsername($username);
 				foreach ($devices as &$device) {
 				    NotificationHelper::sendMessage($device['device_id'], '@' . $currentUsername . ' mentioned you in weed: ' . $weed->get_content());
 				}
@@ -97,37 +90,31 @@ class WeedController extends Controller
 	
 	public function delete($id)
 	{
-		$weedDAO = new WeedDAO();
-
-		$weedDAO->delete($id);
+		$this->weed_dao->delete($id);
 	}
 	
 	public function seed($weed_id) 
 	{
 		$currentUser_id = $this->getCurrentUser();
-		$weedDAO = new WeedDAO();
-		$result = $weedDAO->setUserSeedWeed($currentUser_id, $weed_id);
+		$result = $this->weed_dao->setUserSeedWeed($currentUser_id, $weed_id);
 	}
 	
 	public function unseed($weed_id) 
 	{		
 		$currentUser_id = $this->getCurrentUser();
-		$weedDAO = new WeedDAO();
-		$result = $weedDAO->setUserUnseedWeed($currentUser_id, $weed_id);
+		$result = $this->weed_dao->setUserUnseedWeed($currentUser_id, $weed_id);
 	}
 	
 	public function water($weed_id) 
 	{
 		$currentUser_id = $this->getCurrentUser();
-		$weedDAO = new WeedDAO();
-		$result = $weedDAO->setUserWaterWeed($currentUser_id, $weed_id);
+		$result = $this->weed_dao->setUserWaterWeed($currentUser_id, $weed_id);
 	}
 	
 	public function unwater($weed_id) 
 	{		
 		$currentUser_id = $this->getCurrentUser();
-		$weedDAO = new WeedDAO();
-		$result = $weedDAO->setUserUnwaterWeed($currentUser_id, $weed_id);
+		$result = $this->weed_dao->setUserUnwaterWeed($currentUser_id, $weed_id);
 	}
 	
 	private function parse_request_body() {

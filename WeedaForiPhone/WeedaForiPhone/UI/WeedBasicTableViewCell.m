@@ -18,31 +18,36 @@
     [[NSBundle mainBundle] loadNibNamed:@"WeedBasicTableViewCell" owner:self options:nil];
     self.bounds = self.view.bounds;
     [self addSubview:self.view];
+    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(userAvatarTapped)];
+    [self.userAvatar addGestureRecognizer:singleTap];
+    self.userAvatar.userInteractionEnabled = YES;
+    [self.usernameLabel addTarget:self action:@selector(showUser:)forControlEvents:UIControlEventTouchDown];
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated
+- (void)decorateCellWithWeed:(NSString *)content username:(NSString *) username time:(NSDate *) time user_id:(id) user_id
 {
-    [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
-}
-
-- (void)decorateCellWithWeed:(Weed *)weed
-{
-    self.weedContentLabel.text = [NSString stringWithFormat:@"%@", weed.content];
+    self.weedContentLabel.text = [NSString stringWithFormat:@"%@", content];
     
-    NSString *nameLabel = [NSString stringWithFormat:@"@%@", weed.username];
+    NSString *nameLabel = [NSString stringWithFormat:@"@%@", username];
     [self.usernameLabel setTitle:nameLabel forState:UIControlStateNormal];
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"MMM. dd yyyy"];
-    NSString *formattedDateString = [dateFormatter stringFromDate:weed.time];
+    NSString *formattedDateString = [dateFormatter stringFromDate:time];
     self.timeLabel.text = [NSString stringWithFormat:@"%@", formattedDateString];
     
-    [self.userAvatar sd_setImageWithURL:[WeedImageController imageURLOfAvatar:weed.user_id] placeholderImage:[UIImage imageNamed:@"avatar.jpg"] options:SDWebImageHandleCookies];
+    [self.userAvatar sd_setImageWithURL:[WeedImageController imageURLOfAvatar:user_id] placeholderImage:[UIImage imageNamed:@"avatar.jpg"] options:SDWebImageHandleCookies];
     CALayer * l = [self.userAvatar layer];
     [l setMasksToBounds:YES];
     [l setCornerRadius:7.0];
+}
+
+-(void)userAvatarTapped {
+    [self showUser:self];
+}
+
+-(void)showUser:(id) sender {
+    [self.delegate showUser:self];
 }
 
 @end

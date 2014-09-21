@@ -7,6 +7,41 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0E4E2C9619B860290025C3EC /* MessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E4E2C9519B860290025C3EC /* MessageViewController.m */; };
+		0E99A48219ADD724006A7EE5 /* message.png in Resources */ = {isa = PBXBuildFile; fileRef = 0E99A48119ADD724006A7EE5 /* message.png */; };
+		0EA09D0419BF56EC00E5214E /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EA09D0319BF56EC00E5214E /* Message.m */; };
+		0EB8C4BD19C5C00800BD64E1 /* JSBubbleMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EB8C48519C5C00800BD64E1 /* JSBubbleMessageCell.m */; };
+		0EB8C4BE19C5C00800BD64E1 /* JSBubbleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EB8C48719C5C00800BD64E1 /* JSBubbleView.m */; };
+		0EB8C4BF19C5C00800BD64E1 /* JSDismissiveTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EB8C48919C5C00800BD64E1 /* JSDismissiveTextView.m */; };
+		0EB8C4C019C5C00800BD64E1 /* JSMessageInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EB8C48B19C5C00800BD64E1 /* JSMessageInputView.m */; };
+		0EB8C4C119C5C00800BD64E1 /* JSMessageSoundEffect.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EB8C48D19C5C00800BD64E1 /* JSMessageSoundEffect.m */; };
+		0EB8C4C219C5C00800BD64E1 /* JSMessagesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EB8C48F19C5C00800BD64E1 /* JSMessagesViewController.m */; };
+		0EB8C4C319C5C00800BD64E1 /* NSString+JSMessagesView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EB8C49119C5C00800BD64E1 /* NSString+JSMessagesView.m */; };
+		0EB8C4C519C5C00800BD64E1 /* bubble-default-incoming-green@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0EB8C49519C5C00800BD64E1 /* bubble-default-incoming-green@2x.png */; };
+		0EB8C4C719C5C00800BD64E1 /* bubble-default-incoming-selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0EB8C49719C5C00800BD64E1 /* bubble-default-incoming-selected@2x.png */; };
+		0EB8C4C919C5C00800BD64E1 /* bubble-default-incoming@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0EB8C49919C5C00800BD64E1 /* bubble-default-incoming@2x.png */; };
+		0EB8C4CB19C5C00800BD64E1 /* bubble-default-outgoing-green@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0EB8C49B19C5C00800BD64E1 /* bubble-default-outgoing-green@2x.png */; };
+		0EB8C4CD19C5C00800BD64E1 /* bubble-default-outgoing-selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0EB8C49D19C5C00800BD64E1 /* bubble-default-outgoing-selected@2x.png */; };
+		0EB8C4CF19C5C00800BD64E1 /* bubble-default-outgoing@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0EB8C49F19C5C00800BD64E1 /* bubble-default-outgoing@2x.png */; };
+		0EB8C4D119C5C00800BD64E1 /* bubble-square-incoming-selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0EB8C4A119C5C00800BD64E1 /* bubble-square-incoming-selected@2x.png */; };
+		0EB8C4D319C5C00800BD64E1 /* bubble-square-incoming@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0EB8C4A319C5C00800BD64E1 /* bubble-square-incoming@2x.png */; };
+		0EB8C4D519C5C00800BD64E1 /* bubble-square-outgoing-selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0EB8C4A519C5C00800BD64E1 /* bubble-square-outgoing-selected@2x.png */; };
+		0EB8C4D719C5C00900BD64E1 /* bubble-square-outgoing@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0EB8C4A719C5C00800BD64E1 /* bubble-square-outgoing@2x.png */; };
+		0EB8C4D919C5C00900BD64E1 /* bubble-typing@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0EB8C4A919C5C00800BD64E1 /* bubble-typing@2x.png */; };
+		0EB8C4DF19C5C00900BD64E1 /* send-highlighted@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0EB8C4AF19C5C00800BD64E1 /* send-highlighted@2x.png */; };
+		0EB8C4E119C5C00900BD64E1 /* send@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0EB8C4B119C5C00800BD64E1 /* send@2x.png */; };
+		0EB8C4E219C5C00900BD64E1 /* messageReceived.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 0EB8C4B319C5C00800BD64E1 /* messageReceived.aiff */; };
+		0EB8C4E319C5C00900BD64E1 /* messageSent.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 0EB8C4B419C5C00800BD64E1 /* messageSent.aiff */; };
+		0EB8C4E419C5C00900BD64E1 /* UIButton+JSMessagesView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EB8C4B619C5C00800BD64E1 /* UIButton+JSMessagesView.m */; };
+		0EB8C4E519C5C00900BD64E1 /* UIColor+JSMessagesView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EB8C4B819C5C00800BD64E1 /* UIColor+JSMessagesView.m */; };
+		0EB8C4E619C5C00900BD64E1 /* UIImage+JSMessagesView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EB8C4BA19C5C00800BD64E1 /* UIImage+JSMessagesView.m */; };
+		0EB8C4E719C5C00900BD64E1 /* UIView+AnimationOptionsForCurve.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EB8C4BC19C5C00800BD64E1 /* UIView+AnimationOptionsForCurve.m */; };
+		0ECB452E19C5C55D00690944 /* VendorCallOutView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ECB452C19C5C55D00690944 /* VendorCallOutView.m */; };
+		0ECB452F19C5C55D00690944 /* VendorCallOutView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0ECB452D19C5C55D00690944 /* VendorCallOutView.xib */; };
+		0ECB453719C5C58300690944 /* delete.png in Resources */ = {isa = PBXBuildFile; fileRef = 0ECB453619C5C58300690944 /* delete.png */; };
+		0ECB453A19C5C5AF00690944 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 0ECB453819C5C5AF00690944 /* Model.xcdatamodeld */; };
+		0ECB453D19C5C8E900690944 /* ConversationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ECB453C19C5C8E900690944 /* ConversationViewController.m */; };
+		0EE8BFFB19AF2202007CE683 /* selected_message.png in Resources */ = {isa = PBXBuildFile; fileRef = 0EE8BFFA19AF2202007CE683 /* selected_message.png */; };
 		A914CCA418CD756200B870D8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A914CCA318CD756200B870D8 /* Foundation.framework */; };
 		A914CCA618CD756200B870D8 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A914CCA518CD756200B870D8 /* CoreGraphics.framework */; };
 		A914CCA818CD756200B870D8 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A914CCA718CD756200B870D8 /* UIKit.framework */; };
@@ -43,7 +78,6 @@
 		A953B6F418D6D7CB001CDD4C /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A953B6F318D6D7CB001CDD4C /* QuartzCore.framework */; };
 		A953B6F618D6D7D2001CDD4C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A953B6F518D6D7D2001CDD4C /* Security.framework */; };
 		A953B6F818D6D7DB001CDD4C /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A953B6F718D6D7DB001CDD4C /* SystemConfiguration.framework */; };
-		A953B6FE18D6D9DB001CDD4C /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A953B6FC18D6D9DB001CDD4C /* Model.xcdatamodeld */; };
 		A953B70B18DF8E42001CDD4C /* libRestKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A953B6E418D6D794001CDD4C /* libRestKit.a */; };
 		A959D30719282A9A0085F6C1 /* map.png in Resources */ = {isa = PBXBuildFile; fileRef = A959D30619282A9A0085F6C1 /* map.png */; };
 		A959D30C19282DE50085F6C1 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A959D30B19282DE50085F6C1 /* MapKit.framework */; };
@@ -57,8 +91,6 @@
 		A98A89B8195FB168005A5871 /* dispensary_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A98A89B7195FB168005A5871 /* dispensary_icon.png */; };
 		A98A89C2195FCAC6005A5871 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A98A89C1195FCAC6005A5871 /* AddressBook.framework */; };
 		A98A89C51960C46D005A5871 /* VendorMKAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = A98A89C41960C46D005A5871 /* VendorMKAnnotationView.m */; };
-		A98A89D419615B5B005A5871 /* VendorCallOutView.m in Sources */ = {isa = PBXBuildFile; fileRef = A98A89D219615B5B005A5871 /* VendorCallOutView.m */; };
-		A98A89D819615C99005A5871 /* VendorCallOutView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A98A89D719615C99005A5871 /* VendorCallOutView.xib */; };
 		A991C04818FB3B7700A3D2CD /* TabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = A991C04718FB3B7700A3D2CD /* TabBarController.m */; };
 		A991C04E18FB42EC00A3D2CD /* profile_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A991C04D18FB42EC00A3D2CD /* profile_icon.png */; };
 		A991C05018FB517600A3D2CD /* selected_profile_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A991C04F18FB517600A3D2CD /* selected_profile_icon.png */; };
@@ -103,7 +135,6 @@
 		EA76A50F1952833900B60F04 /* WeedAddingImageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EA76A50D1952833900B60F04 /* WeedAddingImageCell.xib */; };
 		EAA18EDE18F0ADFD0081482D /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA18EDD18F0ADFD0081482D /* LoginViewController.m */; };
 		EAAE7B4B19611295003F0C65 /* WeedImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = EAAE7B4A19611295003F0C65 /* WeedImageView.m */; };
-		EAB1CB82195A6AAD00BB4BBA /* delete.png in Resources */ = {isa = PBXBuildFile; fileRef = EAB1CB81195A6AAD00BB4BBA /* delete.png */; };
 		EAB57B0C197B6F3F00C79E05 /* libSDWebImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EAB57AF0197B6BD500C79E05 /* libSDWebImage.a */; };
 		EAC6AAF0197B616A00017240 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAC6AACA19798F1100017240 /* ImageIO.framework */; };
 		EACD1157197CA76F00E45475 /* WeedImageController.m in Sources */ = {isa = PBXBuildFile; fileRef = EACD1156197CA76F00E45475 /* WeedImageController.m */; };
@@ -184,6 +215,56 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0E4E2C9419B860290025C3EC /* MessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageViewController.h; sourceTree = "<group>"; };
+		0E4E2C9519B860290025C3EC /* MessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageViewController.m; sourceTree = "<group>"; };
+		0E99A48119ADD724006A7EE5 /* message.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = message.png; path = WeedaForiPhone/Images/message.png; sourceTree = "<group>"; };
+		0EA09D0219BF56EC00E5214E /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Message.h; path = WeedaForiPhone/Model/Message.h; sourceTree = "<group>"; };
+		0EA09D0319BF56EC00E5214E /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Message.m; path = WeedaForiPhone/Model/Message.m; sourceTree = "<group>"; };
+		0EB8C48419C5C00800BD64E1 /* JSBubbleMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JSBubbleMessageCell.h; path = WeedaForiPhone/UI/Message/JSBubbleMessageCell.h; sourceTree = "<group>"; };
+		0EB8C48519C5C00800BD64E1 /* JSBubbleMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JSBubbleMessageCell.m; path = WeedaForiPhone/UI/Message/JSBubbleMessageCell.m; sourceTree = "<group>"; };
+		0EB8C48619C5C00800BD64E1 /* JSBubbleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JSBubbleView.h; path = WeedaForiPhone/UI/Message/JSBubbleView.h; sourceTree = "<group>"; };
+		0EB8C48719C5C00800BD64E1 /* JSBubbleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JSBubbleView.m; path = WeedaForiPhone/UI/Message/JSBubbleView.m; sourceTree = "<group>"; };
+		0EB8C48819C5C00800BD64E1 /* JSDismissiveTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JSDismissiveTextView.h; path = WeedaForiPhone/UI/Message/JSDismissiveTextView.h; sourceTree = "<group>"; };
+		0EB8C48919C5C00800BD64E1 /* JSDismissiveTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JSDismissiveTextView.m; path = WeedaForiPhone/UI/Message/JSDismissiveTextView.m; sourceTree = "<group>"; };
+		0EB8C48A19C5C00800BD64E1 /* JSMessageInputView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JSMessageInputView.h; path = WeedaForiPhone/UI/Message/JSMessageInputView.h; sourceTree = "<group>"; };
+		0EB8C48B19C5C00800BD64E1 /* JSMessageInputView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JSMessageInputView.m; path = WeedaForiPhone/UI/Message/JSMessageInputView.m; sourceTree = "<group>"; };
+		0EB8C48C19C5C00800BD64E1 /* JSMessageSoundEffect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JSMessageSoundEffect.h; path = WeedaForiPhone/UI/Message/JSMessageSoundEffect.h; sourceTree = "<group>"; };
+		0EB8C48D19C5C00800BD64E1 /* JSMessageSoundEffect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JSMessageSoundEffect.m; path = WeedaForiPhone/UI/Message/JSMessageSoundEffect.m; sourceTree = "<group>"; };
+		0EB8C48E19C5C00800BD64E1 /* JSMessagesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JSMessagesViewController.h; path = WeedaForiPhone/UI/Message/JSMessagesViewController.h; sourceTree = "<group>"; };
+		0EB8C48F19C5C00800BD64E1 /* JSMessagesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JSMessagesViewController.m; path = WeedaForiPhone/UI/Message/JSMessagesViewController.m; sourceTree = "<group>"; };
+		0EB8C49019C5C00800BD64E1 /* NSString+JSMessagesView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+JSMessagesView.h"; path = "WeedaForiPhone/UI/Message/NSString+JSMessagesView.h"; sourceTree = "<group>"; };
+		0EB8C49119C5C00800BD64E1 /* NSString+JSMessagesView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+JSMessagesView.m"; path = "WeedaForiPhone/UI/Message/NSString+JSMessagesView.m"; sourceTree = "<group>"; };
+		0EB8C49519C5C00800BD64E1 /* bubble-default-incoming-green@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bubble-default-incoming-green@2x.png"; sourceTree = "<group>"; };
+		0EB8C49719C5C00800BD64E1 /* bubble-default-incoming-selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bubble-default-incoming-selected@2x.png"; sourceTree = "<group>"; };
+		0EB8C49919C5C00800BD64E1 /* bubble-default-incoming@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bubble-default-incoming@2x.png"; sourceTree = "<group>"; };
+		0EB8C49B19C5C00800BD64E1 /* bubble-default-outgoing-green@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bubble-default-outgoing-green@2x.png"; sourceTree = "<group>"; };
+		0EB8C49D19C5C00800BD64E1 /* bubble-default-outgoing-selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bubble-default-outgoing-selected@2x.png"; sourceTree = "<group>"; };
+		0EB8C49F19C5C00800BD64E1 /* bubble-default-outgoing@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bubble-default-outgoing@2x.png"; sourceTree = "<group>"; };
+		0EB8C4A119C5C00800BD64E1 /* bubble-square-incoming-selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bubble-square-incoming-selected@2x.png"; sourceTree = "<group>"; };
+		0EB8C4A319C5C00800BD64E1 /* bubble-square-incoming@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bubble-square-incoming@2x.png"; sourceTree = "<group>"; };
+		0EB8C4A519C5C00800BD64E1 /* bubble-square-outgoing-selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bubble-square-outgoing-selected@2x.png"; sourceTree = "<group>"; };
+		0EB8C4A719C5C00800BD64E1 /* bubble-square-outgoing@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bubble-square-outgoing@2x.png"; sourceTree = "<group>"; };
+		0EB8C4A919C5C00800BD64E1 /* bubble-typing@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bubble-typing@2x.png"; sourceTree = "<group>"; };
+		0EB8C4AF19C5C00800BD64E1 /* send-highlighted@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "send-highlighted@2x.png"; sourceTree = "<group>"; };
+		0EB8C4B119C5C00800BD64E1 /* send@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "send@2x.png"; sourceTree = "<group>"; };
+		0EB8C4B319C5C00800BD64E1 /* messageReceived.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = messageReceived.aiff; sourceTree = "<group>"; };
+		0EB8C4B419C5C00800BD64E1 /* messageSent.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = messageSent.aiff; sourceTree = "<group>"; };
+		0EB8C4B519C5C00800BD64E1 /* UIButton+JSMessagesView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIButton+JSMessagesView.h"; path = "WeedaForiPhone/UI/Message/UIButton+JSMessagesView.h"; sourceTree = "<group>"; };
+		0EB8C4B619C5C00800BD64E1 /* UIButton+JSMessagesView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIButton+JSMessagesView.m"; path = "WeedaForiPhone/UI/Message/UIButton+JSMessagesView.m"; sourceTree = "<group>"; };
+		0EB8C4B719C5C00800BD64E1 /* UIColor+JSMessagesView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+JSMessagesView.h"; path = "WeedaForiPhone/UI/Message/UIColor+JSMessagesView.h"; sourceTree = "<group>"; };
+		0EB8C4B819C5C00800BD64E1 /* UIColor+JSMessagesView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+JSMessagesView.m"; path = "WeedaForiPhone/UI/Message/UIColor+JSMessagesView.m"; sourceTree = "<group>"; };
+		0EB8C4B919C5C00800BD64E1 /* UIImage+JSMessagesView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+JSMessagesView.h"; path = "WeedaForiPhone/UI/Message/UIImage+JSMessagesView.h"; sourceTree = "<group>"; };
+		0EB8C4BA19C5C00800BD64E1 /* UIImage+JSMessagesView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+JSMessagesView.m"; path = "WeedaForiPhone/UI/Message/UIImage+JSMessagesView.m"; sourceTree = "<group>"; };
+		0EB8C4BB19C5C00800BD64E1 /* UIView+AnimationOptionsForCurve.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+AnimationOptionsForCurve.h"; path = "WeedaForiPhone/UI/Message/UIView+AnimationOptionsForCurve.h"; sourceTree = "<group>"; };
+		0EB8C4BC19C5C00800BD64E1 /* UIView+AnimationOptionsForCurve.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+AnimationOptionsForCurve.m"; path = "WeedaForiPhone/UI/Message/UIView+AnimationOptionsForCurve.m"; sourceTree = "<group>"; };
+		0ECB452B19C5C55D00690944 /* VendorCallOutView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VendorCallOutView.h; path = WeedaForiPhone/UI/VendorCallOutView.h; sourceTree = "<group>"; };
+		0ECB452C19C5C55D00690944 /* VendorCallOutView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VendorCallOutView.m; path = WeedaForiPhone/UI/VendorCallOutView.m; sourceTree = "<group>"; };
+		0ECB452D19C5C55D00690944 /* VendorCallOutView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = VendorCallOutView.xib; path = WeedaForiPhone/UI/VendorCallOutView.xib; sourceTree = "<group>"; };
+		0ECB453619C5C58300690944 /* delete.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = delete.png; path = WeedaForiPhone/Images/delete.png; sourceTree = "<group>"; };
+		0ECB453919C5C5AF00690944 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		0ECB453B19C5C8E900690944 /* ConversationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConversationViewController.h; sourceTree = "<group>"; };
+		0ECB453C19C5C8E900690944 /* ConversationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConversationViewController.m; sourceTree = "<group>"; };
+		0EE8BFFA19AF2202007CE683 /* selected_message.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = selected_message.png; path = WeedaForiPhone/Images/selected_message.png; sourceTree = "<group>"; };
 		A914CCA018CD756200B870D8 /* Weeda.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Weeda.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A914CCA318CD756200B870D8 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		A914CCA518CD756200B870D8 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -229,7 +310,6 @@
 		A953B6F318D6D7CB001CDD4C /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		A953B6F518D6D7D2001CDD4C /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		A953B6F718D6D7DB001CDD4C /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
-		A953B6FD18D6D9DB001CDD4C /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		A959D30619282A9A0085F6C1 /* map.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = map.png; path = WeedaForiPhone/Images/map.png; sourceTree = "<group>"; };
 		A959D30B19282DE50085F6C1 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		A959D30D19282DFE0085F6C1 /* selected_map.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = selected_map.png; path = WeedaForiPhone/Images/selected_map.png; sourceTree = "<group>"; };
@@ -246,9 +326,6 @@
 		A98A89C1195FCAC6005A5871 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		A98A89C31960C46D005A5871 /* VendorMKAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VendorMKAnnotationView.h; path = WeedaForiPhone/UI/VendorMKAnnotationView.h; sourceTree = "<group>"; };
 		A98A89C41960C46D005A5871 /* VendorMKAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VendorMKAnnotationView.m; path = WeedaForiPhone/UI/VendorMKAnnotationView.m; sourceTree = "<group>"; };
-		A98A89D019615B5B005A5871 /* VendorCallOutView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VendorCallOutView.h; sourceTree = "<group>"; };
-		A98A89D219615B5B005A5871 /* VendorCallOutView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VendorCallOutView.m; sourceTree = "<group>"; };
-		A98A89D719615C99005A5871 /* VendorCallOutView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VendorCallOutView.xib; sourceTree = "<group>"; };
 		A991C04618FB3B7700A3D2CD /* TabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TabBarController.h; sourceTree = "<group>"; };
 		A991C04718FB3B7700A3D2CD /* TabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TabBarController.m; sourceTree = "<group>"; };
 		A991C04D18FB42EC00A3D2CD /* profile_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = profile_icon.png; path = WeedaForiPhone/Images/profile_icon.png; sourceTree = "<group>"; };
@@ -315,7 +392,6 @@
 		EAA18EDD18F0ADFD0081482D /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		EAAE7B4919611295003F0C65 /* WeedImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WeedImageView.h; path = WeedaForiPhone/UI/WeedImageView.h; sourceTree = "<group>"; };
 		EAAE7B4A19611295003F0C65 /* WeedImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WeedImageView.m; path = WeedaForiPhone/UI/WeedImageView.m; sourceTree = "<group>"; };
-		EAB1CB81195A6AAD00BB4BBA /* delete.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = delete.png; sourceTree = "<group>"; };
 		EAB57AE8197B6BD500C79E05 /* SDWebImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDWebImage.xcodeproj; path = SDWebImage/SDWebImage.xcodeproj; sourceTree = "<group>"; };
 		EAC6AACA19798F1100017240 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		EACD1155197CA76F00E45475 /* WeedImageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WeedImageController.h; path = WeedaForiPhone/Library/WeedImageController.h; sourceTree = "<group>"; };
@@ -361,6 +437,75 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0EB8C47719C5BD1100BD64E1 /* Message */ = {
+			isa = PBXGroup;
+			children = (
+				0EB8C48419C5C00800BD64E1 /* JSBubbleMessageCell.h */,
+				0EB8C48519C5C00800BD64E1 /* JSBubbleMessageCell.m */,
+				0EB8C48619C5C00800BD64E1 /* JSBubbleView.h */,
+				0EB8C48719C5C00800BD64E1 /* JSBubbleView.m */,
+				0EB8C48819C5C00800BD64E1 /* JSDismissiveTextView.h */,
+				0EB8C48919C5C00800BD64E1 /* JSDismissiveTextView.m */,
+				0EB8C48A19C5C00800BD64E1 /* JSMessageInputView.h */,
+				0EB8C48B19C5C00800BD64E1 /* JSMessageInputView.m */,
+				0EB8C48C19C5C00800BD64E1 /* JSMessageSoundEffect.h */,
+				0EB8C48D19C5C00800BD64E1 /* JSMessageSoundEffect.m */,
+				0EB8C48E19C5C00800BD64E1 /* JSMessagesViewController.h */,
+				0EB8C48F19C5C00800BD64E1 /* JSMessagesViewController.m */,
+				0EB8C49019C5C00800BD64E1 /* NSString+JSMessagesView.h */,
+				0EB8C49119C5C00800BD64E1 /* NSString+JSMessagesView.m */,
+				0EB8C49219C5C00800BD64E1 /* Resources */,
+				0EB8C4B519C5C00800BD64E1 /* UIButton+JSMessagesView.h */,
+				0EB8C4B619C5C00800BD64E1 /* UIButton+JSMessagesView.m */,
+				0EB8C4B719C5C00800BD64E1 /* UIColor+JSMessagesView.h */,
+				0EB8C4B819C5C00800BD64E1 /* UIColor+JSMessagesView.m */,
+				0EB8C4B919C5C00800BD64E1 /* UIImage+JSMessagesView.h */,
+				0EB8C4BA19C5C00800BD64E1 /* UIImage+JSMessagesView.m */,
+				0EB8C4BB19C5C00800BD64E1 /* UIView+AnimationOptionsForCurve.h */,
+				0EB8C4BC19C5C00800BD64E1 /* UIView+AnimationOptionsForCurve.m */,
+			);
+			name = Message;
+			sourceTree = "<group>";
+		};
+		0EB8C49219C5C00800BD64E1 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				0EB8C49319C5C00800BD64E1 /* Images */,
+				0EB8C4B219C5C00800BD64E1 /* Sounds */,
+			);
+			name = Resources;
+			path = WeedaForiPhone/UI/Message/Resources;
+			sourceTree = "<group>";
+		};
+		0EB8C49319C5C00800BD64E1 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				0EB8C49519C5C00800BD64E1 /* bubble-default-incoming-green@2x.png */,
+				0EB8C49719C5C00800BD64E1 /* bubble-default-incoming-selected@2x.png */,
+				0EB8C49919C5C00800BD64E1 /* bubble-default-incoming@2x.png */,
+				0EB8C49B19C5C00800BD64E1 /* bubble-default-outgoing-green@2x.png */,
+				0EB8C49D19C5C00800BD64E1 /* bubble-default-outgoing-selected@2x.png */,
+				0EB8C49F19C5C00800BD64E1 /* bubble-default-outgoing@2x.png */,
+				0EB8C4A119C5C00800BD64E1 /* bubble-square-incoming-selected@2x.png */,
+				0EB8C4A319C5C00800BD64E1 /* bubble-square-incoming@2x.png */,
+				0EB8C4A519C5C00800BD64E1 /* bubble-square-outgoing-selected@2x.png */,
+				0EB8C4A719C5C00800BD64E1 /* bubble-square-outgoing@2x.png */,
+				0EB8C4A919C5C00800BD64E1 /* bubble-typing@2x.png */,
+				0EB8C4AF19C5C00800BD64E1 /* send-highlighted@2x.png */,
+				0EB8C4B119C5C00800BD64E1 /* send@2x.png */,
+			);
+			path = Images;
+			sourceTree = "<group>";
+		};
+		0EB8C4B219C5C00800BD64E1 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				0EB8C4B319C5C00800BD64E1 /* messageReceived.aiff */,
+				0EB8C4B419C5C00800BD64E1 /* messageSent.aiff */,
+			);
+			path = Sounds;
+			sourceTree = "<group>";
+		};
 		A914CC9718CD756200B870D8 = {
 			isa = PBXGroup;
 			children = (
@@ -441,6 +586,10 @@
 				A9645DDA196A0A6C00DDE2DB /* DiscoverViewController.m */,
 				A9FB79F11985A4C100DB35CB /* EditProfileViewController.h */,
 				A9FB79F21985A4C100DB35CB /* EditProfileViewController.m */,
+				0E4E2C9419B860290025C3EC /* MessageViewController.h */,
+				0E4E2C9519B860290025C3EC /* MessageViewController.m */,
+				0ECB453B19C5C8E900690944 /* ConversationViewController.h */,
+				0ECB453C19C5C8E900690944 /* ConversationViewController.m */,
 			);
 			path = WeedaForiPhone;
 			sourceTree = "<group>";
@@ -477,15 +626,17 @@
 		A914CCE218CD76C500B870D8 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				0ECB453819C5C5AF00690944 /* Model.xcdatamodeld */,
 				EA38FC5D190C9A9D007D652B /* WeedImage.h */,
 				EA38FC5E190C9A9D007D652B /* WeedImage.m */,
-				A953B6FC18D6D9DB001CDD4C /* Model.xcdatamodeld */,
 				A9CA8E5718E8DB1E004F095D /* RemoteObject.h */,
 				A9CA8E5818E8DB1E004F095D /* RemoteObject.m */,
 				A9CA8E8D18F264BA004F095D /* User.h */,
 				A9CA8E8E18F264BA004F095D /* User.m */,
 				A99A0A2F19173C9F00E2C50B /* Weed.h */,
 				A99A0A3019173C9F00E2C50B /* Weed.m */,
+				0EA09D0219BF56EC00E5214E /* Message.h */,
+				0EA09D0319BF56EC00E5214E /* Message.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -513,6 +664,8 @@
 		A9CA8E9218F3DAC6004F095D /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				0E99A48119ADD724006A7EE5 /* message.png */,
+				0EE8BFFA19AF2202007CE683 /* selected_message.png */,
 				A9653A9619988E2C00B9E124 /* Yes.png */,
 				A9D0B16719A043FF00BC2196 /* No.png */,
 				A9D5A05719736F100099664B /* search_icon.png */,
@@ -531,9 +684,9 @@
 				A9A4680E190DDF4100461E90 /* light.png */,
 				EA152C5E19187D9F009E5337 /* title.png */,
 				EA38FC841917067F007D652B /* welcome.png */,
-				EAB1CB81195A6AAD00BB4BBA /* delete.png */,
 				A9A46803190C7A6300461E90 /* seedgray.png */,
 				A9A46801190C696300461E90 /* seed.png */,
+				0ECB453619C5C58300690944 /* delete.png */,
 				A92E513F19048B0400FC518F /* followed.png */,
 				A92E513B19047C6000FC518F /* follow.png */,
 				A91A62F91903602B008726E5 /* wrong.png */,
@@ -553,6 +706,7 @@
 		A9CA8E9A18F3E01C004F095D /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				0EB8C47719C5BD1100BD64E1 /* Message */,
 				EA76A505194E94AF00B60F04 /* WeedAddingImageView.h */,
 				EA76A506194E94AF00B60F04 /* WeedAddingImageView.m */,
 				EA38FC89191719D3007D652B /* WLUIImageView.h */,
@@ -582,9 +736,9 @@
 				EA4DB14B196114D6005ED7F7 /* WeedShowImageCell.xib */,
 				A98A89C31960C46D005A5871 /* VendorMKAnnotationView.h */,
 				A98A89C41960C46D005A5871 /* VendorMKAnnotationView.m */,
-				A98A89D019615B5B005A5871 /* VendorCallOutView.h */,
-				A98A89D719615C99005A5871 /* VendorCallOutView.xib */,
-				A98A89D219615B5B005A5871 /* VendorCallOutView.m */,
+				0ECB452B19C5C55D00690944 /* VendorCallOutView.h */,
+				0ECB452C19C5C55D00690944 /* VendorCallOutView.m */,
+				0ECB452D19C5C55D00690944 /* VendorCallOutView.xib */,
 				A9FB79F71985A94500DB35CB /* UserInfoEditableCell.h */,
 				A9FB79F81985A94500DB35CB /* UserInfoEditableCell.m */,
 				A9FB79FA1985A97000DB35CB /* UserInfoEditableCell.xib */,
@@ -770,41 +924,58 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0EB8C4D719C5C00900BD64E1 /* bubble-square-outgoing@2x.png in Resources */,
 				A9B45DDE194EAC40007AFB06 /* WeedTableViewCell.xib in Resources */,
 				A9D0B16819A043FF00BC2196 /* No.png in Resources */,
+				0EB8C4DF19C5C00900BD64E1 /* send-highlighted@2x.png in Resources */,
 				EA76A50F1952833900B60F04 /* WeedAddingImageCell.xib in Resources */,
 				A9A4680F190DDF4100461E90 /* light.png in Resources */,
+				0EE8BFFB19AF2202007CE683 /* selected_message.png in Resources */,
 				A9180C4B192B327600668E4F /* spotlight_icon.png in Resources */,
+				0EB8C4CD19C5C00800BD64E1 /* bubble-default-outgoing-selected@2x.png in Resources */,
 				A9CA8E9718F3DD67004F095D /* avatar.jpg in Resources */,
 				A9A46802190C696300461E90 /* seed.png in Resources */,
 				A959D30E19282DFE0085F6C1 /* selected_map.png in Resources */,
 				A991C05418FB597900A3D2CD /* selected_weed.png in Resources */,
 				A914CCC418CD756200B870D8 /* Images.xcassets in Resources */,
 				EA38FC851917067F007D652B /* welcome.png in Resources */,
-				A98A89D819615C99005A5871 /* VendorCallOutView.xib in Resources */,
+				0EB8C4C519C5C00800BD64E1 /* bubble-default-incoming-green@2x.png in Resources */,
 				A991C05E18FB75A900A3D2CD /* waterdrop.png in Resources */,
 				EA76A504194E927500B60F04 /* WeedAddingToolbar.xib in Resources */,
+				0EB8C4D119C5C00800BD64E1 /* bubble-square-incoming-selected@2x.png in Resources */,
+				0EB8C4D519C5C00800BD64E1 /* bubble-square-outgoing-selected@2x.png in Resources */,
+				0EB8C4CB19C5C00800BD64E1 /* bubble-default-outgoing-green@2x.png in Resources */,
+				0EB8C4D319C5C00800BD64E1 /* bubble-square-incoming@2x.png in Resources */,
 				EA76A4F8194E75C400B60F04 /* caremar.png in Resources */,
 				A92E513D19047C6000FC518F /* follow.png in Resources */,
 				A92E514019048B0400FC518F /* followed.png in Resources */,
 				A914CCB018CD756200B870D8 /* InfoPlist.strings in Resources */,
 				EA76A4FD194E77A100B60F04 /* picture.png in Resources */,
 				A986EFC5197230B700174AE4 /* current_location.png in Resources */,
-				EAB1CB82195A6AAD00BB4BBA /* delete.png in Resources */,
+				0EB8C4C919C5C00800BD64E1 /* bubble-default-incoming@2x.png in Resources */,
 				EA152C5F19187D9F009E5337 /* title.png in Resources */,
 				A91A62FA1903602B008726E5 /* wrong.png in Resources */,
 				A986EFC719723CEA00174AE4 /* current_location_gray.png in Resources */,
+				0EB8C4C719C5C00800BD64E1 /* bubble-default-incoming-selected@2x.png in Resources */,
 				A9A46804190C7A6300461E90 /* seedgray.png in Resources */,
 				A9D5A05819736F100099664B /* search_icon.png in Resources */,
+				0EB8C4CF19C5C00800BD64E1 /* bubble-default-outgoing@2x.png in Resources */,
 				A991C05218FB58D600A3D2CD /* weed.png in Resources */,
 				EA4DB14D196114D6005ED7F7 /* WeedShowImageCell.xib in Resources */,
 				A91A62F819035FCC008726E5 /* ok.png in Resources */,
 				A91A62E318FD1B1C008726E5 /* compose.png in Resources */,
+				0EB8C4E119C5C00900BD64E1 /* send@2x.png in Resources */,
+				0EB8C4E319C5C00900BD64E1 /* messageSent.aiff in Resources */,
 				A9FB79FB1985A97000DB35CB /* UserInfoEditableCell.xib in Resources */,
+				0EB8C4E219C5C00900BD64E1 /* messageReceived.aiff in Resources */,
+				0EB8C4D919C5C00900BD64E1 /* bubble-typing@2x.png in Resources */,
 				A991C05018FB517600A3D2CD /* selected_profile_icon.png in Resources */,
 				A9180C4D192B329D00668E4F /* setting_icon.png in Resources */,
 				A959D30719282A9A0085F6C1 /* map.png in Resources */,
+				0ECB453719C5C58300690944 /* delete.png in Resources */,
 				A9653A9719988E2C00B9E124 /* Yes.png in Resources */,
+				0ECB452F19C5C55D00690944 /* VendorCallOutView.xib in Resources */,
+				0E99A48219ADD724006A7EE5 /* message.png in Resources */,
 				A9A46824190DE2C600461E90 /* lightgray.png in Resources */,
 				A98A89B8195FB168005A5871 /* dispensary_icon.png in Resources */,
 				A991C04E18FB42EC00A3D2CD /* profile_icon.png in Resources */,
@@ -831,42 +1002,56 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A953B6FE18D6D9DB001CDD4C /* Model.xcdatamodeld in Sources */,
 				EACD1157197CA76F00E45475 /* WeedImageController.m in Sources */,
 				EA38FC8B191719D3007D652B /* WLUIImageView.m in Sources */,
 				A914CCC218CD756200B870D8 /* DetailViewController.m in Sources */,
+				0EB8C4E419C5C00900BD64E1 /* UIButton+JSMessagesView.m in Sources */,
 				A9A46833190E210900461E90 /* WeedDetailControlTableViewCell.m in Sources */,
+				0EB8C4C119C5C00800BD64E1 /* JSMessageSoundEffect.m in Sources */,
 				A9A46830190E1E8E00461E90 /* WeedDetailTableViewCell.m in Sources */,
 				A91816C8195637B400E7DD02 /* WeedBasicTableViewCell.m in Sources */,
+				0EB8C4C019C5C00800BD64E1 /* JSMessageInputView.m in Sources */,
+				0EB8C4E619C5C00900BD64E1 /* UIImage+JSMessagesView.m in Sources */,
 				EA76A50E1952833900B60F04 /* WeedAddingImageCell.m in Sources */,
+				0EB8C4BE19C5C00800BD64E1 /* JSBubbleView.m in Sources */,
 				EA76A507194E94AF00B60F04 /* WeedAddingImageView.m in Sources */,
 				A9CA8EA018F3E255004F095D /* WeedTableViewCell.m in Sources */,
 				A914CCBF18CD756200B870D8 /* MasterViewController.m in Sources */,
 				EAA18EDE18F0ADFD0081482D /* LoginViewController.m in Sources */,
 				A9CA8E5918E8DB1E004F095D /* RemoteObject.m in Sources */,
 				A9FB79F31985A4C100DB35CB /* EditProfileViewController.m in Sources */,
+				0E4E2C9619B860290025C3EC /* MessageViewController.m in Sources */,
 				EA76A500194E923200B60F04 /* WeedAddingToolbar.m in Sources */,
 				EA1B050F18F3668A0033AB06 /* WelcomeViewController.m in Sources */,
+				0ECB452E19C5C55D00690944 /* VendorCallOutView.m in Sources */,
 				A9653A9019984D3300B9E124 /* UIImage+ImageEffects.m in Sources */,
 				A991C04818FB3B7700A3D2CD /* TabBarController.m in Sources */,
 				EA38FC68190D6D26007D652B /* CropImageViewController.m in Sources */,
 				A914CCB618CD756200B870D8 /* AppDelegate.m in Sources */,
 				EAF6762C18FB62E4003BB138 /* SignupViewController.m in Sources */,
+				0EB8C4C219C5C00800BD64E1 /* JSMessagesViewController.m in Sources */,
 				A9CA8E8F18F264BA004F095D /* User.m in Sources */,
 				A9645DDB196A0A6C00DDE2DB /* DiscoverViewController.m in Sources */,
 				EAAE7B4B19611295003F0C65 /* WeedImageView.m in Sources */,
-				A98A89D419615B5B005A5871 /* VendorCallOutView.m in Sources */,
+				0EB8C4BF19C5C00800BD64E1 /* JSDismissiveTextView.m in Sources */,
 				A9CA8E7E18F0F814004F095D /* UserViewController.m in Sources */,
 				A91A62ED18FF8F48008726E5 /* UserListViewController.m in Sources */,
 				A9CA8E6618E9132C004F095D /* AddWeedViewController.m in Sources */,
+				0EB8C4E719C5C00900BD64E1 /* UIView+AnimationOptionsForCurve.m in Sources */,
 				EA4DB14C196114D6005ED7F7 /* WeedShowImageCell.m in Sources */,
+				0EB8C4BD19C5C00800BD64E1 /* JSBubbleMessageCell.m in Sources */,
 				A9653A9519984FFA00B9E124 /* BlurView.m in Sources */,
+				0EB8C4C319C5C00800BD64E1 /* NSString+JSMessagesView.m in Sources */,
 				EA38FC5F190C9A9D007D652B /* WeedImage.m in Sources */,
 				A914CCB218CD756200B870D8 /* main.m in Sources */,
 				A92E513A19046E2A00FC518F /* UserTableViewCell.m in Sources */,
 				A99A0A3119173C9F00E2C50B /* Weed.m in Sources */,
+				0EB8C4E519C5C00900BD64E1 /* UIColor+JSMessagesView.m in Sources */,
 				A98A89C51960C46D005A5871 /* VendorMKAnnotationView.m in Sources */,
 				A9DFADE019A055E900AB00BA /* ColorDefinition.m in Sources */,
+				0ECB453A19C5C5AF00690944 /* Model.xcdatamodeld in Sources */,
+				0ECB453D19C5C8E900690944 /* ConversationViewController.m in Sources */,
+				0EA09D0419BF56EC00E5214E /* Message.m in Sources */,
 				A9FB79F91985A94500DB35CB /* UserInfoEditableCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1004,6 +1189,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -1011,9 +1197,12 @@
 				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"";
 				INFOPLIST_FILE = "WeedaForiPhone/WeedaForiPhone-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Weeda-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1022,6 +1211,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -1029,9 +1219,11 @@
 				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"";
 				INFOPLIST_FILE = "WeedaForiPhone/WeedaForiPhone-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Weeda-Bridging-Header.h";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -1109,13 +1301,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		A953B6FC18D6D9DB001CDD4C /* Model.xcdatamodeld */ = {
+		0ECB453819C5C5AF00690944 /* Model.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				A953B6FD18D6D9DB001CDD4C /* Model.xcdatamodel */,
+				0ECB453919C5C5AF00690944 /* Model.xcdatamodel */,
 			);
-			currentVersion = A953B6FD18D6D9DB001CDD4C /* Model.xcdatamodel */;
-			path = Model.xcdatamodeld;
+			currentVersion = 0ECB453919C5C5AF00690944 /* Model.xcdatamodel */;
+			name = Model.xcdatamodeld;
+			path = WeedaForiPhone/Model/Model.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

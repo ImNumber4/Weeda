@@ -142,7 +142,7 @@ const NSInteger SHOW_FOLLOWINGS = 2;
 
 - (void)decorateCellWithWeed:(Weed *)weed cell:(WeedBasicTableViewCell *)cell
 {
-    [cell decorateCellWithWeed:weed];
+    [cell decorateCellWithWeed:weed.content username:weed.username time:weed.time user_id:weed.user_id];
 }
 
 - (IBAction)handleSelectAvatar:(id)sender {
