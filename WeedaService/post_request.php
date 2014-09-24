@@ -1,15 +1,29 @@
 <?php
 
 //decodeJson();
-base64test();
+// base64test();
 
-$query = 'UPDATE user SET email = \''
-		. 1 . '\',time = \''
-				. 2 . '\', deleted = '
-						. 3 . ', has_avatar = '
-								. 4 . ' WHERE id = ' . 5;
+$size = getimagesize("upload/2/103/0.jpeg");
+echo 'image width: ' . $size[0] . ', image height: ' . $size[1] . "\n";
 
-echo $query;
+$image_path = 'upload/2/104/';
+$images = scandir($image_path);
+var_dump($images);
+
+$array_image_metadata = array();
+for ($i=0; $i < count($images); $i++) { 
+	$image = $image_path . $images[$i];
+	echo "Image:" . $image . "\n";
+	if (is_dir($image)) {
+		continue;
+	}
+	$size = getimagesize($image);
+	$array_image_metadata[] = array('width'=>$size[0], 'height'=>$size[1]);
+}
+
+var_dump(json_encode(array('metadata'=>$array_image_metadata)));
+
+echo "\n";
 
 function base64test()
 {

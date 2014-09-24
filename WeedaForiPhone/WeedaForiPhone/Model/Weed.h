@@ -25,5 +25,6 @@
 @property (nonatomic, retain) NSNumber * light_count;
 @property (nonatomic, retain) NSNumber * root_id;
 @property (nonatomic, retain) NSNumber * image_count;
+@property (nonatomic, retain) NSSet * image_metadata;
 
 @end

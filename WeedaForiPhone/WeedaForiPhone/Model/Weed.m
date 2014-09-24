@@ -23,5 +23,6 @@
 @dynamic light_count;
 @dynamic root_id;
 @dynamic image_count;
+@dynamic image_metadata;
 
 @end

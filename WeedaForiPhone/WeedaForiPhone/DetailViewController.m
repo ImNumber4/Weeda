@@ -15,6 +15,8 @@
 #import "TabBarController.h"
 #import "AddWeedViewController.h"
 #import "WeedImageController.h"
+#import "WeedShowImageCell.h"
+#import "WeedImageController.h"
 
 #import <SDWebImage/UIImageView+WebCache.h>
 
@@ -32,7 +34,12 @@ const NSInteger CURRENT_WEED_CONTROL_CELL_HEIGHT = 30;
 const NSInteger SHOW_SEED_USERS = 1;
 const NSInteger SHOW_WATER_USERS = 2;
 
-@interface DetailViewController () <UITableViewDelegate, UITableViewDataSource>
+const CGFloat COLLECTION_VIEW_PER_ROW_HEIGHT = 100.0;
+
+@interface DetailViewController () <UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource, NSFetchedResultsControllerDelegate>
+
+@property (nonatomic, retain) UICollectionView *imageCollectionView;
+@property (nonatomic, strong) NSFetchedResultsController *fetchMetadataResultController;
 
 @end
 
@@ -162,7 +169,7 @@ const NSInteger SHOW_WATER_USERS = 2;
     CGSize tvsize = [temp sizeThatFits:CGSizeMake(tempFrame.size.width, tempFrame.size.height)]; //This calculates the necessary size so that all the text fits in the necessary width.
     
     //Add the height of the other UI elements inside your cell
-    return MAX(tvsize.height, 50.0) + 50.0;
+    return MAX(tvsize.height, 50.0) + 50.0 + ceilf([self.currentWeed.image_count intValue] / 3.0) * COLLECTION_VIEW_PER_ROW_HEIGHT;
 }
 
 - (void)configureWeedDetailTableViewCell:(WeedDetailTableViewCell *)cell
@@ -179,23 +186,64 @@ const NSInteger SHOW_WATER_USERS = 2;
     [dateFormatter setDateFormat:@"MMM. dd yyyy hh:mm"];
     NSString *formattedDateString = [dateFormatter stringFromDate:self.currentWeed.time];
     cell.timeLabel.text = [NSString stringWithFormat:@"%@", formattedDateString];
-//    cell.userAvatar.image = [self getImage:@"avatar.jpg" width:40 height:40];
-//    [cell.userAvatar setImageWithUser: self.currentWeed.user_id];
     [cell.userAvatar sd_setImageWithURL:[WeedImageController imageURLOfAvatar:self.currentWeed.user_id] placeholderImage:[UIImage imageNamed:@"avatar.jpg"] options:SDWebImageHandleCookies];
     CALayer * l = [cell.userAvatar layer];
     [l setMasksToBounds:YES];
     [l setCornerRadius:7.0];
     
+    [self createImageCollectionViewCell:cell];
 }
 
-//- (void)createImageCollectionViewCell:(WeedDetailTableViewCell *)cell
+//- (void)weedDetailImageLayout
+////{
+////    switch (self.currentWeed.image_metadata.count) {
+////        case 1:
+////            <#statements#>
+////            break;
+////            
+////        default:
+////            break;
+////    }
+////}
+//
+//- (CGSize)calculateCellSize
 //{
-//    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc]init];
-//    layout.itemSize = CGSizeMake(cell.superview.window.frame.size.width, 300);
-//    layout.minimumLineSpacing = 5;
-//    layout.minimumInteritemSpacing = 5;
-//    layout.scrollDirection = UICollectionViewScrollDirectionVertical;
+//    BOOL evenNumber = NO;
+//    if ([self.currentWeed.image_count intValue] % 2 == 0) {
+//        evenNumber = YES;
+//    }
+//    
+//    CGFloat cellHeight;
+//    if (evenNumber) {
+//        cellHeight = COLLECTION_VIEW_HEIGHT / [self.currentWeed.image_count intValue] / 2;
+//    } else {
+//        cellHeight = COLLECTION_VIEW_HEIGHT / ([self.currentWeed.image_count intValue] + 1) / 2;
+//    }
+//    
+//    CGFloat cellWidth = (self.view.frame.size.width - 20) / 2;
+//    
+//    return CGSizeMake(cellWidth, cellHeight);
 //}
+
+- (void)createImageCollectionViewCell:(WeedDetailTableViewCell *)cell
+{
+    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc]init];
+//    layout.itemSize = [self calculateCellSize];
+    layout.itemSize = CGSizeMake(100, 100);
+    layout.minimumLineSpacing = 0;
+    layout.minimumInteritemSpacing = 0;
+    layout.scrollDirection = UICollectionViewScrollDirectionVertical;
+    layout.sectionInset = UIEdgeInsetsMake(10, 5, 0, 5);
+    
+    self.imageCollectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(cell.frame.origin.x, cell.weedContentLabel.frame.origin.y + cell.weedContentLabel.frame.size.height + 5, self.view.frame.size.width, ceilf([self.currentWeed.image_count intValue] / 3.0) * COLLECTION_VIEW_PER_ROW_HEIGHT) collectionViewLayout:layout];
+    self.imageCollectionView.delegate = self;
+    self.imageCollectionView.dataSource = self;
+    
+    [self.imageCollectionView registerNib:[UINib nibWithNibName:@"WeedShowImageCell" bundle:nil] forCellWithReuseIdentifier:@"imageCell"];
+    [self.imageCollectionView setBackgroundColor:[UIColor whiteColor]];
+    [cell addSubview:self.imageCollectionView];
+    [cell bringSubviewToFront:self.imageCollectionView];
+}
 
 - (void)configureWeedTableViewCell:(WeedBasicTableViewCell *)cell weed:(Weed *)weed
 {
@@ -366,5 +414,34 @@ const NSInteger SHOW_WATER_USERS = 2;
     return UIGraphicsGetImageFromCurrentImageContext();
 }
 
+#pragma CollectionView Delegate
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    return [self.currentWeed.image_count intValue];
+}
+
+- (WeedShowImageCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    WeedShowImageCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"imageCell" forIndexPath:indexPath];
+    if (cell) {
+        cell.backgroundColor = [UIColor grayColor];
+        [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:[WeedImageController imageURLOfWeedId:self.currentWeed.id userId:self.currentWeed.user_id count:[indexPath row]] options:SDWebImageDownloaderHandleCookies progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+            return;
+        } completed:^(UIImage *image, NSData *data, NSError *error, BOOL finished) {
+            if (image && finished) {
+                UIImage *newImage = [WeedImageController imageWithImage:image scaledToSize:cell.frame.size];
+                cell.imageView.image = newImage;
+                cell.imageView.contentMode = UIViewContentModeTopLeft;
+            }
+        }];
+    }
+    return cell;
+}
+
+//- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    UIImage *image = [WeedImageController imageWithImage:[self.weedImages objectAtIndex:[indexPath row]] scaledToHeight:100.0];
+//    return image.size;
+//}
 
 @end

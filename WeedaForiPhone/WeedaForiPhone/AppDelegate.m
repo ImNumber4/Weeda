@@ -14,6 +14,7 @@
 #import "Weed.h"
 #import "User.h"
 #import "WeedImage.h"
+#import "ImageMetadata.h"
 
 @interface AppDelegate ()
 
@@ -111,6 +112,11 @@
     
     [userMapping addAttributeMappingsFromDictionary:userResponseMappingDictionary];
     
+    RKEntityMapping *metadataMapping = [RKEntityMapping mappingForEntityForName:NSStringFromClass([ImageMetadata class]) inManagedObjectStore:managedObjectStore];
+    metadataMapping.identificationAttributes = @[@"url"];
+    [metadataMapping addAttributeMappingsFromDictionary:@{@"url" : @"url", @"width" : @"width", @"height" : @"height"}];
+    [metadataMapping addAttributeMappingsFromDictionary:parentObjectMapping];
+    
     RKEntityMapping *weedMapping = [RKEntityMapping mappingForEntityForName:NSStringFromClass([Weed class]) inManagedObjectStore:managedObjectStore];
     
     weedMapping.identificationAttributes = @[ @"id" ];
@@ -129,6 +135,8 @@
                                                       @"image_count" : @"image_count"}];
     
     [weedMapping addAttributeMappingsFromDictionary:parentObjectMapping];
+    
+    [weedMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"image_metadata" toKeyPath:@"image_metadata" withMapping:metadataMapping]];
     
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"shouldBeDeleted = TRUE || id < 0"];
     weedMapping.deletionPredicate = predicate;

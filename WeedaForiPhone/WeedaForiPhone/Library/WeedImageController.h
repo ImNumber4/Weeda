@@ -15,4 +15,12 @@
 
 + (NSURL *)imageURLOfWeed: (Weed *)weed;
 
++ (NSURL *)imageURLOfWeedId: (NSNumber *)weedId userId:(NSNumber *)userId count:(long)count;
+
++ (UIImage *)imageWithImage:(UIImage *)originalImage scaledToSize:(CGSize)size;
+
++ (UIImage *)imageWithImage:(UIImage *)originalImage scaledToWidth:(CGFloat)width;
+
++ (UIImage *)imageWithImage:(UIImage *)originalImage scaledToHeight:(CGFloat)height;
+
 @end

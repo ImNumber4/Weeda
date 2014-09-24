@@ -27,6 +27,8 @@
     CALayer * l = [self.userAvatar layer];
     [l setMasksToBounds:YES];
     [l setCornerRadius:7.0];
+    
+    self.weedImages = [[NSMutableArray alloc]init];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
@@ -82,13 +84,23 @@
     [self.userAvatar sd_setImageWithURL:[WeedImageController imageURLOfAvatar:weed.user_id] placeholderImage:[UIImage imageNamed:@"avatar.jpg"] options:SDWebImageHandleCookies];
     
     if ([weed.image_count intValue] > 0) {
-        _weedTmp = weed;
-        _imageCount = [weed.image_count intValue];
-//        self.imageCollectionView.hidden = NO;
+        for (int i = 0; i < [weed.image_count intValue]; i++) {
+            [[SDWebImageDownloader sharedDownloader]downloadImageWithURL:[WeedImageController imageURLOfWeedId:weed.id userId:weed.user_id count:i] options:SDWebImageDownloaderHandleCookies progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+                
+            } completed:^(UIImage *image, NSData *data, NSError *error, BOOL finished) {
+//                UIImage *newImage = [WeedImageController imageWithImage:image scaledToHeight:200.0];
+//                NSLog(@"Image size, width: %f, height: %f.", newImage.size.width, newImage.size.height);
+                [self.weedImages addObject:image];
+                if (self.weedImages.count == [weed.image_count intValue]) {
+                    [self.imageCollectionView reloadData];
+                }
+            }];
+        }
         
         [self createImageCollectionView];
         
         self.imageCollectionView.center = CGPointMake(320 / 2, self.view.frame.size.height - 20 - 10 - self.imageCollectionView.frame.size.height / 2);
+        
         
     }
 }
@@ -96,7 +108,7 @@
 - (void)createImageCollectionView
 {
     UICollectionViewFlowLayout *layout=[[UICollectionViewFlowLayout alloc] init];
-    layout.itemSize = CGSizeMake(280, 230);
+    layout.itemSize = CGSizeMake(280, 200);
     layout.minimumLineSpacing = 5;
     layout.minimumInteritemSpacing = 5;
     layout.sectionInset = UIEdgeInsetsMake(0, (self.superview.bounds.size.width - layout.itemSize.width) / 2, 0, (self.superview.bounds.size.width - layout.itemSize.width) / 2);
@@ -116,42 +128,26 @@
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return _imageCount;
+    return self.weedImages.count;
 }
 
 - (WeedShowImageCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     WeedShowImageCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"imageCell" forIndexPath:indexPath];
     if (cell) {
-        NSString *url = [NSString stringWithFormat:@"http://www.cannablaze.com/image/query/weed_%@_%@_%ld", _weedTmp.user_id, _weedTmp.id, (long)indexPath.row];
-        cell.backgroundColor = [UIColor grayColor];
-        
-        NSLog(@"Weed URL: %@", url);
-        [cell.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:nil options:SDWebImageHandleCookies];
-
-//        [[SDWebImageManager sharedManager] downloadImageWithURL:[NSURL URLWithString:url] options:SDWebImageHandleCookies progress:^(NSInteger receivedSize, NSInteger expectedSize) {
-//            return;
-//        } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
-//            if (image && finished) {
-//                cell.imageView.image = image;
-//            }
-//        }];
+        cell.backgroundColor = [UIColor whiteColor];
+        cell.imageView.image = [self.weedImages objectAtIndex:[indexPath row]];
     }
-    
-//    NSLog(@"url: image/query/weed_%@_%@_%ld", _weedTmp.user_id, _weedTmp.id, indexPath.row);
-//    
-//    cell.backgroundColor = [UIColor grayColor];
-//
-//    //Get Weeds Image
-//    [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"image/query/weed_%@_%@_%ld", _weedTmp.user_id, _weedTmp.id, indexPath.row] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-//        WeedImage *image = [mappingResult.array objectAtIndex:0];
-//        cell.imageView.image = image.image;
-//    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-//        NSLog(@"Get image Failed: %@", error);
-//    }];
     
     return cell;
 }
+
+//- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    UIImage *image = [self.weedImages objectAtIndex:[indexPath row]];
+//    NSLog(@"cell size, width: %f, height: %f.", image.size.width, image.size.height);
+//    return image.size;
+//}
 
 - (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
 {

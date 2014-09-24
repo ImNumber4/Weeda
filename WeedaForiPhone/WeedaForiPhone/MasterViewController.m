@@ -15,6 +15,7 @@
 #import "Weed.h"
 #import "User.h"
 #import "WeedImage.h"
+#import "ImageMetadata.h"
 
 
 @interface MasterViewController () <UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate>
@@ -54,7 +55,7 @@ const NSInteger NON_GLOBAL_COMPOSE_TAG = 1;
                                                                         managedObjectContext:[RKManagedObjectStore defaultStore].mainQueueManagedObjectContext
                                                                           sectionNameKeyPath:nil
                                                                                    cacheName:nil];
-    
+        
     UIBarButtonItem *composeButton = [[UIBarButtonItem alloc] initWithImage:[self getImage:@"compose.png" width:30 height:30] style:UIBarButtonItemStylePlain target:self action:@selector(lightIt:)];
     composeButton.tag = GLOBAL_COMPOSE_TAG;
     [self.navigationItem setRightBarButtonItem:composeButton];
@@ -133,7 +134,6 @@ const NSInteger NON_GLOBAL_COMPOSE_TAG = 1;
     }
 }
 
-
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -151,6 +151,12 @@ const NSInteger NON_GLOBAL_COMPOSE_TAG = 1;
     static NSString *CellIdentifier = @"WeedTableCell";
     WeedTableViewCell *cell = (WeedTableViewCell *) [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     Weed *weed = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    
+    if (weed.image_metadata.count > 0) {
+        for (ImageMetadata *metadata in weed.image_metadata){
+            NSLog(@"image url: %@, width: %@, height: %@", metadata.url, metadata.width, metadata.height);
+        }
+    }
     
     [self decorateCellWithWeed:weed cell:cell];
     return cell;

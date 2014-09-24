@@ -138,6 +138,7 @@
 		EAB57B0C197B6F3F00C79E05 /* libSDWebImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EAB57AF0197B6BD500C79E05 /* libSDWebImage.a */; };
 		EAC6AAF0197B616A00017240 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAC6AACA19798F1100017240 /* ImageIO.framework */; };
 		EACD1157197CA76F00E45475 /* WeedImageController.m in Sources */ = {isa = PBXBuildFile; fileRef = EACD1156197CA76F00E45475 /* WeedImageController.m */; };
+		EAD2597B19CE672600D59F9D /* ImageMetadata.m in Sources */ = {isa = PBXBuildFile; fileRef = EAD2597A19CE672600D59F9D /* ImageMetadata.m */; };
 		EAF6762C18FB62E4003BB138 /* SignupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAF6762B18FB62E4003BB138 /* SignupViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -396,6 +397,8 @@
 		EAC6AACA19798F1100017240 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		EACD1155197CA76F00E45475 /* WeedImageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WeedImageController.h; path = WeedaForiPhone/Library/WeedImageController.h; sourceTree = "<group>"; };
 		EACD1156197CA76F00E45475 /* WeedImageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WeedImageController.m; path = WeedaForiPhone/Library/WeedImageController.m; sourceTree = "<group>"; };
+		EAD2597919CE672600D59F9D /* ImageMetadata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ImageMetadata.h; path = WeedaForiPhone/Model/ImageMetadata.h; sourceTree = "<group>"; };
+		EAD2597A19CE672600D59F9D /* ImageMetadata.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ImageMetadata.m; path = WeedaForiPhone/Model/ImageMetadata.m; sourceTree = "<group>"; };
 		EAF6762A18FB62E4003BB138 /* SignupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignupViewController.h; sourceTree = "<group>"; };
 		EAF6762B18FB62E4003BB138 /* SignupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignupViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -637,6 +640,8 @@
 				A99A0A3019173C9F00E2C50B /* Weed.m */,
 				0EA09D0219BF56EC00E5214E /* Message.h */,
 				0EA09D0319BF56EC00E5214E /* Message.m */,
+				EAD2597919CE672600D59F9D /* ImageMetadata.h */,
+				EAD2597A19CE672600D59F9D /* ImageMetadata.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -1047,6 +1052,7 @@
 				A92E513A19046E2A00FC518F /* UserTableViewCell.m in Sources */,
 				A99A0A3119173C9F00E2C50B /* Weed.m in Sources */,
 				0EB8C4E519C5C00900BD64E1 /* UIColor+JSMessagesView.m in Sources */,
+				EAD2597B19CE672600D59F9D /* ImageMetadata.m in Sources */,
 				A98A89C51960C46D005A5871 /* VendorMKAnnotationView.m in Sources */,
 				A9DFADE019A055E900AB00BA /* ColorDefinition.m in Sources */,
 				0ECB453A19C5C5AF00690944 /* Model.xcdatamodeld in Sources */,
