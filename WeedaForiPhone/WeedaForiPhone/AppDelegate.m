@@ -161,6 +161,7 @@
     [messageMapping addAttributeMappingsFromDictionary:parentObjectMapping];
     
     messageMapping.deletionPredicate = predicate;
+
     
     // Register our mappings with the provider
     [manager addResponseDescriptor:[RKResponseDescriptor responseDescriptorWithMapping:weedMapping
@@ -267,7 +268,7 @@
                                                                                 keyPath:@"messages"
                                                                             statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)]];
     
-    
+    //weed creation mapping
     RKObjectMapping * weedRequestMapping = [RKObjectMapping requestMapping];
     [weedRequestMapping addAttributeMappingsFromArray:@[ @"id", @"content",@"time",@"user_id", @"light_id", @"root_id", @"image_count"]];
     
@@ -279,7 +280,6 @@
     
     [manager addResponseDescriptor:[RKResponseDescriptor responseDescriptorWithMapping:weedMapping method:RKRequestMethodPOST pathPattern:@"weed/create" keyPath:nil statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)]];
     
-    
     //For checking username
     RKObjectMapping *userRequestMapping = [RKObjectMapping requestMapping];
     [userRequestMapping addAttributeMappingsFromDictionary:userRequestMappingDictionary];
@@ -288,9 +288,19 @@
                                                                                         rootKeyPath:nil
                                                                                              method:RKRequestMethodPOST]];
 
-    [manager addResponseDescriptor:[RKResponseDescriptor responseDescriptorWithMapping:errorMapping method:RKRequestMethodPOST pathPattern:@"user/update" keyPath:@"errors" statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)] ];
+    //user creation/update mapping
+    [manager addResponseDescriptor:[RKResponseDescriptor responseDescriptorWithMapping:errorMapping method:RKRequestMethodPOST pathPattern:@"user/update" keyPath:@"errors" statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)]];
     
-    [manager addResponseDescriptor:[RKResponseDescriptor responseDescriptorWithMapping:userMapping method:RKRequestMethodPOST pathPattern:@"user/signup" keyPath:@"user" statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)] ];
+    [manager addResponseDescriptor:[RKResponseDescriptor responseDescriptorWithMapping:userMapping method:RKRequestMethodPOST pathPattern:@"user/signup" keyPath:@"user" statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)]];
+    
+    //message creation mapping
+    [manager addResponseDescriptor:[RKResponseDescriptor responseDescriptorWithMapping:messageMapping method:RKRequestMethodPOST pathPattern:@"message/create" keyPath:nil statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)]];
+    
+    [manager addRequestDescriptor:[RKRequestDescriptor requestDescriptorWithMapping:[messageMapping inverseMapping]
+                                                                        objectClass:[Message class]
+                                                                        rootKeyPath:nil
+                                                                             method:RKRequestMethodPOST]];
+    
     
     //Adding Image response descriptor
     [self addImageHttpResponser:managedObjectStore];

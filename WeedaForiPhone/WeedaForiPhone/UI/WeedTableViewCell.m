@@ -90,10 +90,13 @@
             } completed:^(UIImage *image, NSData *data, NSError *error, BOOL finished) {
 //                UIImage *newImage = [WeedImageController imageWithImage:image scaledToHeight:200.0];
 //                NSLog(@"Image size, width: %f, height: %f.", newImage.size.width, newImage.size.height);
-                [self.weedImages addObject:image];
-                if (self.weedImages.count == [weed.image_count intValue]) {
-                    [self.imageCollectionView reloadData];
+                if (image && finished) {
+                    [self.weedImages addObject:image];
+                    if (self.weedImages.count == [weed.image_count intValue]) {
+                        [self.imageCollectionView reloadData];
+                    }
                 }
+                
             }];
         }
         

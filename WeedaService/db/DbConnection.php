@@ -21,6 +21,7 @@ class DbConnection
 		if (!mysql_select_db($this->database, $this->db_conn)) {
 			throw new DependencyFailureException("Failed to select database");
 		}
+		$this->init_connection();
 	}
 	
 	function __destruct() {
@@ -34,10 +35,6 @@ class DbConnection
 	}
 	
 	public function query($query) {
-		if ($this->db_conn == null) {
-			$this->init_connection();
-		}
-		
 		$result = mysql_query($query, $this->db_conn);
 		if ($result) {
 			return $result;
@@ -47,10 +44,6 @@ class DbConnection
 	}
 	
 	public function insert($query) {
-		if (!$this->db_conn) {
-			$this->init_connection();
-		}
-		
 		$result = mysql_query($query, $this->db_conn);
 		if (!$result)
 		{

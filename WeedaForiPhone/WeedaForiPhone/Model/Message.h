@@ -10,6 +10,8 @@
 #import <CoreData/CoreData.h>
 #import "RemoteObject.h"
 
+#define NOTIFICATION_TYPE @"notification"
+#define MESSAGE_TYPE @"message"
 
 @interface Message : RemoteObject
 

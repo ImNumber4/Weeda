@@ -15,4 +15,6 @@
 
 @property (nonatomic, retain) User * userObject;
 
+@property (strong) CLGeocoder *geocoder;
+
 @end

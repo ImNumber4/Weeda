@@ -11,8 +11,8 @@
 #import "DetailViewController.h"
 #import "ConversationViewController.h"
 
-#define NOTIFICATION_TYPE @"notification"
-#define MESSAGE_TYPE @"message"
+#define RED_DOT_RADIUS 4
+#define RED_DOT_PAD 10.0
 
 @interface MessageViewController () <UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, WeedBasicTableViewCellDelegate>
 
@@ -20,6 +20,8 @@
 @property (nonatomic, strong) NSFetchedResultsController *messageFetchedResultsController;
 @property (nonatomic, strong) Weed *relatedWeedToShow; //use this to cache the weed user want to see before segue
 @property (nonatomic, retain) NSMutableArray* conversations;
+@property (nonatomic, retain) UIView* redDotForNotifications;
+@property (nonatomic, retain) UIView* redDotForMessages;
 
 @end
 
@@ -32,7 +34,7 @@
     self.tableView.tableFooterView = [[UIView alloc] init];
     
     CGFloat customRefreshControlHeight = 50.0f;
-    CGFloat customRefreshControlWidth = 320.0f;
+    CGFloat customRefreshControlWidth = 100.0;
     CGRect customRefreshControlFrame = CGRectMake(0.0f,
                                                   -customRefreshControlHeight,
                                                   customRefreshControlWidth,
@@ -47,7 +49,31 @@
     self.messageFetchedResultsController = [self createNSFetchedResultsController:MESSAGE_TYPE sectionNameKeyPath:@"participant_id"];
     
     [self.segmentedControl addTarget:self action:@selector(segmentSwitched:) forControlEvents:UIControlEventValueChanged];
+    
+    [self initRedDotViews];
+}
 
+- (void) initRedDotViews
+{
+    self.redDotForMessages = [self circleWithColor:self.segmentedControl.tintColor radius:RED_DOT_RADIUS];
+    [self.segmentedControl addSubview:self.redDotForMessages];
+    [self.segmentedControl bringSubviewToFront:self.redDotForMessages];
+    [self.redDotForMessages setFrame:CGRectMake(self.segmentedControl.frame.size.width - RED_DOT_PAD  - RED_DOT_RADIUS * 2.0, self.segmentedControl.frame.size.height/2.0 - RED_DOT_RADIUS, self.redDotForMessages.frame.size.width, self.redDotForMessages.frame.size.height)];
+    self.redDotForMessages.hidden = true;
+    
+    self.redDotForNotifications = [self circleWithColor:self.segmentedControl.tintColor radius:RED_DOT_RADIUS];
+    [self.segmentedControl addSubview:self.redDotForNotifications];
+    [self.segmentedControl bringSubviewToFront:self.redDotForNotifications];
+    [self.redDotForNotifications setFrame:CGRectMake(self.segmentedControl.frame.size.width/2.0 - RED_DOT_PAD - RED_DOT_RADIUS * 2.0, self.segmentedControl.frame.size.height/2.0 - RED_DOT_RADIUS, self.redDotForNotifications.frame.size.width, self.redDotForNotifications.frame.size.height)];
+    self.redDotForNotifications.hidden = true;
+}
+
+- (UIView *)circleWithColor:(UIColor *)color radius:(int)radius {
+    UIView *circle = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 2 * radius, 2 * radius)];
+    circle.backgroundColor = color;
+    circle.layer.cornerRadius = radius;
+    circle.layer.masksToBounds = YES;
+    return circle;
 }
 
 - (NSFetchedResultsController *) createNSFetchedResultsController:(NSString *) type sectionNameKeyPath:(NSString *)sectionNameKeyPath
@@ -100,6 +126,17 @@
 {
     // Load the object model via RestKit
     [[RKObjectManager sharedManager] getObjectsAtPath:@"message/query" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+        self.redDotForNotifications.hidden = true;
+        self.redDotForMessages.hidden = true;
+        for (Message * message in mappingResult.array) {
+            
+            if ([message.type isEqualToString:NOTIFICATION_TYPE] && [message.is_read intValue] == 0) {
+                self.redDotForNotifications.hidden = false;
+                
+            } else if ([message.type isEqualToString:MESSAGE_TYPE] && [message.is_read intValue] == 0) {
+                self.redDotForMessages.hidden = false;
+            }
+        }
         [self loadData];
         [self.refreshControl endRefreshing];
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
@@ -188,11 +225,19 @@
         [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/queryById/%@", message.related_weed_id]  parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
             if ([mappingResult.array count]) {
                 self.relatedWeedToShow = mappingResult.array[0];
-                [self performSegueWithIdentifier:@"showWeed" sender:[self.tableView cellForRowAtIndexPath:indexPath]];
+                //now mark this notification as read on server side
+                [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"message/read/%@", message.id]  parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                    message.is_read = [NSNumber numberWithInt:1];
+                    [[[RKObjectManager sharedManager] managedObjectStore].mainQueueManagedObjectContext refreshObject:message mergeChanges:YES];
+                    NSError *error = nil;
+                    [message.managedObjectContext save:&error];
+                    [self performSegueWithIdentifier:@"showWeed" sender:[self.tableView cellForRowAtIndexPath:indexPath]];
+                } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                    RKLogError(@"Failed to call message/read due to error: %@", error);
+                }];
             }
         } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-            RKLogError(@"Load failed with error: %@", error);
-            [self.refreshControl endRefreshing];
+            RKLogError(@"Failed to query weed by id due to error: %@", error);
         }];
     } else if ([message.type isEqualToString:MESSAGE_TYPE]) {
         [self performSegueWithIdentifier:@"showMessage" sender:[self.tableView cellForRowAtIndexPath:indexPath]];
@@ -203,7 +248,11 @@
 {
     CGPoint buttonPosition = [sender convertPoint:CGPointZero toView:self.tableView];
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:buttonPosition];
-    Message *message = [[self getNSFetchedResultsController] objectAtIndexPath:indexPath];
+    Message *message;
+    if ([self isRetrievingConversations])
+        message = [self.conversations objectAtIndex:indexPath.row];
+    else
+         message = [[self getNSFetchedResultsController] objectAtIndexPath:indexPath];
     if ([[segue identifier] isEqualToString:@"showWeed"]) {
         [[segue destinationViewController] setCurrentWeed:self.relatedWeedToShow];
     } else if ([[segue identifier] isEqualToString:@"showUser"]) {

@@ -5,11 +5,14 @@
 class Message
 {
 	private $id;
+	private $message;
 	private $sender_id;
 	private $receiver_id;
-	private $message;
-	private $send_time;
-	private $received;
+	private $time;
+	private $deleted;
+	private $type;
+	private $related_weed_id;
+	private $is_read;
 	
 	public function get_id() {
 		return $this->id;
@@ -43,20 +46,44 @@ class Message
 		$this->message = $message;
 	}
 	
-	public function get_send_time() {
-		return $this->send_time;
+	public function get_time() {
+		return $this->time;
 	}
 	
-	public function set_send_time($send_time) {
-		$this->send_time = $send_time;
+	public function set_time($time) {
+		$this->time = $time;
 	}
 	
-	public function get_received() {
-		return $this->received;
+	public function get_deleted() {
+		return $this->deleted;
 	}
 	
-	public function set_received($received) {
-		$this->received = $received;
+	public function set_deleted($deleted) {
+		$this->deleted = $deleted;
+	}
+	
+	public function get_type() {
+		return $this->type;
+	}
+	
+	public function set_type($type) {
+		$this->type = $type;
+	}
+	
+	public function get_related_weed_id() {
+		return $this->related_weed_id;
+	}
+	
+	public function set_related_weed_id($related_weed_id) {
+		$this->related_weed_id = $related_weed_id;
+	}
+	
+	public function get_is_read() {
+		return $this->is_read;
+	}
+	
+	public function set_is_read($is_read) {
+		$this->is_read = $is_read;
 	}
 }
 
