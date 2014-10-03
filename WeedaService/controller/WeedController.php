@@ -4,18 +4,16 @@
 // error_reporting(E_ALL);
 
 include './library/ImageHandler.php';
-include './library/NotificationHelper.php';
 
 class WeedController extends Controller
 {
 	protected $weed_dao;
-	protected $user_dao;
+	
 	
     function __construct($model, $controller, $action) 
     {
 		parent::__construct($model, $controller, $action);
 		$this->weed_dao = new WeedDAO();
-		$this->user_dao = new UserDAO();
     }
 	
 	public function query($user_id) {
@@ -57,10 +55,7 @@ class WeedController extends Controller
 		foreach ($tokens as &$token) {
 			if(strpos($token, '@') === 0) {
 				$username = substr($token, 1);
-				$devices = $this->user_daos->getUserDevicesByUsername($username);
-				foreach ($devices as &$device) {
-				    NotificationHelper::sendMessage($device['device_id'], '@' . $currentUsername . ' mentioned you in weed: ' . $weed->get_content());
-				}
+				$this->sendNotificationToUser($username, null, '@' . $currentUsername . ' mentioned you in weed: ' . $weed->get_content());
 			}
 		}
 		error_log('Create weed successed!');

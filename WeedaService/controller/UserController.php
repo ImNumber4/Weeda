@@ -7,12 +7,10 @@ include './library/ImageHandler.php';
 
 class UserController extends Controller
 {
-	protected $user_dao;
 	
     function __construct($model, $controller, $action) 
     {
 		parent::__construct($model, $controller, $action);
-		$this->user_dao = new UserDAO();
     }
 	
 	public function query($id) {

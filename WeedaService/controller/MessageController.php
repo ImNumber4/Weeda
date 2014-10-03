@@ -24,8 +24,10 @@ class MessageController extends Controller
 	}
 	
 	public function create() {
-		$message = $this->parse_create_request_body();
+		$data = $this->parse_create_request_body();
+		$message = $this->convert_data_to_message($data);
 		$id = $this->message_dao->create($message);
+		$this->sendNotificationToUser($data->participant_username, $message->get_receiver_id(), $data->participant_username . ':' . $message->get_message());
 	    return json_encode(array('id' => $id));
 	}
 	
@@ -39,6 +41,10 @@ class MessageController extends Controller
 		if ($invalidReason) {
 			throw new InvalidRequestException("Inputs are not valid due to $invalidReason");
 		}
+		return $data;
+	}
+	
+	private function convert_data_to_message($data) {
 		$currentUser_id = $this->getCurrentUser();
 		$message = new Message();
 		$message->set_message($data->message);
@@ -64,6 +70,11 @@ class MessageController extends Controller
 		$participant_id = trim($data->participant_id);
 		if ($participant_id == '') {
 			return 'Input error, participant_id is null';
+		}
+		
+		$participant_username = trim($data->participant_username);
+		if ($participant_username == '') {
+			return 'Input error, participant_username is null';
 		}
 		
 		$type = trim($data->type);
