@@ -15,8 +15,11 @@ class MessageDAO extends BaseDAO
 		return $id;
 	}
 	
+	/**
+	* return messages that 'invole' given user and are unread or less than one day old
+	*/
 	public function query($user_id) {
-		$query = 'SELECT message.id as id, sender.username as sender_username, receiver.username as receiver_username, sender_id, receiver_id, message, message.time as time, message.deleted as deleted, type, related_weed_id, is_read FROM message LEFT JOIN user as sender on message.sender_id = sender.id LEFT JOIN user as receiver on message.receiver_id = receiver.id WHERE is_read = false and (receiver_id = ' . $user_id . ' or sender_id = ' . $user_id . ')';
+		$query = 'SELECT message.id as id, sender.username as sender_username, receiver.username as receiver_username, sender_id, receiver_id, message, message.time as time, message.deleted as deleted, type, related_weed_id, is_read FROM message LEFT JOIN user as sender on message.sender_id = sender.id LEFT JOIN user as receiver on message.receiver_id = receiver.id WHERE (is_read = false or message.time > timestampadd(hour, -24, now())) and (receiver_id = ' . $user_id . ' or sender_id = ' . $user_id . ')';
 		
 		$result = $this->db_conn->query($query);
 
@@ -31,9 +34,7 @@ class MessageDAO extends BaseDAO
 					$participant_username = $message['receiver_username'];
 				}
 				$is_read = $user_id == $message['sender_id'] ? 1 : $message['is_read'];
-				if( !$is_read) {
-					$messages[] = array('id' => $message['id'], 'sender_id' => $message['sender_id'], 'message' => $message['message'], 'time' => $message['time'], 'deleted' => $message['deleted'], 'type' => $message['type'], 'related_weed_id' => $message['related_weed_id'], 'is_read' => $is_read, 'participant_id' => $participant_id, 'participant_username' => $participant_username);
-				}
+				$messages[] = array('id' => $message['id'], 'sender_id' => $message['sender_id'], 'message' => $message['message'], 'time' => $message['time'], 'deleted' => $message['deleted'], 'type' => $message['type'], 'related_weed_id' => $message['related_weed_id'], 'is_read' => $is_read, 'participant_id' => $participant_id, 'participant_username' => $participant_username);
 			}
 		}
 		return $messages;
