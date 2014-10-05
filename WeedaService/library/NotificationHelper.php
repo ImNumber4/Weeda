@@ -31,7 +31,7 @@ class NotificationHelper
 				'action-loc-key' => 'Open',
 				'body' => $message
 			),
-			'badge' => 3,
+			'badge' => 1,
 			'sound' => 'default'
 		);
 
