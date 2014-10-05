@@ -16,31 +16,41 @@ class NotificationHelper
 			'ssl://gateway.sandbox.push.apple.com:2195', $err,
 			$errstr, 60, STREAM_CLIENT_CONNECT|STREAM_CLIENT_PERSISTENT, $ctx);
 
-		if (!$fp)
-			exit("Failed to connect: $err $errstr" . PHP_EOL);
+		if (!$fp) {
+			error_log("Failed to connect: $err $errstr" . PHP_EOL);
+			return;
+		}
+			
 
 		error_log('Connected to APNS' . PHP_EOL);
 
 		// Create the payload body
 		$body['aps'] = array(
-			'alert' => $message,
-			'badge'=> 1,
+			//'alert' => $message,
+			'alert' => array(
+				'action-loc-key' => 'Open',
+				'body' => $message
+			),
+			'badge' => 3,
 			'sound' => 'default'
-			);
+		);
 
 		// Encode the payload as JSON
 		$payload = json_encode($body);
 
 		// Build the binary notification
-		$msg = chr(1) . pack("N", $msg_id) . pack("N", $expiry) . pack('n', 32) . pack('H*', $token) . pack('n', strlen($payload)) . $payload; 
+		// The payload needs to be packed before it can be sent
+		$msg = chr(0) . chr(0) . chr(32);
+		$msg .= pack('H*', str_replace(' ', '', $deviceToken));
+		$msg .= chr(0) . chr(strlen($payload)) . $payload;
 
 		// Send it to the server
 		$result = fwrite($fp, $msg, strlen($msg));
 
 		if (!$result)
-			error_log('Message not delivered' . PHP_EOL);
+			error_log('Message ' . $message . ' not delivered to ' . $deviceToken . PHP_EOL);
 		else
-			error_log('Message successfully delivered' . PHP_EOL);
+			error_log('Message successfully delivered to ' . $deviceToken . PHP_EOL);
 
 		// Close the connection to the server
 		fclose($fp);
