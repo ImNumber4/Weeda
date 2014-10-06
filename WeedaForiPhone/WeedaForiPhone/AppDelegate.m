@@ -113,10 +113,10 @@
     
     [userMapping addAttributeMappingsFromDictionary:userResponseMappingDictionary];
     
-    RKEntityMapping *metadataMapping = [RKEntityMapping mappingForEntityForName:NSStringFromClass([ImageMetadata class]) inManagedObjectStore:managedObjectStore];
-    metadataMapping.identificationAttributes = @[@"url"];
-    [metadataMapping addAttributeMappingsFromDictionary:@{@"url" : @"url", @"width" : @"width", @"height" : @"height"}];
-    [metadataMapping addAttributeMappingsFromDictionary:parentObjectMapping];
+    RKEntityMapping *weedImageMapping = [RKEntityMapping mappingForEntityForName:NSStringFromClass([WeedImage class]) inManagedObjectStore:managedObjectStore];
+    weedImageMapping.identificationAttributes = @[@"url"];
+    [weedImageMapping addAttributeMappingsFromDictionary:@{@"url" : @"url", @"width" : @"width", @"height" : @"height"}];
+//    [weedImageMapping addAttributeMappingsFromDictionary:parentObjectMapping];
     
     RKEntityMapping *weedMapping = [RKEntityMapping mappingForEntityForName:NSStringFromClass([Weed class]) inManagedObjectStore:managedObjectStore];
     
@@ -137,7 +137,7 @@
     
     [weedMapping addAttributeMappingsFromDictionary:parentObjectMapping];
     
-    [weedMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"image_metadata" toKeyPath:@"image_metadata" withMapping:metadataMapping]];
+    [weedMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"images" toKeyPath:@"images" withMapping:weedImageMapping]];
     
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"shouldBeDeleted = TRUE || id < 0"];
     weedMapping.deletionPredicate = predicate;

@@ -13,8 +13,11 @@
 #import <SDWebImage/UIImageView+WebCache.h>
 #import <SDWebImage/SDWebImageManager.h>
 
-@implementation WeedTableViewCell
+#define MIN_HEIGHT_OF_TEXT_VIEW 40.0
+#define DEFAULT_WEED_CONTENT_LABLE_WIDTH 200.0
 
+
+@implementation WeedTableViewCell
 
 - (void)awakeFromNib
 {
@@ -28,7 +31,12 @@
     [l setMasksToBounds:YES];
     [l setCornerRadius:7.0];
     
-    self.weedImages = [[NSMutableArray alloc]init];
+    if (_weedTmp) {
+        _weedTmp = nil;
+    }
+    
+    _collectionView = [self createImageCollectionView:CGRectMake(0, 0, self.frame.size.width, MASTERVIEW_IMAGEVIEW_HEIGHT)];
+    [self addSubview:_collectionView];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
@@ -50,9 +58,13 @@
 
 - (void)decorateCellWithWeed:(Weed *)weed
 {
+    _weedTmp = weed;
+    
     [self.view setFrame:CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.frame.size.width, self.frame.size.height)];
-    self.weedContentLabel.text = weed.content;
-    [self.weedContentLabel setFrame:CGRectMake(self.weedContentLabel.frame.origin.x, self.weedContentLabel.frame.origin.y, self.weedContentLabel.frame.size.width, self.weedContentLabel.contentSize.height)];
+    self.weedContentLabel.attributedText = [[NSAttributedString alloc]initWithString:weed.content];
+    self.weedContentLabel.translatesAutoresizingMaskIntoConstraints = YES;
+    CGSize textLableSize = [self.weedContentLabel sizeThatFits:CGSizeMake(DEFAULT_WEED_CONTENT_LABLE_WIDTH, MIN_HEIGHT_OF_TEXT_VIEW)];
+    [self.weedContentLabel setFrame:CGRectMake(self.weedContentLabel.frame.origin.x, self.weedContentLabel.frame.origin.y, self.weedContentLabel.frame.size.width, MAX(MIN_HEIGHT_OF_TEXT_VIEW, textLableSize.height))];
     
     NSString *nameLabel = [NSString stringWithFormat:@"@%@", weed.username];
     [self.usernameLabel setTitle:nameLabel forState:UIControlStateNormal];
@@ -83,74 +95,61 @@
     
     [self.userAvatar sd_setImageWithURL:[WeedImageController imageURLOfAvatar:weed.user_id] placeholderImage:[UIImage imageNamed:@"avatar.jpg"] options:SDWebImageHandleCookies];
     
-    if ([weed.image_count intValue] > 0) {
-        for (int i = 0; i < [weed.image_count intValue]; i++) {
-            [[SDWebImageDownloader sharedDownloader]downloadImageWithURL:[WeedImageController imageURLOfWeedId:weed.id userId:weed.user_id count:i] options:SDWebImageDownloaderHandleCookies progress:^(NSInteger receivedSize, NSInteger expectedSize) {
-                
-            } completed:^(UIImage *image, NSData *data, NSError *error, BOOL finished) {
-//                UIImage *newImage = [WeedImageController imageWithImage:image scaledToHeight:200.0];
-//                NSLog(@"Image size, width: %f, height: %f.", newImage.size.width, newImage.size.height);
-                if (image && finished) {
-                    [self.weedImages addObject:image];
-                    if (self.weedImages.count == [weed.image_count intValue]) {
-                        [self.imageCollectionView reloadData];
-                    }
-                }
-                
-            }];
+    if (weed.images.count > 0) {
+        [_collectionView setFrame:CGRectMake(0, self.weedContentLabel.frame.origin.y + self.weedContentLabel.frame.size.height, self.frame.size.width, MASTERVIEW_IMAGEVIEW_HEIGHT)];
+        _collectionView.hidden = NO;
+        [_collectionView reloadData];
+    } else {
+        if (_collectionView) {
+            _collectionView.hidden = YES;
         }
-        
-        [self createImageCollectionView];
-        
-        self.imageCollectionView.center = CGPointMake(320 / 2, self.view.frame.size.height - 20 - 10 - self.imageCollectionView.frame.size.height / 2);
-        
-        
     }
 }
 
-- (void)createImageCollectionView
+- (UICollectionView *)createImageCollectionView:(CGRect)rect
 {
-    UICollectionViewFlowLayout *layout=[[UICollectionViewFlowLayout alloc] init];
-    layout.itemSize = CGSizeMake(280, 200);
-    layout.minimumLineSpacing = 5;
-    layout.minimumInteritemSpacing = 5;
+    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc]init];
+    layout.itemSize = CGSizeMake(280.0, 200.0);
+    layout.minimumLineSpacing = 5.0;
+    layout.minimumInteritemSpacing = 5.0;
     layout.sectionInset = UIEdgeInsetsMake(0, (self.superview.bounds.size.width - layout.itemSize.width) / 2, 0, (self.superview.bounds.size.width - layout.itemSize.width) / 2);
     layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-    self.imageCollectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 0, 320, 230) collectionViewLayout:layout];
-    [self.imageCollectionView setDelegate:self];
-    [self.imageCollectionView setDataSource:self];
-    [self.imageCollectionView registerNib:[UINib nibWithNibName:@"WeedShowImageCell" bundle:nil] forCellWithReuseIdentifier:@"imageCell"];
-    [self.imageCollectionView setBackgroundColor:[UIColor whiteColor]];
     
-//    CGFloat collectionViewHeight = CGRectGetHeight(self.imageCollectionView.bounds);
-//    [self.imageCollectionView setContentInset:UIEdgeInsetsMake(collectionViewHeight/2, 0, collectionViewHeight/2, 0) ];
+    UICollectionView *collectionView = [[UICollectionView alloc]initWithFrame:rect collectionViewLayout:layout];
+    [collectionView setDelegate:self];
+    [collectionView setDataSource:self];
+    [collectionView registerNib:[UINib nibWithNibName:@"WeedShowImageCell" bundle:nil] forCellWithReuseIdentifier:@"imageCell"];
+    [collectionView setBackgroundColor:[UIColor whiteColor]];
+    collectionView.showsHorizontalScrollIndicator = NO;
     
-    [self addSubview:self.imageCollectionView];
-//    self.imageCollectionView.hidden = YES;
+    return collectionView;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return self.weedImages.count;
+    return _weedTmp.images.count;
 }
 
 - (WeedShowImageCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     WeedShowImageCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"imageCell" forIndexPath:indexPath];
     if (cell) {
-        cell.backgroundColor = [UIColor whiteColor];
-        cell.imageView.image = [self.weedImages objectAtIndex:[indexPath row]];
+        cell.backgroundColor = [UIColor grayColor];
+        WeedImage *weedImage = [[_weedTmp.images allObjects] objectAtIndex:indexPath.row];
+        [cell.imageView sd_setImageWithURL:[WeedImageController imageURLOfImageId:weedImage.url] placeholderImage:nil options:SDWebImageHandleCookies
+        progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+            ;
+        } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+            if (!image) {
+                NSLog(@"Load image failed, imageId: %@, error: %@", weedImage.url, error);
+            }
+        }];
+    } else {
+        NSLog(@"Cell is nil.");
     }
     
     return cell;
 }
-
-//- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    UIImage *image = [self.weedImages objectAtIndex:[indexPath row]];
-//    NSLog(@"cell size, width: %f, height: %f.", image.size.width, image.size.height);
-//    return image.size;
-//}
 
 - (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -169,6 +168,33 @@
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
     return UIEdgeInsetsMake(0, (self.superview.bounds.size.width - 280) / 2, 0, (self.superview.bounds.size.width - 280) / 2);
+}
+
+- (CGFloat)weedContentLableHeight:(Weed *)weed
+{
+    UITextView *temp = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, DEFAULT_WEED_CONTENT_LABLE_WIDTH, 44)]; //This initial size doesn't matter
+    temp.font = [UIFont systemFontOfSize:12.0];
+    temp.text = weed.content;
+    
+    CGFloat textViewWidth = DEFAULT_WEED_CONTENT_LABLE_WIDTH;
+    CGRect tempFrame = CGRectMake(0, 0, textViewWidth, MIN_HEIGHT_OF_TEXT_VIEW); //The height of this frame doesn't matter.
+    CGSize tvsize = [temp sizeThatFits:CGSizeMake(tempFrame.size.width, tempFrame.size.height)]; //This calculates the necessary size so that all the text fits in the necessary width.
+
+    return MAX(tvsize.height, MIN_HEIGHT_OF_TEXT_VIEW);
+}
+
++ (CGFloat)heightOfWeedTableViewCell:(Weed *)weed
+{
+    UITextView *temp = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, DEFAULT_WEED_CONTENT_LABLE_WIDTH, 44)]; //This initial size doesn't matter
+    temp.attributedText = [[NSAttributedString alloc]initWithString:weed.content];
+    CGSize textLableSize = [temp sizeThatFits:CGSizeMake(DEFAULT_WEED_CONTENT_LABLE_WIDTH, MIN_HEIGHT_OF_TEXT_VIEW)];
+    
+    //Add the height of the other UI elements inside your cell
+    if ([weed.image_count intValue] > 0) {
+        return MAX(textLableSize.height, MIN_HEIGHT_OF_TEXT_VIEW) + 20.0 + MASTERVIEW_IMAGEVIEW_HEIGHT + 30.0; //For Image View
+    } else {
+        return MAX(textLableSize.height, MIN_HEIGHT_OF_TEXT_VIEW) + 20.0;
+    }
 }
 
 @end

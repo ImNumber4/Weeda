@@ -13,5 +13,7 @@
 @dynamic url;
 @dynamic image;
 @dynamic isBig;
+@dynamic width;
+@dynamic height;
 
 @end

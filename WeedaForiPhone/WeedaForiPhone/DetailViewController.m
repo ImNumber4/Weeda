@@ -17,8 +17,16 @@
 #import "WeedImageController.h"
 #import "WeedShowImageCell.h"
 #import "WeedImageController.h"
+#import "WeedImage.h"
 
 #import <SDWebImage/UIImageView+WebCache.h>
+
+#define COLLECTION_VIEW_WIDTH 300
+#define COLLECTION_VIEW_HEGITH 280
+#define COLLECTION_VIEW_ACREAGE (COLLECTION_VIEW_WIDTH * COLLECTION_VIEW_HEGITH)
+
+#define TEXTLABLE_WEED_CONTENT_ORIGIN_Y 59
+
 
 const NSInteger PARENT_WEEDS_SECTION_INDEX = 0;
 const NSInteger CURRENT_WEED_SECTION_INDEX = 1;
@@ -36,7 +44,11 @@ const NSInteger SHOW_WATER_USERS = 2;
 
 const CGFloat COLLECTION_VIEW_PER_ROW_HEIGHT = 100.0;
 
-@interface DetailViewController () <UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource, NSFetchedResultsControllerDelegate>
+const CGFloat COLLECTION_VIEW_HEIGHT = 300.0;
+
+@interface DetailViewController () <UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate> {
+    NSInteger *_ratio;
+}
 
 @property (nonatomic, retain) UICollectionView *imageCollectionView;
 @property (nonatomic, strong) NSFetchedResultsController *fetchMetadataResultController;
@@ -63,7 +75,9 @@ const CGFloat COLLECTION_VIEW_PER_ROW_HEIGHT = 100.0;
             }
         }
         
-        [self.tableView reloadData];
+//        [self.tableView reloadData];
+        NSIndexSet *section = [NSIndexSet indexSetWithIndex:CHILD_WEEDS_SECTION_INDEX];
+        [self.tableView reloadSections:section withRowAnimation:UITableViewRowAnimationAutomatic];
         [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/getAncestorWeeds/%@", self.currentWeed.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
             for(Weed* weed in [mappingResult.array sortedArrayUsingDescriptors:descriptors]) {
                 if (weed.shouldBeDeleted != nil && [weed.shouldBeDeleted intValue] == 0) {
@@ -74,7 +88,9 @@ const CGFloat COLLECTION_VIEW_PER_ROW_HEIGHT = 100.0;
             CGFloat orginalOffset = self.tableView.contentOffset.y;
             
             [self.tableView setContentOffset:CGPointMake(0, orginalOffset + self.parentWeeds.count * WEED_CELL_HEIGHT)];
-            [self.tableView reloadData];
+//            [self.tableView reloadData];
+            NSIndexSet *section = [NSIndexSet indexSetWithIndex:PARENT_WEEDS_SECTION_INDEX];
+            [self.tableView reloadSections:section withRowAnimation:UITableViewRowAnimationAutomatic];
         } failure:^(RKObjectRequestOperation *operation, NSError *error) {
             RKLogError(@"getAncestorWeeds failed with error: %@", error);
         }];
@@ -160,16 +176,29 @@ const CGFloat COLLECTION_VIEW_PER_ROW_HEIGHT = 100.0;
 }
 
 - (CGFloat)getCurrentWeedCellHeight {
+    CGFloat textLableHeight = [self getTextLableHeight];
+    
+    //Add the height of the other UI elements inside your cell
+    if (self.currentWeed.images.count > 0 && self.currentWeed.images.count < 3) {
+        return TEXTLABLE_WEED_CONTENT_ORIGIN_Y + textLableHeight + 200.0 + 10;
+    } else if (self.currentWeed.images.count >= 3) {
+        return TEXTLABLE_WEED_CONTENT_ORIGIN_Y + textLableHeight + 250.0 + 10;
+    } else {
+        return TEXTLABLE_WEED_CONTENT_ORIGIN_Y + textLableHeight + 10;
+    }
+}
+
+- (CGFloat)getTextLableHeight
+{
     UITextView *temp = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 44)]; //This initial size doesn't matter
     temp.font = [UIFont systemFontOfSize:12.0];
     temp.text = self.currentWeed.content;
     
     CGFloat textViewWidth = 200.0;
-    CGRect tempFrame = CGRectMake(0, 0, textViewWidth, 50); //The height of this frame doesn't matter.
+    CGRect tempFrame = CGRectMake(0, 0, textViewWidth, 40); //The height of this frame doesn't matter.
     CGSize tvsize = [temp sizeThatFits:CGSizeMake(tempFrame.size.width, tempFrame.size.height)]; //This calculates the necessary size so that all the text fits in the necessary width.
     
-    //Add the height of the other UI elements inside your cell
-    return MAX(tvsize.height, 50.0) + 50.0 + ceilf([self.currentWeed.image_count intValue] / 3.0) * COLLECTION_VIEW_PER_ROW_HEIGHT;
+    return MAX(tvsize.height, 40.0);
 }
 
 - (void)configureWeedDetailTableViewCell:(WeedDetailTableViewCell *)cell
@@ -181,7 +210,9 @@ const CGFloat COLLECTION_VIEW_PER_ROW_HEIGHT = 100.0;
     [cell.userLabel addTarget:self action:@selector(showUser:)forControlEvents:UIControlEventTouchDown];
     
     cell.weedContentLabel.text = content;
-    [cell.weedContentLabel sizeToFit];
+    cell.weedContentLabel.translatesAutoresizingMaskIntoConstraints = YES;
+    [cell.weedContentLabel setFrame:CGRectMake(cell.weedContentLabel.frame.origin.x, cell.weedContentLabel.frame.origin.y, cell.weedContentLabel.frame.size.width, [self getTextLableHeight])];
+    
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"MMM. dd yyyy hh:mm"];
     NSString *formattedDateString = [dateFormatter stringFromDate:self.currentWeed.time];
@@ -191,58 +222,9 @@ const CGFloat COLLECTION_VIEW_PER_ROW_HEIGHT = 100.0;
     [l setMasksToBounds:YES];
     [l setCornerRadius:7.0];
     
-    [self createImageCollectionViewCell:cell];
-}
-
-//- (void)weedDetailImageLayout
-////{
-////    switch (self.currentWeed.image_metadata.count) {
-////        case 1:
-////            <#statements#>
-////            break;
-////            
-////        default:
-////            break;
-////    }
-////}
-//
-//- (CGSize)calculateCellSize
-//{
-//    BOOL evenNumber = NO;
-//    if ([self.currentWeed.image_count intValue] % 2 == 0) {
-//        evenNumber = YES;
-//    }
-//    
-//    CGFloat cellHeight;
-//    if (evenNumber) {
-//        cellHeight = COLLECTION_VIEW_HEIGHT / [self.currentWeed.image_count intValue] / 2;
-//    } else {
-//        cellHeight = COLLECTION_VIEW_HEIGHT / ([self.currentWeed.image_count intValue] + 1) / 2;
-//    }
-//    
-//    CGFloat cellWidth = (self.view.frame.size.width - 20) / 2;
-//    
-//    return CGSizeMake(cellWidth, cellHeight);
-//}
-
-- (void)createImageCollectionViewCell:(WeedDetailTableViewCell *)cell
-{
-    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc]init];
-//    layout.itemSize = [self calculateCellSize];
-    layout.itemSize = CGSizeMake(100, 100);
-    layout.minimumLineSpacing = 0;
-    layout.minimumInteritemSpacing = 0;
-    layout.scrollDirection = UICollectionViewScrollDirectionVertical;
-    layout.sectionInset = UIEdgeInsetsMake(10, 5, 0, 5);
+    [cell decorateCellWithWeed:self.currentWeed];
     
-    self.imageCollectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(cell.frame.origin.x, cell.weedContentLabel.frame.origin.y + cell.weedContentLabel.frame.size.height + 5, self.view.frame.size.width, ceilf([self.currentWeed.image_count intValue] / 3.0) * COLLECTION_VIEW_PER_ROW_HEIGHT) collectionViewLayout:layout];
-    self.imageCollectionView.delegate = self;
-    self.imageCollectionView.dataSource = self;
-    
-    [self.imageCollectionView registerNib:[UINib nibWithNibName:@"WeedShowImageCell" bundle:nil] forCellWithReuseIdentifier:@"imageCell"];
-    [self.imageCollectionView setBackgroundColor:[UIColor whiteColor]];
-    [cell addSubview:self.imageCollectionView];
-    [cell bringSubviewToFront:self.imageCollectionView];
+//    [self createImageCollectionViewCell:cell];
 }
 
 - (void)configureWeedTableViewCell:(WeedBasicTableViewCell *)cell weed:(Weed *)weed
@@ -413,35 +395,5 @@ const CGFloat COLLECTION_VIEW_PER_ROW_HEIGHT = 100.0;
     [image drawInRect:CGRectMake(0, 0, sacleSize.width, sacleSize.height)];
     return UIGraphicsGetImageFromCurrentImageContext();
 }
-
-#pragma CollectionView Delegate
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
-{
-    return [self.currentWeed.image_count intValue];
-}
-
-- (WeedShowImageCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    WeedShowImageCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"imageCell" forIndexPath:indexPath];
-    if (cell) {
-        cell.backgroundColor = [UIColor grayColor];
-        [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:[WeedImageController imageURLOfWeedId:self.currentWeed.id userId:self.currentWeed.user_id count:[indexPath row]] options:SDWebImageDownloaderHandleCookies progress:^(NSInteger receivedSize, NSInteger expectedSize) {
-            return;
-        } completed:^(UIImage *image, NSData *data, NSError *error, BOOL finished) {
-            if (image && finished) {
-                UIImage *newImage = [WeedImageController imageWithImage:image scaledToSize:cell.frame.size];
-                cell.imageView.image = newImage;
-                cell.imageView.contentMode = UIViewContentModeTopLeft;
-            }
-        }];
-    }
-    return cell;
-}
-
-//- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    UIImage *image = [WeedImageController imageWithImage:[self.weedImages objectAtIndex:[indexPath row]] scaledToHeight:100.0];
-//    return image.size;
-//}
 
 @end

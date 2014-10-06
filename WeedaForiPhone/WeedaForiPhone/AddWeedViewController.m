@@ -12,6 +12,7 @@
 #import "WeedAddingImageView.h"
 #import "WeedAddingImageCell.h"
 #import "WeedImage.h"
+#import "WeedImageController.h"
 #import <RestKit/RestKit.h>
 
 @interface AddWeedViewController () <UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UICollectionViewDelegate,UICollectionViewDataSource,UIGestureRecognizerDelegate, WeedAddingToolbarDelegate, WeedAddingImageViewDelegate>
@@ -254,10 +255,24 @@
         }
     }
     
+    //Sending Request to Server
     [[RKObjectManager sharedManager] postObject:weed path:@"weed/create" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
         NSLog(@"Response: %@", mappingResult);
         Weed *newWeed = mappingResult.firstObject;
         weed.id = newWeed.id;
+        
+        //Adding image metadata to the weed relationship
+        NSMutableSet *images = [[NSMutableSet alloc]init];
+        for (int i = 0; i < self.dataArray.count; i++) {
+            WeedImage *weedImage = [NSEntityDescription insertNewObjectForEntityForName:@"WeedImage" inManagedObjectContext:objectStore.mainQueueManagedObjectContext];
+            weedImage.url = [WeedImageController imageRelatedURLWithWeed:weed count:[NSNumber numberWithInt:i]];
+            weedImage.width = [NSNumber numberWithFloat:((UIImage *)[self.dataArray objectAtIndex:i]).size.width];
+            weedImage.height = [NSNumber numberWithFloat:((UIImage *)[self.dataArray objectAtIndex:i]).size.height];
+            [images addObject:weedImage];
+        }
+        weed.images = images;
+
+        
         if (self.dataArray.count > 0) {
             [self uploadImageToServer:weed];
         }
@@ -270,23 +285,19 @@
 
 - (void)uploadImageToServer:(Weed *)weed
 {
-    RKManagedObjectStore *objectStore = [[RKObjectManager sharedManager] managedObjectStore];
-    
     for (int i = 0; i < self.dataArray.count; i++) {
-        WeedImage *weedImage = [NSEntityDescription insertNewObjectForEntityForName:@"WeedImage" inManagedObjectContext:objectStore.mainQueueManagedObjectContext];
-        weedImage.image = [self.dataArray objectAtIndex:i];
-        
-        NSMutableURLRequest *request = [[RKObjectManager sharedManager] multipartFormRequestWithObject:weedImage method:RKRequestMethodPOST path:[NSString stringWithFormat:@"weed/upload/%@", weed.id] parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-            [formData appendPartWithFileData:UIImageJPEGRepresentation([self.dataArray objectAtIndex:i], 90)
+        NSMutableURLRequest *request = [[RKObjectManager sharedManager] multipartFormRequestWithObject:nil method:RKRequestMethodPOST path:[NSString stringWithFormat:@"weed/upload/%@", weed.id] parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+            [formData appendPartWithFileData:UIImageJPEGRepresentation([self.dataArray objectAtIndex:i], 100)
                                         name:@"image"
                                     fileName:[NSString stringWithFormat:@"%d.jpeg", i]
                                     mimeType:@"image/jpeg"];
         }];
         
-        RKObjectRequestOperation *operation = [[RKObjectManager sharedManager] objectRequestOperationWithRequest:request success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+        RKObjectRequestOperation *operation = [[RKObjectManager sharedManager] objectRequestOperationWithRequest:request
+        success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
             
         } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-            NSLog(@"%@", error);
+            NSLog(@"Uploading image failed. url:%@, error: %@", weed.id, error);
         }];
         
         [[RKObjectManager sharedManager] enqueueObjectRequestOperation:operation];

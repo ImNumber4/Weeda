@@ -6,7 +6,7 @@
 $size = getimagesize("upload/2/103/0.jpeg");
 echo 'image width: ' . $size[0] . ', image height: ' . $size[1] . "\n";
 
-$image_path = 'upload/2/104/';
+$image_path = './upload/2/136/';
 $images = scandir($image_path);
 var_dump($images);
 

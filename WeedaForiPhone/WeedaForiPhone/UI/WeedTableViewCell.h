@@ -8,9 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+#define MASTERVIEW_IMAGEVIEW_HEIGHT 200
+
 @interface WeedTableViewCell : UITableViewCell <UICollectionViewDelegate, UICollectionViewDataSource> {
     int _imageCount;
     Weed *_weedTmp;
+    UICollectionView *_collectionView;
 }
 
 @property (nonatomic, weak) IBOutlet UIButton *usernameLabel;
@@ -31,5 +34,7 @@
 
 - (void)hideControls;
 - (void)decorateCellWithWeed:(Weed *)weed;
+
++ (CGFloat)heightOfWeedTableViewCell:(Weed *)weed;
 
 @end

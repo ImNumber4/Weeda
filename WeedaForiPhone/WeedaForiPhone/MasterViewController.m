@@ -151,13 +151,6 @@ const NSInteger NON_GLOBAL_COMPOSE_TAG = 1;
     static NSString *CellIdentifier = @"WeedTableCell";
     WeedTableViewCell *cell = (WeedTableViewCell *) [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     Weed *weed = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    
-    if (weed.image_metadata.count > 0) {
-        for (ImageMetadata *metadata in weed.image_metadata){
-            NSLog(@"image url: %@, width: %@, height: %@", metadata.url, metadata.width, metadata.height);
-        }
-    }
-    
     [self decorateCellWithWeed:weed cell:cell];
     return cell;
 }
@@ -166,21 +159,8 @@ const NSInteger NON_GLOBAL_COMPOSE_TAG = 1;
 {
     
     Weed *weed = [self.fetchedResultsController objectAtIndexPath:indexPath];
-
-    UITextView *temp = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 44)]; //This initial size doesn't matter
-    temp.font = [UIFont systemFontOfSize:12.0];
-    temp.text = weed.content;
     
-    CGFloat textViewWidth = 200.0;
-    CGRect tempFrame = CGRectMake(0, 0, textViewWidth, 50); //The height of this frame doesn't matter.
-    CGSize tvsize = [temp sizeThatFits:CGSizeMake(tempFrame.size.width, tempFrame.size.height)]; //This calculates the necessary size so that all the text fits in the necessary width.
-    
-    //Add the height of the other UI elements inside your cell
-    if ([weed.image_count intValue] > 0) {
-        return MAX(tvsize.height, 50.0) + 20.0 + 260.0; //For Image View
-    } else {
-        return MAX(tvsize.height, 50.0) + 20.0;
-    }
+    return [WeedTableViewCell heightOfWeedTableViewCell:weed];
 }
 
 - (void)decorateCellWithWeed:(Weed *)weed cell:(WeedTableViewCell *)cell

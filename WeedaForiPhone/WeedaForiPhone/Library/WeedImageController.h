@@ -15,12 +15,18 @@
 
 + (NSURL *)imageURLOfWeed: (Weed *)weed;
 
++ (NSString *)imageRelatedURLWithWeed: (Weed *)weed count:(NSNumber *)count;
+
 + (NSURL *)imageURLOfWeedId: (NSNumber *)weedId userId:(NSNumber *)userId count:(long)count;
+
++ (NSURL *)imageURLOfImageId: (NSString *)imageId;
 
 + (UIImage *)imageWithImage:(UIImage *)originalImage scaledToSize:(CGSize)size;
 
 + (UIImage *)imageWithImage:(UIImage *)originalImage scaledToWidth:(CGFloat)width;
 
 + (UIImage *)imageWithImage:(UIImage *)originalImage scaledToHeight:(CGFloat)height;
+
++ (UIImage *)imageWithImage:(UIImage *)originalImage scaledToRatio:(CGFloat)ratio;
 
 @end

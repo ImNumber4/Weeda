@@ -8,10 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
-@interface WeedImage : NSObject
+@interface WeedImage : NSManagedObject
 
 @property (nonatomic, retain) NSString *url;
 @property (nonatomic, retain) UIImage *image;
 @property (nonatomic, retain) NSNumber *isBig;
+@property (nonatomic, retain) NSNumber * width;
+@property (nonatomic, retain) NSNumber * height;
 
 @end

@@ -39,7 +39,7 @@ class ImageController extends Controller
 		$image_path = $this->get_weed_image_path($user_id, $weed_id);
 		$images = scandir($image_path);
 
-		$array_image_metadata = array();
+		$array_image = array();
 		for ($i=0; $i < count($images); $i++) {
 			$image = $image_path . $images[$i];
 			if (is_dir($image)) {
@@ -47,10 +47,10 @@ class ImageController extends Controller
 			}
 			$image_id = 'weed_' . $user_id . '_' . $weed_id . '_' . str_replace(strrchr($images[$i], "."), "", $images[$i]); 
 			$size = getimagesize($image);
-			$array_image_metadata[] = array('url'=>$image_id, 'width'=>$size[0], 'height'=>$size[1]);
+			$array_image[] = array('url'=>$image_id, 'width'=>$size[0], 'height'=>$size[1]);
 		}
 		
-		return $array_image_metadata;
+		return $array_image;
 	}
 	
 	private function getImageForServer($image_url)
