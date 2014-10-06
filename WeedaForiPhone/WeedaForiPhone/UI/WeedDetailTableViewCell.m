@@ -44,7 +44,7 @@ typedef NS_ENUM(NSInteger, EnumImageWidthType)
     _imageWidthDictionary = [[NSMutableDictionary alloc]initWithCapacity:3];
     [_imageWidthDictionary setObject:[NSNumber numberWithFloat:300.0] forKey:[NSNumber numberWithInteger:EnumImageWidthTypeFull]];
     [_imageWidthDictionary setObject:[NSNumber numberWithFloat:149.0] forKey:[NSNumber numberWithInteger:EnumImageWidthTypeHalf]];
-    [_imageWidthDictionary setObject:[NSNumber numberWithFloat:99.0] forKey:[NSNumber numberWithInteger:EnumImageWidthTypeOneThird]];
+    [_imageWidthDictionary setObject:[NSNumber numberWithFloat:98.6] forKey:[NSNumber numberWithInteger:EnumImageWidthTypeOneThird]];
     
     _adjustedImage = [[NSMutableArray alloc]init];
     
@@ -75,7 +75,7 @@ typedef NS_ENUM(NSInteger, EnumImageWidthType)
 - (UICollectionView *)createCollectionViewWithRect:(CGRect)rect
 {
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc]init];
-    layout.minimumLineSpacing = 1;
+    layout.minimumLineSpacing = 2;
     layout.minimumInteritemSpacing = 2;
     layout.sectionInset = UIEdgeInsetsMake(0, 10.0, 0, 10.0);
     layout.scrollDirection = UICollectionViewScrollDirectionVertical;
