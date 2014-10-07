@@ -20,6 +20,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *followingCountLabel;
 @property (weak, nonatomic) IBOutlet UIButton *followerCountLabel;
 @property (weak, nonatomic) IBOutlet UIButton *followButton;
+@property (weak, nonatomic) IBOutlet UIButton *messageButton;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UITextView *userDescription;
 @property (weak, nonatomic) IBOutlet MKMapView *location;

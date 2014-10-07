@@ -50,7 +50,23 @@
     
     [self.segmentedControl addTarget:self action:@selector(segmentSwitched:) forControlEvents:UIControlEventValueChanged];
     
+    UIBarButtonItem *composeButton = [[UIBarButtonItem alloc] initWithImage:[self getImage:@"compose.png" width:30 height:30] style:UIBarButtonItemStylePlain target:self action:@selector(startNewConversation:)];
+    [self.navigationItem setRightBarButtonItem:composeButton];
+    
     [self initRedDotViews];
+}
+
+-(void)startNewConversation:(id)sender {
+    [self performSegueWithIdentifier:@"newMessage" sender:self];
+}
+
+- (UIImage *)getImage:(NSString *)imageName width:(int)width height:(int) height
+{
+    UIImage * image = [UIImage imageNamed:imageName];
+    CGSize sacleSize = CGSizeMake(width, height);
+    UIGraphicsBeginImageContextWithOptions(sacleSize, NO, 0.0);
+    [image drawInRect:CGRectMake(0, 0, sacleSize.width, sacleSize.height)];
+    return UIGraphicsGetImageFromCurrentImageContext();
 }
 
 - (void) initRedDotViews
@@ -178,7 +194,7 @@
     WeedBasicTableViewCell *cell = (WeedBasicTableViewCell *) [tableView dequeueReusableCellWithIdentifier:@"MessageCell" forIndexPath:indexPath];
     Message *message;
     if ([self isRetrievingConversations]) {
-        message = [self.conversations objectAtIndex:indexPath.row];
+        message = [self.conversations objectAtIndex:indexPath.section];
     } else {
         message = [[self getNSFetchedResultsController] objectAtIndexPath:indexPath];
     }
@@ -198,7 +214,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if ([self isRetrievingConversations]) {
-        return [self.conversations count];
+        return 1;
     }
     id sectionInfo = [[[self getNSFetchedResultsController] sections] objectAtIndex:section];
     return [sectionInfo numberOfObjects];
@@ -206,8 +222,9 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
+    
     if ([self isRetrievingConversations]) {
-        return 1;
+        return [self.conversations count];
     }
     return [[self getNSFetchedResultsController] sections].count;
 }
@@ -218,8 +235,8 @@
 }
 
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
     Message *message = [[self getNSFetchedResultsController] objectAtIndexPath:indexPath];
     if (([message.type isEqualToString:NOTIFICATION_TYPE]) && message.related_weed_id) {
         [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/queryById/%@", message.related_weed_id]  parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
@@ -246,20 +263,22 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    CGPoint buttonPosition = [sender convertPoint:CGPointZero toView:self.tableView];
-    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:buttonPosition];
-    Message *message;
-    if ([self isRetrievingConversations])
-        message = [self.conversations objectAtIndex:indexPath.row];
-    else
-         message = [[self getNSFetchedResultsController] objectAtIndexPath:indexPath];
-    if ([[segue identifier] isEqualToString:@"showWeed"]) {
-        [[segue destinationViewController] setCurrentWeed:self.relatedWeedToShow];
-    } else if ([[segue identifier] isEqualToString:@"showUser"]) {
-        [[segue destinationViewController] setUser_id:message.participant_id];
-    } else if ([[segue identifier] isEqualToString:@"showMessage"]) {
-        [[segue destinationViewController] setParticipant_username:message.participant_username];
-        [[segue destinationViewController] setParticipant_id:message.participant_id];
+    if (![[segue identifier] isEqualToString:@"newMessage"]) {
+        CGPoint buttonPosition = [sender convertPoint:CGPointZero toView:self.tableView];
+        NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:buttonPosition];
+        Message *message;
+        if ([self isRetrievingConversations])
+            message = [self.conversations objectAtIndex:indexPath.section];
+        else
+            message = [[self getNSFetchedResultsController] objectAtIndexPath:indexPath];
+        if ([[segue identifier] isEqualToString:@"showWeed"]) {
+            [[segue destinationViewController] setCurrentWeed:self.relatedWeedToShow];
+        } else if ([[segue identifier] isEqualToString:@"showUser"]) {
+            [[segue destinationViewController] setUser_id:message.participant_id];
+        } else if ([[segue identifier] isEqualToString:@"showMessage"]) {
+            [[segue destinationViewController] setParticipant_username:message.participant_username];
+            [[segue destinationViewController] setParticipant_id:message.participant_id];
+        }
     }
 }
 

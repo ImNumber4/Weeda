@@ -62,7 +62,7 @@
     
     CGSize size = self.view.frame.size;
 	
-    CGRect tableFrame = CGRectMake(0.0f, 0.0f, size.width, size.height - INPUT_HEIGHT);
+    CGRect tableFrame = CGRectMake(0.0f, self.navigationController.navigationBar.frame.size.height + [UIApplication sharedApplication].statusBarFrame.size.height, size.width, size.height - INPUT_HEIGHT - self.navigationController.navigationBar.frame.size.height - [UIApplication sharedApplication].statusBarFrame.size.height);
 	self.tableView = [[UITableView alloc] initWithFrame:tableFrame style:UITableViewStylePlain];
 	self.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	self.tableView.dataSource = self;
@@ -86,6 +86,7 @@
          forControlEvents:UIControlEventTouchUpInside];
     [self.inputToolBarView setSendButton:sendButton];
     [self.view addSubview:self.inputToolBarView];
+//    [self showConversation];
 }
 
 - (UIButton *)sendButton
@@ -113,9 +114,11 @@
                                                object:nil];
 }
 
-- (void)viewDidAppear:(BOOL)animated
+- (void) showConversation
 {
+    [self.tableView reloadData];
     [self scrollToBottomAnimated:YES];
+    [self.inputToolBarView.textView becomeFirstResponder];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -156,7 +159,7 @@
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
     [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
-    [self.tableView reloadData];
+    [self showConversation];
     [self.tableView setNeedsLayout];
 }
 
@@ -225,6 +228,8 @@
                                              avatar:[self shouldHaveAvatarForRowAtIndexPath:indexPath]];
 }
 
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {}
+
 #pragma mark - Messages view controller
 - (BOOL)shouldHaveTimestampForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -269,8 +274,7 @@
 {
     [self.inputToolBarView.textView setText:nil];
     [self textViewDidChange:self.inputToolBarView.textView];
-    [self.tableView reloadData];
-    [self scrollToBottomAnimated:YES];
+    [self showConversation];
 }
 
 - (void)setBackgroundColor:(UIColor *)color

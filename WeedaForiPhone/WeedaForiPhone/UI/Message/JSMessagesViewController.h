@@ -89,6 +89,8 @@ typedef enum {
 @property (strong, nonatomic) JSMessageInputView *inputToolBarView;
 @property (assign, nonatomic) CGFloat previousTextViewContentHeight;
 
+- (void) showConversation;
+
 #pragma mark - Initialization
 - (UIButton *)sendButton;
 

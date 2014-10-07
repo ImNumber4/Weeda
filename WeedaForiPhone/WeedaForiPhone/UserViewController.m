@@ -19,6 +19,7 @@
 #import "WeedImageController.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "EditProfileViewController.h"
+#import "ConversationViewController.h"
 
 @interface UserViewController () <CropImageDelegate>
 
@@ -190,6 +191,10 @@ const NSInteger SHOW_FOLLOWINGS = 2;
         EditProfileViewController* editProfileViewController = (EditProfileViewController *) nav.topViewController;
         [editProfileViewController setTitle:@"Edit Profile"];
         [editProfileViewController setUserObject:self.user];
+    } else if ([[segue identifier] isEqualToString:@"messageUser"]) {
+        ConversationViewController* controller = [segue destinationViewController];
+        [controller setParticipant_id:self.user.id];
+        [controller setParticipant_username:self.user.username];
     }
 }
 
@@ -229,6 +234,16 @@ const NSInteger SHOW_FOLLOWINGS = 2;
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)makeMessageButton:(BOOL)enabled
+{
+    [self.messageButton setTitle:@"Message" forState:UIControlStateNormal];
+    self.messageButton.enabled = enabled;
+    self.messageButton.backgroundColor = enabled ? [ColorDefinition orangeColor]:[ColorDefinition grayColor];
+    [self.messageButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+    if(enabled)
+        [self.messageButton addTarget:self action:@selector(message:) forControlEvents:UIControlEventTouchUpInside];
 }
 
 - (void)makeFollowButton
@@ -288,10 +303,13 @@ const NSInteger SHOW_FOLLOWINGS = 2;
     [self.followingCountLabel setTitle:[NSString stringWithFormat:@"%@", self.user.followingCount] forState:UIControlStateNormal];
     if ([self.user.relationshipWithCurrentUser intValue] == 0) {
         [self makeEditProfileButton];
+        [self makeMessageButton:false];
     } else if ([self.user.relationshipWithCurrentUser intValue] < 3){
         [self makeFollowButton];
+        [self makeMessageButton:true];
     } else {
         [self makeFollowingButton];
+        [self makeMessageButton:true];
     }
 }
 
@@ -347,6 +365,11 @@ const NSInteger SHOW_FOLLOWINGS = 2;
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
         RKLogError(@"Follow failed with error: %@", error);
     }];
+}
+
+- (void)message:(id)sender
+{
+    [self performSegueWithIdentifier:@"messageUser" sender:sender];
 }
 
 - (void)addItemViewContrller:(CropImageViewController *)controller didFinishCropImage:(UIImage *)cropedImage

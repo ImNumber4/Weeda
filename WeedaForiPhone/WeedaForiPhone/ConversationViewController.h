@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "JSMessagesViewController.h"
 
-@interface ConversationViewController : JSMessagesViewController <JSMessagesViewDelegate, JSMessagesViewDataSource, NSFetchedResultsControllerDelegate>
+@interface ConversationViewController : JSMessagesViewController <JSMessagesViewDelegate, JSMessagesViewDataSource, NSFetchedResultsControllerDelegate, UITextFieldDelegate>
 
 @property (nonatomic, strong) NSNumber * participant_id;
 @property (nonatomic, strong) NSString * participant_username;

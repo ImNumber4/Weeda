@@ -14,6 +14,8 @@
 #import "WeedImage.h"
 #import "WeedImageController.h"
 #import <RestKit/RestKit.h>
+#import "WeedImageController.h"
+#import <SDWebImage/UIImageView+WebCache.h>
 
 @interface AddWeedViewController () <UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UICollectionViewDelegate,UICollectionViewDataSource,UIGestureRecognizerDelegate, WeedAddingToolbarDelegate, WeedAddingImageViewDelegate>
 
@@ -222,10 +224,12 @@
 }
 
 - (void)decorateCellWithUser:(User *)user cell:(UserTableViewCell *)cell {
-    cell.userAvatar.image = [UIImage imageNamed:@"avatar.jpg"];
+    [cell.userAvatar sd_setImageWithURL:[WeedImageController imageURLOfAvatar:user.id] placeholderImage:[UIImage imageNamed:@"avatar.jpg"] options:SDWebImageHandleCookies];
+    cell.userAvatar.contentMode = UIViewContentModeScaleAspectFill;
+    cell.userAvatar.clipsToBounds = YES;
     CALayer * l = [cell.userAvatar layer];
     [l setMasksToBounds:YES];
-    [l setCornerRadius:2.0];
+    [l setCornerRadius:7.0];
     NSString *nameLabel = [NSString stringWithFormat:@"@%@", user.username];
     cell.usernameLabel.text = nameLabel;
 }
