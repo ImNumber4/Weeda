@@ -64,7 +64,7 @@
                             <constraint firstAttribute="width" relation="lessThanOrEqual" constant="6" id="k8z-TA-2YW"/>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="12" id="rfd-9H-mjS"/>
                         </constraints>
-                        <state key="normal" image="2177B4DF-D8E3-453F-9E00-5DE1AA0C6B25">
+                        <state key="normal" image="B3B96396-E1D2-44B6-857E-B26265BDF3D1">
                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                         </state>
                     </button>
@@ -145,7 +145,6 @@
                     <constraint firstItem="i7I-df-Hnb" firstAttribute="leading" secondItem="wZW-Sw-4Ej" secondAttribute="trailing" constant="26" id="M7d-6B-KLq"/>
                     <constraint firstItem="L5n-lZ-88m" firstAttribute="top" secondItem="wZW-Sw-4Ej" secondAttribute="bottom" id="QxZ-Ko-87U"/>
                     <constraint firstItem="wZW-Sw-4Ej" firstAttribute="top" secondItem="zbb-la-cnz" secondAttribute="top" constant="7" id="Rl2-bd-lK8"/>
-                    <constraint firstItem="8Vg-4f-hEe" firstAttribute="top" secondItem="L5n-lZ-88m" secondAttribute="bottom" constant="2" id="WQg-k6-AUj"/>
                     <constraint firstAttribute="trailing" secondItem="i7I-df-Hnb" secondAttribute="trailing" constant="12" id="YHZ-iU-HFB"/>
                     <constraint firstItem="i7I-df-Hnb" firstAttribute="top" secondItem="zbb-la-cnz" secondAttribute="top" constant="7" id="loU-Q3-Ws6"/>
                     <constraint firstAttribute="bottom" secondItem="7nL-c9-2oo" secondAttribute="bottom" constant="5" id="oAr-3V-kxd"/>
@@ -160,7 +159,7 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="2177B4DF-D8E3-453F-9E00-5DE1AA0C6B25" width="591" height="980">
+        <image name="B3B96396-E1D2-44B6-857E-B26265BDF3D1" width="591" height="980">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPj9YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQsLzI4O1UkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw
