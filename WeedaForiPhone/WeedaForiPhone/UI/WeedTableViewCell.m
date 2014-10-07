@@ -136,12 +136,24 @@
     if (cell) {
         cell.backgroundColor = [UIColor grayColor];
         WeedImage *weedImage = [[_weedTmp.images allObjects] objectAtIndex:indexPath.row];
-        [cell.imageView sd_setImageWithURL:[WeedImageController imageURLOfImageId:weedImage.url] placeholderImage:nil options:SDWebImageHandleCookies
+//        [cell.imageView sd_setImageWithURL:[WeedImageController imageURLOfImageId:weedImage.url] placeholderImage:nil options:SDWebImageHandleCookies
+//        progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+//            ;
+//        } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+//            if (!image) {
+//                NSLog(@"Load image failed, imageId: %@, error: %@", weedImage.url, error);
+//            }
+//        }];
+        SDWebImageManager *manager = [SDWebImageManager sharedManager];
+        [manager downloadImageWithURL:[WeedImageController imageURLOfImageId:weedImage.url] options:SDWebImageHandleCookies
         progress:^(NSInteger receivedSize, NSInteger expectedSize) {
             ;
-        } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-            if (!image) {
-                NSLog(@"Load image failed, imageId: %@, error: %@", weedImage.url, error);
+        } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+            if (image && finished) {
+                UIImage *newImage = [WeedImageController imageWithImage:image scaledToSize:CGSizeMake(cell.imageView.frame.size.width, cell.imageView.frame.size.height)];
+                cell.imageView.image = newImage;
+            } else {
+                NSLog(@"Loading image failed, url:%@, error: %@", imageURL, error);
             }
         }];
     } else {

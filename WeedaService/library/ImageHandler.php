@@ -165,7 +165,7 @@
 						$error = error_get_last();
     					error_log($error['message']);
 					}
-					error_log('ceart directory: ' . $destinationPath);
+					error_log('create directory: ' . $destinationPath);
 				}
 				
 				if (move_uploaded_file ( $image['tmp_name'], $destinationPath . '/' . $image['name'])){
