@@ -40,7 +40,7 @@
 #import "JSDismissiveTextView.h"
 #import "JSMessageInputView.h"
 
-#define INPUT_HEIGHT 37.0f
+#define INPUT_HEIGHT 35.0f
 
 @interface JSMessagesViewController () <JSDismissiveTextViewDelegate>
 
@@ -288,9 +288,7 @@
 
 #pragma mark - Text view delegate
 - (void)textViewDidBeginEditing:(UITextView *)textView
-{
-    [textView becomeFirstResponder];
-	
+{	
     if(!self.previousTextViewContentHeight)
 		self.previousTextViewContentHeight = textView.contentSize.height;
     
@@ -336,6 +334,7 @@
                                                                       inputViewFrame.origin.y - changeInHeight,
                                                                       inputViewFrame.size.width,
                                                                       inputViewFrame.size.height + changeInHeight);
+                             [self.inputToolBarView.sendButton setCenter:CGPointMake(self.inputToolBarView.sendButton.center.x, self.inputToolBarView.frame.size.height/2.0)];
                          }
                          completion:^(BOOL finished) {
                              if(isShrinking)
@@ -344,8 +343,7 @@
         
         self.previousTextViewContentHeight = MIN(textViewContentHeight, maxHeight);
     }
-    
-    self.inputToolBarView.sendButton.enabled = ([textView.text trimWhitespace].length > 0);
+    [self.inputToolBarView textDidChange];
 }
 
 #pragma mark - Keyboard notifications

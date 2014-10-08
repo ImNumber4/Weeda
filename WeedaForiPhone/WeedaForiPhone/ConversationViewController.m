@@ -10,6 +10,7 @@
 #import "AppDelegate.h"
 #import "WeedImageController.h"
 #import <SDWebImage/UIImageView+WebCache.h>
+#import "NSString+JSMessagesView.h"
 #import "UserTableViewCell.h"
 
 @interface ConversationViewController ()
@@ -234,7 +235,7 @@ const NSInteger USER_LIST_TAG = 1;
     message.time = [NSDate date];
     message.type = MESSAGE_TYPE;
     message.is_read = [NSNumber numberWithInt:1];//to make it marked as read locally
-    message.message = text;
+    message.message = [text trimWhitespace];
     [self createMessageOnServer:message];
 }
 

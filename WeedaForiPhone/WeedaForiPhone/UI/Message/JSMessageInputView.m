@@ -86,9 +86,11 @@
     
     self.textView = [[JSDismissiveTextView  alloc] initWithFrame:CGRectMake(LEFT_PADDING, (self.frame.size.height - [JSMessageInputView textViewLineHeight])/2.0, width, height)];
     self.textView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    self.textView.textContainerInset = UIEdgeInsetsMake(5, 0, 5, CHARACTER_COUNT_LABEL_WIDTH);
     self.textView.backgroundColor = [UIColor whiteColor];
     self.textView.scrollEnabled = YES;
     self.textView.bounds = self.textView.frame;
+    self.textView.contentSize = self.textView.frame.size;
     self.textView.userInteractionEnabled = YES;
     self.textView.font = [JSBubbleView font];
     self.textView.textColor = [UIColor blackColor];
@@ -100,6 +102,18 @@
     CALayer * l = [self.textView layer];
     [l setMasksToBounds:YES];
     [l setCornerRadius:3.0];
+    
+    self.characterCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, CHARACTER_COUNT_LABEL_WIDTH, [JSMessageInputView textViewLineHeight])];
+    [self adjustCharacterCountLabelAccordingToTextView];
+    self.characterCountLabel.text = [NSString stringWithFormat:@"%d", MAX_CHARACTER_COUNT];
+    [self.characterCountLabel setFont:[JSBubbleView font]];
+    [self setCharacterCountLabelTextColor];
+    [self addSubview:self.characterCountLabel];
+}
+
+- (void)adjustCharacterCountLabelAccordingToTextView
+{
+    [self.characterCountLabel setFrame:CGRectMake(self.textView.frame.origin.x + self.textView.frame.size.width - CHARACTER_COUNT_LABEL_WIDTH, self.textView.frame.origin.y + self.textView.frame.size.height - [JSMessageInputView textViewLineHeight], CHARACTER_COUNT_LABEL_WIDTH, [JSMessageInputView textViewLineHeight])];
 }
 
 #pragma mark - Setters
@@ -115,7 +129,6 @@
 #pragma mark - Message input view
 - (void)adjustTextViewHeightBy:(CGFloat)changeInHeight
 {
-    NSLog(@"adjustTextViewHeightBy");
     CGRect prevFrame = self.textView.frame;
     
     NSUInteger numLines = [self.textView.text numberOfLines];
@@ -131,11 +144,24 @@
     } else {
         [self.textView setContentOffset:CGPointMake(0.0, 0.0) animated:YES];
     }
+    [self adjustCharacterCountLabelAccordingToTextView];
+}
+
+- (void)textDidChange
+{
+    [self setCharacterCountLabelTextColor];
+    self.sendButton.enabled = ([self.textView.text trimWhitespace].length > 0) && (self.textView.text.length <= MAX_CHARACTER_COUNT);
+    self.characterCountLabel.text = [NSString stringWithFormat:@"%ld", MAX_CHARACTER_COUNT - self.textView.text.length];
+}
+
+- (void)setCharacterCountLabelTextColor
+{
+    self.characterCountLabel.textColor = (self.textView.text.length <= MAX_CHARACTER_COUNT) ? [ColorDefinition grayColor] : [UIColor redColor];
 }
 
 + (CGFloat)textViewLineHeight
 {
-    return 28.0f;
+    return 26.0f;
 }
 
 + (CGFloat)maxLines

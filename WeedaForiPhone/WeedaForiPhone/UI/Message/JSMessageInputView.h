@@ -38,11 +38,14 @@
 
 #define SEND_BUTTON_WIDTH 60.0f
 #define LEFT_PADDING 5.0f
+#define CHARACTER_COUNT_LABEL_WIDTH 30.0f
+#define MAX_CHARACTER_COUNT 140
 #define ALPHA 0.85f
 
 @interface JSMessageInputView : UIImageView
 
 @property (strong, nonatomic) JSDismissiveTextView *textView;
+@property (strong, nonatomic) UILabel *characterCountLabel;
 @property (strong, nonatomic) UIButton *sendButton;
 
 #pragma mark - Initialization
@@ -51,6 +54,7 @@
 
 #pragma mark - Message input view
 - (void)adjustTextViewHeightBy:(CGFloat)changeInHeight;
+- (void)textDidChange;
 
 + (CGFloat)textViewLineHeight;
 + (CGFloat)maxLines;
