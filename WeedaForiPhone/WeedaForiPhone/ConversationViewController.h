@@ -9,9 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "JSMessagesViewController.h"
 
-@interface ConversationViewController : JSMessagesViewController <JSMessagesViewDelegate, JSMessagesViewDataSource, NSFetchedResultsControllerDelegate, UITextFieldDelegate>
+@interface ConversationViewController : JSMessagesViewController <JSMessagesViewDelegate, JSMessagesViewDataSource, NSFetchedResultsControllerDelegate>
 
 @property (nonatomic, strong) NSNumber * participant_id;
 @property (nonatomic, strong) NSString * participant_username;
+@property (nonatomic, weak) IBOutlet UITextField *usernameTextField;
+@property (nonatomic, weak) IBOutlet UITableView *usernameList;
 
 @end

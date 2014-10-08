@@ -15,11 +15,11 @@
 @interface ConversationViewController ()
 
 @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
+
 @property (nonatomic, strong) UIImage *participant_avatar;
 @property (nonatomic, strong) UIImage *current_user_avatar;
-@property (weak, nonatomic) IBOutlet UITextField *usernameTextField;
-@property (weak, nonatomic) IBOutlet UITableView *usernameList;
-@property (nonatomic, strong) NSMutableArray *users;
+
+@property (nonatomic, retain) NSMutableArray *users;
 
 @end
 
@@ -41,19 +41,19 @@ const NSInteger USER_LIST_TAG = 1;
     [super viewDidLoad];
     self.delegate = self;
     self.dataSource = self;
+    
     [self reloadView];
 }
 
 - (void) reloadView {
     if ([self isNewConversation]) {
         self.title = @"New Message";
-        self.users = [[NSMutableArray alloc] init];
+        self.users = [NSMutableArray array];
         [self.view bringSubviewToFront:self.usernameTextField];
         [self.view bringSubviewToFront:self.usernameList];
-        self.usernameList.tag = USER_LIST_TAG;
-        self.usernameTextField.delegate = self;
         [self.usernameTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
         [self.usernameTextField becomeFirstResponder];
+        self.usernameList.tag = USER_LIST_TAG;
         self.usernameList.hidden = true;
         [self.usernameList setSeparatorInset:UIEdgeInsetsZero];
         self.usernameList.tableFooterView = [[UIView alloc] init];
@@ -61,6 +61,21 @@ const NSInteger USER_LIST_TAG = 1;
         [self.usernameList setFrame:CGRectMake(self.usernameList.frame.origin.x, self.usernameList.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height - self.usernameList.frame.origin.y)];
         self.inputToolBarView.hidden = true;
     } else {
+        //init fetch controller
+        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Message"];
+        NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"time" ascending:YES];
+        fetchRequest.sortDescriptors = @[descriptor];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"type = 'message' and (participant_id = %@)", self.participant_id]];
+        fetchRequest.predicate = predicate;
+        // Setup fetched results
+        self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
+                                                                            managedObjectContext:[RKManagedObjectStore defaultStore].mainQueueManagedObjectContext
+                                                                              sectionNameKeyPath:nil
+                                                                                       cacheName:nil];
+        
+        [self.fetchedResultsController setDelegate:self];
+        
+        
         UIImageView *avatar =  [[UIImageView alloc] init];
         [avatar sd_setImageWithURL:[WeedImageController imageURLOfAvatar:self.participant_id] placeholderImage:[UIImage imageNamed:@"avatar.jpg"] options:SDWebImageHandleCookies];
         self.participant_avatar = avatar.image;
@@ -75,6 +90,13 @@ const NSInteger USER_LIST_TAG = 1;
         [self loadData];
         [self showConversation];
     }
+}
+
+- (void) viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [self.view sendSubviewToBack:self.usernameTextField];
+    [self.view sendSubviewToBack:self.usernameList];
 }
 
 - (BOOL) isNewConversation
@@ -129,18 +151,6 @@ const NSInteger USER_LIST_TAG = 1;
 
 
 - (void) loadData {
-    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Message"];
-    NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"time" ascending:YES];
-    fetchRequest.sortDescriptors = @[descriptor];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"type = 'message' and (participant_id = %@)", self.participant_id]];
-    fetchRequest.predicate = predicate;
-    // Setup fetched results
-    self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-                                                                        managedObjectContext:[RKManagedObjectStore defaultStore].mainQueueManagedObjectContext
-                                                                          sectionNameKeyPath:nil
-                                                                                   cacheName:nil];
-    
-    [self.fetchedResultsController setDelegate:self];
     NSError *error = nil;
     BOOL fetchSuccessful = [self.fetchedResultsController performFetch:&error];
     if (! fetchSuccessful) {
@@ -207,9 +217,6 @@ const NSInteger USER_LIST_TAG = 1;
         self.participant_username = user.username;
         self.participant_id = user.id;
         [self reloadView];
-        [self showConversation];
-    } else {
-        [super tableView:tableView didSelectRowAtIndexPath:indexPath];
     }
 }
 

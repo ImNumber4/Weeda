@@ -86,7 +86,6 @@
          forControlEvents:UIControlEventTouchUpInside];
     [self.inputToolBarView setSendButton:sendButton];
     [self.view addSubview:self.inputToolBarView];
-//    [self showConversation];
 }
 
 - (UIButton *)sendButton
@@ -135,14 +134,6 @@
 {
     [super didReceiveMemoryWarning];
     NSLog(@"*** %@: didReceiveMemoryWarning ***", self.class);
-}
-
-- (void)dealloc
-{
-    self.delegate = nil;
-    self.dataSource = nil;
-    self.tableView = nil;
-    self.inputToolBarView = nil;
 }
 
 #pragma mark - View rotation

@@ -47,7 +47,6 @@
 @property (assign, nonatomic) JSAvatarStyle avatarImageStyle;
 
 - (void)setup;
-- (void)configureTimestampLabel;
 
 - (void)configureWithType:(JSBubbleMessageType)type
               bubbleStyle:(JSBubbleMessageStyle)bubbleStyle

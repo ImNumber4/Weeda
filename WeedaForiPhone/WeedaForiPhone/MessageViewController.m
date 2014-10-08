@@ -18,7 +18,7 @@
 
 @property (nonatomic, strong) NSFetchedResultsController *notificationFetchedResultsController;
 @property (nonatomic, strong) NSFetchedResultsController *messageFetchedResultsController;
-@property (nonatomic, strong) Weed *relatedWeedToShow; //use this to cache the weed user want to see before segue
+@property (nonatomic, retain) Weed *relatedWeedToShow; //use this to cache the weed user want to see before segue
 @property (nonatomic, retain) NSMutableArray* conversations;
 @property (nonatomic, retain) UIView* redDotForNotifications;
 @property (nonatomic, retain) UIView* redDotForMessages;
@@ -222,11 +222,12 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    
+    // only conversation needs to have multiple sections, section per conversation
     if ([self isRetrievingConversations]) {
         return [self.conversations count];
+    } else {
+        return 1;
     }
-    return [[self getNSFetchedResultsController] sections].count;
 }
 
 - (void) showUser:(id) sender
@@ -248,7 +249,7 @@
                     [[[RKObjectManager sharedManager] managedObjectStore].mainQueueManagedObjectContext refreshObject:message mergeChanges:YES];
                     NSError *error = nil;
                     [message.managedObjectContext save:&error];
-                    [self performSegueWithIdentifier:@"showWeed" sender:[self.tableView cellForRowAtIndexPath:indexPath]];
+                    [self performSegueWithIdentifier:@"showWeed" sender:self];
                 } failure:^(RKObjectRequestOperation *operation, NSError *error) {
                     RKLogError(@"Failed to call message/read due to error: %@", error);
                 }];
@@ -263,7 +264,14 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if (![[segue identifier] isEqualToString:@"newMessage"]) {
+    if ([[segue identifier] isEqualToString:@"showWeed"]) {
+        [[segue destinationViewController] setCurrentWeed:self.relatedWeedToShow];
+    } else if ([[segue identifier] isEqualToString:@"showMessage"]) {
+        NSIndexPath *selectedIndexPath = [self.tableView indexPathForSelectedRow];
+        Message * message = [self.conversations objectAtIndex:selectedIndexPath.section];
+        [[segue destinationViewController] setParticipant_username:message.participant_username];
+        [[segue destinationViewController] setParticipant_id:message.participant_id];
+    } else if ([[segue identifier] isEqualToString:@"showUser"]) {
         CGPoint buttonPosition = [sender convertPoint:CGPointZero toView:self.tableView];
         NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:buttonPosition];
         Message *message;
@@ -271,14 +279,7 @@
             message = [self.conversations objectAtIndex:indexPath.section];
         else
             message = [[self getNSFetchedResultsController] objectAtIndexPath:indexPath];
-        if ([[segue identifier] isEqualToString:@"showWeed"]) {
-            [[segue destinationViewController] setCurrentWeed:self.relatedWeedToShow];
-        } else if ([[segue identifier] isEqualToString:@"showUser"]) {
-            [[segue destinationViewController] setUser_id:message.participant_id];
-        } else if ([[segue identifier] isEqualToString:@"showMessage"]) {
-            [[segue destinationViewController] setParticipant_username:message.participant_username];
-            [[segue destinationViewController] setParticipant_id:message.participant_id];
-        }
+        [[segue destinationViewController] setUser_id:message.participant_id];
     }
 }
 
