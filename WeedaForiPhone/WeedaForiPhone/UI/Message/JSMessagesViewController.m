@@ -288,7 +288,7 @@
 
 #pragma mark - Text view delegate
 - (void)textViewDidBeginEditing:(UITextView *)textView
-{	
+{
     if(!self.previousTextViewContentHeight)
 		self.previousTextViewContentHeight = textView.contentSize.height;
     

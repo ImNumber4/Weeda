@@ -86,7 +86,7 @@
     
     self.textView = [[JSDismissiveTextView  alloc] initWithFrame:CGRectMake(LEFT_PADDING, (self.frame.size.height - [JSMessageInputView textViewLineHeight])/2.0, width, height)];
     self.textView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    self.textView.textContainerInset = UIEdgeInsetsMake(5, 0, 5, CHARACTER_COUNT_LABEL_WIDTH);
+    self.textView.textContainerInset = UIEdgeInsetsMake(5, 0, 5, CHARACTER_COUNT_LABEL_WIDTH + CHARACTER_COUNT_LABEL_RIGHT_PAD);
     self.textView.backgroundColor = [UIColor whiteColor];
     self.textView.scrollEnabled = YES;
     self.textView.bounds = self.textView.frame;
@@ -107,13 +107,14 @@
     [self adjustCharacterCountLabelAccordingToTextView];
     self.characterCountLabel.text = [NSString stringWithFormat:@"%d", MAX_CHARACTER_COUNT];
     [self.characterCountLabel setFont:[JSBubbleView font]];
+    self.characterCountLabel.textAlignment = NSTextAlignmentRight;
     [self setCharacterCountLabelTextColor];
     [self addSubview:self.characterCountLabel];
 }
 
 - (void)adjustCharacterCountLabelAccordingToTextView
 {
-    [self.characterCountLabel setFrame:CGRectMake(self.textView.frame.origin.x + self.textView.frame.size.width - CHARACTER_COUNT_LABEL_WIDTH, self.textView.frame.origin.y + self.textView.frame.size.height - [JSMessageInputView textViewLineHeight], CHARACTER_COUNT_LABEL_WIDTH, [JSMessageInputView textViewLineHeight])];
+    [self.characterCountLabel setFrame:CGRectMake(self.textView.frame.origin.x + self.textView.frame.size.width - CHARACTER_COUNT_LABEL_WIDTH - CHARACTER_COUNT_LABEL_RIGHT_PAD, self.textView.frame.origin.y + self.textView.frame.size.height - [JSMessageInputView textViewLineHeight], CHARACTER_COUNT_LABEL_WIDTH, [JSMessageInputView textViewLineHeight])];
 }
 
 #pragma mark - Setters
