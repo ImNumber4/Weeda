@@ -32,7 +32,7 @@ class WeedDAO extends BaseDAO
 			while($weed = mysql_fetch_assoc($result)) {
 				
 				if ($weed['image_count']  > 0) {
-					// $array_image_metadata = $imageController->query_image_metadata($weed['weed_id']);
+					$array_image_metadata = $imageController->query_image_metadata($weed['weed_id']);
 					if (count($array_image_metadata) > 0) {
 						$weed['images'] = $array_image_metadata;
 					} else {
