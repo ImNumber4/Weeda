@@ -53,7 +53,8 @@ class WeedController extends Controller
 		$currentUsername = $this->getCurrentUsername();
 		$currentUser_id = $this->getCurrentUser();
 
-		foreach ($weed->get_mentions() as &$mention) {
+		$mentions = $weed->get_mentions();
+		foreach ($mentions as &$mention) {
 			if ($mention != $currentUser_id) {
 				$message = new Message();
 				$message->set_message('@' . $currentUsername . ' mentioned you in weed: ' . $weed->get_content());
