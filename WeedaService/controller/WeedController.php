@@ -8,12 +8,13 @@ include './library/ImageHandler.php';
 class WeedController extends Controller
 {
 	protected $weed_dao;
-	
+	protected $message_dao;
 	
     function __construct($model, $controller, $action) 
     {
 		parent::__construct($model, $controller, $action);
 		$this->weed_dao = new WeedDAO();
+		$this->message_dao = new MessageDAO();
     }
 	
 	public function query($user_id) {
@@ -48,19 +49,23 @@ class WeedController extends Controller
 		$weed = $this->parse_request_body();
 		
 		$result = $this->weed_dao->create($weed);
-		
+
 		$currentUsername = $this->getCurrentUsername();
-		$tokens = preg_split('/\s+/', $weed->get_content());
-		
-		foreach ($tokens as &$token) {
-			if(strpos($token, '@') === 0) {
-				$username = substr($token, 1);
-				$this->sendNotificationToUser($username, null, '@' . $currentUsername . ' mentioned you in weed: ' . $weed->get_content());
+		$currentUser_id = $this->getCurrentUser();
+
+		foreach ($weed->get_mentions() as &$mention) {
+			if ($mention != $currentUser_id) {
+				$message = new Message();
+				$message->set_message('@' . $currentUsername . ' mentioned you in weed: ' . $weed->get_content());
+				$message->set_sender_id($currentUser_id);
+				$message->set_receiver_id($mention);
+				$message->set_time($weed->get_time());
+				$message->set_type(Message::$MESSAGE_TYPE_NOTIFICATION);
+				$message->set_related_weed_id($result);
+				$this->message_dao->create($message);
+				$this->sendNotificationToUser(null, $mention, '@' . $currentUsername . ' mentioned you in weed: ' . $weed->get_content());
 			}
 		}
-		error_log('Create weed successed!');
-		header('Content-type: application/json');
-		http_response_code(200);
 		return json_encode(array('id' => $result));
 	}
 	
@@ -132,6 +137,7 @@ class WeedController extends Controller
 		$weed->set_light_id($data->light_id);
 		$weed->set_root_id($data->root_id);
 		$weed->set_image_count($data->image_count);
+		$weed->set_mentions($data->mentions);
 		return $weed;
 	}
 	
@@ -151,6 +157,10 @@ class WeedController extends Controller
 		$user_id = trim($data->user_id);
 		if ($user_id == '') {
 			return 'Input error, userid is null';
+		}
+		
+		if ($data->mentions == '') {
+			return 'Input error, $mentions is null';
 		}
 		return null;		
 	}

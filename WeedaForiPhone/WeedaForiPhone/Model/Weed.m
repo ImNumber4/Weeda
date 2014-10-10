@@ -24,5 +24,5 @@
 @dynamic root_id;
 @dynamic image_count;
 @dynamic images;
-
+@synthesize mentions;
 @end

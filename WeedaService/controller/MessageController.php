@@ -26,8 +26,11 @@ class MessageController extends Controller
 	public function create() {
 		$data = $this->parse_create_request_body();
 		$message = $this->convert_data_to_message($data);
+		$currentUser_id = $this->getCurrentUser();
+		if ($currentUser_id == $message->get_receiver_id()) {
+			throw new InvalidRequestException('Can not send message to yourself.'); 
+		}
 		$id = $this->message_dao->create($message);
-		
 		$this->sendNotificationToUser($data->participant_username, $message->get_receiver_id(), $this->getCurrentUsername() . ':' . $message->get_message());
 	    return json_encode(array('id' => $id));
 	}
@@ -52,7 +55,7 @@ class MessageController extends Controller
 		$message->set_sender_id($currentUser_id);
 		$message->set_receiver_id($data->participant_id);
 		$message->set_time($data->time);
-		$message->set_type($data->type);
+		$message->set_type(Message::$MESSAGE_TYPE_MESSAGE);
 		return $message;
 	}
 	

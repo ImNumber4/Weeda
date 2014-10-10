@@ -5,11 +5,12 @@
 class MessageDAO extends BaseDAO
 {
 	public function create($message) {
-		$query = 'INSERT INTO message (sender_id, receiver_id, message, type, time) VALUES ('
+		$query = 'INSERT INTO message (sender_id, receiver_id, message, type, related_weed_id, time) VALUES ('
 			    . $message->get_sender_id() . ',' 
 			    . $message->get_receiver_id() . ',\'' 
 				. $message->get_message() . '\',\'' 
-				. $message->get_type() . '\',\'' 
+				. $message->get_type() . '\','
+				. ($message->get_related_weed_id() == NULL ? 'NULL' : $message->get_related_weed_id()) . ',\''  
 				. $message->get_time() . '\')';
 		$id = $this->db_conn->insert($query);
 		return $id;
@@ -39,6 +40,8 @@ class MessageDAO extends BaseDAO
 		}
 		return $messages;
 	}
+	
+	
 	
 	/**
 	* requiring receiver_id to avoid setting wrong message to be read

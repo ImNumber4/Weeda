@@ -14,6 +14,9 @@ class Message
 	private $related_weed_id;
 	private $is_read;
 	
+	public static $MESSAGE_TYPE_NOTIFICATION = 'notification';
+	public static $MESSAGE_TYPE_MESSAGE = 'message';
+	
 	public function get_id() {
 		return $this->id;
 	}

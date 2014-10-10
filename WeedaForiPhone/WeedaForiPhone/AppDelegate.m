@@ -116,7 +116,6 @@
     RKEntityMapping *weedImageMapping = [RKEntityMapping mappingForEntityForName:NSStringFromClass([WeedImage class]) inManagedObjectStore:managedObjectStore];
     weedImageMapping.identificationAttributes = @[@"url"];
     [weedImageMapping addAttributeMappingsFromDictionary:@{@"url" : @"url", @"width" : @"width", @"height" : @"height"}];
-//    [weedImageMapping addAttributeMappingsFromDictionary:parentObjectMapping];
     
     RKEntityMapping *weedMapping = [RKEntityMapping mappingForEntityForName:NSStringFromClass([Weed class]) inManagedObjectStore:managedObjectStore];
     
@@ -133,6 +132,7 @@
                                                       @"if_cur_user_light_it" : @"if_cur_user_light_it",
                                                       @"light_id" : @"light_id",
                                                       @"root_id" : @"root_id",
+                                                      @"mentions" : @"mentions",
                                                       @"image_count" : @"image_count"}];
     
     [weedMapping addAttributeMappingsFromDictionary:parentObjectMapping];
@@ -271,7 +271,7 @@
     
     //weed creation mapping
     RKObjectMapping * weedRequestMapping = [RKObjectMapping requestMapping];
-    [weedRequestMapping addAttributeMappingsFromArray:@[ @"id", @"content",@"time",@"user_id", @"light_id", @"root_id", @"image_count"]];
+    [weedRequestMapping addAttributeMappingsFromArray:@[ @"id", @"content",@"time",@"user_id", @"light_id", @"root_id", @"image_count", @"mentions"]];
     
     
     [manager addRequestDescriptor:[RKRequestDescriptor requestDescriptorWithMapping:weedRequestMapping

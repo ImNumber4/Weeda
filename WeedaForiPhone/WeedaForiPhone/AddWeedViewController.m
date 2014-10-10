@@ -31,6 +31,8 @@
 
 @property (nonatomic, weak) UIPanGestureRecognizer *pan;
 
+@property (nonatomic, strong) NSMutableDictionary * mentionedUsernameToUserId;//
+
 @end
 
 @implementation AddWeedViewController
@@ -94,25 +96,16 @@
     pan.delegate = self;
     [self.view addGestureRecognizer:pan];
     self.pan = pan;
+    
+    self.mentionedUsernameToUserId = [[NSMutableDictionary alloc] init];
 }
 
-- (void)textViewDidChange:(UITextView *)textView
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
-    NSRange spaceRange = [[textView text] rangeOfString:@" " options:NSBackwardsSearch];
-    NSRange lineBreakRange = [[textView text] rangeOfString:@"\n" options:NSBackwardsSearch];
-    int lastSpaceIndex = (int)spaceRange.location;
-    if (lastSpaceIndex == NSNotFound) {
-        lastSpaceIndex = -1;
-    }
-    int lastLineBreakIndex = (int)lineBreakRange.location;
-    if (lastLineBreakIndex == NSNotFound) {
-        lastLineBreakIndex = -1;
-    }
-    NSString *separator = (lastSpaceIndex > lastLineBreakIndex)?@" ":@"\n";
-    
-    NSArray *allWords = [[textView text] componentsSeparatedByString: separator];
+    NSString * textNeedToBeProcessed = [[textView.text substringToIndex:(range.length > 0 ? range.location : range.location - range.length)] stringByAppendingString:text];
+    NSArray *allWords = [textNeedToBeProcessed componentsSeparatedByCharactersInSet:[NSMutableCharacterSet whitespaceAndNewlineCharacterSet]];
     NSString *mostRecentWord = [allWords lastObject];
-
+    
     if([mostRecentWord hasPrefix:@"@"]){
         NSString *usernamePrefix = [mostRecentWord substringFromIndex:1];
         if ([usernamePrefix isEqualToString:@""]) {
@@ -135,6 +128,24 @@
         }
     }else{
         [self adjustWeedContentView:true];
+    }
+    return true;
+}
+
+- (void)textViewDidChange:(UITextView *)textView
+{
+    //make sure mentions map in sync with text, so if user removed any mention, we need to remove it from mentions
+    NSArray * tokens = [textView.text componentsSeparatedByCharactersInSet:[NSMutableCharacterSet whitespaceAndNewlineCharacterSet]];
+    NSMutableSet * validMentions = [[NSMutableSet alloc] init];
+    for (NSString * token in tokens) {
+        if([token hasPrefix:@"@"]){
+            [validMentions addObject:token];
+        }
+    }
+    for(NSString *key in self.mentionedUsernameToUserId.allKeys) {
+        if (![validMentions containsObject:key]) {
+            [self.mentionedUsernameToUserId removeObjectForKey:key];
+        }
     }
 }
 
@@ -218,9 +229,14 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     User *user = [self.users objectAtIndex:indexPath.row];
-    NSRange lastAtCharacter = [[self.weedContentView text] rangeOfString:@"@" options:NSBackwardsSearch];
-    self.weedContentView.text = [NSString stringWithFormat:@"%@%@ ", [self.weedContentView.text substringToIndex:lastAtCharacter.location + 1], user.username];
+    NSRange cursorPosition = [self.weedContentView selectedRange];
+    NSString * textBeforeInsertionPoint = [[self.weedContentView text] substringToIndex:cursorPosition.location];
+    NSString * textAfterInsertionPoint = [[self.weedContentView text] substringFromIndex:cursorPosition.location];
+    NSRange lastAtCharacter = [textBeforeInsertionPoint rangeOfString:@"@" options:NSBackwardsSearch];
+    self.weedContentView.text = [NSString stringWithFormat:@"%@%@ %@", [textBeforeInsertionPoint substringToIndex:lastAtCharacter.location + 1], user.username, textAfterInsertionPoint];
+    [self.weedContentView setSelectedRange:NSMakeRange(self.weedContentView.text.length - textAfterInsertionPoint.length, 0)];
     [self adjustWeedContentView:true];
+    [self.mentionedUsernameToUserId setObject:user.id forKey:[NSString stringWithFormat:@"@%@", user.username]];
 }
 
 - (void)decorateCellWithUser:(User *)user cell:(UserTableViewCell *)cell {
@@ -244,6 +260,7 @@
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     weed.username = appDelegate.currentUser.username;
     weed.user_id = appDelegate.currentUser.id;
+    weed.mentions = [[NSSet alloc] initWithArray:self.mentionedUsernameToUserId.allValues];
     
     // If appropriate, configure the new managed object.
     // Normally you should use accessor methods, but using KVC here avoids the need to add a custom class to the template.

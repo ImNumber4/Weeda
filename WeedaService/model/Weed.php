@@ -17,6 +17,8 @@ class Weed
 	
 	private $image_count;
 	
+	private $mentions;
+	
 	public function set_id($id) {
 		$this->id = $id;
 	}
@@ -87,6 +89,16 @@ class Weed
 	public function set_image_count($image_count)
 	{
 		$this->image_count = $image_count;
+	}
+	
+	public function get_mentions()
+	{
+		return $this->mentions;
+	}
+	
+	public function set_mentions($mentions)
+	{
+		$this->mentions = $mentions;
 	}
 }
 ?>

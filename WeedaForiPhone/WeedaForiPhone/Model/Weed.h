@@ -26,5 +26,8 @@
 @property (nonatomic, retain) NSNumber * root_id;
 @property (nonatomic, retain) NSNumber * image_count;
 @property (nonatomic, retain) NSSet * images;
+//mentions will not be stored in the model since we do not want to cache this at client side
+//therefore, if you use NSFetchController to get weeds, you will have this value as nil
+@property (nonatomic, retain) NSSet * mentions;
 
 @end
