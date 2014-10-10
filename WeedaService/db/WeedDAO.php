@@ -65,7 +65,8 @@ class WeedDAO extends BaseDAO
 		}
 		if (count($weed->get_mentions()) > 0) {
 			$update_mention_table_query = "INSERT INTO mention (weed_id, user_id) VALUES ";
-			foreach ($weed->get_mentions() as &$mention) {
+			$mentions = $weed->get_mentions();
+			foreach ($mentions as &$mention) {
 				$update_mention_table_query = $update_mention_table_query . "(" . $result . "," . $mention . "), ";
 			}
 			$this->db_conn->insert(substr($update_mention_table_query, 0, strlen($update_mention_table_query) - 2));
