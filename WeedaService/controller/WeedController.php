@@ -63,8 +63,8 @@ class WeedController extends Controller
 				$message->set_time($weed->get_time());
 				$message->set_type(Message::$MESSAGE_TYPE_NOTIFICATION);
 				$message->set_related_weed_id($result);
-				$this->message_dao->create($message);
-				$this->sendNotificationToUser(null, $mention, '@' . $currentUsername . ' mentioned you in weed: ' . $weed->get_content());
+				$notification_message = '@' . $currentUsername . ' mentioned you in weed: ' . $weed->get_content();
+				$this->message_dao->create($message, $notification_message);
 			}
 		}
 		return json_encode(array('id' => $result));

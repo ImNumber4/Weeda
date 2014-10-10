@@ -1,6 +1,5 @@
 <?php
 
-include './library/NotificationHelper.php';
 class Controller
 {
     protected $_model;
@@ -36,16 +35,6 @@ class Controller
 			throw new DependencyDataMissingException('current username is not set');
 		}
 		return $currentUsername;
-	}
-	
-	protected function sendNotificationToUser($username, $user_id, $message) {
-		if ($user_id)
-			$devices = $this->user_dao->getUserDevicesByUserId($user_id);
-		else if ($username)
-			$devices = $this->user_dao->getUserDevicesByUsername($username);
-		foreach ($devices as &$device) {
-		    NotificationHelper::sendMessage($device['device_id'], $message);
-		}
 	}
 	
 	// function set($name,$value) {

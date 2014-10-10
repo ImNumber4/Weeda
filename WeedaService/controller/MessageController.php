@@ -30,8 +30,8 @@ class MessageController extends Controller
 		if ($currentUser_id == $message->get_receiver_id()) {
 			throw new InvalidRequestException('Can not send message to yourself.'); 
 		}
-		$id = $this->message_dao->create($message);
-		$this->sendNotificationToUser($data->participant_username, $message->get_receiver_id(), $this->getCurrentUsername() . ':' . $message->get_message());
+		$notification_message = $this->getCurrentUsername() . ':' . $message->get_message();
+		$id = $this->message_dao->create($message, $notification_message);
 	    return json_encode(array('id' => $id));
 	}
 	

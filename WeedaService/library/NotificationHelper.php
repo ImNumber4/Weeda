@@ -3,7 +3,7 @@
 class NotificationHelper
 {
    	
-	public static function sendMessage($deviceToken, $message) {
+	public static function sendMessage($deviceToken, $message, $badge_count) {
 		
 		$passphrase = 'Iloveweed@309';
 		
@@ -31,7 +31,7 @@ class NotificationHelper
 				'action-loc-key' => 'Open',
 				'body' => $message
 			),
-			'badge' => 1,
+			'badge' => $badge_count,
 			'sound' => 'default'
 		);
 

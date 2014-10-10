@@ -263,7 +263,11 @@ const NSInteger USER_LIST_TAG = 1;
                 message.is_read = [NSNumber numberWithInt:1];
                 [[[RKObjectManager sharedManager] managedObjectStore].mainQueueManagedObjectContext refreshObject:message mergeChanges:YES];
                 NSError *error = nil;
-                [message.managedObjectContext save:&error];
+                BOOL successful = [message.managedObjectContext save:&error];
+                if (! successful) {
+                    NSLog(@"Save Error: %@",error);
+                }
+                [UIApplication sharedApplication].applicationIconBadgeNumber = [UIApplication sharedApplication].applicationIconBadgeNumber - 1;
             } failure:^(RKObjectRequestOperation *operation, NSError *error) {
                 RKLogError(@"Failed to call message/read due to error: %@", error);
             }];

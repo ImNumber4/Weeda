@@ -1,10 +1,12 @@
 <?php
+
+include './library/NotificationHelper.php';
 /**
 * 
 */
 class MessageDAO extends BaseDAO
 {
-	public function create($message) {
+	public function create($message, $notification_message) {
 		$query = 'INSERT INTO message (sender_id, receiver_id, message, type, related_weed_id, time) VALUES ('
 			    . $message->get_sender_id() . ',' 
 			    . $message->get_receiver_id() . ',\'' 
@@ -13,6 +15,16 @@ class MessageDAO extends BaseDAO
 				. ($message->get_related_weed_id() == NULL ? 'NULL' : $message->get_related_weed_id()) . ',\''  
 				. $message->get_time() . '\')';
 		$id = $this->db_conn->insert($query);
+		
+		$unread_message_count_query = 'select count(*) as count from message where is_read = 0 and receiver_id = ' . $message->get_receiver_id();
+		$unread_message_count_query_result = $this->db_conn->query($unread_message_count_query);
+		if(mysql_num_rows($unread_message_count_query_result)) {
+			while($count_result = mysql_fetch_assoc($unread_message_count_query_result)) {
+				error_log($count_result['count']);
+				$this->sendNotificationToUser($message->get_receiver_id(), $notification_message, intval($count_result['count']));
+				break;
+			}
+		}
 		return $id;
 	}
 	
@@ -27,6 +39,11 @@ class MessageDAO extends BaseDAO
 		$messages = array();
 		if(mysql_num_rows($result)) {
 			while($message = mysql_fetch_assoc($result)) {
+				// no need to send notification back to sender
+				if ($message['type'] == Message::$MESSAGE_TYPE_NOTIFICATION && $user_id == $message['sender_id']) {
+					continue;
+				}
+					
 				if ($user_id == $message['receiver_id']) {
 					$participant_id = $message['sender_id'];
 					$participant_username = $message['sender_username'];
@@ -49,6 +66,37 @@ class MessageDAO extends BaseDAO
 	public function mark_message_as_read($receiver_id, $message_id) {
 		$query = "UPDATE message SET is_read = true WHERE id = $message_id AND receiver_id = $receiver_id";
 		return $this->db_conn->query($query);
+	}
+	
+	protected function sendNotificationToUser($user_id, $message, $badge_count) {
+		$devices = $this->getUserDevicesByUserId($user_id);
+		foreach ($devices as &$device) {
+		    NotificationHelper::sendMessage($device['device_id'], $message, $badge_count);
+		}
+	}
+	
+	public function getUserDevicesByUserId($user_id) {		
+		$query = "SELECT device_id FROM device WHERE user_id = $user_id";
+		$result = $this->db_conn->query($query);
+		$devices = array();
+		if (mysql_num_rows($result)) {
+			while($device = mysql_fetch_assoc($result)) {
+				$devices[] = $device;
+			}
+		} 
+		return $devices;
+	}
+	
+	public function getUserDevicesByUsername($username) {		
+		$query = "SELECT device.device_id as device_id FROM device, user WHERE device.user_id = user.id AND user.username = '$username'";
+		$result = $this->db_conn->query($query);
+		$devices = array();
+		if (mysql_num_rows($result)) {
+			while($device = mysql_fetch_assoc($result)) {
+				$devices[] = $device;
+			}
+		} 
+		return $devices;
 	}
 }
 

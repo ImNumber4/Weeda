@@ -139,7 +139,7 @@
             }];
         }
     } else {
-        NSLog(@"Pinch failed, reason: %d", gesture.state);
+        NSLog(@"Pinch failed, reason: %ld", gesture.state);
     }
 }
 
@@ -159,7 +159,7 @@
             }];
         }
     } else {
-        NSLog(@"Pinch failed, reason: %d", gesture.state);
+        NSLog(@"Pinch failed, reason: %ld", gesture.state);
     }
     
 }

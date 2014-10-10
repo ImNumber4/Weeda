@@ -195,18 +195,24 @@
     Message *message;
     if ([self isRetrievingConversations]) {
         message = [self.conversations objectAtIndex:indexPath.section];
+        [cell setBackgroundColor:[UIColor clearColor]];
+        NSIndexPath *originalIndexPathForMessage = [[self getNSFetchedResultsController] indexPathForObject:message];
+        for(Message * message_in_section in [[[[self getNSFetchedResultsController] sections] objectAtIndex:originalIndexPathForMessage.section] objects]) {
+            if ([message_in_section.is_read intValue] == 0) {
+                [cell setBackgroundColor:[ColorDefinition lightGreenColor]];
+            }
+        }
     } else {
         message = [[self getNSFetchedResultsController] objectAtIndexPath:indexPath];
+        if ([message.is_read intValue] == 0) {
+            [cell setBackgroundColor:[ColorDefinition lightGreenColor]];
+        } else {
+            [cell setBackgroundColor:[UIColor clearColor]];
+        }
     }
     
     [cell decorateCellWithWeed:message.message username:message.participant_username time:message.time user_id:message.participant_id];
     cell.delegate = self;
-    
-    if ([message.is_read intValue] == 0) {
-        [cell setBackgroundColor:[ColorDefinition lightGreenColor]];
-    } else {
-        [cell setBackgroundColor:[UIColor clearColor]];
-    }
     
     return cell;
 }
@@ -248,7 +254,11 @@
                     message.is_read = [NSNumber numberWithInt:1];
                     [[[RKObjectManager sharedManager] managedObjectStore].mainQueueManagedObjectContext refreshObject:message mergeChanges:YES];
                     NSError *error = nil;
-                    [message.managedObjectContext save:&error];
+                    BOOL successful = [message.managedObjectContext save:&error];
+                    if (! successful) {
+                        NSLog(@"Save Error: %@",error);
+                    }
+                    [UIApplication sharedApplication].applicationIconBadgeNumber = [UIApplication sharedApplication].applicationIconBadgeNumber - 1;
                     [self performSegueWithIdentifier:@"showWeed" sender:self];
                 } failure:^(RKObjectRequestOperation *operation, NSError *error) {
                     RKLogError(@"Failed to call message/read due to error: %@", error);
