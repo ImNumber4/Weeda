@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 Weeda. All rights reserved.
 //
 
+#import "AppDelegate.h"
 #import "MessageViewController.h"
 #import "WeedBasicTableViewCell.h"
 #import "DetailViewController.h"
@@ -144,15 +145,21 @@
     [[RKObjectManager sharedManager] getObjectsAtPath:@"message/query" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
         self.redDotForNotifications.hidden = true;
         self.redDotForMessages.hidden = true;
+        NSInteger newMessageCount = 0;
         for (Message * message in mappingResult.array) {
             
             if ([message.type isEqualToString:NOTIFICATION_TYPE] && [message.is_read intValue] == 0) {
                 self.redDotForNotifications.hidden = false;
-                
+                newMessageCount++;
             } else if ([message.type isEqualToString:MESSAGE_TYPE] && [message.is_read intValue] == 0) {
                 self.redDotForMessages.hidden = false;
+                newMessageCount++;
             }
         }
+        AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+        appDelegate.badgeCount = newMessageCount;
+        [appDelegate updateBadgeCount];
+        
         [self loadData];
         [self.refreshControl endRefreshing];
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
@@ -245,6 +252,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     Message *message = [[self getNSFetchedResultsController] objectAtIndexPath:indexPath];
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     if (([message.type isEqualToString:NOTIFICATION_TYPE]) && message.related_weed_id) {
         [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/queryById/%@", message.related_weed_id]  parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
             if ([mappingResult.array count]) {
@@ -258,7 +266,7 @@
                     if (! successful) {
                         NSLog(@"Save Error: %@",error);
                     }
-                    [UIApplication sharedApplication].applicationIconBadgeNumber = [UIApplication sharedApplication].applicationIconBadgeNumber - 1;
+                    [appDelegate decreaseBadgeCount:1];
                     [self performSegueWithIdentifier:@"showWeed" sender:self];
                 } failure:^(RKObjectRequestOperation *operation, NSError *error) {
                     RKLogError(@"Failed to call message/read due to error: %@", error);

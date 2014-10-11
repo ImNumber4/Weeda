@@ -6,10 +6,15 @@
 //  Copyright (c) 2014 Weeda. All rights reserved.
 //
 
-#import "AppDelegate.h"
 #import "TabBarController.h"
 #import "MasterViewController.h"
 #import "UserViewController.h"
+
+const NSInteger WEEDS_TAB_BAR_ITEM_INDEX = 0;
+const NSInteger MESSAGES_TAB_BAR_ITEM_INDEX = 1;
+const NSInteger DISCOVER_TAB_BAR_ITEM_INDEX = 2;
+const NSInteger ME_TAB_BAR_ITEM_INDEX = 3;
+
 
 @interface TabBarController ()
 
@@ -32,10 +37,10 @@
     // Do any additional setup after loading the view.
     // Assign tab bar item with titles
     UITabBar *tabBar = self.tabBar;
-    UITabBarItem *tabBarItem1 = [tabBar.items objectAtIndex:0];
-    UITabBarItem *tabBarItem2 = [tabBar.items objectAtIndex:1];
-    UITabBarItem *tabBarItem3 = [tabBar.items objectAtIndex:2];
-    UITabBarItem *tabBarItem4 = [tabBar.items objectAtIndex:3];
+    UITabBarItem *weedsTabBarItem = [tabBar.items objectAtIndex:WEEDS_TAB_BAR_ITEM_INDEX];
+    UITabBarItem *messagesTabBarItem = [tabBar.items objectAtIndex:MESSAGES_TAB_BAR_ITEM_INDEX];
+    UITabBarItem *discoverTabBarItem = [tabBar.items objectAtIndex:DISCOVER_TAB_BAR_ITEM_INDEX];
+    UITabBarItem *meTabBarItem = [tabBar.items objectAtIndex:ME_TAB_BAR_ITEM_INDEX];
     
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     
@@ -43,25 +48,45 @@
     UserViewController *userView = (UserViewController *)userViewNav.topViewController;
     [userView setUser_id:appDelegate.currentUser.id];
     
-    tabBarItem1.title = @"Weeds";
-    tabBarItem2.title = @"Messages";
-    tabBarItem3.title = @"Discover";
-    tabBarItem4.title = @"Me";
+    weedsTabBarItem.title = @"Weeds";
+    messagesTabBarItem.title = @"Messages";
+    discoverTabBarItem.title = @"Discover";
+    meTabBarItem.title = @"Me";
     
     
-    tabBarItem1.selectedImage = [[self getImage:@"selected_weed.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    tabBarItem1.image = [[self getImage:@"weed.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    tabBarItem2.image = [[self getImage:@"message.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    tabBarItem2.selectedImage = [[self getImage:@"selected_message.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    tabBarItem3.image = [[self getImage:@"map.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    tabBarItem3.selectedImage = [[self getImage:@"selected_map.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    tabBarItem4.image = [[self getImage:@"profile_icon.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    tabBarItem4.selectedImage = [[self getImage:@"selected_profile_icon.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    weedsTabBarItem.selectedImage = [[self getImage:@"selected_weed.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    weedsTabBarItem.image = [[self getImage:@"weed.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    messagesTabBarItem.image = [[self getImage:@"message.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    messagesTabBarItem.selectedImage = [[self getImage:@"selected_message.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    discoverTabBarItem.image = [[self getImage:@"map.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    discoverTabBarItem.selectedImage = [[self getImage:@"selected_map.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    meTabBarItem.image = [[self getImage:@"profile_icon.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    meTabBarItem.selectedImage = [[self getImage:@"selected_profile_icon.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     
     self.tabBar.tintColor = [ColorDefinition greenColor];
     
     [self.tabBar drawRect:CGRectMake(self.tabBar.frame.origin.x, self.tabBar.frame.origin.y, self.tabBar.frame.size.width, TAB_BAR_HEIGHT)];
 
+    appDelegate.notificationDelegate = self;
+    [appDelegate updateBadgeCount];
+}
+
+- (void) updateBadgeCount:(NSInteger) badgeCount
+{
+    UITabBarItem *messageTabBarItem = [self.tabBar.items objectAtIndex:MESSAGES_TAB_BAR_ITEM_INDEX];
+    if (badgeCount > 0) {
+        if (badgeCount >= 1000000000) {
+            [messageTabBarItem setBadgeValue:[NSString stringWithFormat:@"%ldB", (long)(badgeCount/1000000000.0)]];
+        } else if (badgeCount >= 1000000) {
+            [messageTabBarItem setBadgeValue:[NSString stringWithFormat:@"%ldM", (long)(badgeCount/1000000.0)]];
+        } else if (badgeCount >= 1000) {
+            [messageTabBarItem setBadgeValue:[NSString stringWithFormat:@"%ldK", (long)(badgeCount/1000.0)]];
+        } else {
+            [messageTabBarItem setBadgeValue:[NSString stringWithFormat:@"%ld", badgeCount]];
+        }
+    } else {
+        messageTabBarItem.badgeValue = nil;
+    }
 }
 
 - (UIImage *)getImage:(NSString *)imageName

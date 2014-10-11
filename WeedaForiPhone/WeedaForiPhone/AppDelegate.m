@@ -24,21 +24,50 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    NSLog(@"didFinishLaunchingWithOptions");
     // Override point for customization after application launch.
     [self setupRestKit];
     
     // Let the device know we want to receive push notifications
-    NSComparisonResult order = [[UIDevice currentDevice].systemVersion compare: @"8.0" options: NSNumericSearch];
-    if (order == NSOrderedSame || order == NSOrderedDescending) {
+    if ([[[UIDevice currentDevice] systemVersion] doubleValue] >= 8.0) {
         UIUserNotificationSettings* notificationSettings = [UIUserNotificationSettings settingsForTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert) categories:nil];
         [[UIApplication sharedApplication] registerUserNotificationSettings:notificationSettings];
         [[UIApplication sharedApplication] registerForRemoteNotifications];
     } else {
         [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
     }
-    
+    self.badgeCount = [UIApplication sharedApplication].applicationIconBadgeNumber;
     return YES;
 }
+
+- (void)applicationWillEnterForeground:(UIApplication *)application
+{
+    self.badgeCount = [UIApplication sharedApplication].applicationIconBadgeNumber;
+    [self updateBadgeCount];
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
+{
+    NSLog(@"received notification as %@", [userInfo objectForKey:@"aps"]);
+    NSString * badgeString = [NSString stringWithFormat:@"%@", [[userInfo objectForKey:@"aps"] objectForKey:@"badge"]];
+    self.badgeCount = MAX([badgeString integerValue], [UIApplication sharedApplication].applicationIconBadgeNumber);
+    [self updateBadgeCount];
+}
+
+- (void) decreaseBadgeCount:(NSInteger) decreaseBy
+{
+    self.badgeCount = self.badgeCount - decreaseBy;
+    [self updateBadgeCount];
+}
+
+- (void) updateBadgeCount
+{
+    if (self.notificationDelegate) {
+        [self.notificationDelegate updateBadgeCount:self.badgeCount];
+    }
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:self.badgeCount];
+}
+
 
 - (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken
 {

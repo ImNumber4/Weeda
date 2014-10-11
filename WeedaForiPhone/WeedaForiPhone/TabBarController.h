@@ -7,8 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AppDelegate.h"
+
 #define TAB_BAR_HEIGHT 49
 
-@interface TabBarController : UITabBarController
+@interface TabBarController : UITabBarController<NotificationDelegate>
 
 @end

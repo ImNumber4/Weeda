@@ -267,7 +267,7 @@ const NSInteger USER_LIST_TAG = 1;
                 if (! successful) {
                     NSLog(@"Save Error: %@",error);
                 }
-                [UIApplication sharedApplication].applicationIconBadgeNumber = [UIApplication sharedApplication].applicationIconBadgeNumber - 1;
+                [appDelegate decreaseBadgeCount:1];
             } failure:^(RKObjectRequestOperation *operation, NSError *error) {
                 RKLogError(@"Failed to call message/read due to error: %@", error);
             }];
