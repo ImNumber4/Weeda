@@ -145,13 +145,15 @@
 //            }
 //        }];
         SDWebImageManager *manager = [SDWebImageManager sharedManager];
-        [manager downloadImageWithURL:[WeedImageController imageURLOfImageId:weedImage.url] options:SDWebImageHandleCookies
+        [manager downloadImageWithURL:[WeedImageController imageURLOfImageId:weedImage.url quality:[NSNumber numberWithInt:25]] options:SDWebImageHandleCookies
         progress:^(NSInteger receivedSize, NSInteger expectedSize) {
             ;
         } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
             if (image && finished) {
                 UIImage *newImage = [WeedImageController imageWithImage:image scaledToSize:CGSizeMake(cell.imageView.frame.size.width, cell.imageView.frame.size.height)];
                 cell.imageView.image = newImage;
+                [cell.imageView turnOnMaxDisplay];
+                cell.imageView.imageURL = [WeedImageController imageURLOfImageId:weedImage.url quality:[NSNumber numberWithInt:100]];
             } else {
                 NSLog(@"Loading image failed, url:%@, error: %@", imageURL, error);
             }

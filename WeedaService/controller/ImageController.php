@@ -7,20 +7,29 @@ class ImageController extends Controller
 {
 	private $UPLOAD_BASE_PATH = './upload/';
 	
-	public function query($image_url)
+	public function query($image_id, $parameters)
 	{
-		if (!isset($image_url)) {
-			throw new InvalidRequestException('Input error, image_url is null');
+		if (!isset($image_id)) {
+			throw new InvalidRequestException('Input error, $image_id is null');
 		}
 		
-		$weed_image = $this->getImageForServer($image_url);
+		$image_quality = $parameters['quality'];
+		if (!isset($image_quality)) {
+			$image_quality = 25;
+		}
+		
+		$weed_image = $this->getImageForServer($image_id);
 		if (!$weed_image) {
-			error_log('Image not exist. image url: ' . $image_url);
+			error_log('Image not exist. image url: ' . $image_id);
 			throw new InvalidRequestException('Image not exist');
 		}
 		
 		header('Content-Type: image/jpeg');
-		imagejpeg($weed_image, null, 100);
+		ob_start();
+		imagejpeg($weed_image, null, $image_quality);
+		$size = ob_get_length();
+		header('Content-Length: '.$size);
+		ob_end_flush();
 		imagedestroy($weed_image);
 	}
 	
@@ -69,6 +78,7 @@ class ImageController extends Controller
 			$user_id = array_shift($url_arr);
 			$weed_id = array_shift($url_arr);
 			$count = array_shift($url_arr);
+			$quality = array_shift($url_arr);
 			if (!$user_id || !$weed_id || ($count == null)) {
 				error_log('Invalid url, url: ' . $image_url);
 				return null;

@@ -19,7 +19,7 @@
 
 + (NSURL *)imageURLOfWeedId: (NSNumber *)weedId userId:(NSNumber *)userId count:(long)count;
 
-+ (NSURL *)imageURLOfImageId: (NSString *)imageId;
++ (NSURL *)imageURLOfImageId: (NSString *)imageId quality:(NSNumber *)quality;
 
 + (UIImage *)imageWithImage:(UIImage *)originalImage scaledToSize:(CGSize)size;
 

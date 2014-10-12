@@ -32,12 +32,12 @@ static NSString *baseUrl = @"http://www.cannablaze.com/image/query";
     return [NSURL URLWithString:[NSString stringWithFormat:@"%@/weed_%@_%@_%ld", baseUrl, userId, weedId, count]];
 }
 
-+ (NSURL *)imageURLOfImageId:(NSString *)imageId
++ (NSURL *)imageURLOfImageId:(NSString *)imageId quality:(NSNumber *)quality
 {
-    return [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", baseUrl, imageId]];
+    return [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@?quality=%@", baseUrl, imageId, quality]];
 }
 
-+ (UIImage*)imageWithImage:(UIImage*)originalImage scaledToSize:(CGSize)size
++ (UIImage *)imageWithImage:(UIImage*)originalImage scaledToSize:(CGSize)size
 {
     CGFloat width = originalImage.size.width;
     CGFloat height = originalImage.size.height;

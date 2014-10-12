@@ -64,7 +64,6 @@ typedef NS_ENUM(NSInteger, EnumImageWidthType)
     if (weed.images.count > 0) {
         [self adjustImageSizeWithWeed:weed];
         
-        //init UICollectionView
         [_collectionView setFrame:CGRectMake(self.frame.origin.x, self.weedContentLabel.frame.origin.y + self.weedContentLabel.frame.size.height, self.frame.size.width, weed.images.count > 2 ? DEFAULT_IMAGE_DISPLAY_BOARD_HEIGHT1 : DEFAULT_IMAGE_DISPLAY_BOARD_HEIGHT2)];
         [_collectionView reloadData];
     } else {
@@ -182,12 +181,14 @@ typedef NS_ENUM(NSInteger, EnumImageWidthType)
         cell.imageView.contentMode = UIViewContentModeCenter;
 
         SDWebImageManager *manager = [SDWebImageManager sharedManager];
-        [manager downloadImageWithURL:[WeedImageController imageURLOfImageId:weedImage.url] options:SDWebImageHandleCookies progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+        [manager downloadImageWithURL:[WeedImageController imageURLOfImageId:weedImage.url quality:[NSNumber numberWithInt:25]] options:SDWebImageHandleCookies progress:^(NSInteger receivedSize, NSInteger expectedSize) {
             ;
         } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
             if (image && finished) {
                 UIImage *newImage = [WeedImageController imageWithImage:image scaledToSize:CGSizeMake([weedImage.width floatValue], [weedImage.height floatValue])];
                 cell.imageView.image = newImage;
+                [cell.imageView turnOnMaxDisplay];
+                cell.imageView.imageURL = [WeedImageController imageURLOfImageId:weedImage.url quality:[NSNumber numberWithInt:100]];
             } else {
                 NSLog(@"Loading image failed, url:%@, error: %@", imageURL, error);
             }
