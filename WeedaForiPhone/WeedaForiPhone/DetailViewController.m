@@ -371,9 +371,9 @@ const CGFloat COLLECTION_VIEW_HEIGHT = 300.0;
         [[segue destinationViewController] setUser_id:weed.user_id];
     } else if ([[segue identifier] isEqualToString:@"showUsers"]) {
         if ([sender tag] == SHOW_WATER_USERS) {
-            [[segue destinationViewController] setTitle:@"Seeded by"];
-        } else {
             [[segue destinationViewController] setTitle:@"Watered by"];
+        } else {
+            [[segue destinationViewController] setTitle:@"Seeded by"];
         }
         [[segue destinationViewController] setUsers:self.users];
     } else if ([[segue identifier] isEqualToString:@"addWeed"]) {

@@ -359,7 +359,10 @@
 
 - (void)keyboardWillShowHide:(NSNotification *)notification
 {
-    CGRect keyboardRect = [[notification.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    CGRect keyboardFrameInWindowsCoordinates;
+    [[[notification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] getValue:&keyboardFrameInWindowsCoordinates];
+    CGPoint kbPosition = keyboardFrameInWindowsCoordinates.origin;
+    
 	UIViewAnimationCurve curve = [[notification.userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
 	double duration = [[notification.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
     
@@ -367,7 +370,7 @@
                           delay:0.0f
                         options:[UIView animationOptionsForCurve:curve]
                      animations:^{
-                         CGFloat keyboardY = [self.view convertRect:keyboardRect fromView:nil].origin.y;
+                         CGFloat keyboardY = kbPosition.y;
                          
                          CGRect inputViewFrame = self.inputToolBarView.frame;
                          CGFloat inputViewFrameY = keyboardY - inputViewFrame.size.height;
@@ -389,6 +392,7 @@
                          
                          self.tableView.contentInset = insets;
                          self.tableView.scrollIndicatorInsets = insets;
+                         [self scrollToBottomAnimated:YES];
                      }
                      completion:^(BOOL finished) {
                      }];

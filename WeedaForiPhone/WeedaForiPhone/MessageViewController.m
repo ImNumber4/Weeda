@@ -55,6 +55,8 @@
     [self.navigationItem setRightBarButtonItem:composeButton];
     
     [self initRedDotViews];
+    
+    [self loadData];
 }
 
 -(void)startNewConversation:(id)sender {

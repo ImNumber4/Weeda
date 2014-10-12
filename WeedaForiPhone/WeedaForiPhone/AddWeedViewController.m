@@ -260,13 +260,6 @@
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     weed.username = appDelegate.currentUser.username;
     weed.user_id = appDelegate.currentUser.id;
-    weed.mentions = [[NSSet alloc] initWithArray:self.mentionedUsernameToUserId.allValues];
-    
-    // If appropriate, configure the new managed object.
-    // Normally you should use accessor methods, but using KVC here avoids the need to add a custom class to the template.
-    weed.content = self.weedContentView.text;
-    weed.time = [NSDate date];
-    weed.image_count = [NSNumber numberWithUnsignedInteger:self.dataArray.count];
     if (self.lightWeed != nil) {
         weed.light_id = self.lightWeed.id;
         if (self.lightWeed.root_id != nil) {
@@ -274,7 +267,15 @@
         } else {
             weed.root_id = weed.light_id;
         }
+        [self.mentionedUsernameToUserId setObject:self.lightWeed.user_id forKey:self.lightWeed.username];
     }
+    weed.mentions = [[NSSet alloc] initWithArray:self.mentionedUsernameToUserId.allValues];
+    
+    // If appropriate, configure the new managed object.
+    // Normally you should use accessor methods, but using KVC here avoids the need to add a custom class to the template.
+    weed.content = self.weedContentView.text;
+    weed.time = [NSDate date];
+    weed.image_count = [NSNumber numberWithUnsignedInteger:self.dataArray.count];
     
     //Sending Request to Server
     [[RKObjectManager sharedManager] postObject:weed path:@"weed/create" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {

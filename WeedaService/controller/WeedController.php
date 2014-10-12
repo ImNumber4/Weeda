@@ -57,13 +57,17 @@ class WeedController extends Controller
 		foreach ($mentions as &$mention) {
 			if ($mention != $currentUser_id) {
 				$message = new Message();
-				$message->set_message('@' . $currentUsername . ' mentioned you in weed: ' . $weed->get_content());
+				if ($weed->get_light_id() == NULL) {
+					$message->set_message('@' . $currentUsername . ' mentioned you in weed: ' . $weed->get_content());
+				} else {
+					$message->set_message('@' . $currentUsername . ' lighted your weed: ' . $weed->get_content());
+				}
 				$message->set_sender_id($currentUser_id);
 				$message->set_receiver_id($mention);
 				$message->set_time($weed->get_time());
 				$message->set_type(Message::$MESSAGE_TYPE_NOTIFICATION);
 				$message->set_related_weed_id($result);
-				$notification_message = '@' . $currentUsername . ' mentioned you in weed: ' . $weed->get_content();
+				$notification_message = $message->get_message();
 				$this->message_dao->create($message, $notification_message);
 			}
 		}
@@ -97,25 +101,51 @@ class WeedController extends Controller
 	public function seed($weed_id) 
 	{
 		$currentUser_id = $this->getCurrentUser();
-		$result = $this->weed_dao->setUserSeedWeed($currentUser_id, $weed_id);
+		$currentUsername = $this->getCurrentUsername();
+		$this->weed_dao->setUserSeedWeed($currentUser_id, $weed_id);
+		$weed = $this->weed_dao->find_by_id($weed_id)[0];
+		if ($weed['user_id'] != $currentUser_id) {
+			$message = new Message();
+			$message->set_message('@' . $currentUsername . ' seeded your weed: ' . $weed['content']);
+			$message->set_sender_id($currentUser_id);
+			$message->set_receiver_id($weed['user_id']);
+			$message->set_time(date('Y-m-d H:i:s'));
+			$message->set_type(Message::$MESSAGE_TYPE_NOTIFICATION);
+			$message->set_related_weed_id($weed_id);
+			$notification_message = $message->get_message();
+			$this->message_dao->create($message, $notification_message);
+		}
 	}
 	
 	public function unseed($weed_id) 
 	{		
 		$currentUser_id = $this->getCurrentUser();
-		$result = $this->weed_dao->setUserUnseedWeed($currentUser_id, $weed_id);
+		$this->weed_dao->setUserUnseedWeed($currentUser_id, $weed_id);
 	}
 	
 	public function water($weed_id) 
 	{
 		$currentUser_id = $this->getCurrentUser();
-		$result = $this->weed_dao->setUserWaterWeed($currentUser_id, $weed_id);
+		$currentUsername = $this->getCurrentUsername();
+		$this->weed_dao->setUserWaterWeed($currentUser_id, $weed_id);
+		$weed = $this->weed_dao->find_by_id($weed_id)[0];
+		if ($weed['user_id'] != $currentUser_id) {
+			$message = new Message();
+			$message->set_message('@' . $currentUsername . ' watered your weed: ' . $weed['content']);
+			$message->set_sender_id($currentUser_id);
+			$message->set_receiver_id($weed['user_id']);
+			$message->set_time(date('Y-m-d H:i:s'));
+			$message->set_type(Message::$MESSAGE_TYPE_NOTIFICATION);
+			$message->set_related_weed_id($weed_id);
+			$notification_message = $message->get_message();
+			$this->message_dao->create($message, $notification_message);
+		}
 	}
 	
 	public function unwater($weed_id) 
 	{		
 		$currentUser_id = $this->getCurrentUser();
-		$result = $this->weed_dao->setUserUnwaterWeed($currentUser_id, $weed_id);
+		$this->weed_dao->setUserUnwaterWeed($currentUser_id, $weed_id);
 	}
 	
 	private function parse_request_body() {

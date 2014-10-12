@@ -59,8 +59,8 @@ class WeedDAO extends BaseDAO
 			$this->db_conn->query($query);
 			$fetchedWeeds = $this->find_by_id($fectchId);
 			if (count($fetchedWeeds) <= 0) break;
-			foreach ($fetchedWeeds as &$weed) {
-				$fectchId = $weed['light_id'];
+			foreach ($fetchedWeeds as &$parent_weed) {
+				$fectchId = $parent_weed['light_id'];
 			}
 		}
 		if (count($weed->get_mentions()) > 0) {
@@ -111,7 +111,10 @@ class WeedDAO extends BaseDAO
 		return $weeds;
 	}
 	
-	private function find_by_id($id) {
+	/*
+	* this function just returns a plain weed that matches the give id. No extra information will be retrieved
+	*/
+	public function find_by_id($id) {
 		$condition = "weed.id = $id";
 		return $this->getWeedsWithCondition($condition);
 	}
