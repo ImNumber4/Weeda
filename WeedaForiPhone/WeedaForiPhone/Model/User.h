@@ -40,5 +40,8 @@
 
 
 - (MKMapItem*)mapItem;
+- (NSString *) getFormatedAddress;
+- (void) updateAddress:(CLPlacemark *)placeMark;
++ (NSString *) getFormatedAddressWithPlaceMark:(CLPlacemark *)placeMark;
 
 @end

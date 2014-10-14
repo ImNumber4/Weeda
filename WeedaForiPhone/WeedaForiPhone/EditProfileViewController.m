@@ -12,8 +12,9 @@
 
 @interface EditProfileViewController ()
 
-@property (nonatomic, strong) UIView *blurView;
+@property (nonatomic, strong) BlurView *blurView;
 @property BOOL addressChanged;
+@property (nonatomic, strong) CLPlacemark *suggestedAddress;
 
 @end
 
@@ -32,6 +33,20 @@ const NSInteger CITY_ROW = 3;
 const NSInteger STATE_ROW = 4;
 const NSInteger ZIP_ROW = 5;
 const NSInteger COUNTRY_ROW = 6;
+
+const NSInteger PADDING = 10;
+
+const NSInteger MAP_VIEW_IN_BLUR_VIEW_TAG = 11;
+const NSInteger MAP_QUESTION_LABEL_IN_BLUR_VIEW_TAG = 12;
+const NSInteger MAP_USE_MY_ADDRESS_IN_BLUR_VIEW_TAG = 13;
+const NSInteger MAP_RE_ENTER_ADDRESS_BUTTON_IN_BLUR_VIEW_TAG = 14;
+const NSInteger MAP_USE_SUGGESTED_ADDRESS_BUTTON_IN_BLUR_VIEW_TAG = 15;
+
+
+const NSInteger RESULT_IMAGE_VIEW_IN_BLUR_VIEW_TAG = 21;
+const NSInteger RESULT_LABEL_IN_BLUR_VIEW = 22;
+const NSInteger RESULT_TEXT_VIEW_IN_BLUR_VIEW = 23;
+const NSInteger RESULT_OKAY_BUTTON_IN_BLUR_VIEW = 24;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -93,37 +108,22 @@ const NSInteger COUNTRY_ROW = 6;
             cell.nameLabel.text = @"Street";
             cell.contentTextField.text = self.userObject.address_street;
             cell.contentTextField.placeholder = self.userObject.address_street;
-            if ([cell.contentTextField.text caseInsensitiveCompare:cell.contentTextField.placeholder] != NSOrderedSame) {
-                self.addressChanged = YES;
-            }
         } else if (indexPath.row == CITY_ROW) {
             cell.nameLabel.text = @"City";
             cell.contentTextField.text = self.userObject.address_city;
             cell.contentTextField.placeholder = self.userObject.address_city;
-            if ([cell.contentTextField.text caseInsensitiveCompare:cell.contentTextField.placeholder] != NSOrderedSame) {
-                self.addressChanged = YES;
-            }
         } else if (indexPath.row == STATE_ROW) {
             cell.nameLabel.text = @"State";
             cell.contentTextField.text = self.userObject.address_state;
             cell.contentTextField.placeholder = self.userObject.address_state;
-            if ([cell.contentTextField.text caseInsensitiveCompare:cell.contentTextField.placeholder] != NSOrderedSame) {
-                self.addressChanged = YES;
-            }
         } else if (indexPath.row == ZIP_ROW) {
             cell.nameLabel.text = @"Zip";
             cell.contentTextField.text = self.userObject.address_zip;
             cell.contentTextField.placeholder = self.userObject.address_zip;
-            if ([cell.contentTextField.text caseInsensitiveCompare:cell.contentTextField.placeholder] != NSOrderedSame) {
-                self.addressChanged = YES;
-            }
         } else if (indexPath.row == COUNTRY_ROW) {
             cell.nameLabel.text = @"Country";
             cell.contentTextField.text = self.userObject.address_country;
             cell.contentTextField.placeholder = self.userObject.address_country;
-            if ([cell.contentTextField.text caseInsensitiveCompare:cell.contentTextField.placeholder] != NSOrderedSame) {
-                self.addressChanged = YES;
-            }
         } else if (indexPath.row == PHONE_ROW) {
             cell.nameLabel.text = @"Phone";
             cell.contentTextField.text = self.userObject.phone;
@@ -139,7 +139,7 @@ const NSInteger COUNTRY_ROW = 6;
     return cell;
 }
 
-- (void) finishModifying:(NSString *)text sender:(UITableViewCell *)sender
+- (void) finishModifying:(NSString *)text sender:(UserInfoEditableCell *)sender
 {
     CGPoint cellPosition = [sender convertPoint:CGPointZero toView:self.table];
     NSIndexPath *indexPath = [self.table indexPathForRowAtPoint:cellPosition];
@@ -154,15 +154,32 @@ const NSInteger COUNTRY_ROW = 6;
     } else if (indexPath.section == STORE_INFO_SECTION) {
         if (indexPath.row == STREET_ROW) {
             [self.userObject setAddress_street:text];
+            if ([sender.contentTextField.text caseInsensitiveCompare:sender.contentTextField.placeholder] != NSOrderedSame) {
+                self.addressChanged = YES;
+            }
         } else if (indexPath.row == CITY_ROW) {
             [self.userObject setAddress_city:text];
+            if ([sender.contentTextField.text caseInsensitiveCompare:sender.contentTextField.placeholder] != NSOrderedSame) {
+                self.addressChanged = YES;
+            }
         } else if (indexPath.row == STATE_ROW) {
             [self.userObject setAddress_state:text];
+            if ([sender.contentTextField.text caseInsensitiveCompare:sender.contentTextField.placeholder] != NSOrderedSame) {
+                self.addressChanged = YES;
+            }
         } else if (indexPath.row == ZIP_ROW) {
             [self.userObject setAddress_zip:text];
+            self.addressChanged = YES;
+            if ([sender.contentTextField.text caseInsensitiveCompare:sender.contentTextField.placeholder] != NSOrderedSame) {
+                self.addressChanged = YES;
+            }
         } else if (indexPath.row == COUNTRY_ROW) {
             [self.userObject setAddress_country:text];
+            if ([sender.contentTextField.text caseInsensitiveCompare:sender.contentTextField.placeholder] != NSOrderedSame) {
+                self.addressChanged = YES;
+            }
         } else if (indexPath.row == PHONE_ROW) {
+            self.addressChanged = YES;
             [self.userObject setPhone:text];
         } else if (indexPath.row == STORENAME_ROW) {
             [self.userObject setStorename:text];
@@ -219,131 +236,255 @@ const NSInteger COUNTRY_ROW = 6;
 - (IBAction) save: (id) sender
 {
     [self.view endEditing:YES];
-//    [self.navigationItem.rightBarButtonItem setEnabled:NO];
-//    [self.navigationItem.leftBarButtonItem setEnabled:NO];
+    [self.navigationItem.rightBarButtonItem setEnabled:NO];
     
-    self.blurView = [[BlurView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+    if (!self.blurView) {
+        self.blurView = [[BlurView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+    }
+    [self.view addSubview:self.blurView];
     
-//    if (self.addressChanged) {
+    for (UIView *subView in self.blurView.subviews) {
+        //all the views we will add/have added will have non zero tag
+        if (subView.tag > 0) {
+            subView.hidden = true;
+        }
+    }
+    
+    if (self.addressChanged) {
         if (self.geocoder == nil) {
             self.geocoder = [[CLGeocoder alloc] init];
         }
-        NSString *searchAddress = [NSString stringWithFormat:@"%@, %@, %@, %@, %@", self.userObject.address_street, self.userObject.address_city, self.userObject.address_state, self.userObject.address_zip, self.userObject.address_country];
+        NSString *searchAddress = [self.userObject getFormatedAddress];
         [self.geocoder geocodeAddressString:searchAddress
                           completionHandler:^(NSArray* placemarks, NSError* error){
                               if (placemarks && placemarks.count > 0) {
-                                  MKMapView *mapView = [[MKMapView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.blurView.frame.size.width, 150.0)];
-                                  CLPlacemark *placeMark = [placemarks objectAtIndex:0];
-                                  CLLocationCoordinate2D zoomLocation= placeMark.location.coordinate;
-                                  self.userObject.latitude = [NSNumber numberWithDouble:placeMark.location.coordinate.latitude];
-                                  self.userObject.longitude = [NSNumber numberWithDouble:placeMark.location.coordinate.longitude];
-                                  MKCoordinateSpan span = MKCoordinateSpanMake(0.005, 0.005);
-                                  MKCoordinateRegion region = MKCoordinateRegionMake(zoomLocation, span);
-                                  [mapView setRegion:region animated:YES];
-                                  [mapView addAnnotation:self.userObject];
-                                  [self.blurView addSubview:mapView];
-                                  [mapView setCenter:self.blurView.center];
-                                  
-                                  UILabel *questionLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, self.blurView.frame.size.width - 20, 50.0)];
-                                  questionLabel.text = @"Is the new address correctly marked on the map?";
-                                  [questionLabel setFont:[UIFont systemFontOfSize:12]];
-                                  [questionLabel setTextAlignment:NSTextAlignmentCenter];
-                                  [self.blurView addSubview:questionLabel];
-                                  [questionLabel setCenter:CGPointMake(self.blurView.center.x, self.blurView.center.y - mapView.frame.size.height / 2.0 - 40.0)];
-                                  
-                                  UIButton *okayButton = [[UIButton alloc] initWithFrame:CGRectMake(0.0, 0.0, 100.0, 25.0)];
-                                  [okayButton setTitle:@"Yes" forState:UIControlStateNormal];
-                                  [okayButton.titleLabel setFont:[UIFont systemFontOfSize:12]];
-                                  [okayButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-                                  [okayButton setBackgroundColor:[ColorDefinition blueColor]];
-                                  [self.blurView addSubview:okayButton];
-                                  [okayButton setCenter:CGPointMake(self.blurView.center.x, self.blurView.center.y + mapView.frame.size.height / 2.0 + 40.0)];
-                                  
-                                  [self.view addSubview:self.blurView];
-                                  
-                                  
+                                  self.suggestedAddress = [placemarks objectAtIndex:0];
                               } else {
-                                  UIAlertView *errorAlert = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Sorry, we couldn't locate the place specified by you. Please make sure you enter correct address." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
-                                  [errorAlert show];
+                                  self.suggestedAddress = nil;
                               }
+                              
+                              NSString * userEnteredAddress = [self.userObject getFormatedAddress];
+                              
+                              MKMapView * mapView = (MKMapView *)[self.view viewWithTag:MAP_VIEW_IN_BLUR_VIEW_TAG];
+                              if (!mapView) {
+                                  CGSize statusBarSize = [[UIApplication sharedApplication] statusBarFrame].size;
+                                  mapView = [[MKMapView alloc] initWithFrame:CGRectMake(0.0, self.navigationController.navigationBar.frame.size.height + statusBarSize.height, self.blurView.frame.size.width, 260)];
+                                  mapView.tag = MAP_VIEW_IN_BLUR_VIEW_TAG;
+                                  [self.blurView addSubview:mapView];
+                                  UILongPressGestureRecognizer *longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(mapLongPress:)];
+                                  longPressGesture.minimumPressDuration = 1.0;
+                                  [mapView addGestureRecognizer:longPressGesture];
+                              }
+                              mapView.hidden = false;
+                              
+                              UITextView *mapQuestionLabel = (UITextView*)[self.view viewWithTag:MAP_QUESTION_LABEL_IN_BLUR_VIEW_TAG];
+                              if (!mapQuestionLabel) {
+                                  mapQuestionLabel = [[UITextView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.blurView.frame.size.width - PADDING, 110.0)];
+                                  mapQuestionLabel.tag = MAP_QUESTION_LABEL_IN_BLUR_VIEW_TAG;
+                                  mapQuestionLabel.editable = false;
+                                  mapQuestionLabel.selectable = false;
+                                  [mapQuestionLabel setTextAlignment:NSTextAlignmentLeft];
+                                  [mapQuestionLabel setBackgroundColor:[UIColor clearColor]];
+                                  [mapQuestionLabel setFont:[UIFont systemFontOfSize:12]];
+                                  [self.blurView addSubview:mapQuestionLabel];
+                                  [mapQuestionLabel setCenter:CGPointMake(self.blurView.center.x, mapView.frame.origin.y + mapView.frame.size.height + mapQuestionLabel.frame.size.height/2.0 + PADDING)];
+                              }
+                              mapQuestionLabel.hidden = false;
+                              if (self.suggestedAddress) {
+                                  mapQuestionLabel.text = [NSString stringWithFormat:@"You entered: %@. We found the best match as: %@. Before clicking save please long press on the correct spot on the map to move the pin to the right location if it is not correctly marked.", userEnteredAddress, [User getFormatedAddressWithPlaceMark:self.suggestedAddress]];
+                              } else {
+                                  mapQuestionLabel.text = [NSString stringWithFormat:@"You entered: %@. We could not find any matched location. Please make sure the address you entered is correct. If yes, you can still save the address that you entered and long press on the correct spot on the map to move the pin to the right location so it can be correctly marked.", userEnteredAddress];
+                              }
+                              
+                              CLLocationCoordinate2D zoomLocation;
+                              if (self.suggestedAddress) {
+                                  zoomLocation = self.suggestedAddress.location.coordinate;
+                              } else {
+                                  //default to seattle
+                                  zoomLocation = CLLocationCoordinate2DMake(47.6097, -122.3331);
+                              }
+                              self.userObject.latitude = [NSNumber numberWithDouble:zoomLocation.latitude];
+                              self.userObject.longitude = [NSNumber numberWithDouble:zoomLocation.longitude];
+                              MKCoordinateSpan span = self.suggestedAddress ? MKCoordinateSpanMake(0.005, 0.005) : mapView.region.span;
+                              MKCoordinateRegion region = MKCoordinateRegionMake(zoomLocation, span);
+                              [mapView setRegion:region animated:YES];
+                              [mapView addAnnotation:self.userObject];
+                              
+                              UIButton *useSuggestedAddressButton = (UIButton *)[self.view viewWithTag:MAP_USE_SUGGESTED_ADDRESS_BUTTON_IN_BLUR_VIEW_TAG];
+                              if (!useSuggestedAddressButton) {
+                                  useSuggestedAddressButton = [[UIButton alloc] initWithFrame:CGRectMake(0.0, 0.0, self.blurView.frame.size.width - PADDING * 2, 25.0)];
+                                  useSuggestedAddressButton.tag = MAP_USE_SUGGESTED_ADDRESS_BUTTON_IN_BLUR_VIEW_TAG;
+                                  [useSuggestedAddressButton setTitle:@"Use the suggested address & Save" forState:UIControlStateNormal];
+                                  [self.blurView addSubview:useSuggestedAddressButton];
+                                  [useSuggestedAddressButton setCenter:CGPointMake(self.blurView.center.x, self.blurView.center.y)];
+                                  [useSuggestedAddressButton setFrame:CGRectMake(useSuggestedAddressButton.frame.origin.x, mapQuestionLabel.frame.origin.y + mapQuestionLabel.frame.size.height + PADDING, useSuggestedAddressButton.frame.size.width, useSuggestedAddressButton.frame.size.height)];
+                                  [useSuggestedAddressButton addTarget:self action:@selector(saveWithSuggestedAddress:) forControlEvents:UIControlEventTouchUpInside];
+                              }
+                              useSuggestedAddressButton.hidden = false;
+                              if (self.suggestedAddress) {
+                                  [self decorateButton:useSuggestedAddressButton color:[ColorDefinition greenColor]];
+                                  useSuggestedAddressButton.enabled = true;
+                              } else {
+                                  [self decorateButton:useSuggestedAddressButton color:[ColorDefinition grayColor]];
+                                  useSuggestedAddressButton.enabled = false;
+                              }
+                              
+                              UIButton *useMyAddressButton = (UIButton *)[self.view viewWithTag:MAP_USE_MY_ADDRESS_IN_BLUR_VIEW_TAG];
+                              if (!useMyAddressButton) {
+                                  useMyAddressButton = [[UIButton alloc] initWithFrame:CGRectMake(0.0, 0.0, self.blurView.frame.size.width - PADDING * 2, 25.0)];
+                                  useMyAddressButton.tag = MAP_USE_MY_ADDRESS_IN_BLUR_VIEW_TAG;
+                                  [self decorateButton:useMyAddressButton color:[ColorDefinition blueColor]];
+                                  [useMyAddressButton setTitle:@"Use the address I entered & Save" forState:UIControlStateNormal];
+                                  [self.blurView addSubview:useMyAddressButton];
+                                  [useMyAddressButton setCenter:CGPointMake(self.blurView.center.x, self.blurView.center.y)];
+                                  [useMyAddressButton setFrame:CGRectMake(useMyAddressButton.frame.origin.x, useSuggestedAddressButton.frame.origin.y + useSuggestedAddressButton.frame.size.height + PADDING, useMyAddressButton.frame.size.width, useMyAddressButton.frame.size.height)];
+                                  [useMyAddressButton addTarget:self action:@selector(saveWithEnteredAddress:) forControlEvents:UIControlEventTouchUpInside];
+                              }
+                              useMyAddressButton.hidden = false;
+                              
+                              UIButton *reenterAddressButton = (UIButton *)[self.view viewWithTag:MAP_RE_ENTER_ADDRESS_BUTTON_IN_BLUR_VIEW_TAG];
+                              if (!reenterAddressButton) {
+                                  reenterAddressButton = [[UIButton alloc] initWithFrame:CGRectMake(0.0, 0.0, self.blurView.frame.size.width - PADDING * 2, 25.0)];
+                                  reenterAddressButton.tag = MAP_RE_ENTER_ADDRESS_BUTTON_IN_BLUR_VIEW_TAG;
+                                  [self decorateButton:reenterAddressButton color:[ColorDefinition orangeColor]];
+                                  [reenterAddressButton setTitle:@"I want to re-enter the address" forState:UIControlStateNormal];
+                                  [self.blurView addSubview:reenterAddressButton];
+                                  [reenterAddressButton setCenter:CGPointMake(self.blurView.center.x, self.blurView.center.y)];
+                                  [reenterAddressButton setFrame:CGRectMake(reenterAddressButton.frame.origin.x, useMyAddressButton.frame.origin.y + useMyAddressButton.frame.size.height + PADDING, reenterAddressButton.frame.size.width, reenterAddressButton.frame.size.height)];
+                                  [reenterAddressButton addTarget:self action:@selector(reenterClicked:) forControlEvents:UIControlEventTouchUpInside];
+                              }
+                              reenterAddressButton.hidden = false;
+                              
                           }
          ];
-    
-//    }
-    
-//    UIImage * image = [UIImage imageNamed:@"Yes.png"];
-//    UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
-//    [self.blurView addSubview:imageView];
-//    imageView.hidden = YES;
-//    [imageView setFrame:CGRectMake(0.0, 0.0, 40.0, 40.0)];
-//    [imageView setCenter:CGPointMake(self.blurView.center.x, self.blurView.center.y - 150)];
-//    UITextView *label = [[UITextView alloc] initWithFrame:CGRectMake(0.0, 0.0, 250.0, 50.0)];
-//    label.text = @"Updating...";
-//    [label setFont:[UIFont systemFontOfSize:12]];
-//    [label setTextAlignment:NSTextAlignmentCenter];
-//    label.backgroundColor = [UIColor clearColor];
-//    [label setEditable:NO];
-//    [label setSelectable:NO];
-//    [self.blurView addSubview:label];
-    
-//    [label setCenter:CGPointMake(imageView.center.x, imageView.center.y)];
-//    [label setFrame:CGRectMake(label.frame.origin.x, imageView.frame.origin.y + imageView.frame.size.height + 10, label.frame.size.width, label.frame.size.height)];
-    
-//    [self.view addSubview:self.blurView];
-    
-//    [[RKObjectManager sharedManager] postObject:self.userObject path:@"user/update" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-//        imageView.hidden = NO;
-//        if(mappingResult.array != nil && [mappingResult.array count] > 0) {
-//            
-//            [imageView setImage:[UIImage imageNamed:@"No.png"]];
-//            [label setTextAlignment:NSTextAlignmentLeft];
-//            label.text = @"Failed to update profile. The following things need to be corrected:";
-//            CGSize tvsize = [label sizeThatFits:CGSizeMake(label.frame.size.width, label.frame.size.height)];
-//            [label setFrame:CGRectMake(label.frame.origin.x, label.frame.origin.y, label.frame.size.width, tvsize.height)];
-//            
-//            UITextView *errorMessageView = [[UITextView alloc] initWithFrame:CGRectMake(0.0, 0.0, 250.0, 50.0)];
-//            NSMutableString *errorMessage = [[NSMutableString alloc] init];
-//            for (RKErrorMessage *error in mappingResult.array) {
-//                [errorMessage appendString:@" * "];
-//                [errorMessage appendString:error.errorMessage];
-//                [errorMessage appendString:@"\n"];
-//            }
-//            errorMessageView.text = errorMessage;
-//            [self.blurView addSubview:errorMessageView];
-//            tvsize = [errorMessageView sizeThatFits:CGSizeMake(label.frame.size.width, label.frame.size.height)];
-//            [errorMessageView setFrame:CGRectMake(label.frame.origin.x, label.frame.origin.y + label.frame.size.height + 10, label.frame.size.width, MIN(200.0,tvsize.height))];
-//            [errorMessageView setFont:[UIFont systemFontOfSize:12]];
-//            [errorMessageView setTextAlignment:NSTextAlignmentLeft];
-//            errorMessageView.backgroundColor = [UIColor clearColor];
-//            [errorMessageView setEditable:NO];
-//            [errorMessageView setSelectable:NO];
-//            
-//            UIButton *okayButton = [[UIButton alloc] initWithFrame:CGRectMake(0.0, 0.0, 100.0, 25.0)];
-//            [okayButton setTitle:@"Got it" forState:UIControlStateNormal];
-//            [okayButton.titleLabel setFont:[UIFont systemFontOfSize:12]];
-//            [okayButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-//            [okayButton setBackgroundColor:[ColorDefinition blueColor]];
-//            [self.blurView addSubview:okayButton];
-//            [okayButton setCenter:CGPointMake(self.blurView.center.x, self.blurView.center.y)];
-//            [okayButton setFrame:CGRectMake(okayButton.frame.origin.x, errorMessageView.frame.origin.y + errorMessageView.frame.size.height + 10, okayButton.frame.size.width, okayButton.frame.size.height)];
-//            [okayButton addTarget:self action:@selector(okayClicked:) forControlEvents:UIControlEventTouchUpInside];
-//            [self.navigationItem.leftBarButtonItem setEnabled:YES];
-//        } else {
-//            label.text = @"Successfully updated profile.";
-//            [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(cancel:) userInfo:nil repeats:YES];
-//        }
-//    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-//        NSLog(@"Failed to save post: %@", error.localizedRecoverySuggestion);
-//        [self.navigationItem.rightBarButtonItem setEnabled:YES];
-//        [self.navigationItem.leftBarButtonItem setEnabled:YES];
-//    }];
+    } else {
+        UIImageView *imageView = (UIImageView *)[self.view viewWithTag:RESULT_IMAGE_VIEW_IN_BLUR_VIEW_TAG];
+        if (!imageView) {
+            imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0, 0.0, 40.0, 40.0)];
+            imageView.tag = RESULT_IMAGE_VIEW_IN_BLUR_VIEW_TAG;
+            [self.blurView addSubview:imageView];
+            [imageView setFrame:CGRectMake(0.0, 0.0, 40.0, 40.0)];
+            [imageView setCenter:CGPointMake(self.blurView.center.x, self.blurView.center.y - 150)];
+        }
+        imageView.hidden = YES;
+        
+        UITextView *resultLabel = (UITextView *)[self.view viewWithTag:RESULT_LABEL_IN_BLUR_VIEW];
+        if (!resultLabel) {
+            resultLabel = [[UITextView alloc] initWithFrame:CGRectMake(0.0, 0.0, 250.0, 50.0)];
+            resultLabel.tag = RESULT_LABEL_IN_BLUR_VIEW;
+            resultLabel.text = @"Updating...";
+            [resultLabel setFont:[UIFont systemFontOfSize:12]];
+            [resultLabel setTextAlignment:NSTextAlignmentCenter];
+            resultLabel.backgroundColor = [UIColor clearColor];
+            [resultLabel setEditable:NO];
+            [resultLabel setSelectable:NO];
+            [self.blurView addSubview:resultLabel];
+            [resultLabel setCenter:CGPointMake(imageView.center.x, imageView.center.y)];
+            [resultLabel setFrame:CGRectMake(resultLabel.frame.origin.x, imageView.frame.origin.y + imageView.frame.size.height + PADDING, resultLabel.frame.size.width, resultLabel.frame.size.height)];
+        }
+        resultLabel.hidden = false;
+        
+        [[RKObjectManager sharedManager] postObject:self.userObject path:@"user/update" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+            imageView.hidden = NO;
+            if(mappingResult.array != nil && [mappingResult.array count] > 0) {
+                
+                [imageView setImage:[UIImage imageNamed:@"No.png"]];
+                [resultLabel setTextAlignment:NSTextAlignmentLeft];
+                resultLabel.text = @"Failed to update profile. The following things need to be corrected:";
+                CGSize tvsize = [resultLabel sizeThatFits:CGSizeMake(resultLabel.frame.size.width, resultLabel.frame.size.height)];
+                [resultLabel setFrame:CGRectMake(resultLabel.frame.origin.x, resultLabel.frame.origin.y, resultLabel.frame.size.width, tvsize.height)];
+                
+                UITextView *errorMessageView = (UITextView *)[self.view viewWithTag:RESULT_TEXT_VIEW_IN_BLUR_VIEW];
+                if (!errorMessageView) {
+                    errorMessageView = [[UITextView alloc] initWithFrame:CGRectMake(0.0, 0.0, 250.0, 50.0)];
+                    errorMessageView.tag = RESULT_TEXT_VIEW_IN_BLUR_VIEW;
+                    [self.blurView addSubview:errorMessageView];
+                    [errorMessageView setFont:[UIFont systemFontOfSize:12]];
+                    [errorMessageView setTextAlignment:NSTextAlignmentLeft];
+                    errorMessageView.backgroundColor = [UIColor clearColor];
+                    [errorMessageView setEditable:NO];
+                    [errorMessageView setSelectable:NO];
+                }
+                errorMessageView.hidden = false;
+                
+                NSMutableString *errorMessage = [[NSMutableString alloc] init];
+                for (RKErrorMessage *error in mappingResult.array) {
+                    [errorMessage appendString:@" * "];
+                    [errorMessage appendString:error.errorMessage];
+                    [errorMessage appendString:@"\n"];
+                }
+                errorMessageView.text = errorMessage;
+                tvsize = [errorMessageView sizeThatFits:CGSizeMake(resultLabel.frame.size.width, resultLabel.frame.size.height)];
+                [errorMessageView setFrame:CGRectMake(resultLabel.frame.origin.x, resultLabel.frame.origin.y + resultLabel.frame.size.height + PADDING, resultLabel.frame.size.width, MIN(200.0,tvsize.height))];
+                
+                UIButton *okayButton = (UIButton *)[self.view viewWithTag:RESULT_OKAY_BUTTON_IN_BLUR_VIEW];
+                if (!okayButton) {
+                    okayButton = [[UIButton alloc] initWithFrame:CGRectMake(0.0, 0.0, 100, 25.0)];
+                    okayButton.tag = RESULT_OKAY_BUTTON_IN_BLUR_VIEW;
+                    [self decorateButton:okayButton color:[ColorDefinition blueColor]];
+                    [okayButton setTitle:@"Got it" forState:UIControlStateNormal];
+                    [self.blurView addSubview:okayButton];
+                    [okayButton setCenter:CGPointMake(self.blurView.center.x, self.blurView.center.y)];
+                    [okayButton setFrame:CGRectMake(okayButton.frame.origin.x, errorMessageView.frame.origin.y + errorMessageView.frame.size.height + PADDING, okayButton.frame.size.width, okayButton.frame.size.height)];
+                    [okayButton addTarget:self action:@selector(reenterClicked:) forControlEvents:UIControlEventTouchUpInside];
+                }
+                okayButton.hidden = false;
+                
+                [self.navigationItem.leftBarButtonItem setEnabled:YES];
+            } else {
+                [imageView setImage:[UIImage imageNamed:@"Yes.png"]];
+                resultLabel.text = @"Successfully updated profile.";
+                [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(cancel:) userInfo:nil repeats:YES];
+            }
+        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+            NSLog(@"Failed to save post: %@", error.localizedRecoverySuggestion);
+            [self.navigationItem.rightBarButtonItem setEnabled:YES];
+            [self.navigationItem.leftBarButtonItem setEnabled:YES];
+        }];
+    }
+}
+
+- (void)mapLongPress:(UILongPressGestureRecognizer *)gestureRecognizer{
+    if(gestureRecognizer.state == UIGestureRecognizerStateBegan){
+        MKMapView * mapView = (MKMapView *)[self.view viewWithTag:MAP_VIEW_IN_BLUR_VIEW_TAG];
+        CGPoint touchLocation = [gestureRecognizer locationInView:mapView];
+        
+        CLLocationCoordinate2D coordinate = [mapView convertPoint:touchLocation toCoordinateFromView:mapView];
+        self.userObject.latitude = [NSNumber numberWithDouble:coordinate.latitude];
+        self.userObject.longitude = [NSNumber numberWithDouble:coordinate.longitude];
+        for (id<MKAnnotation> annotation in mapView.annotations) {
+            [mapView removeAnnotation:annotation];
+        }
+        [mapView addAnnotation:self.userObject];
+    }
+}
+
+- (void) decorateButton:(UIButton *) button color:(UIColor *) color {
+    button.layer.cornerRadius = 5;
+    button.layer.borderColor = color.CGColor;
+    button.layer.borderWidth = 1;
+    [button.titleLabel setFont:[UIFont boldSystemFontOfSize:12]];
+    [button setTitleColor:color forState:UIControlStateNormal];
+    [button setBackgroundColor:[UIColor clearColor]];
 }
 
 - (IBAction) cancel: (id) sender {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (IBAction) okayClicked: (id) sender {
+- (IBAction) saveWithSuggestedAddress: (id) sender {
+    [self.userObject updateAddress:self.suggestedAddress];
+    self.addressChanged = false;
+    [self save:self];
+}
+
+- (IBAction) saveWithEnteredAddress: (id) sender {
+    self.addressChanged = false;
+    [self save:self];
+}
+
+- (IBAction) reenterClicked: (id) sender {
+    [self.table reloadData];
     [self.blurView removeFromSuperview];
     [self.navigationItem.rightBarButtonItem setEnabled:YES];
 }

@@ -61,5 +61,26 @@
     return mapItem;
 }
 
+- (NSString *) getFormatedAddress {
+    return [User _getFormatedAddress:self.address_street city:self.address_city state:self.address_state zip:self.address_zip country:self.address_country];
+}
+
++ (NSString *) _getFormatedAddress:(NSString *) street city:(NSString*) city state:(NSString *) state zip:(NSString *) zip country:(NSString *)country {
+    return [NSString stringWithFormat:@"%@, %@, %@, %@, %@", street, city, state, zip, country];
+}
+
+// please make sure this method is in sync with update address
++ (NSString *) getFormatedAddressWithPlaceMark:(CLPlacemark *)placeMark {
+    return [User _getFormatedAddress:[NSString stringWithFormat:@"%@ %@", placeMark.subThoroughfare, placeMark.thoroughfare] city:placeMark.locality state:placeMark.administrativeArea zip:placeMark.postalCode country:placeMark.country];
+}
+
+- (void) updateAddress:(CLPlacemark *)placeMark
+{
+    self.address_street = [NSString stringWithFormat:@"%@ %@", placeMark.subThoroughfare, placeMark.thoroughfare];
+    self.address_city = placeMark.locality;
+    self.address_state = placeMark.administrativeArea;
+    self.address_country = placeMark.country;
+    self.address_zip = placeMark.postalCode;
+}
 
 @end
