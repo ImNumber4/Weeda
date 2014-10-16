@@ -68,6 +68,7 @@ const NSInteger USER_LIST_TAG = 1;
         fetchRequest.sortDescriptors = @[descriptor];
         NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"type = 'message' and (participant_id = %@)", self.participant_id]];
         fetchRequest.predicate = predicate;
+        [fetchRequest setFetchBatchSize:10];
         // Setup fetched results
         self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                                                                             managedObjectContext:[RKManagedObjectStore defaultStore].mainQueueManagedObjectContext

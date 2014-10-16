@@ -734,7 +734,7 @@
                                 </connections>
                             </mapView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="52" sectionHeaderHeight="22" sectionFooterHeight="22" id="44t-Tf-H5u">
-                                <rect key="frame" x="1" y="185" width="319" height="204"/>
+                                <rect key="frame" x="1" y="185" width="319" height="295"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
@@ -1136,11 +1136,11 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="JEh-w8-48C"/>
-        <segue reference="i1k-fC-0aj"/>
-        <segue reference="aBn-FK-paW"/>
-        <segue reference="qcm-SY-fma"/>
-        <segue reference="Cu1-Di-ade"/>
+        <segue reference="dSx-Us-Hdx"/>
         <segue reference="Th6-6F-Dxp"/>
+        <segue reference="gr4-Yl-zIz"/>
+        <segue reference="Z8M-XG-GdH"/>
+        <segue reference="aBn-FK-paW"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="0.24313727021217346" green="0.64705884456634521" blue="0.24705883860588074" alpha="1" colorSpace="deviceRGB"/>
 </document>

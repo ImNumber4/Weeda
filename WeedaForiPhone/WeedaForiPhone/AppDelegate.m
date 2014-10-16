@@ -22,11 +22,11 @@
 
 @implementation AppDelegate
 
+NSString * _deviceToken;
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // Override point for customization after application launch.
     [self setupRestKit];
-    
     // Let the device know we want to receive push notifications
     if ([[[UIDevice currentDevice] systemVersion] doubleValue] >= 8.0) {
         UIUserNotificationSettings* notificationSettings = [UIUserNotificationSettings settingsForTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert) categories:nil];
@@ -37,6 +37,37 @@
     }
     self.badgeCount = [UIApplication sharedApplication].applicationIconBadgeNumber;
     return YES;
+}
+
+- (void) setCurrentUser:(User *)currentUser
+{
+    _currentUser = currentUser;
+    [self resetPersisiStores];
+    [self setupRestKit];
+}
+
+- (void) registerDeviceToken
+{
+    if (_deviceToken) {
+        [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"user/registerDevice/%@", _deviceToken] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+            RKLogError(@"registerDevice failed with error: %@", error);
+        }];
+    }
+}
+
+- (void) resetPersisiStores
+{
+    [[RKObjectManager sharedManager] cancelAllObjectRequestOperationsWithMethod:RKRequestMethodAny matchingPathPattern:@"/"];
+    
+    [[RKObjectManager sharedManager].operationQueue cancelAllOperations];
+    
+    [RKObjectManager sharedManager].managedObjectStore.managedObjectCache = nil;
+    // Clear our object manager
+    [RKObjectManager setSharedManager:nil];
+    
+    // Clear our default store
+    [RKManagedObjectStore setDefaultStore:nil];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
@@ -70,8 +101,8 @@
 
 - (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken
 {
-    self.deviceToken = [[[deviceToken description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]] stringByReplacingOccurrencesOfString:@" " withString:@""];
-    NSLog(@"Got device token as %@", self.deviceToken);
+    _deviceToken = [[[deviceToken description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]] stringByReplacingOccurrencesOfString:@" " withString:@""];
+    NSLog(@"Got device token as %@", _deviceToken);
 }
 
 - (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError*)error
@@ -79,9 +110,9 @@
 	NSLog(@"Failed to get token, error: %@", error);
 }
 
-- (void)setupRestKit{
+- (void) setupRestKit {
     
-    RKObjectManager *manager = [RKObjectManager managerWithBaseURL:[NSURL URLWithString:@"http://www.cannablaze.com/"]];
+    RKObjectManager *manager = [RKObjectManager managerWithBaseURL:[NSURL URLWithString:ROOT_URL]];
     
     //[[manager HTTPClient] setDefaultHeader:@"X-Parse-REST-API-Key" value:@"your key"];
     //[[manager HTTPClient] setDefaultHeader:@"X-Parse-Application-Id" value:@"your key"];
@@ -98,8 +129,7 @@
     manager.managedObjectStore = managedObjectStore;
     
     RKObjectMapping *errorMapping = [RKObjectMapping mappingForClass:[RKErrorMessage class]];
-    [errorMapping addPropertyMapping:
-    [RKAttributeMapping attributeMappingFromKeyPath:nil toKeyPath:@"errorMessage"]];
+    [errorMapping addPropertyMapping:[RKAttributeMapping attributeMappingFromKeyPath:nil toKeyPath:@"errorMessage"]];
     
     NSDictionary *parentObjectMapping = @{
                                           @"id" : @"id",
@@ -337,10 +367,13 @@
     /**
      Complete Core Data stack initialization
      */
-    [managedObjectStore createPersistentStoreCoordinator];
+    if (!managedObjectStore.persistentStoreCoordinator) {
+        [managedObjectStore createPersistentStoreCoordinator];
+    }
     
-    NSString *storePath = [RKApplicationDataDirectory() stringByAppendingPathComponent:@"Weeda.sqlite"];
     
+    NSString *storePath = [RKApplicationDataDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"%@Weeda.sqlite", (self.currentUser.id == nil?@"":self.currentUser.id)]];
+    NSLog(@"storePath %@", storePath);
     NSError *error;
     
     NSPersistentStore *persistentStore = [managedObjectStore addSQLitePersistentStoreAtPath:storePath fromSeedDatabaseAtPath:nil withConfiguration:nil options:@{NSMigratePersistentStoresAutomaticallyOption:@YES, NSInferMappingModelAutomaticallyOption:@YES} error:&error];

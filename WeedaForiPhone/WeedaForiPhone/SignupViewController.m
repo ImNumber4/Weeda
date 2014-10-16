@@ -77,8 +77,7 @@ bool availableUsername = false;
 }
 
 - (IBAction)signupClicked:(id)sender {
-    RKManagedObjectStore *objectStore = [[RKObjectManager sharedManager] managedObjectStore];
-    User *user = [NSEntityDescription insertNewObjectForEntityForName:@"User" inManagedObjectContext:objectStore.mainQueueManagedObjectContext];
+    User *user = [[User alloc] init];
     user.id = [NSNumber numberWithInt:-1];
     user.username = self.txtUsername.text;
     user.password = self.txtPassword.text;
@@ -165,7 +164,7 @@ bool availableUsername = false;
 
 - (BOOL)validateUsername:(NSString *)username
 {
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://localhost/user/username/%@", username]];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@user/username/%@", ROOT_URL, username]];
     
     NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReturnCacheDataElseLoad timeoutInterval:60];
     
@@ -202,8 +201,7 @@ bool availableUsername = false;
 
 - (void) setCurrentUser
 {
-    RKManagedObjectStore *objectStore = [[RKObjectManager sharedManager] managedObjectStore];
-    User *user = [NSEntityDescription insertNewObjectForEntityForName:@"User" inManagedObjectContext:objectStore.mainQueueManagedObjectContext];
+    User *user = [[User alloc] init];
 
     NSArray *cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookies];
     for (NSHTTPCookie *cookie in cookies) {

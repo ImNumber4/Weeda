@@ -134,10 +134,7 @@ class UserController extends Controller
 		}
 		
 		if ($password == $user['password']) {
-			//login success
-			setcookie('user_id', $user['id'], time() + (86400 * 7), '/');
-			setcookie('username', $user['username'], time() + (86400 * 7), '/');
-			setcookie('password', $user['password'], time() + (86400 * 7), '/');
+			$this->update_cookie($user);
 			return json_encode(array("user" => $user));
 		} else {
 			throw new InvalidRequestException('user/password do not match record.');
@@ -148,6 +145,8 @@ class UserController extends Controller
 		try {
 			$currentUser_id = $this->getCurrentUser();
 			setcookie('user_id', '', time() - 3600);
+			setcookie('username', '', time() - 3600);
+			setcookie('password', '', time() - 3600);
 		} catch (DependencyDataMissingException $e) {
 			//already log out.
 			return;
@@ -155,30 +154,42 @@ class UserController extends Controller
 	}
 	
 	public function signup() {
-		$user = $this->parse_body_request();
+		$data = $this->parse_body_request();
+		$invalidReasons = $this->check_para($data);
+		if (!empty($invalidReasons)) {
+			throw new InvalidRequestException("Inputs are not valid due to $invalidReasons");
+		}
+		$user = $this->convert_data_to_user($data);
 		$result = $this->user_dao->create($user);
 		$user->set_id($result);
-		$this->update_cookie($user);	
+		$userPropertyMap = array('id'=>$user->get_id(), 'username'=>$user->get_username(), 'password'=>$user->get_password());
+		$this->update_cookie($userPropertyMap);	
 		
 		return json_encode(array('user' => $user));
 	}
 	
 	private function update_cookie($user){
-		setcookie('user_id', $user->get_id(), time() + (86400 * 7), '/');
-		setcookie('username', $user->get_username(), time() + (86400 * 7), '/');
-		setcookie('password', $user->get_password(), time() + (86400 * 7), '/');
+		error_log($user['id']);
+		error_log($user['username']);
+		error_log($user['password']);
+		setcookie('user_id', $user['id'], time() + (86400 * 7), '/');
+		setcookie('username', $user['username'], time() + (86400 * 7), '/');
+		setcookie('password', $user['password'], time() + (86400 * 7), '/');
 	}
 	
 	public function update() {
-		$user = $this->parse_body_request();
+		$data = $this->parse_body_request();
+		$invalidReasons = $this->check_para($data);
+		if (!empty($invalidReasons)) {
+			return json_encode(array('errors' => $invalidReasons));
+		}
+		$user = $this->convert_data_to_user($data);
 		$user_id = $this->getCurrentUser();
 		if ($user_id != $user->get_id()) {
 			throw new InvalidRequestException('Current user id is '. $user_id . ' and it is trying to modify user data for user id ' . $user->get_id() . '.');
 		}
 		$result = $this->user_dao->update($user);
-		$this->update_cookie($user);
-		$errors = array();
-		return json_encode(array('errors' => $errors));
+		return json_encode(array('errors' => array()));
 	}
 	
 	public function upload() {
@@ -190,23 +201,10 @@ class UserController extends Controller
 		error_log('Image tmp name: ' . $_FILES['avatar']['tmp_name']);
 		
 		if (!saveAvatarToServer($_FILES['avatar'], $user_id)) {
-			header('Content-type: application/json');
-			http_response_code(500);
-			return;
+			throw new DependencyFailureException('Failed to store avatar.');
 		}
 		
-		$user = $this->user_dao->find_by_user_id($user_id);	
-		if (!$user) {
-			error_log('Did not find user by user id: ' . $user_id);
-			header('Content-type: application/json');
-			http_response_code(500);
-			return;
-		}
-		$user->set_has_avatar(1);
-		$this->user_dao->update_has_avatar($user);
-		
-		header('Content-type: application/json');
-		http_response_code(200);
+		$this->user_dao->update_has_avatar($user_id);
 	}
 	
 	public function username($username) {
@@ -218,9 +216,8 @@ class UserController extends Controller
 	}
 	
 	public function avatar($user_id) {
-// 		$currentUser_id = $_COOKIE['user_id'];
 		if (!isset($user_id)) {
-			throw new InvalidRequestException('current user is not set');
+			throw new InvalidRequestException('user_id user is not set');
 		}
 		
 		//Get the user avatar
@@ -239,12 +236,10 @@ class UserController extends Controller
 			throw new InvalidRequestException('request has to be either POST or PUT.');
 		}
 		
-		$data = json_decode(file_get_contents('php://input'));
-		$invalidReason = $this->check_para($data);
-		if ($invalidReason) {
-			throw new InvalidRequestException("Inputs are not valid due to $invalidReason");
-		}
-		
+		return json_decode(file_get_contents('php://input'));
+	}
+	
+	private function convert_data_to_user($data) {
 		$user = new User();
 		$user->set_id($data->id);
 		$user->set_username($data->username);
@@ -271,27 +266,73 @@ class UserController extends Controller
 	}
 	
 	private function check_para($data) {
+		$invalidReasons = array();
+		
 		$username = trim($data->username);
 		if ($username == '') {
-			return 'Input error, username is null.';
+			$invalidReasons[] = 'Username can not be empty';
 		}
 		
 		$password = trim($data->password);
 		if ($password == '') {
-			return 'Input error, password is null';
+			$invalidReasons[] = 'Password can not be empty';
 		}
 		
 		$email = trim($data->email);
 		if ($email == '') {
-			return 'Input error, email is null';
+			$invalidReasons[] = 'Email can not be empty';
+		} else {
+			if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+			    $invalidReasons[] = "Email address $email is not valid.";
+			}
 		}
 		
 		$time = trim($data->time);
 		if ($time == '') {
-			return 'Input error, time is null';
+			$invalidReasons[] = 'Time can not be empty';
 		}
 		
-		return null;
+		$user_type = trim($data->user_type);
+		if ($user_type && strtolower($user_type) != User::$TYPE_USER) {
+			$storename = trim($data->storename);
+			if ($storename == '') {
+				$invalidReasons[] = 'Storename can not be empty';
+			}
+			$address_street = trim($data->address_street);
+			if ($address_street == '') {
+				$invalidReasons[] = 'Street can not be empty';
+			}
+			$address_city = trim($data->address_city);
+			if ($address_city == '') {
+				$invalidReasons[] = 'City can not be empty';
+			}
+			$address_state = trim($data->address_state);
+			if ($address_state == '') {
+				$invalidReasons[] = 'State can not be empty';
+			}
+			$address_country = trim($data->address_country);
+			if ($address_country == '') {
+				$invalidReasons[] = 'Country can not be empty';
+			}
+			$address_zip = trim($data->address_zip);
+			if ($address_zip == '') {
+				$invalidReasons[] = 'ZIP code can not be empty';
+			}
+			$phone = trim($data->phone);
+			if ($phone == '') {
+				$invalidReasons[] = 'Phone can not be empty';
+			}
+			$latitude = trim($data->latitude);
+			if ($latitude == '') {
+				$invalidReasons[] = 'Latitude can not be empty';
+			}
+			$longitude = trim($data->longitude);
+			if ($longitude == '') {
+				$invalidReasons[] = 'Longitude can not be empty';
+			}
+		}
+		
+		return $invalidReasons;
 	}
 }
 ?>

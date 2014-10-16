@@ -22,7 +22,7 @@ class UserDAO extends BaseDAO
 			.'username = \'' . $user->get_username() . '\', '
 			.'description = \'' . $user->get_description() . '\'';
 		
-		if ($user->get_user_type() && strtolower($user->get_user_type()) != 'user') {
+		if ($user->get_user_type() && strtolower($user->get_user_type()) != User::$TYPE_USER) {
 			$query = $query . ', storename = \'' . $user->get_storename() . '\', '
 				.'address_street = \'' . $user->get_address_street() . '\', '
 				.'address_city = \'' . $user->get_address_city() . '\', '
@@ -39,9 +39,9 @@ class UserDAO extends BaseDAO
 		$this->db_conn->query($query);
 	}
 	
-	public function update_has_avatar($user) {
+	public function update_has_avatar($user_id, $has_avatar) {
 		$query = 'UPDATE user SET has_avatar = ' 
-				. $user->get_has_avatar() . ' WHERE id = ' . $user->get_id();
+				. ($has_avatar ? '1' : '0') . ' WHERE id = ' . $user_id;
 
 		$this->db_conn->query($query);
 	}

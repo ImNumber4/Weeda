@@ -85,7 +85,6 @@
     } else {
         sleep(2);
         [UIView animateWithDuration:0.5 animations:^{
-//            self.titleImageView.center = CGPointMake(self.titleImageView.center.x, 100);
             self.titleImage.center = CGPointMake(self.titleImage.center.x, 100);
         } completion:^(BOOL finished) {
             [UIView animateWithDuration:0.5 animations:^{
@@ -213,12 +212,7 @@
     }
     
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    if (appDelegate.deviceToken) {
-        [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"user/registerDevice/%@", appDelegate.deviceToken] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-            RKLogError(@"registerDevice failed with error: %@", error);
-        }];
-    }
+    
     appDelegate.currentUser = self.currentUser;
 }
 
@@ -235,6 +229,10 @@
         
         [[RKObjectManager sharedManager] postObject:self.currentUser path:@"user/login" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
             NSLog(@"Response: %@", mappingResult);
+            NSArray *cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookies];
+            if (!cookies && cookies.count > 0) {
+                NSLog(@"Found cookie");
+            }
             [self setCurrentUser];
             [self performSegueWithIdentifier:@"masterView" sender:self];
         } failure:^(RKObjectRequestOperation *operation, NSError *error) {
@@ -283,6 +281,7 @@
     
     NSHTTPCookie *cookie = [NSHTTPCookie cookieWithProperties:cookieProperties];
     [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie];
+    [[NSUserDefaults standardUserDefaults] synchronize];
     return cookie;
 }
 

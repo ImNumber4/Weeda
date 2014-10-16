@@ -27,6 +27,8 @@ class User
 	private $latitude;
 	private $longitude;
 	
+	public static $TYPE_USER = 'user';
+	
 	public function get_id() {
 		return $this->id;
 	}

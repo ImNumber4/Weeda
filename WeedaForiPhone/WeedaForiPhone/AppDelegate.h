@@ -15,11 +15,12 @@
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
+#define ROOT_URL @"http://www.cannablaze.com/"
+
 @property (strong, nonatomic) UIWindow *window;
 
 @property (nonatomic, retain) User * currentUser;
 @property NSInteger badgeCount;
-@property (nonatomic, retain) NSString * deviceToken;
 @property (nonatomic, weak) id<NotificationDelegate> notificationDelegate;
 
 - (void) decreaseBadgeCount:(NSInteger) decreaseBy;

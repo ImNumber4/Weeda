@@ -21,9 +21,8 @@
 @implementation EditProfileViewController
 
 const NSInteger BASIC_INFO_SECTION = 0;
-const NSInteger USERNAME_ROW = 0;
-const NSInteger EMAIL_ROW = 1;
-const NSInteger USER_BIO_ROW = 2;
+const NSInteger EMAIL_ROW = 0;
+const NSInteger USER_BIO_ROW = 1;
 
 const NSInteger STORE_INFO_SECTION = 1;
 const NSInteger STORENAME_ROW = 0;
@@ -75,7 +74,7 @@ const NSInteger RESULT_OKAY_BUTTON_IN_BLUR_VIEW = 24;
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (BASIC_INFO_SECTION == section) {
-        return 3;
+        return 2;
     } else if (STORE_INFO_SECTION == section) {
         return 7;
     } else {
@@ -89,11 +88,7 @@ const NSInteger RESULT_OKAY_BUTTON_IN_BLUR_VIEW = 24;
     cell.contentTextField.hidden = NO;
     cell.contentTextView.hidden = YES;
     if (indexPath.section == BASIC_INFO_SECTION) {
-        if (indexPath.row == USERNAME_ROW) {
-            cell.nameLabel.text = @"Username";
-            cell.contentTextField.text = self.userObject.username;
-            cell.contentTextField.placeholder = self.userObject.username;
-        } else if (indexPath.row == EMAIL_ROW) {
+        if (indexPath.row == EMAIL_ROW) {
             cell.nameLabel.text = @"Email";
             cell.contentTextField.text = self.userObject.email;
             cell.contentTextField.placeholder = self.userObject.email;
@@ -144,9 +139,7 @@ const NSInteger RESULT_OKAY_BUTTON_IN_BLUR_VIEW = 24;
     CGPoint cellPosition = [sender convertPoint:CGPointZero toView:self.table];
     NSIndexPath *indexPath = [self.table indexPathForRowAtPoint:cellPosition];
     if (indexPath.section == BASIC_INFO_SECTION) {
-        if (indexPath.row == USERNAME_ROW) {
-            [self.userObject setUsername:text];
-        } else if (indexPath.row == EMAIL_ROW) {
+        if (indexPath.row == EMAIL_ROW) {
             [self.userObject setEmail:text];
         } else if (indexPath.row == USER_BIO_ROW) {
             [self.userObject setUserDescription:text];
@@ -331,7 +324,7 @@ const NSInteger RESULT_OKAY_BUTTON_IN_BLUR_VIEW = 24;
                               
                               UIButton *useMyAddressButton = (UIButton *)[self.view viewWithTag:MAP_USE_MY_ADDRESS_IN_BLUR_VIEW_TAG];
                               if (!useMyAddressButton) {
-                                  useMyAddressButton = [[UIButton alloc] initWithFrame:CGRectMake(0.0, 0.0, self.blurView.frame.size.width - PADDING * 2, 25.0)];
+                                  useMyAddressButton = [[UIButton alloc] initWithFrame:CGRectMake(0.0, 0.0, useSuggestedAddressButton.frame.size.width, useSuggestedAddressButton.frame.size.height)];
                                   useMyAddressButton.tag = MAP_USE_MY_ADDRESS_IN_BLUR_VIEW_TAG;
                                   [self decorateButton:useMyAddressButton color:[ColorDefinition blueColor]];
                                   [useMyAddressButton setTitle:@"Use the address I entered & Save" forState:UIControlStateNormal];
@@ -344,7 +337,7 @@ const NSInteger RESULT_OKAY_BUTTON_IN_BLUR_VIEW = 24;
                               
                               UIButton *reenterAddressButton = (UIButton *)[self.view viewWithTag:MAP_RE_ENTER_ADDRESS_BUTTON_IN_BLUR_VIEW_TAG];
                               if (!reenterAddressButton) {
-                                  reenterAddressButton = [[UIButton alloc] initWithFrame:CGRectMake(0.0, 0.0, self.blurView.frame.size.width - PADDING * 2, 25.0)];
+                                  reenterAddressButton = [[UIButton alloc] initWithFrame:CGRectMake(0.0, 0.0, useSuggestedAddressButton.frame.size.width, useSuggestedAddressButton.frame.size.height)];
                                   reenterAddressButton.tag = MAP_RE_ENTER_ADDRESS_BUTTON_IN_BLUR_VIEW_TAG;
                                   [self decorateButton:reenterAddressButton color:[ColorDefinition orangeColor]];
                                   [reenterAddressButton setTitle:@"I want to re-enter the address" forState:UIControlStateNormal];
@@ -370,11 +363,9 @@ const NSInteger RESULT_OKAY_BUTTON_IN_BLUR_VIEW = 24;
         
         UITextView *resultLabel = (UITextView *)[self.view viewWithTag:RESULT_LABEL_IN_BLUR_VIEW];
         if (!resultLabel) {
-            resultLabel = [[UITextView alloc] initWithFrame:CGRectMake(0.0, 0.0, 250.0, 50.0)];
+            resultLabel = [[UITextView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.blurView.frame.size.width - PADDING * 4, 50.0)];
             resultLabel.tag = RESULT_LABEL_IN_BLUR_VIEW;
-            resultLabel.text = @"Updating...";
-            [resultLabel setFont:[UIFont systemFontOfSize:12]];
-            [resultLabel setTextAlignment:NSTextAlignmentCenter];
+            [resultLabel setFont:[UIFont boldSystemFontOfSize:12]];
             resultLabel.backgroundColor = [UIColor clearColor];
             [resultLabel setEditable:NO];
             [resultLabel setSelectable:NO];
@@ -382,6 +373,8 @@ const NSInteger RESULT_OKAY_BUTTON_IN_BLUR_VIEW = 24;
             [resultLabel setCenter:CGPointMake(imageView.center.x, imageView.center.y)];
             [resultLabel setFrame:CGRectMake(resultLabel.frame.origin.x, imageView.frame.origin.y + imageView.frame.size.height + PADDING, resultLabel.frame.size.width, resultLabel.frame.size.height)];
         }
+        resultLabel.text = @"Updating...";
+        [resultLabel setTextAlignment:NSTextAlignmentCenter];
         resultLabel.hidden = false;
         
         [[RKObjectManager sharedManager] postObject:self.userObject path:@"user/update" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
@@ -390,13 +383,13 @@ const NSInteger RESULT_OKAY_BUTTON_IN_BLUR_VIEW = 24;
                 
                 [imageView setImage:[UIImage imageNamed:@"No.png"]];
                 [resultLabel setTextAlignment:NSTextAlignmentLeft];
-                resultLabel.text = @"Failed to update profile. The following things need to be corrected:";
+                resultLabel.text = @"Sorry, we could not update your profile due to the following reason(s):";
                 CGSize tvsize = [resultLabel sizeThatFits:CGSizeMake(resultLabel.frame.size.width, resultLabel.frame.size.height)];
                 [resultLabel setFrame:CGRectMake(resultLabel.frame.origin.x, resultLabel.frame.origin.y, resultLabel.frame.size.width, tvsize.height)];
                 
                 UITextView *errorMessageView = (UITextView *)[self.view viewWithTag:RESULT_TEXT_VIEW_IN_BLUR_VIEW];
                 if (!errorMessageView) {
-                    errorMessageView = [[UITextView alloc] initWithFrame:CGRectMake(0.0, 0.0, 250.0, 50.0)];
+                    errorMessageView = [[UITextView alloc] initWithFrame:CGRectMake(0.0, 0.0, resultLabel.frame.size.width, 50.0)];
                     errorMessageView.tag = RESULT_TEXT_VIEW_IN_BLUR_VIEW;
                     [self.blurView addSubview:errorMessageView];
                     [errorMessageView setFont:[UIFont systemFontOfSize:12]];

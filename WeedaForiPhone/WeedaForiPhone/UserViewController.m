@@ -60,6 +60,11 @@ const NSInteger SHOW_FOLLOWINGS = 2;
     self.followingCountLabel.tag = SHOW_FOLLOWINGS;
     
     [self.tableView setSeparatorInset:UIEdgeInsetsZero];
+    
+    UIEdgeInsets insets = UIEdgeInsetsMake(0.0, 0.0, self.tabBarController.tabBar.frame.size.height, 0.0);
+    self.tableView.contentInset = insets;
+    self.tableView.scrollIndicatorInsets = insets;
+    
     self.tableView.tableFooterView = [[UIView alloc] init];
     self.weeds = [[NSMutableArray alloc] init];
 }
