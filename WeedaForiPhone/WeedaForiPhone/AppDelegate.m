@@ -373,7 +373,7 @@ NSString * _deviceToken;
     
     
     NSString *storePath = [RKApplicationDataDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"%@Weeda.sqlite", (self.currentUser.id == nil?@"":self.currentUser.id)]];
-    NSLog(@"storePath %@", storePath);
+
     NSError *error;
     
     NSPersistentStore *persistentStore = [managedObjectStore addSQLitePersistentStoreAtPath:storePath fromSeedDatabaseAtPath:nil withConfiguration:nil options:@{NSMigratePersistentStoresAutomaticallyOption:@YES, NSInferMappingModelAutomaticallyOption:@YES} error:&error];
