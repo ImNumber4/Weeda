@@ -61,10 +61,6 @@ const NSInteger SHOW_FOLLOWINGS = 2;
     
     [self.tableView setSeparatorInset:UIEdgeInsetsZero];
     
-    UIEdgeInsets insets = UIEdgeInsetsMake(0.0, 0.0, self.tabBarController.tabBar.frame.size.height, 0.0);
-    self.tableView.contentInset = insets;
-    self.tableView.scrollIndicatorInsets = insets;
-    
     self.tableView.tableFooterView = [[UIView alloc] init];
     self.weeds = [[NSMutableArray alloc] init];
 }
@@ -282,6 +278,8 @@ const NSInteger SHOW_FOLLOWINGS = 2;
     CGSize tvsize = [self.userDescription sizeThatFits:CGSizeMake(tempFrame.size.width, tempFrame.size.height)];
     [self.userDescription setFrame:CGRectMake(self.userDescription.frame.origin.x, self.userDescription.frame.origin.y, self.userDescription.frame.size.width, tvsize.height)];
     [self.location setFrame:CGRectMake(self.location.frame.origin.x, self.userDescription.frame.origin.y + self.userDescription.frame.size.height + 5, self.userDescription.frame.size.width, self.location.frame.size.height)];
+    
+    double tableViewYCoordinate;
     if(![USER_TYPE_USER isEqualToString:[self.user.user_type lowercaseString]]) {
         self.location.hidden = NO;
         CLLocationCoordinate2D zoomLocation;
@@ -293,11 +291,12 @@ const NSInteger SHOW_FOLLOWINGS = 2;
             [self.location removeAnnotation:annotation];
         }
         [self.location addAnnotation:self.user];
-        [self.tableView setFrame:CGRectMake(self.tableView.frame.origin.x, self.location.frame.origin.y + self.location.frame.size.height + 5, self.tableView.frame.size.width, self.tableView.frame.size.height)];
+        tableViewYCoordinate = self.location.frame.origin.y + self.location.frame.size.height + 5;
     } else {
         self.location.hidden = YES;
-        [self.tableView setFrame:CGRectMake(self.tableView.frame.origin.x, self.userDescription.frame.origin.y + self.userDescription.frame.size.height + 5, self.tableView.frame.size.width, self.tableView.frame.size.height)];
+        tableViewYCoordinate = self.userDescription.frame.origin.y + self.userDescription.frame.size.height + 5;
     }
+    [self.tableView setFrame:CGRectMake(self.tableView.frame.origin.x, tableViewYCoordinate, self.tableView.frame.size.width, self.view.frame.size.height  -  self.tabBarController.tabBar.frame.size.height - tableViewYCoordinate)];
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"MMM. yyyy"];
