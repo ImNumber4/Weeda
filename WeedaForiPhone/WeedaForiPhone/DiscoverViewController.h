@@ -18,6 +18,8 @@
 @property (weak, nonatomic) IBOutlet UIView *searchBackground;
 @property (weak, nonatomic) IBOutlet UIView *locationBackground;
 @property (nonatomic, retain) IBOutlet UITableView *suggestionList;
+@property (nonatomic, strong) UIImageView *filterIcon;
+@property (nonatomic, strong) UIImageView *listIcon;
 @property (strong) CLLocationManager *locationManager;
 @property (strong) CLGeocoder *geocoder;
 @property (strong) NSMutableArray *suggestions;

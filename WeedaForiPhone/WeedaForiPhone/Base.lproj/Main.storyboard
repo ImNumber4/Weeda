@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="14A388a" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="95h-tk-Uat">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="95h-tk-Uat">
     <dependencies>
         <deployment defaultVersion="1808" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
@@ -113,16 +113,12 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
-                            <searchBar contentMode="redraw" searchBarStyle="minimal" placeholder="Store name that you are looking for" id="Sfm-Mz-VBY">
-                                <rect key="frame" x="0.0" y="17" width="300" height="44"/>
+                            <searchBar contentMode="redraw" searchBarStyle="minimal" placeholder="Store name" id="Sfm-Mz-VBY">
+                                <rect key="frame" x="0.0" y="17" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <textInputTraits key="textInputTraits" returnKeyType="search" enablesReturnKeyAutomatically="YES"/>
                             </searchBar>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="list.png" id="vIJ-Dm-M93">
-                                <rect key="frame" x="287" y="25" width="25" height="28"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </imageView>
-                            <searchBar contentMode="redraw" searchBarStyle="minimal" placeholder="Current location" id="ndZ-wS-fdD">
+                            <searchBar contentMode="redraw" searchBarStyle="minimal" placeholder="Location" id="ndZ-wS-fdD">
                                 <rect key="frame" x="0.0" y="48" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <textInputTraits key="textInputTraits" returnKeyType="search" enablesReturnKeyAutomatically="YES"/>
@@ -1130,7 +1126,6 @@
     <resources>
         <image name="caremar.png" width="76" height="76"/>
         <image name="light.png" width="60" height="58"/>
-        <image name="list.png" width="50" height="50"/>
         <image name="seed.png" width="512" height="307"/>
         <image name="waterdrop.png" width="50" height="90"/>
     </resources>

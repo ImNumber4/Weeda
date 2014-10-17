@@ -22,6 +22,8 @@ const NSInteger STORE_SEARCH = 0;
 const NSInteger LOCATION_SEARCH = 1;
 
 const double REGION_SPAN = 2.0;
+const double ICON_HEIGHT = 28.0;
+const double ICON_PADDING = 5.0;
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -59,6 +61,15 @@ const double REGION_SPAN = 2.0;
     [self enableSearchButton:self.storeSearch];
     [self enableSearchButton:self.location];
     
+    self.filterIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"filter.png" ]];
+    [self.filterIcon setFrame:CGRectMake(ICON_PADDING, self.storeSearch.center.y - ICON_HEIGHT/2.0, ICON_HEIGHT, ICON_HEIGHT)];
+    [self.view addSubview:self.filterIcon];
+    self.filterIcon.hidden = true;
+    
+    self.listIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"list.png" ]];
+    [self.listIcon setFrame:CGRectMake(self.view.frame.size.width - ICON_PADDING - ICON_HEIGHT, self.storeSearch.center.y - ICON_HEIGHT/2.0, ICON_HEIGHT, ICON_HEIGHT)];
+    [self.view addSubview:self.listIcon];
+    self.listIcon.hidden = true;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -87,6 +98,7 @@ const double REGION_SPAN = 2.0;
 - (void)handleSingleTap:(UITapGestureRecognizer *)recognizer {
     [self.location endEditing:YES];
     [self.storeSearch endEditing:YES];
+    [self hideLocationSearchBar];
 }
 
 - (void)searchInArea:(id) sender
@@ -115,23 +127,53 @@ const double REGION_SPAN = 2.0;
     // Dispose of any resources that can be recreated.
 }
 
-- (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar
+- (void)hideLocationSearchBar
 {
-    self.location.hidden = YES;
-    self.locationBackground.hidden = YES;
-    [self hideSuggestionList];
-    
+    double storeSearchTargetLength = self.view.frame.size.width - 2 * (ICON_HEIGHT);
+    if (!self.locationBackground.hidden) {
+        self.filterIcon.hidden = false;
+        self.listIcon.hidden = false;
+        [UIView animateWithDuration:0.5 animations:^{
+            [self.location setCenter:CGPointMake(self.location.center.x, self.location.center.y - self.locationBackground.frame.size.height)];
+            [self.location setAlpha:0.0];
+            [self.locationBackground setCenter:CGPointMake(self.locationBackground.center.x, self.locationBackground.center.y - self.locationBackground.frame.size.height)];
+            [self.locationBackground setAlpha:0.0];
+            [self.storeSearch setFrame:CGRectMake(self.storeSearch.center.x - storeSearchTargetLength/2.0, self.storeSearch.frame.origin.y, storeSearchTargetLength, self.storeSearch.frame.size.height)];
+        } completion:^(BOOL finished) {
+            self.locationBackground.hidden = YES;
+            self.location.hidden = YES;
+            [self hideSuggestionList];
+            
+        }];
+    }
 }
 
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
 {
-    self.location.hidden = NO;
-    self.locationBackground.hidden = NO;
+    if (searchBar.tag == STORE_SEARCH) {
+        if (self.locationBackground.hidden) {
+            self.location.hidden = NO;
+            self.locationBackground.hidden = NO;
+            self.filterIcon.hidden = true;
+            self.listIcon.hidden = true;
+            [UIView animateWithDuration:0.5 animations:^{
+                [self.location setAlpha:1.0];
+                [self.location setCenter:CGPointMake(self.location.center.x, self.location.center.y + self.locationBackground.frame.size.height)];
+                [self.locationBackground setAlpha:0.75];
+                [self.locationBackground setCenter:CGPointMake(self.locationBackground.center.x, self.locationBackground.center.y + self.locationBackground.frame.size.height)];
+                [self.storeSearch setFrame:CGRectMake(0.0, self.storeSearch.frame.origin.y, self.location.frame.size.width, self.storeSearch.frame.size.height)];
+                
+            } completion:^(BOOL finished) {
+                
+            }];
+        }
+    }
 }
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
     [searchBar endEditing:YES];
+    [self hideLocationSearchBar];
     if ([self.location.text isEqualToString: @""]) {
         [self searchInCurrentLocation:nil];
     } else {
