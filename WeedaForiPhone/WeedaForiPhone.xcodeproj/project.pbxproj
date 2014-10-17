@@ -41,6 +41,7 @@
 		0ECB453719C5C58300690944 /* delete.png in Resources */ = {isa = PBXBuildFile; fileRef = 0ECB453619C5C58300690944 /* delete.png */; };
 		0ECB453A19C5C5AF00690944 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 0ECB453819C5C5AF00690944 /* Model.xcdatamodeld */; };
 		0ECB453D19C5C8E900690944 /* ConversationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ECB453C19C5C8E900690944 /* ConversationViewController.m */; };
+		0EDDDB0219F08E7800337B59 /* list.png in Resources */ = {isa = PBXBuildFile; fileRef = 0EDDDB0119F08E7800337B59 /* list.png */; };
 		0EE8BFFB19AF2202007CE683 /* selected_message.png in Resources */ = {isa = PBXBuildFile; fileRef = 0EE8BFFA19AF2202007CE683 /* selected_message.png */; };
 		A914CCA418CD756200B870D8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A914CCA318CD756200B870D8 /* Foundation.framework */; };
 		A914CCA618CD756200B870D8 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A914CCA518CD756200B870D8 /* CoreGraphics.framework */; };
@@ -268,6 +269,7 @@
 		0ECB453919C5C5AF00690944 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		0ECB453B19C5C8E900690944 /* ConversationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConversationViewController.h; sourceTree = "<group>"; };
 		0ECB453C19C5C8E900690944 /* ConversationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConversationViewController.m; sourceTree = "<group>"; };
+		0EDDDB0119F08E7800337B59 /* list.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = list.png; path = WeedaForiPhone/Images/list.png; sourceTree = "<group>"; };
 		0EE8BFFA19AF2202007CE683 /* selected_message.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = selected_message.png; path = WeedaForiPhone/Images/selected_message.png; sourceTree = "<group>"; };
 		A914CCA018CD756200B870D8 /* Weeda.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Weeda.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A914CCA318CD756200B870D8 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -678,6 +680,7 @@
 		A9CA8E9218F3DAC6004F095D /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				0EDDDB0119F08E7800337B59 /* list.png */,
 				0E99A48119ADD724006A7EE5 /* message.png */,
 				0EE8BFFA19AF2202007CE683 /* selected_message.png */,
 				A9653A9619988E2C00B9E124 /* Yes.png */,
@@ -984,6 +987,7 @@
 				EA4DB14D196114D6005ED7F7 /* WeedShowImageCell.xib in Resources */,
 				A91A62F819035FCC008726E5 /* ok.png in Resources */,
 				A91A62E318FD1B1C008726E5 /* compose.png in Resources */,
+				0EDDDB0219F08E7800337B59 /* list.png in Resources */,
 				0EB8C4E119C5C00900BD64E1 /* send@2x.png in Resources */,
 				0EB8C4E319C5C00900BD64E1 /* messageSent.aiff in Resources */,
 				A9FB79FB1985A97000DB35CB /* UserInfoEditableCell.xib in Resources */,
