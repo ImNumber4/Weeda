@@ -14,6 +14,7 @@
 #define USER_TYPE_USER @"user"
 #define USER_TYPE_DISPENSARY @"dispensary"
 #define USER_TYPE_HYDRO @"hydro"
+#define USER_TYPE_I502 @"i502"
 
 @interface User : NSObject <MKAnnotation>
 @property (nonatomic, retain) NSNumber * shouldBeDeleted;

@@ -22,11 +22,9 @@
 - (id)initWithAnnotation:(id<MKAnnotation>)annotation reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithAnnotation:annotation reuseIdentifier:reuseIdentifier];
     if (self) {
-        self.image = [self getImage:@"dispensary_icon.png" width:30 height:30];
         self.canShowCallout = NO;
         self.enabled = YES;
     }
-    
     return self;
 }
 
@@ -50,7 +48,7 @@
             User * user = (User *)self.annotation;
             if (user.phone) {
                 self.calloutView.phone.enabled = YES;
-                self.calloutView.phone.backgroundColor = [ColorDefinition greenColor];
+                self.calloutView.phone.backgroundColor = [ColorDefinition shiningGreenColor];
             }else{
                 self.calloutView.phone.enabled = NO;
                 self.calloutView.phone.backgroundColor = [ColorDefinition grayColor];
@@ -92,6 +90,19 @@
     [[UIApplication sharedApplication] openURL:URL];
 }
 
+- (void) decorateWithAnnotation:(id<MKAnnotation>)annotation
+{
+    if ([annotation isKindOfClass:[User class]]) {
+        User * user = (User *) annotation;
+        if ([USER_TYPE_DISPENSARY isEqualToString:user.user_type]) {
+            self.image = [self getImage:@"dispensary_icon.png" width:30 height:30];
+        } else if ([USER_TYPE_HYDRO isEqualToString:user.user_type]) {
+            self.image = [self getImage:@"hydro_icon.png" width:30 height:30];
+        } else if ([USER_TYPE_I502 isEqualToString:user.user_type]) {
+            self.image = [self getImage:@"i502_icon.png" width:30 height:30];
+        }
+    }
+}
 
 - (UIImage *)getImage:(NSString *)imageName width:(int)width height:(int) height
 {

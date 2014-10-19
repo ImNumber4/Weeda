@@ -26,6 +26,10 @@
     return [UIColor colorWithRed:62.0/255.0 green:165.0/255.0 blue:64.0/255.0 alpha:0.1];
 }
 
++ (UIColor *) shiningGreenColor {
+    return [UIColor colorWithRed:51.0/255.0 green:211.0/255.0 blue:38.0/255.0 alpha:1.0];
+}
+
 + (UIColor *) orangeColor {
     return [UIColor colorWithRed:255.0/255.0 green:145.0/255.0 blue:0.0/255.0 alpha:1.0];
 }

@@ -305,6 +305,7 @@ const double STORE_LIST_ANIMATION_VERTICAL_DELTA = 50;
         } else {
             [annotationView setAnnotation:annotation];
         }
+        [annotationView decorateWithAnnotation:annotation];
         return annotationView;
     }
     

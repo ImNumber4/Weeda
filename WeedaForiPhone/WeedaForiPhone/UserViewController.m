@@ -107,19 +107,11 @@ const NSInteger SHOW_FOLLOWINGS = 2;
             [annotationView setAnnotation:annotation];
         }
         [annotationView setSelected:YES animated:YES];
+        [annotationView decorateWithAnnotation:annotation];
         return annotationView;
     }
     
     return nil;
-}
-
-- (UIImage *)getImage:(NSString *)imageName width:(int)width height:(int) height
-{
-    UIImage * image = [UIImage imageNamed:imageName];
-    CGSize sacleSize = CGSizeMake(width, height);
-    UIGraphicsBeginImageContextWithOptions(sacleSize, NO, 0.0);
-    [image drawInRect:CGRectMake(0, 0, sacleSize.width, sacleSize.height)];
-    return UIGraphicsGetImageFromCurrentImageContext();
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath

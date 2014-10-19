@@ -20,4 +20,6 @@
 @property (nonatomic, retain) VendorCallOutView * calloutView;
 @property (nonatomic, weak)id<VendorMKAnnotationViewDelegate> delegate;
 
+- (void) decorateWithAnnotation:(id<MKAnnotation>)annotation;
+
 @end
