@@ -33,7 +33,7 @@ const double STORE_TYPE_ICON_SIZE = 15;
         [l setCornerRadius:7.0];
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         
-        double labelX = UI_PADDING * 2 + self.userAvatar.frame.origin.x + self.userAvatar.frame.size.width;
+        double labelX = UI_PADDING + self.userAvatar.frame.origin.x + self.userAvatar.frame.size.width;
         double labelWidth = self.frame.size.width - UI_PADDING * 2 - FOLLOW_BUTTION_WIDTH - labelX;
         self.usernameLabel = [[UILabel alloc] initWithFrame:CGRectMake(labelX + STORE_TYPE_ICON_SIZE + UI_PADDING, self.userAvatar.frame.origin.y, labelWidth - (STORE_TYPE_ICON_SIZE + UI_PADDING), LABEL_HEIGHT)];
         [self.usernameLabel setFont:[UIFont systemFontOfSize:12]];
@@ -79,7 +79,7 @@ const double STORE_TYPE_ICON_SIZE = 15;
     } else {
         self.followButton.hidden = true;
     }
-    double labelX = UI_PADDING * 2 + self.userAvatar.frame.origin.x + self.userAvatar.frame.size.width;
+    double labelX = UI_PADDING + self.userAvatar.frame.origin.x + self.userAvatar.frame.size.width;
     double labelWidth;
     if (user.relationshipWithCurrentUser) {
         labelWidth = self.frame.size.width - UI_PADDING * 2 - FOLLOW_BUTTION_WIDTH - labelX;
