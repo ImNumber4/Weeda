@@ -37,6 +37,8 @@
 
 @implementation AddWeedViewController
 
+static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -62,6 +64,8 @@
     [self.userList setSeparatorInset:UIEdgeInsetsZero];
     self.userList.tableFooterView = [[UIView alloc] init];
     self.userList.delegate = self;
+    [self.userList registerClass:[UserTableViewCell class] forCellReuseIdentifier:USER_TABLE_CELL_REUSE_ID];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWasShown:)
                                                  name:UIKeyboardDidShowNotification object:nil];
@@ -214,16 +218,19 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UserTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UserTableCell" forIndexPath:indexPath];
-    User *user = [self.users objectAtIndex:indexPath.row];
-    [self decorateCellWithUser:user cell:cell];
-    cell.backgroundColor = [UIColor colorWithRed:250.0/255.0 green:250.0/255.0 blue:250.0/255.0 alpha:0.4];
+    UserTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:USER_TABLE_CELL_REUSE_ID forIndexPath:indexPath];
+    if (cell) {
+        User *user = [self.users objectAtIndex:indexPath.row];
+        [cell decorateCellWithUser:user];
+        cell.backgroundColor = [UIColor colorWithRed:250.0/255.0 green:250.0/255.0 blue:250.0/255.0 alpha:0.4];
+    }
+    
     return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 50;
+    return USER_TABLE_VIEW_CELL_HEIGHT;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -237,17 +244,6 @@
     [self.weedContentView setSelectedRange:NSMakeRange(self.weedContentView.text.length - textAfterInsertionPoint.length, 0)];
     [self adjustWeedContentView:true];
     [self.mentionedUsernameToUserId setObject:user.id forKey:[NSString stringWithFormat:@"@%@", user.username]];
-}
-
-- (void)decorateCellWithUser:(User *)user cell:(UserTableViewCell *)cell {
-    [cell.userAvatar sd_setImageWithURL:[WeedImageController imageURLOfAvatar:user.id] placeholderImage:[UIImage imageNamed:@"avatar.jpg"] options:SDWebImageHandleCookies];
-    cell.userAvatar.contentMode = UIViewContentModeScaleAspectFill;
-    cell.userAvatar.clipsToBounds = YES;
-    CALayer * l = [cell.userAvatar layer];
-    [l setMasksToBounds:YES];
-    [l setCornerRadius:7.0];
-    NSString *nameLabel = [NSString stringWithFormat:@"@%@", user.username];
-    cell.usernameLabel.text = nameLabel;
 }
 
 #pragma mark -

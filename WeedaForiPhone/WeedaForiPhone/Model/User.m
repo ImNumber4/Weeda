@@ -65,6 +65,10 @@
     return [User _getFormatedAddress:self.address_street city:self.address_city state:self.address_state zip:self.address_zip country:self.address_country];
 }
 
+- (NSString *) getSimpleFormatedAddress {
+    return [NSString stringWithFormat:@"%@, %@", self.address_street,self.address_city];
+}
+
 + (NSString *) _getFormatedAddress:(NSString *) street city:(NSString*) city state:(NSString *) state zip:(NSString *) zip country:(NSString *)country {
     return [NSString stringWithFormat:@"%@, %@, %@, %@, %@", street, city, state, zip, country];
 }

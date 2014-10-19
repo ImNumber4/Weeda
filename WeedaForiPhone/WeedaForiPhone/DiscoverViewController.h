@@ -12,16 +12,11 @@
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (weak, nonatomic) IBOutlet UISearchBar *storeSearch;
-@property (weak, nonatomic) IBOutlet UISearchBar *location;
+@property (weak, nonatomic) IBOutlet UISearchBar *locationSearch;
 @property (weak, nonatomic) IBOutlet UIButton *searchInArea;
 @property (weak, nonatomic) IBOutlet UIButton *searchInCurrentLocation;
 @property (weak, nonatomic) IBOutlet UIView *searchBackground;
 @property (weak, nonatomic) IBOutlet UIView *locationBackground;
-@property (nonatomic, retain) IBOutlet UITableView *suggestionList;
-@property (nonatomic, strong) UIImageView *filterIcon;
-@property (nonatomic, strong) UIImageView *listIcon;
-@property (strong) CLLocationManager *locationManager;
-@property (strong) CLGeocoder *geocoder;
-@property (strong) NSMutableArray *suggestions;
+@property (nonatomic, retain) IBOutlet UITableView *locationList;
 
 @end

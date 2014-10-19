@@ -72,7 +72,7 @@
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>7AFB0A53-E2CC-41FA-A776-D9377407C059</string>
+			<string>822670D72DA6CB3E094E900F0D31C5A6027736AD</string>
 			<key>IDESourceControlWCCName</key>
 			<string>ISO8601DateFormatterValueTransformer</string>
 		</dict>
@@ -80,7 +80,7 @@
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>822670D72DA6CB3E094E900F0D31C5A6027736AD</string>
+			<string>7AFB0A53-E2CC-41FA-A776-D9377407C059</string>
 			<key>IDESourceControlWCCName</key>
 			<string>ISO8601DateFormatterValueTransformer</string>
 		</dict>

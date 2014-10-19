@@ -9,10 +9,16 @@
 #import <UIKit/UIKit.h>
 #import "WLUIImageView.h"
 
+#define USER_TABLE_VIEW_CELL_HEIGHT 50;
+
 @interface UserTableViewCell : UITableViewCell
 
-@property (nonatomic, weak) IBOutlet UIButton *followButton;
-@property (nonatomic, weak) IBOutlet UILabel *usernameLabel;
-@property (nonatomic, weak) IBOutlet UIImageView *userAvatar;
+@property (nonatomic, strong) UIButton *followButton;
+@property (nonatomic, strong) UILabel *usernameLabel;
+@property (nonatomic, strong) UILabel *addressLabel;
+@property (nonatomic, strong) UIImageView *userAvatar;
+@property (nonatomic, strong) UIImageView *storeTypeIcon;
+
+- (void)decorateCellWithUser:(User *)user;
 
 @end

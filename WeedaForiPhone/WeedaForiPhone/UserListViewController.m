@@ -8,13 +8,13 @@
 
 #import "UserListViewController.h"
 #import "UserTableViewCell.h"
-#import "WeedImageController.h"
-#import <SDWebImage/UIImageView+WebCache.h>
 
 @interface UserListViewController ()
 @end
 
 @implementation UserListViewController 
+
+static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -30,6 +30,7 @@
     [super viewDidLoad];
     [self.tableView setSeparatorInset:UIEdgeInsetsZero];
     self.tableView.tableFooterView = [[UIView alloc] init];
+    [self.tableView registerClass:[UserTableViewCell class] forCellReuseIdentifier:USER_TABLE_CELL_REUSE_ID];
     [self loadData];
 }
 
@@ -58,21 +59,18 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UserTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UserTableCell" forIndexPath:indexPath];
-    User *user = [self.users objectAtIndex:indexPath.row];
-    [self decorateCellWithUser:user cell:cell];
+    UserTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:USER_TABLE_CELL_REUSE_ID forIndexPath:indexPath];
+    if (cell) {
+        User *user = [self.users objectAtIndex:indexPath.row];
+        [self decorateCellWithUser:user cell:cell];
+    }
     
     return cell;
 }
 
 - (void)decorateCellWithUser:(User *)user cell:(UserTableViewCell *)cell {
-    [cell.userAvatar sd_setImageWithURL:[WeedImageController imageURLOfAvatar:user.id] placeholderImage:[UIImage imageNamed:@"avatar.jpg"] options:SDWebImageHandleCookies];
-    CALayer * l = [cell.userAvatar layer];
-    [l setMasksToBounds:YES];
-    [l setCornerRadius:7.0];
-    
-    NSString *nameLabel = [NSString stringWithFormat:@"@%@", user.username];
-    cell.usernameLabel.text = nameLabel;
+    [cell decorateCellWithUser:user];
+    cell.followButton.tintColor = [UIColor whiteColor];
     if ([user.relationshipWithCurrentUser intValue] == 0) {
         cell.followButton.hidden = TRUE;
     } else if ([user.relationshipWithCurrentUser intValue] < 3){
@@ -82,11 +80,14 @@
     }
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return USER_TABLE_VIEW_CELL_HEIGHT;
+}
 
 - (void)makeFollowButton:(UIButton *)button
 {
     [button setImage:[UIImage imageNamed:@"follow.png"] forState:UIControlStateNormal];
-    button.tintColor = [UIColor whiteColor];
     //blue
     button.backgroundColor = [ColorDefinition blueColor];
     [button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
@@ -96,7 +97,6 @@
 - (void)makeFollowingButton:(UIButton *)button
 {
     [button setImage:[UIImage imageNamed:@"followed.png"] forState:UIControlStateNormal];
-    button.tintColor = [UIColor whiteColor];
     //green
     button.backgroundColor = [ColorDefinition greenColor];
     [button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];

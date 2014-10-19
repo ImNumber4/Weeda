@@ -27,6 +27,7 @@
 @implementation ConversationViewController
 
 const NSInteger USER_LIST_TAG = 1;
+static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
 
 #pragma mark - Initialization
 - (UIButton *)sendButton
@@ -59,6 +60,7 @@ const NSInteger USER_LIST_TAG = 1;
         [self.usernameList setSeparatorInset:UIEdgeInsetsZero];
         self.usernameList.tableFooterView = [[UIView alloc] init];
         self.usernameList.delegate = self;
+        [self.usernameList registerClass:[UserTableViewCell class] forCellReuseIdentifier:USER_TABLE_CELL_REUSE_ID];
         [self.usernameList setFrame:CGRectMake(self.usernameList.frame.origin.x, self.usernameList.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height - self.usernameList.frame.origin.y)];
         self.inputToolBarView.hidden = true;
     } else {
@@ -91,6 +93,7 @@ const NSInteger USER_LIST_TAG = 1;
         self.usernameList.hidden = true;
         [self loadData];
         [self showConversation];
+        [self.inputToolBarView becomeFirstResponder];
     }
 }
 
@@ -129,28 +132,15 @@ const NSInteger USER_LIST_TAG = 1;
 
 - (void) updateUsernameListWithMappingResult:(RKMappingResult *)mappingResult
 {
-    @synchronized (self) {
-        [self.users removeAllObjects];
-        AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-        for (User * user in mappingResult.array) {
-            if (![user.id isEqualToNumber:appDelegate.currentUser.id]) {
-                [self.users addObject:user];
-            }
+    [self.users removeAllObjects];
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    for (User * user in mappingResult.array) {
+        if (![user.id isEqualToNumber:appDelegate.currentUser.id]) {
+            [self.users addObject:user];
         }
-        [self.usernameList reloadData];
     }
+    [self.usernameList reloadData];
 }
-
-- (void)decorateCellWithUser:(User *)user cell:(UserTableViewCell *)cell {
-    [cell.userAvatar sd_setImageWithURL:[WeedImageController imageURLOfAvatar:user.id] placeholderImage:[UIImage imageNamed:@"avatar.jpg"] options:SDWebImageHandleCookies];
-    [cell.userAvatar setFrame:CGRectMake(5, 5, 40, 40)];
-    CALayer * l = [cell.userAvatar layer];
-    [l setMasksToBounds:YES];
-    [l setCornerRadius:7.0];
-    NSString *nameLabel = [NSString stringWithFormat:@"@%@", user.username];
-    cell.usernameLabel.text = nameLabel;
-}
-
 
 - (void) loadData {
     NSError *error = nil;
@@ -183,7 +173,7 @@ const NSInteger USER_LIST_TAG = 1;
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (tableView.tag == USER_LIST_TAG) {
-        return 50;
+        return USER_TABLE_VIEW_CELL_HEIGHT;
     } else {
         return [super tableView:tableView heightForRowAtIndexPath:indexPath];
     }
@@ -192,10 +182,14 @@ const NSInteger USER_LIST_TAG = 1;
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (tableView.tag == USER_LIST_TAG) {
-        UserTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UserTableCell" forIndexPath:indexPath];
-        User *user = [self.users objectAtIndex:indexPath.row];
-        [self decorateCellWithUser:user cell:cell];
-        cell.backgroundColor = [UIColor colorWithRed:250.0/255.0 green:250.0/255.0 blue:250.0/255.0 alpha:0.4];
+        UserTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:USER_TABLE_CELL_REUSE_ID forIndexPath:indexPath];
+        if (cell) {
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            User *user = [self.users objectAtIndex:indexPath.row];
+            [cell decorateCellWithUser:user];
+            cell.backgroundColor = [UIColor colorWithRed:250.0/255.0 green:250.0/255.0 blue:250.0/255.0 alpha:0.4];
+        }
+        
         return cell;
     } else {
         return [super tableView:tableView cellForRowAtIndexPath:indexPath];
@@ -214,7 +208,6 @@ const NSInteger USER_LIST_TAG = 1;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (tableView.tag == USER_LIST_TAG) {
-        [self.usernameTextField endEditing:true];
         User *user = [self.users objectAtIndex:indexPath.row];
         self.participant_username = user.username;
         self.participant_id = user.id;

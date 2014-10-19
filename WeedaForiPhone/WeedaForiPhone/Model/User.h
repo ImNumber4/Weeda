@@ -12,6 +12,8 @@
 #import <MapKit/MapKit.h>
 
 #define USER_TYPE_USER @"user"
+#define USER_TYPE_DISPENSARY @"dispensary"
+#define USER_TYPE_HYDRO @"hydro"
 
 @interface User : NSObject <MKAnnotation>
 @property (nonatomic, retain) NSNumber * shouldBeDeleted;
@@ -41,6 +43,7 @@
 
 - (MKMapItem*)mapItem;
 - (NSString *) getFormatedAddress;
+- (NSString *) getSimpleFormatedAddress;
 - (void) updateAddress:(CLPlacemark *)placeMark;
 + (NSString *) getFormatedAddressWithPlaceMark:(CLPlacemark *)placeMark;
 
