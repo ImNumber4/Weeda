@@ -18,6 +18,17 @@
 }
 */
 
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        self.imageView = [[UIImageView alloc] initWithFrame:frame];
+        self.imageView.contentMode = UIViewContentModeScaleAspectFill;
+        [self addSubview:self.imageView];
+    }
+    return self;
+}
+
 - (void)willMoveToSuperview:(UIView *)newSuperview
 {
     [super willMoveToSuperview:newSuperview];
@@ -28,13 +39,11 @@
     [newSuperview drawViewHierarchyInRect:newSuperview.bounds afterScreenUpdates:YES];
     UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:[img applyBlurWithRadius:10
-                                                                                        tintColor:[UIColor colorWithWhite:1 alpha:0.5]
+    CGImageRef imageRef = CGImageCreateWithImageInRect([img CGImage], CGRectMake(self.frame.origin.x * img.scale, self.frame.origin.y * img.scale, self.frame.size.width * img.scale, self.frame.size.height * img.scale));
+    UIImage *cropImage = [UIImage imageWithCGImage:imageRef];
+    [self.imageView setImage:[cropImage applyBlurWithRadius:10 tintColor:[UIColor colorWithWhite:1 alpha:0.5]
                                                                             saturationDeltaFactor:1.8
                                                                                         maskImage:nil]];
-    
-    [self addSubview:imageView];
-    [self sendSubviewToBack:imageView];
 }
 
 @end

@@ -11,4 +11,6 @@
 
 @interface BlurView : UIView
 
+@property (nonatomic, strong) UIImageView *imageView;
+
 @end

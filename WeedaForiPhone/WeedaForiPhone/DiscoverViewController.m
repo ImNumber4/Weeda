@@ -10,19 +10,27 @@
 #import "VendorMKAnnotationView.h"
 #import "UserViewController.h"
 #import "UserTableViewCell.h"
+#import "BlurView.h"
+#import "UIViewHelper.h"
 
 @interface DiscoverViewController () <UITableViewDelegate, UITableViewDataSource, VendorMKAnnotationViewDelegate>
 
 @property (nonatomic, strong) CLLocation *curLocation;
-@property BOOL isListViewOn;
 @property BOOL isFilterOn;
 @property (nonatomic, strong) UITableView * storeList;
 @property (nonatomic, strong) UIButton *filterIcon;
 @property (nonatomic, strong) UIButton *listIcon;
+
+@property (nonatomic, strong) BlurView *storeListBlurView;
 @property (strong) CLLocationManager *locationManager;
 @property (strong) CLGeocoder *geocoder;
 @property (strong) NSMutableArray *locations;
 @property (strong) NSMutableArray *stores;
+
+@property (nonatomic, strong) UIView *filterView;
+@property (nonatomic, strong) UIButton *filterDispensary;
+@property (nonatomic, strong) UIButton *filterHydro;
+@property (nonatomic, strong) UIButton *filterI502;
 
 @end
 
@@ -33,7 +41,7 @@ const NSInteger LOCATION_SEARCH = 1;
 
 const double REGION_SPAN = 2.0;
 const double ICON_HEIGHT = 28.0;
-const double ICON_PADDING = 5.0;
+const double COMPONENT_PADDING = 5.0;
 
 const NSInteger LOCATION_LIST_TABLE_VIEW = 1;
 const NSInteger STORE_LIST_TABLE_VIEW = 2;
@@ -43,7 +51,7 @@ const double LOCATION_LIST_HEIGHT = 35;
 static NSString * LOCATION_LIST_CELL_REUSE_ID = @"LocationCell";
 static NSString * STORE_LIST_CELL_REUSE_ID = @"StoreCell";
 
-const double STORE_LIST_ANIMATION_VERTICAL_DELTA = 50;
+const double STORE_LIST_ANIMATION_VERTICAL_DELTA = 100;
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -88,33 +96,95 @@ const double STORE_LIST_ANIMATION_VERTICAL_DELTA = 50;
     self.stores = [[NSMutableArray alloc] init];
     self.storeList = [[UITableView alloc] initWithFrame:CGRectMake(0.0, self.locationBackground.frame.origin.y, self.view.frame.size.width, self.searchInArea.frame.origin.y - self.locationBackground.frame.origin.y)];
     self.storeList.tag = STORE_LIST_TABLE_VIEW;
-    [self.storeList setBackgroundColor:[UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.75]];
+    [self.storeList setBackgroundColor:[UIColor clearColor]];
     self.storeList.dataSource = self;
     self.storeList.delegate = self;
-    self.storeList.hidden = true;
+    [self.storeList setAlpha:0.0];
     [self.storeList setSeparatorInset:UIEdgeInsetsZero];
     self.storeList.tableFooterView = [[UIView alloc] init];
     [self.storeList registerClass:[UserTableViewCell class] forCellReuseIdentifier:STORE_LIST_CELL_REUSE_ID];
     [self.view insertSubview:self.storeList belowSubview:self.locationBackground];
+    self.storeList.hidden = true;
     
     [self enableSearchButton:self.storeSearch];
     [self enableSearchButton:self.locationSearch];
     
-    self.filterIcon = [[UIButton alloc] initWithFrame:CGRectMake(ICON_PADDING, self.storeSearch.center.y - ICON_HEIGHT/2.0, ICON_HEIGHT, ICON_HEIGHT)];
+    self.filterIcon = [[UIButton alloc] initWithFrame:CGRectMake(COMPONENT_PADDING, self.storeSearch.center.y - ICON_HEIGHT/2.0, ICON_HEIGHT, ICON_HEIGHT)];
     [self.view addSubview:self.filterIcon];
     self.filterIcon.hidden = true;
     [self.filterIcon setAlpha:0.75];
     [self.filterIcon addTarget:self action:@selector(filterIconClicked:)forControlEvents:UIControlEventTouchDown];
-    self.isFilterOn = true;
-    [self filterIconClicked:self];
+    self.isFilterOn = false;
+    [self turnOffFilterIcon];
     
-    self.listIcon = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - ICON_PADDING - ICON_HEIGHT, self.storeSearch.center.y - ICON_HEIGHT/2.0, ICON_HEIGHT, ICON_HEIGHT)];
+    self.listIcon = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - COMPONENT_PADDING - ICON_HEIGHT, self.storeSearch.center.y - ICON_HEIGHT/2.0, ICON_HEIGHT, ICON_HEIGHT)];
     [self.view addSubview:self.listIcon];
     self.listIcon.hidden = true;
     [self.listIcon setAlpha:0.75];
     [self.listIcon addTarget:self action:@selector(listIconClicked:)forControlEvents:UIControlEventTouchDown];
-    self.isListViewOn = true;
-    [self listIconClicked:self];
+    [self turnOffListIcon];
+    
+    self.storeListBlurView = [[BlurView alloc] initWithFrame:self.mapView.frame];
+       
+    self.filterView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 300, self.view.frame.size.width, self.view.frame.size.height - 300)];
+    [self.filterView setBackgroundColor:[UIColor whiteColor]];
+    [UIViewHelper roundCorners:self.filterView byRoundingCorners:UIRectCornerTopLeft|UIRectCornerTopRight];
+    
+    UILabel *filterViewArrow= [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, self.filterView.frame.size.width, 20.0)];
+    filterViewArrow.text = @"Tap to hide";
+    [filterViewArrow setTextAlignment:NSTextAlignmentCenter];
+    [filterViewArrow setTextColor:[UIColor whiteColor]];
+    [filterViewArrow setFont:[UIFont systemFontOfSize:12]];
+    [filterViewArrow setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];
+    [self.filterView addSubview:filterViewArrow];
+    UITapGestureRecognizer *singleFingerTapOnFilterViewArrow = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(filterIconClicked:)];
+    [self.filterView addGestureRecognizer:singleFingerTapOnFilterViewArrow];
+    
+    UILabel *filterViewTitle = [[UILabel alloc] initWithFrame:CGRectMake(0.0, filterViewArrow.frame.size.height + COMPONENT_PADDING, self.filterView.frame.size.width, 30.0)];
+    filterViewTitle.text = @"What filters you want to apply to your search?";
+    [filterViewTitle setFont:[UIFont systemFontOfSize:14]];
+    [filterViewTitle setTextAlignment:NSTextAlignmentCenter];
+    [self.filterView addSubview:filterViewTitle];
+    
+    UILabel *filterByStoreTypeTitle = [[UILabel alloc] initWithFrame:CGRectMake(COMPONENT_PADDING * 2/*Use double padding*/, filterViewTitle.frame.origin.y + filterViewTitle.frame.size.height + 15, self.filterView.frame.size.width - COMPONENT_PADDING * 4.0, 30.0)];
+    filterByStoreTypeTitle.text = @"Store type";
+    [filterByStoreTypeTitle setFont:[UIFont systemFontOfSize:12]];
+    filterByStoreTypeTitle.textColor = [UIColor darkGrayColor];
+    [filterByStoreTypeTitle setTextAlignment:NSTextAlignmentLeft];
+    [self.filterView addSubview:filterByStoreTypeTitle];
+    
+    double filterButtonWidth = (self.locationBackground.frame.size.width - COMPONENT_PADDING * 4)/3.0;
+    double filterButtonY = filterByStoreTypeTitle.frame.origin.y + filterByStoreTypeTitle.frame.size.height + COMPONENT_PADDING;
+    
+    self.filterDispensary = [[UIButton alloc] initWithFrame:CGRectMake(COMPONENT_PADDING, filterButtonY, filterButtonWidth, 25)];
+    [self.filterView addSubview:self.filterDispensary];
+    [self.filterDispensary setTitle:@"Dispensary" forState:UIControlStateNormal];
+    [self.filterDispensary.titleLabel setFont:[UIFont boldSystemFontOfSize:12]];
+    self.filterDispensary.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.9];
+    [self.filterDispensary setTitleColor:[ColorDefinition orangeColor] forState:UIControlStateNormal];
+    self.filterDispensary.layer.borderColor = [ColorDefinition orangeColor].CGColor;
+    self.filterDispensary.layer.borderWidth = 1;
+    self.filterDispensary.layer.cornerRadius = 5;
+    
+    self.filterHydro = [[UIButton alloc] initWithFrame:CGRectMake(self.filterDispensary.frame.origin.x + filterButtonWidth + COMPONENT_PADDING, filterButtonY, filterButtonWidth, 25)];
+    [self.filterView addSubview:self.filterHydro];
+    [self.filterHydro setTitle:@"Hydro" forState:UIControlStateNormal];
+    [self.filterHydro.titleLabel setFont:[UIFont boldSystemFontOfSize:12]];
+    self.filterHydro.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.9];
+    [self.filterHydro setTitleColor:[ColorDefinition blueColor] forState:UIControlStateNormal];
+    self.filterHydro.layer.borderColor = [ColorDefinition blueColor].CGColor;
+    self.filterHydro.layer.borderWidth = 1;
+    self.filterHydro.layer.cornerRadius = 5;
+    
+    self.filterI502 = [[UIButton alloc] initWithFrame:CGRectMake(self.filterHydro.frame.origin.x + filterButtonWidth + COMPONENT_PADDING, filterButtonY, filterButtonWidth, 25)];
+    [self.filterView addSubview:self.filterI502];
+    [self.filterI502 setTitle:@"I-502" forState:UIControlStateNormal];
+    [self.filterI502.titleLabel setFont:[UIFont boldSystemFontOfSize:12]];
+    self.filterI502.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.9];
+    [self.filterI502 setTitleColor:[ColorDefinition greenColor] forState:UIControlStateNormal];
+    self.filterI502.layer.borderColor = [ColorDefinition greenColor].CGColor;
+    self.filterI502.layer.borderWidth = 1;
+    self.filterI502.layer.cornerRadius = 5;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -226,6 +296,7 @@ const double STORE_LIST_ANIMATION_VERTICAL_DELTA = 50;
 {
     [searchBar endEditing:YES];
     [self hideLocationSearchBar];
+    [self hideLocationList];
     if ([self.locationSearch.text isEqualToString: @""]) {
         [self searchInArea:nil];
     } else {
@@ -339,6 +410,22 @@ const double STORE_LIST_ANIMATION_VERTICAL_DELTA = 50;
     }
 }
 
+- (void)mapViewDidFinishRenderingMap:(MKMapView *)mapView fullyRendered:(BOOL)fullyRendered
+{
+    if (fullyRendered && !self.storeList.hidden) {
+        [self.storeListBlurView setAlpha:0.0];
+        [self.storeList setAlpha:0.0];
+        [self.storeListBlurView removeFromSuperview];
+        [self.view insertSubview:self.storeListBlurView aboveSubview:self.mapView];
+        [self.storeList setAlpha:1.0];
+        [UIView animateWithDuration:0.5 animations:^{
+            [self.storeListBlurView setAlpha:1.0];
+        } completion:^(BOOL finished) {
+            
+        }];
+    }
+}
+
 - (void)updateRegionAndStores: (CLLocationCoordinate2D) coordinate
 {
     CLLocationCoordinate2D zoomLocation= coordinate;
@@ -437,40 +524,78 @@ const double STORE_LIST_ANIMATION_VERTICAL_DELTA = 50;
 
 - (void)filterIconClicked:(id) sender {
     if (self.isFilterOn) {
-        [self.filterIcon setBackgroundImage:[UIImage imageNamed:@"filter.png" ] forState:UIControlStateNormal];
+        [self turnOffFilterIcon];
         self.isFilterOn = false;
+        [UIView animateWithDuration:0.5 animations:^{
+            [self.filterView setAlpha:0.0];
+            [self.filterView setCenter:CGPointMake(self.filterView.center.x, self.filterView.center.y + STORE_LIST_ANIMATION_VERTICAL_DELTA)];
+        } completion:^(BOOL finished) {
+            [self.filterView removeFromSuperview];
+            [self.filterView setCenter:CGPointMake(self.filterView.center.x, self.filterView.center.y - STORE_LIST_ANIMATION_VERTICAL_DELTA)];
+        }];
     } else {
-        [self.filterIcon setBackgroundImage:[UIImage imageNamed:@"filter_on.png" ] forState:UIControlStateNormal];
+        [self turnOnFilterIcon];
         self.isFilterOn = true;
+        [self.filterView setCenter:CGPointMake(self.filterView.center.x, self.filterView.center.y + STORE_LIST_ANIMATION_VERTICAL_DELTA)];
+        [self.view addSubview:self.filterView];
+        [UIView animateWithDuration:0.5 animations:^{
+            [self.filterView setAlpha:1.0];
+            [self.filterView setCenter:CGPointMake(self.filterView.center.x, self.filterView.center.y - STORE_LIST_ANIMATION_VERTICAL_DELTA)];
+        } completion:^(BOOL finished) {
+        }];
     }
 }
 
 - (void)listIconClicked:(id) sender {
-    if (self.isListViewOn) {
-        [self.listIcon setBackgroundImage:[UIImage imageNamed:@"list.png" ] forState:UIControlStateNormal];
-        self.isListViewOn = false;
-        if (!self.storeList.hidden) {
-            [UIView animateWithDuration:0.5 animations:^{
-                [self.storeList setCenter:CGPointMake(self.storeList.center.x, self.storeList.center.y - STORE_LIST_ANIMATION_VERTICAL_DELTA)];
-                [self.storeList setAlpha:0.0];
-            } completion:^(BOOL finished) {
-                self.storeList.hidden = true;
-                [self.storeList setCenter:CGPointMake(self.storeList.center.x, self.storeList.center.y + STORE_LIST_ANIMATION_VERTICAL_DELTA)];
-            }];
-        }
-    } else {
-        [self.listIcon setBackgroundImage:[UIImage imageNamed:@"list_on.png" ] forState:UIControlStateNormal];
-        self.isListViewOn = true;
-        if (self.storeList.hidden) {
-            self.storeList.hidden = false;
+    if (!self.storeList.hidden) {
+        [self turnOffListIcon];
+        [self.storeListBlurView removeFromSuperview];
+        self.listIcon.enabled = false;
+        [UIView animateWithDuration:0.5 animations:^{
             [self.storeList setCenter:CGPointMake(self.storeList.center.x, self.storeList.center.y - STORE_LIST_ANIMATION_VERTICAL_DELTA)];
-            [UIView animateWithDuration:0.5 animations:^{
-                [self.storeList setCenter:CGPointMake(self.storeList.center.x, self.storeList.center.y + STORE_LIST_ANIMATION_VERTICAL_DELTA)];
-                [self.storeList setAlpha:1.0];
-            } completion:^(BOOL finished) {
-            }];
-        }
+            [self.storeList setAlpha:0.0];
+        } completion:^(BOOL finished) {
+            self.storeList.hidden = true;
+            [self.storeList setCenter:CGPointMake(self.storeList.center.x, self.storeList.center.y + STORE_LIST_ANIMATION_VERTICAL_DELTA)];
+            self.listIcon.enabled = true;
+        }];
+    } else {
+        [self turnOnListIcon];
+        [self.view insertSubview:self.storeListBlurView aboveSubview:self.mapView];
+        self.listIcon.enabled = false;
+        self.storeList.hidden = false;
+        [self.storeList setCenter:CGPointMake(self.storeList.center.x, self.storeList.center.y - STORE_LIST_ANIMATION_VERTICAL_DELTA)];
+        [UIView animateWithDuration:0.5 animations:^{
+            [self.storeList setCenter:CGPointMake(self.storeList.center.x, self.storeList.center.y + STORE_LIST_ANIMATION_VERTICAL_DELTA)];
+            [self.storeList setAlpha:1.0];
+        } completion:^(BOOL finished) {
+            self.listIcon.enabled = true;
+        }];
     }
+}
+
+- (void)turnOffFilterIcon
+{
+    [self.filterIcon setBackgroundImage:[UIImage imageNamed:@"filter.png" ] forState:UIControlStateNormal];
+    [self.filterIcon setBackgroundImage:[UIImage imageNamed:@"filter.png" ] forState:UIControlStateDisabled];
+}
+
+- (void)turnOnFilterIcon
+{
+    [self.filterIcon setBackgroundImage:[UIImage imageNamed:@"filter_on.png" ] forState:UIControlStateNormal];
+    [self.filterIcon setBackgroundImage:[UIImage imageNamed:@"filter_on.png" ] forState:UIControlStateDisabled];
+}
+
+- (void)turnOffListIcon
+{
+    [self.listIcon setBackgroundImage:[UIImage imageNamed:@"list.png" ] forState:UIControlStateNormal];
+    [self.listIcon setBackgroundImage:[UIImage imageNamed:@"list.png" ] forState:UIControlStateDisabled];
+}
+
+- (void)turnOnListIcon
+{
+    [self.listIcon setBackgroundImage:[UIImage imageNamed:@"list_on.png" ] forState:UIControlStateNormal];
+    [self.listIcon setBackgroundImage:[UIImage imageNamed:@"list_on.png" ] forState:UIControlStateDisabled];
 }
 
 @end
