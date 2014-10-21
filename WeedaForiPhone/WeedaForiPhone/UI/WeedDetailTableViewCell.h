@@ -7,13 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "WLUIImageView.h"
 
-@interface WeedDetailTableViewCell : UITableViewCell <UICollectionViewDelegate, UICollectionViewDataSource> {
+@interface WeedDetailTableViewCell : UITableViewCell {
     UIView *_board;
-    NSMutableArray *_adjustedImage;
-    UICollectionView *_collectionView;
-    NSMutableDictionary *_imageWidthDictionary;
 }
 
 @property (weak, nonatomic) IBOutlet UILabel *weedContentLabel;

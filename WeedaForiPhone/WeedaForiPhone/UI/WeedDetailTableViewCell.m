@@ -8,8 +8,8 @@
 
 #import "WeedDetailTableViewCell.h"
 #import "WeedImage.h"
-#import "WeedShowImageCell.h"
 #import "WeedImageController.h"
+#import "WLImageCollectionView.h"
 
 #import <SDWebImage/UIImageView+WebCache.h>
 
@@ -25,6 +25,15 @@ typedef NS_ENUM(NSInteger, EnumImageWidthType)
     EnumImageWidthTypeOneThird,
     EnumImageWidthTypeMax
 };
+
+@interface WeedDetailTableViewCell() <UICollectionViewDelegate, UICollectionViewDataSource, WLImageCollectionViewDelegate>
+
+@property (nonatomic, retain) NSArray *dataSource;
+@property (nonatomic, retain) NSMutableArray *adjustedCellSize;
+@property (nonatomic, retain) UICollectionView *collectionView;
+@property (nonatomic, retain) NSMutableDictionary *imageWidthDictionary;
+
+@end
 
 @implementation WeedDetailTableViewCell
 
@@ -46,7 +55,8 @@ typedef NS_ENUM(NSInteger, EnumImageWidthType)
     [_imageWidthDictionary setObject:[NSNumber numberWithFloat:149.0] forKey:[NSNumber numberWithInteger:EnumImageWidthTypeHalf]];
     [_imageWidthDictionary setObject:[NSNumber numberWithFloat:98.6] forKey:[NSNumber numberWithInteger:EnumImageWidthTypeOneThird]];
     
-    _adjustedImage = [[NSMutableArray alloc]init];
+    _adjustedCellSize = [[NSMutableArray alloc]init];
+    _dataSource = [[NSArray alloc]init];
     
     _collectionView = [self createCollectionViewWithRect:CGRectMake(0, 0, self.frame.size.width, DEFAULT_IMAGE_DISPLAY_BOARD_HEIGHT1)];
     [self addSubview:_collectionView];
@@ -82,7 +92,7 @@ typedef NS_ENUM(NSInteger, EnumImageWidthType)
     UICollectionView *collectionView = [[UICollectionView alloc]initWithFrame:rect collectionViewLayout:layout];
     [collectionView setDelegate:self];
     [collectionView setDataSource:self];
-    [collectionView registerNib:[UINib nibWithNibName:@"WeedShowImageCell" bundle:nil] forCellWithReuseIdentifier:@"imageCell"];
+    [collectionView registerClass:[WLImageCollectionViewCell class] forCellWithReuseIdentifier:@"weedImageCell"];
     [collectionView setBackgroundColor:[UIColor clearColor]];
     
     return collectionView;
@@ -102,7 +112,7 @@ typedef NS_ENUM(NSInteger, EnumImageWidthType)
     
     CGFloat height = row > 1 ? (DEFAULT_IMAGE_DISPLAY_BOARD_HEIGHT1 / row) : DEFAULT_IMAGE_DISPLAY_BOARD_HEIGHT2;
     
-    NSArray *sortedArray = [[weed.images allObjects] sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+    _dataSource = [[weed.images allObjects] sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
         WeedImage *image1 = (WeedImage *)obj1;
         WeedImage *image2 = (WeedImage *)obj2;
         
@@ -147,14 +157,9 @@ typedef NS_ENUM(NSInteger, EnumImageWidthType)
     }
     
     for (int i = 0; i < weed.images.count; i++) {
-        WeedImage *image = (WeedImage *)[sortedArray objectAtIndex:i];
         CGFloat width = [(NSNumber *)[widthArray objectAtIndex:i] floatValue];
-        
-        image.width = [NSNumber numberWithFloat:width];
-        image.height = [NSNumber numberWithFloat:height];
-        
-        NSLog(@"Adjusted Image size: %@-%@", image.width, image.height);
-        [_adjustedImage addObject:image];
+        CGSize cellSize = CGSizeMake(width, height);
+        [_adjustedCellSize addObject:[NSValue valueWithCGSize:cellSize]];
     }
 }
 
@@ -165,45 +170,44 @@ typedef NS_ENUM(NSInteger, EnumImageWidthType)
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    NSLog(@"Return count is %ld.", _adjustedImage.count);
-    return _adjustedImage.count;
+    return _adjustedCellSize.count;
 }
 
-- (WeedShowImageCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+- (WLImageCollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"IndexPath row: %ld", indexPath.row);
-    
-    WeedShowImageCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"imageCell" forIndexPath:indexPath];
+    WLImageCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"weedImageCell" forIndexPath:indexPath];
     if (cell) {
-        WeedImage *weedImage = [_adjustedImage objectAtIndex:indexPath.row];
-        cell.imageView.translatesAutoresizingMaskIntoConstraints = YES;
-        [cell.imageView setFrame:CGRectMake(0, 0, [weedImage.width floatValue], [weedImage.height floatValue])];
-        cell.imageView.contentMode = UIViewContentModeCenter;
-
-        SDWebImageManager *manager = [SDWebImageManager sharedManager];
-        [manager downloadImageWithURL:[WeedImageController imageURLOfImageId:weedImage.url quality:[NSNumber numberWithInt:25]] options:SDWebImageHandleCookies progress:^(NSInteger receivedSize, NSInteger expectedSize) {
-            ;
-        } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
-            if (image && finished) {
-                UIImage *newImage = [WeedImageController imageWithImage:image scaledToSize:CGSizeMake([weedImage.width floatValue], [weedImage.height floatValue])];
-                cell.imageView.image = newImage;
-                [cell.imageView turnOnMaxDisplay];
-                cell.imageView.imageURL = [WeedImageController imageURLOfImageId:weedImage.url quality:[NSNumber numberWithInt:100]];
-            } else {
-                NSLog(@"Loading image failed, url:%@, error: %@", imageURL, error);
-            }
-        }];
+        WeedImage *weedImage = [_dataSource objectAtIndex:indexPath.row];
+        cell.imageView.imageURL = [WeedImageController imageURLOfImageId:weedImage.url quality:[NSNumber numberWithInt:25]];
+        cell.imageView.allowFullScreenDisplay = NO;
     } else {
         NSLog(@"Cell not exist!");
     }
-    
     return cell;
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    WeedImage *image = [_adjustedImage objectAtIndex:indexPath.row];
-    return CGSizeMake([image.width floatValue], [image.height floatValue]);
+    NSValue *cellSize = [_adjustedCellSize objectAtIndex:indexPath.row];
+    return CGSizeMake([cellSize CGSizeValue].width, [cellSize CGSizeValue].height);
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    WLImageCollectionView *imageCollectionView = [[WLImageCollectionView alloc]initWithFrame:[UIScreen mainScreen].bounds];
+    imageCollectionView.dataSource = _dataSource;
+    imageCollectionView.delegate = self;
+    [[UIApplication sharedApplication].windows.lastObject addSubview:imageCollectionView];
+    
+    WLImageCollectionViewCell *cell = (WLImageCollectionViewCell *)[_collectionView cellForItemAtIndexPath:indexPath];
+    [imageCollectionView displayWithSelectedImage:indexPath currentCell:cell];
+}
+
+#pragma delegate WLImageCollectionView
+- (CGRect)collectionview:(WLImageCollectionView *)collectionView cellRectWithIndexPath:(NSIndexPath *)indexPath
+{
+    WLImageCollectionViewCell *cell = (WLImageCollectionViewCell *)[_collectionView cellForItemAtIndexPath:indexPath];
+    return [collectionView convertRect:cell.frame fromView:_collectionView];
 }
 
 @end

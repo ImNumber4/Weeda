@@ -7,15 +7,22 @@
 //
 
 #import "WeedTableViewCell.h"
-#import "WeedShowImageCell.h"
-#import "WeedImage.h"
 #import "WeedImageController.h"
+#import "WLImageCollectionView.h"
+
 #import <SDWebImage/UIImageView+WebCache.h>
-#import <SDWebImage/SDWebImageManager.h>
 
 #define MIN_HEIGHT_OF_TEXT_VIEW 40.0
 #define DEFAULT_WEED_CONTENT_LABLE_WIDTH 200.0
 
+@interface WeedTableViewCell() <WLImageCollectionViewDelegate> {
+    CGPoint _beginOffset;
+    NSIndexPath *_currentIndexPath;
+}
+
+@property (nonatomic, strong) NSArray *dataSource;
+
+@end
 
 @implementation WeedTableViewCell
 
@@ -34,6 +41,8 @@
     if (_weedTmp) {
         _weedTmp = nil;
     }
+    
+    _dataSource = [[NSArray alloc]init];
     
     _collectionView = [self createImageCollectionView:CGRectMake(0, 0, self.frame.size.width, MASTERVIEW_IMAGEVIEW_HEIGHT)];
     [self addSubview:_collectionView];
@@ -97,6 +106,7 @@
     
     if (weed.images.count > 0) {
         [_collectionView setFrame:CGRectMake(0, self.weedContentLabel.frame.origin.y + self.weedContentLabel.frame.size.height, self.frame.size.width, MASTERVIEW_IMAGEVIEW_HEIGHT)];
+        _dataSource = [self adjustWeedImages];
         _collectionView.hidden = NO;
         [_collectionView reloadData];
     } else {
@@ -104,6 +114,31 @@
             _collectionView.hidden = YES;
         }
     }
+}
+
+- (NSArray *)adjustWeedImages
+{
+    NSArray *dataSource = [[_weedTmp.images allObjects] sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        WeedImage *image1 = obj1;
+        WeedImage *image2 = obj2;
+        
+        NSArray *strArr1 = [image1.url componentsSeparatedByString:@"_"];
+        NSArray *strArr2 = [image2.url componentsSeparatedByString:@"_"];
+        
+        if ([[strArr1 objectAtIndex:(strArr1.count - 1)] integerValue] > [[strArr2 objectAtIndex:(strArr2.count - 1)] integerValue]) {
+            return NSOrderedDescending;
+        } else {
+            return NSOrderedAscending;
+        }
+    }];
+    
+    for (WeedImage *image in dataSource) {
+        CGSize expectedSize = [WeedImageController translateSizeWithFrameSize:CGSizeMake(image.width.floatValue, image.height.floatValue) frameSize:CGSizeMake(280, 200)];
+        image.width = [NSNumber numberWithFloat:expectedSize.width];
+        image.height = [NSNumber numberWithFloat:expectedSize.height];
+    }
+
+    return dataSource;
 }
 
 - (UICollectionView *)createImageCollectionView:(CGRect)rect
@@ -118,9 +153,12 @@
     UICollectionView *collectionView = [[UICollectionView alloc]initWithFrame:rect collectionViewLayout:layout];
     [collectionView setDelegate:self];
     [collectionView setDataSource:self];
-    [collectionView registerNib:[UINib nibWithNibName:@"WeedShowImageCell" bundle:nil] forCellWithReuseIdentifier:@"imageCell"];
+    [collectionView registerClass:[WLImageCollectionViewCell class] forCellWithReuseIdentifier:@"weedImageCell"];
     [collectionView setBackgroundColor:[UIColor whiteColor]];
     collectionView.showsHorizontalScrollIndicator = NO;
+    collectionView.userInteractionEnabled = YES;
+    
+    _currentIndexPath = [NSIndexPath indexPathForItem:0 inSection:0];
     
     return collectionView;
 }
@@ -130,34 +168,14 @@
     return _weedTmp.images.count;
 }
 
-- (WeedShowImageCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+- (WLImageCollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    WeedShowImageCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"imageCell" forIndexPath:indexPath];
+    WLImageCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"weedImageCell" forIndexPath:indexPath];
     if (cell) {
         cell.backgroundColor = [UIColor grayColor];
-        WeedImage *weedImage = [[_weedTmp.images allObjects] objectAtIndex:indexPath.row];
-//        [cell.imageView sd_setImageWithURL:[WeedImageController imageURLOfImageId:weedImage.url] placeholderImage:nil options:SDWebImageHandleCookies
-//        progress:^(NSInteger receivedSize, NSInteger expectedSize) {
-//            ;
-//        } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-//            if (!image) {
-//                NSLog(@"Load image failed, imageId: %@, error: %@", weedImage.url, error);
-//            }
-//        }];
-        SDWebImageManager *manager = [SDWebImageManager sharedManager];
-        [manager downloadImageWithURL:[WeedImageController imageURLOfImageId:weedImage.url quality:[NSNumber numberWithInt:25]] options:SDWebImageHandleCookies
-        progress:^(NSInteger receivedSize, NSInteger expectedSize) {
-            ;
-        } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
-            if (image && finished) {
-                UIImage *newImage = [WeedImageController imageWithImage:image scaledToSize:CGSizeMake(cell.imageView.frame.size.width, cell.imageView.frame.size.height)];
-                cell.imageView.image = newImage;
-                [cell.imageView turnOnMaxDisplay];
-                cell.imageView.imageURL = [WeedImageController imageURLOfImageId:weedImage.url quality:[NSNumber numberWithInt:100]];
-            } else {
-                NSLog(@"Loading image failed, url:%@, error: %@", imageURL, error);
-            }
-        }];
+        WeedImage *weedImage = [_dataSource objectAtIndex:indexPath.row];
+        cell.imageView.imageURL = [WeedImageController imageURLOfImageId:weedImage.url quality:[NSNumber numberWithInt:25]];
+        cell.imageView.allowFullScreenDisplay = NO;
     } else {
         NSLog(@"Cell is nil.");
     }
@@ -165,23 +183,48 @@
     return cell;
 }
 
-- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    [collectionView scrollToItemAtIndexPath:indexPath
-                           atScrollPosition:UICollectionViewScrollPositionCenteredVertically
-                                   animated:YES];
-}
-
-- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    [collectionView scrollToItemAtIndexPath:indexPath
-                           atScrollPosition:UICollectionViewScrollPositionCenteredVertically
-                                   animated:YES];
+    WLImageCollectionView *imageCollectionView = [[WLImageCollectionView alloc]initWithFrame:[UIScreen mainScreen].bounds];
+    imageCollectionView.dataSource = _dataSource;
+    imageCollectionView.delegate = self;
+    [[UIApplication sharedApplication].windows.lastObject addSubview:imageCollectionView];
+    
+    WLImageCollectionViewCell *cell = (WLImageCollectionViewCell *)[_collectionView cellForItemAtIndexPath:indexPath];
+    [imageCollectionView displayWithSelectedImage:indexPath currentCell:cell];
 }
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
     return UIEdgeInsetsMake(0, (self.superview.bounds.size.width - 280) / 2, 0, (self.superview.bounds.size.width - 280) / 2);
+}
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    _beginOffset = scrollView.contentOffset;
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    if (decelerate) {
+        return;
+    }
+    
+    UICollectionView *collectionView = (UICollectionView *)scrollView;
+    CGPoint endOffset = scrollView.contentOffset;
+    if (abs(endOffset.x - _beginOffset.x) > 50) {
+        if (endOffset.x > _beginOffset.x && _currentIndexPath.item < _dataSource.count) {
+            _currentIndexPath = [NSIndexPath indexPathForItem:(_currentIndexPath.item + 1) inSection:_currentIndexPath.section];
+        } else if (endOffset.x < _beginOffset.x && _currentIndexPath.item > 0) {
+            _currentIndexPath = [NSIndexPath indexPathForItem:(_currentIndexPath.item - 1) inSection:_currentIndexPath.section];
+        }
+    }
+    [collectionView scrollToItemAtIndexPath:_currentIndexPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
+}
+
+- (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView
+{
+    [self scrollViewDidEndDragging:scrollView willDecelerate:NO];
 }
 
 - (CGFloat)weedContentLableHeight:(Weed *)weed
@@ -209,6 +252,13 @@
     } else {
         return MAX(textLableSize.height, MIN_HEIGHT_OF_TEXT_VIEW) + 20.0;
     }
+}
+
+#pragma WLImageCollectionView Delegate
+- (void)collectionView:(WLImageCollectionView *)collectionView didDragToIndexPath:(NSIndexPath *)indexPath
+{
+    _currentIndexPath = indexPath;
+    [_collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
 }
 
 @end

@@ -9,13 +9,13 @@
 #import "WeedImageMaxDisplayView.h"
 #import "WeedImageController.h"
 #import "WLProgressView.h"
+#import "WLImageCollectionView.h"
 
 #import <SDWebImage/UIImageView+WebCache.h>
 
 @interface WeedImageMaxDisplayView() <UIGestureRecognizerDelegate> {
-//    WLProgressView *_progress;
-//    UIProgressView *_progress;
     CGFloat _lastRotation;
+    UIDeviceOrientation _lastOrientation;
 }
 
 @end
@@ -41,31 +41,111 @@
         
         _originalImageView = imageView;
         
-        _imageView = [[UIImageView alloc]initWithFrame:[self originalImageViewRect]];
+        _imageView = [[WLImageView alloc]initWithFrame:[self originalImageViewRect]];
         _imageView.image = imageView.image;
         _imageView.contentMode = UIViewContentModeScaleAspectFill;
         _imageView.clipsToBounds = YES;
         [self addSubview:_imageView];
         
-//        _progress = [[WLProgressView alloc]initWithFrame:CGRectMake((self.frame.size.width - 40) * 0.5f, (self.frame.size.height - 40) * 0.5f, 40, 40)];
-//        [_progress setTrackImage:[WeedImageController imageWithImage:[UIImage imageNamed:@"weed.png"] scaledToSize:CGSizeMake(40, 40)]];
-//        [_progress setProgressImage:[WeedImageController imageWithImage:[UIImage imageNamed:@"weed.png"] scaledToSize:CGSizeMake(40, 40)]];
-
-//        _progress = [[UIProgressView alloc]initWithFrame:CGRectMake(0, 0, self.frame.size.width, 2)];
-//        [_progress setTrackTintColor:[ColorDefinition grayColor]];
-//        [_progress setProgressTintColor:[ColorDefinition greenColor]];
-
-        [self addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleTap:)]];
-        
-        UIRotationGestureRecognizer *rotationGesture = [[UIRotationGestureRecognizer alloc]initWithTarget:self action:@selector(handleRotation:)];
-        [rotationGesture setDelegate:self];
-        [self addGestureRecognizer:rotationGesture];
+        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleTap:)];
+        tapGesture.delegate = self;
+        [self addGestureRecognizer:tapGesture];
         
         self.userInteractionEnabled = YES;
     }
     
     return self;
 }
+
+- (void)display:(WLImageView *)imageView
+{
+    if (!imageView) {
+        return;
+    }
+    
+    [[UIDevice currentDevice]beginGeneratingDeviceOrientationNotifications];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(handleOrentation:) name:UIDeviceOrientationDidChangeNotification object:nil];
+    _lastOrientation = [[UIDevice currentDevice] orientation];
+    
+    self.frame = [[UIApplication sharedApplication].windows.lastObject frame];
+    _backgroundView.frame = [[UIApplication sharedApplication].windows.lastObject frame];
+    
+    _originalImageView = imageView;
+    _imageView.frame = [self originalImageViewRect];
+    _imageView.image = imageView.image;
+    
+    [UIView animateWithDuration:0.5 animations:^{
+        _imageView.frame = [self imageFrame];
+        [_backgroundView setAlpha:0.9];
+    } completion:^(BOOL finished) {
+        if (finished) {
+            NSURL *imageURL = [WeedImageController imageURLOfImageId:imageView.imageId quality:[NSNumber numberWithInteger:imageView.quality]];
+            [_imageView setImageURL:imageURL animate:YES];
+        }
+    }];
+}
+
+#pragma Gesture recognizers
+
+- (void)handleTap:(UITapGestureRecognizer *)gesture
+{
+    [UIView animateWithDuration:0.5 animations:^{
+        [self rotateImageView:UIDeviceOrientationPortrait];
+        _imageView.frame = [self originalImageViewRect];
+        [_backgroundView setAlpha:0.0];
+    } completion:^(BOOL finished) {
+        [[UIDevice currentDevice]endGeneratingDeviceOrientationNotifications];
+        [self removeFromSuperview];
+    }];
+}
+
+- (void)handleOrentation:(NSNotification *)rotationNotification
+{
+    UIDeviceOrientation orientation = [[UIDevice currentDevice]orientation];
+    [self rotateImageView:orientation];
+}
+
+- (void)rotateImageView:(UIDeviceOrientation)orientation
+{
+    if (orientation == UIDeviceOrientationUnknown || orientation == UIDeviceOrientationFaceUp
+        || orientation == UIDeviceOrientationFaceDown || orientation == UIDeviceOrientationPortraitUpsideDown) {
+        return;
+    }
+    
+    int count = [self getCountWithOrientation:orientation];
+    int lastCount = [self getCountWithOrientation:_lastOrientation];
+    
+    CGFloat angle = (count - lastCount) * M_PI_2;
+    
+    CGAffineTransform currentTransform = _imageView.transform;
+    [UIView animateWithDuration:0.5 animations:^{
+        _imageView.bounds = [self imageSizeWithOrientation:orientation];
+        _imageView.transform = CGAffineTransformRotate(currentTransform, angle);
+    }];
+    
+    _lastOrientation = orientation;
+
+}
+
+- (int)getCountWithOrientation:(UIDeviceOrientation)orientation
+{
+    switch (orientation) {
+        case UIDeviceOrientationLandscapeLeft:
+            return 1;
+            break;
+        case UIDeviceOrientationLandscapeRight:
+            return -1;
+            break;
+        case UIDeviceOrientationPortrait:
+            return 0;
+            
+        default:
+            return 0;
+            break;
+    }
+}
+
+#pragma private
 
 - (CGRect)originalImageViewRect
 {
@@ -86,105 +166,39 @@
     return CGRectMake(self.bounds.origin.x, (self.bounds.size.height - heigth) / 2, width, heigth);
 }
 
-- (void)display:(UIImageView *)imageView
+- (CGRect)imageSizeWithOrientation:(UIDeviceOrientation)orientation
 {
-    [self display:imageView imageURL:nil];
-}
-
-- (void)display:(UIImageView *)imageView imageURL:(NSURL *)imageURL
-{
-    self.frame = [[UIApplication sharedApplication].windows.lastObject frame];
-    _backgroundView.frame = [[UIApplication sharedApplication].windows.lastObject frame];
+    CGSize size = self.bounds.size;
+    CGSize imageSize = _imageView.image.size;
     
-    _originalImageView = imageView;
-    _imageView.frame = [self originalImageViewRect];
-    _imageView.image = imageView.image;
-    
-    [UIView animateWithDuration:0.5 animations:^{
-        _imageView.frame = [self imageFrame];
-        [_backgroundView setAlpha:0.9];
-    } completion:^(BOOL finished) {
-        if (imageURL && finished) {
-            UIActivityIndicatorView *indicatorView = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-            [indicatorView setFrame:CGRectMake((self.frame.size.width - 40) / 2, (self.frame.size.height - 40) / 2, 40, 40)];
-            [indicatorView isAnimating];
-            [self addSubview:indicatorView];
-            [self bringSubviewToFront:indicatorView];
-            
-            [[SDWebImageManager sharedManager] downloadImageWithURL:imageURL options:(SDWebImageHandleCookies | SDWebImageCacheMemoryOnly) progress:^(NSInteger receivedSize, NSInteger expectedSize) {
-                NSLog(@"received size %ld expected size %ld", receivedSize, expectedSize);
-                if (expectedSize == -1) {
-                    [indicatorView startAnimating];
-                }
-            } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
-                if (image && finished) {
-                    _imageView.image = image;
-                } else {
-                    NSLog(@"Max Image View loading Image failed. image url: %@, error: %@", imageURL, error);
-                }
-                [indicatorView stopAnimating];
-                [indicatorView removeFromSuperview];
-            }];
-        }
-    }];
-//        if (imageURL && finished) {
-//            [self addSubview:_progress];
-//            [self bringSubviewToFront:_progress];
-//            
-//            [[SDWebImageManager sharedManager] downloadImageWithURL:imageURL options:(SDWebImageHandleCookies | SDWebImageCacheMemoryOnly)
-//            progress:^(NSInteger receivedSize, NSInteger expectedSize) {
-//                NSLog(@"received size %ld expected size %ld", receivedSize, expectedSize);
-//                if (expectedSize > 0) {
-//                    [self updateProgress:(float)receivedSize / (float)expectedSize];
-//                }
-//            } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
-//                if (image && finished) {
-//                    _imageView.image = image;
-//                } else {
-//                    NSLog(@"Loading Image failed. image url: %@, error: %@", imageURL, error);
-//                }
-//                [_progress removeFromSuperview];
-//            }];
-//        }
-//    }];
-    
-}
-
-//- (void)updateProgress:(CGFloat)progress
-//{
-//    NSLog(@"Progress: %f", progress);
-//    [_progress setProgress:progress];
-//}
-
-#pragma Gesture recognizers
-
-- (void)handleTap:(UIGestureRecognizer *)gesture
-{
-    [UIView animateWithDuration:0.5 animations:^{
-        _imageView.frame = [self originalImageViewRect];
-        [_backgroundView setAlpha:0.0];
-    } completion:^(BOOL finished) {
-        [self removeFromSuperview];
-    }];
-}
-
-- (void)handleRotation:(UIGestureRecognizer *)gesture
-{
-    if (gesture.state == UIGestureRecognizerStateEnded) {
-        _lastRotation = 0.0;
-        return;
+    CGFloat ratio = 0.0;
+    if (orientation == UIDeviceOrientationLandscapeLeft || orientation == UIDeviceOrientationLandscapeRight) {
+        ratio = fmin(size.height / imageSize.width, size.width / imageSize.height);
+    } else {
+        ratio = fminf(size.height / imageSize.height, size.width / imageSize.width);
     }
     
-    CGFloat rotation = 0.0 - (_lastRotation - ((UIRotationGestureRecognizer *)gesture).rotation);
+    CGFloat width = imageSize.width * ratio;
+    CGFloat heigth = imageSize.height * ratio;
     
-    CGAffineTransform currentTransform = _imageView.transform;
-    CGAffineTransform newTransform = CGAffineTransformRotate(currentTransform, rotation);
-    
-    [_imageView setTransform:newTransform];
-    
-    _lastRotation = ((UIRotationGestureRecognizer *)gesture).rotation;
+    return CGRectMake(self.bounds.origin.x, (self.bounds.size.height - heigth) / 2, width, heigth);
 }
 
-
+- (CGSize)imageSizeImageSize:(CGSize)imageSize orientation:(UIDeviceOrientation)orientation
+{
+    CGSize size = self.bounds.size;
+    
+    CGFloat ratio = 0.0;
+    if (orientation == UIDeviceOrientationLandscapeLeft || orientation == UIDeviceOrientationLandscapeRight) {
+        ratio = fmin(size.height / imageSize.width, size.width / imageSize.height);
+    } else {
+        ratio = fminf(size.height / imageSize.height, size.width / imageSize.width);
+    }
+    
+    CGFloat width = imageSize.width * ratio;
+    CGFloat heigth = imageSize.height * ratio;
+    
+    return CGSizeMake(width, heigth);
+}
 
 @end

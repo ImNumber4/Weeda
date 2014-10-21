@@ -7,10 +7,22 @@
 //
 
 #import "WLImageView.h"
+#import "WLImageCollectionView.h"
+#import "WeedImageMaxDisplayView.h"
+
+#import <SDWebImage/UIImageView+WebCache.h>
+
+@interface WLImageView()
+
+@property (nonatomic, retain) WeedImageMaxDisplayView *maxDisplayView;
+
+@end
 
 @implementation WLImageView
 
-@synthesize imageURL;
+@synthesize dataSource;
+@synthesize indexPath;
+@synthesize allowCollectionViewDisplay;
 
 /*
 // Only override drawRect: if you perform custom drawing.
@@ -20,43 +32,76 @@
 }
 */
 
-- (id)initWithFrame:(CGRect)frame imageURL:(NSString *)imageURL isMaxDisplay:(BOOL)isMaxDisplay
+- (id)initWithFrame:(CGRect)frame imageURL:(NSURL *)url
 {
     self = [super initWithFrame:frame];
-    if (isMaxDisplay) {
-        _isMaxDisplay = YES;
-        _maxDisplayView = [[WeedImageMaxDisplayView alloc]initWithImageView:self];
-        self.userInteractionEnabled = YES;
-        [self addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleTap:)]];
-    } else {
-        _isMaxDisplay = NO;
+    if (self) {
+        self.contentMode = UIViewContentModeScaleAspectFit;
+        [self sd_setImageWithURL:url placeholderImage:nil options:SDWebImageHandleCookies progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+            ;
+        } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+            ;
+        }];
+        
+        _allowFullScreenDisplay = NO;
     }
     
     return self;
 }
 
-- (void)turnOnMaxDisplay
+- (void)setImageURL:(NSURL *)imageURL
 {
-    _isMaxDisplay = YES;
+    _imageURL = imageURL;
     
-    if (!_maxDisplayView) {
+    [self sd_setImageWithURL:imageURL placeholderImage:nil options:SDWebImageHandleCookies progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+        ;
+    } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        ;
+    }];
+}
+
+- (void)setImageURL:(NSURL *)imageURL animate:(BOOL)animate
+{
+    UIActivityIndicatorView *indicatorView = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    [indicatorView setFrame:CGRectMake((self.frame.size.width - 40) / 2, (self.frame.size.height - 40) / 2, 40, 40)];
+    [indicatorView isAnimating];
+    [self addSubview:indicatorView];
+    [self bringSubviewToFront:indicatorView];
+    
+    [[SDWebImageManager sharedManager] downloadImageWithURL:imageURL options:(SDWebImageHandleCookies | SDWebImageCacheMemoryOnly)
+    progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+        if (expectedSize == -1) {
+            [indicatorView startAnimating];
+        }
+    } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+        if (image && finished) {
+            self.image = image;
+        } else {
+            NSLog(@"Max Image View loading Image failed. image url: %@, error: %@", imageURL, error);
+        }
+        [indicatorView stopAnimating];
+        [indicatorView removeFromSuperview];
+    }];
+}
+
+- (void)setAllowFullScreenDisplay:(BOOL)allowFullScreenDisplay
+{
+    _allowFullScreenDisplay = allowFullScreenDisplay;
+    if (_allowFullScreenDisplay) {
         _maxDisplayView = [[WeedImageMaxDisplayView alloc]initWithImageView:self];
         self.userInteractionEnabled = YES;
         [self addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleTap:)]];
+    } else {
+        _maxDisplayView = nil;
+        self.userInteractionEnabled = NO;
     }
-}
-
-- (void)turnOffMaxDisplay
-{
-    _isMaxDisplay = NO;
 }
 
 - (void)handleTap:(UIGestureRecognizer *)gesture
 {
-    if (_maxDisplayView && _isMaxDisplay) {
-        [self addSubview:_maxDisplayView];
+    if (_allowFullScreenDisplay) {
         [(UIView *)[UIApplication sharedApplication].windows.lastObject addSubview:_maxDisplayView];
-        [_maxDisplayView display:self imageURL:[self imageURL]];
+        [_maxDisplayView display:self];
     }
 }
 

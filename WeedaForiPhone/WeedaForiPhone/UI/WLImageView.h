@@ -8,17 +8,18 @@
 
 #import <UIKit/UIKit.h>
 
-#import "WeedImageMaxDisplayView.h"
-
-@interface WLImageView : UIImageView {
-    WeedImageMaxDisplayView *_maxDisplayView;
-    BOOL _isMaxDisplay;
-}
-
-//- (id)initWithFrame:(CGRect)frame imageId:(NSString *)imageId isMaxDisplay:(BOOL)isMaxDisplay;
-- (void)turnOnMaxDisplay;
-//- (void)turnOffMaxDisplay;
+@interface WLImageView : UIImageView
 
 @property (nonatomic, retain) NSURL *imageURL;
+@property (nonatomic, retain) NSString *imageId;
+@property (nonatomic) NSInteger quality;
+
+@property (nonatomic, retain) NSIndexPath *indexPath;
+@property (nonatomic, retain) NSArray *dataSource;
+
+@property (nonatomic) BOOL allowFullScreenDisplay;
+@property (nonatomic) BOOL allowCollectionViewDisplay;
+
+- (void)setImageURL:(NSURL *)imageURL animate:(BOOL)animate;
 
 @end

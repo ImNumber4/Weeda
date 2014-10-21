@@ -150,6 +150,7 @@
 		EACD1157197CA76F00E45475 /* WeedImageController.m in Sources */ = {isa = PBXBuildFile; fileRef = EACD1156197CA76F00E45475 /* WeedImageController.m */; };
 		EAD2597B19CE672600D59F9D /* ImageMetadata.m in Sources */ = {isa = PBXBuildFile; fileRef = EAD2597A19CE672600D59F9D /* ImageMetadata.m */; };
 		EAF6762C18FB62E4003BB138 /* SignupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAF6762B18FB62E4003BB138 /* SignupViewController.m */; };
+		EAFF8D6719ECDB9F006632A4 /* WLImageCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = EAFF8D6619ECDB9F006632A4 /* WLImageCollectionView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -425,6 +426,8 @@
 		EAD2597A19CE672600D59F9D /* ImageMetadata.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ImageMetadata.m; path = WeedaForiPhone/Model/ImageMetadata.m; sourceTree = "<group>"; };
 		EAF6762A18FB62E4003BB138 /* SignupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignupViewController.h; sourceTree = "<group>"; };
 		EAF6762B18FB62E4003BB138 /* SignupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignupViewController.m; sourceTree = "<group>"; };
+		EAFF8D6519ECDB9F006632A4 /* WLImageCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WLImageCollectionView.h; path = WeedaForiPhone/UI/WLImageCollectionView.h; sourceTree = "<group>"; };
+		EAFF8D6619ECDB9F006632A4 /* WLImageCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WLImageCollectionView.m; path = WeedaForiPhone/UI/WLImageCollectionView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -787,6 +790,8 @@
 				EA9B504D19E9EAF7008B2464 /* WLProgressView.m */,
 				A9C1BDE919F6440F003672DD /* UIViewHelper.h */,
 				A9C1BDE119F643D6003672DD /* UIViewHelper.m */,
+				EAFF8D6519ECDB9F006632A4 /* WLImageCollectionView.h */,
+				EAFF8D6619ECDB9F006632A4 /* WLImageCollectionView.m */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -1083,6 +1088,7 @@
 				A914CCB618CD756200B870D8 /* AppDelegate.m in Sources */,
 				EAF6762C18FB62E4003BB138 /* SignupViewController.m in Sources */,
 				0EB8C4C219C5C00800BD64E1 /* JSMessagesViewController.m in Sources */,
+				EAFF8D6719ECDB9F006632A4 /* WLImageCollectionView.m in Sources */,
 				A9CA8E8F18F264BA004F095D /* User.m in Sources */,
 				A9645DDB196A0A6C00DDE2DB /* DiscoverViewController.m in Sources */,
 				EAAE7B4B19611295003F0C65 /* WeedImageView.m in Sources */,

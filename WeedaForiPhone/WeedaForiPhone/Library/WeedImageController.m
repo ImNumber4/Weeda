@@ -62,6 +62,31 @@ static NSString *baseUrl = @"http://www.cannablaze.com/image/query";
     return newImage;
 }
 
++ (CGSize)translateSizeWithFrameSize:(CGSize)size frameSize:(CGSize)frameSize
+{
+    CGFloat ratio = size.width / size.height;
+    CGFloat frameRatio = frameSize.width / size.height;
+    
+    CGSize newSize;
+    if (frameSize.width > frameSize.height && frameRatio > ratio) {
+        newSize = CGSizeMake(frameSize.width, frameSize.width / ratio);
+    } else {
+        newSize = CGSizeMake(frameSize.height * ratio, frameSize.height);
+    }
+    
+    return newSize;
+}
+
++ (CGSize)sizeAspectScaleFitWithSize:(CGSize)originalSize frameSize:(CGSize)frameSize
+{
+    CGFloat ratio = fminf(frameSize.height / originalSize.height, frameSize.width / originalSize.width);
+    
+    CGFloat width = originalSize.width * ratio;
+    CGFloat heigth = originalSize.height * ratio;
+    
+    return CGSizeMake(width, heigth);
+}
+
 + (UIImage *)imageWithImage:(UIImage *)originalImage scaledToWidth:(CGFloat)width
 {
     CGFloat originalWidth = originalImage.size.width;

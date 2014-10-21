@@ -29,4 +29,8 @@
 
 + (UIImage *)imageWithImage:(UIImage *)originalImage scaledToRatio:(CGFloat)ratio;
 
++ (CGSize) translateSizeWithFrameSize:(CGSize)size frameSize:(CGSize)frameSize;
+
++ (CGSize)sizeAspectScaleFitWithSize:(CGSize)originalSize frameSize:(CGSize)frameSize;
+
 @end

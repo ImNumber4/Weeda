@@ -17,4 +17,9 @@
 //    NSLog(@"cell imageview size, width: %f, height: %f.", self.frame.size.width, self.frame.size.height);
 }
 
+- (void)prepareForReuse
+{
+    self.imageView.image = nil;
+}
+
 @end
