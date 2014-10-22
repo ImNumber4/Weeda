@@ -596,7 +596,6 @@ static const double FILTER_TAB_HEIGHT = 150;
 
 - (void)filterIconClicked:(id) sender {
     if (!self.filterView.hidden) {
-        [self turnOffFilterIcon];
         [UIView animateWithDuration:0.5 animations:^{
             [self.filterView setAlpha:0.0];
             [self.filterView setCenter:CGPointMake(self.filterView.center.x, self.filterView.center.y + STORE_LIST_ANIMATION_VERTICAL_DELTA)];
@@ -605,7 +604,6 @@ static const double FILTER_TAB_HEIGHT = 150;
             [self.filterView setCenter:CGPointMake(self.filterView.center.x, self.filterView.center.y - STORE_LIST_ANIMATION_VERTICAL_DELTA)];
         }];
     } else {
-        [self turnOnFilterIcon];
         self.filterView.hidden = false;
         [self.filterView setCenter:CGPointMake(self.filterView.center.x, self.filterView.center.y + STORE_LIST_ANIMATION_VERTICAL_DELTA)];
         [UIView animateWithDuration:0.5 animations:^{
@@ -693,7 +691,17 @@ static const double FILTER_TAB_HEIGHT = 150;
     }
     [button setTitleColor:color forState:UIControlStateNormal];
     button.layer.borderColor = color.CGColor;
+    [self adjustFilterOnIconStatus];
     [self reloadData];
+}
+
+- (void) adjustFilterOnIconStatus
+{
+    if ([self.userTypeFilters count] == 0) {
+        [self turnOffFilterIcon];
+    } else {
+        [self turnOnFilterIcon];
+    }
 }
 
 @end
