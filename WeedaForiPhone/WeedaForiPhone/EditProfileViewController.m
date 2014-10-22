@@ -223,7 +223,6 @@ const NSInteger RESULT_OKAY_BUTTON_IN_BLUR_VIEW = 24;
     UIEdgeInsets contentInsets = UIEdgeInsetsMake(self.table.contentInset.top, 0.0, 0.0, 0.0);
     self.table.contentInset = contentInsets;
     self.table.scrollIndicatorInsets = contentInsets;
-    
 }
 
 - (IBAction) save: (id) sender

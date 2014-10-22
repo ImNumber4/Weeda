@@ -11,10 +11,10 @@
 #import "RemoteObject.h"
 #import <MapKit/MapKit.h>
 
-#define USER_TYPE_USER @"user"
-#define USER_TYPE_DISPENSARY @"dispensary"
-#define USER_TYPE_HYDRO @"hydro"
-#define USER_TYPE_I502 @"i502"
+#define USER_TYPE_USER @"User"
+#define USER_TYPE_DISPENSARY @"Dispensary"
+#define USER_TYPE_HYDRO @"Hydro"
+#define USER_TYPE_I502 @"I-502"
 
 @interface User : NSObject <MKAnnotation>
 @property (nonatomic, retain) NSNumber * shouldBeDeleted;

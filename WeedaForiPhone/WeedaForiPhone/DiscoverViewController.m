@@ -16,7 +16,6 @@
 @interface DiscoverViewController () <UITableViewDelegate, UITableViewDataSource, VendorMKAnnotationViewDelegate>
 
 @property (nonatomic, strong) CLLocation *curLocation;
-@property BOOL isFilterOn;
 @property (nonatomic, strong) UITableView * storeList;
 @property (nonatomic, strong) UIButton *filterIcon;
 @property (nonatomic, strong) UIButton *listIcon;
@@ -26,32 +25,54 @@
 @property (strong) CLGeocoder *geocoder;
 @property (strong) NSMutableArray *locations;
 @property (strong) NSMutableArray *stores;
+@property (strong) NSMutableArray *filteredStores;
 
 @property (nonatomic, strong) UIView *filterView;
 @property (nonatomic, strong) UIButton *filterDispensary;
 @property (nonatomic, strong) UIButton *filterHydro;
 @property (nonatomic, strong) UIButton *filterI502;
 
+/*
+ * stores user types filter values, if it is empty, means no filter
+ */
+@property (nonatomic, strong) NSMutableSet *userTypeFilters;
+/*
+ * stores UI tag value to user types mapping
+ */
+@property (nonatomic, strong) NSDictionary *tagValueToUserTypeMapping;
+/*
+ * stores user types to tag mapping
+ */
+@property (nonatomic, strong) NSDictionary *userTypeToTagValueMapping;
+/*
+ * stores user types to color mapping
+ */
+@property (nonatomic, strong) NSDictionary *userTypeToColorMapping;
+
 @end
 
 @implementation DiscoverViewController
 
-const NSInteger STORE_SEARCH = 0;
-const NSInteger LOCATION_SEARCH = 1;
+static const NSInteger STORE_SEARCH = 0;
+static const NSInteger LOCATION_SEARCH = 1;
 
-const double REGION_SPAN = 2.0;
-const double ICON_HEIGHT = 28.0;
-const double COMPONENT_PADDING = 5.0;
+static const double REGION_SPAN = 2.0;
+static const double ICON_HEIGHT = 28.0;
+static const double COMPONENT_PADDING = 5.0;
 
-const NSInteger LOCATION_LIST_TABLE_VIEW = 1;
-const NSInteger STORE_LIST_TABLE_VIEW = 2;
+static const NSInteger LOCATION_LIST_TABLE_VIEW = 1;
+static const NSInteger STORE_LIST_TABLE_VIEW = 2;
 
-const double LOCATION_LIST_HEIGHT = 35;
+static const double LOCATION_LIST_HEIGHT = 35;
 
 static NSString * LOCATION_LIST_CELL_REUSE_ID = @"LocationCell";
 static NSString * STORE_LIST_CELL_REUSE_ID = @"StoreCell";
 
-const double STORE_LIST_ANIMATION_VERTICAL_DELTA = 100;
+static const double STORE_LIST_ANIMATION_VERTICAL_DELTA = 100;
+
+static const double ALPHA_VALUE = 0.8;
+
+static const double FILTER_TAB_HEIGHT = 150;
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -67,10 +88,15 @@ const double STORE_LIST_ANIMATION_VERTICAL_DELTA = 100;
     [super viewDidLoad];
     
     self.mapView.delegate = self;
+    
     self.storeSearch.delegate = self;
     self.storeSearch.tag = STORE_SEARCH;
     self.locationSearch.delegate = self;
     self.locationSearch.tag = LOCATION_SEARCH;
+    
+    [self.searchBackground setAlpha:ALPHA_VALUE];
+    [self.locationBackground setAlpha:ALPHA_VALUE];
+
     self.locations = [[NSMutableArray alloc] init];
     [self.storeSearch setImage:[UIImage imageNamed: @"search_icon.png"] forSearchBarIcon:UISearchBarIconSearch state:UIControlStateNormal];
     [self.searchInCurrentLocation addTarget:self action:@selector(searchInCurrentLocation:)forControlEvents:UIControlEventTouchDown];
@@ -78,22 +104,24 @@ const double STORE_LIST_ANIMATION_VERTICAL_DELTA = 100;
     [self.searchInArea addTarget:self action:@selector(searchInArea:)forControlEvents:UIControlEventTouchDown];
     self.searchInArea.backgroundColor = [ColorDefinition greenColor];
     [self.storeSearch becomeFirstResponder];
-    //do not do search in current location for now
-    //[self searchInCurrentLocation:nil];
-    self.geocoder = [[CLGeocoder alloc] init];
+
     UITapGestureRecognizer *singleFingerTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
     [self.mapView addGestureRecognizer:singleFingerTap];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWasShown:)
                                                  name:UIKeyboardDidShowNotification object:nil];
+    
     [self hideLocationList];
+    
     self.locationList.tag = LOCATION_LIST_TABLE_VIEW;
-    [self.locationList setBackgroundColor:[UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.75]];
+    [self.locationList setBackgroundColor:[UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:ALPHA_VALUE]];
     [self.locationList setSeparatorInset:UIEdgeInsetsZero];
     self.locationList.tableFooterView = [[UIView alloc] init];
     [self.locationList registerClass:[UITableViewCell class] forCellReuseIdentifier:LOCATION_LIST_CELL_REUSE_ID];
     
     self.stores = [[NSMutableArray alloc] init];
+    self.filteredStores = [[NSMutableArray alloc] init];
     self.storeList = [[UITableView alloc] initWithFrame:CGRectMake(0.0, self.locationBackground.frame.origin.y, self.view.frame.size.width, self.searchInArea.frame.origin.y - self.locationBackground.frame.origin.y)];
     self.storeList.tag = STORE_LIST_TABLE_VIEW;
     [self.storeList setBackgroundColor:[UIColor clearColor]];
@@ -112,22 +140,46 @@ const double STORE_LIST_ANIMATION_VERTICAL_DELTA = 100;
     self.filterIcon = [[UIButton alloc] initWithFrame:CGRectMake(COMPONENT_PADDING, self.storeSearch.center.y - ICON_HEIGHT/2.0, ICON_HEIGHT, ICON_HEIGHT)];
     [self.view addSubview:self.filterIcon];
     self.filterIcon.hidden = true;
-    [self.filterIcon setAlpha:0.75];
+    [self.filterIcon setAlpha:ALPHA_VALUE];
     [self.filterIcon addTarget:self action:@selector(filterIconClicked:)forControlEvents:UIControlEventTouchDown];
-    self.isFilterOn = false;
     [self turnOffFilterIcon];
     
     self.listIcon = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - COMPONENT_PADDING - ICON_HEIGHT, self.storeSearch.center.y - ICON_HEIGHT/2.0, ICON_HEIGHT, ICON_HEIGHT)];
     [self.view addSubview:self.listIcon];
     self.listIcon.hidden = true;
-    [self.listIcon setAlpha:0.75];
+    [self.listIcon setAlpha:ALPHA_VALUE];
     [self.listIcon addTarget:self action:@selector(listIconClicked:)forControlEvents:UIControlEventTouchDown];
     [self turnOffListIcon];
     
     self.storeListBlurView = [[BlurView alloc] initWithFrame:self.mapView.frame];
        
-    self.filterView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 300, self.view.frame.size.width, self.view.frame.size.height - 300)];
+    [self initFilterTab];
+}
+
+- (void) initFilterTab
+{
+    self.userTypeFilters = [[NSMutableSet alloc] init];
+    self.tagValueToUserTypeMapping = @{
+                                       [NSNumber numberWithInt:1] : USER_TYPE_DISPENSARY,
+                                       [NSNumber numberWithInt:2] : USER_TYPE_HYDRO,
+                                       [NSNumber numberWithInt:3] : USER_TYPE_I502
+                                       };
+    self.userTypeToTagValueMapping = @{
+                                       USER_TYPE_DISPENSARY : [NSNumber numberWithInt:1],
+                                       USER_TYPE_HYDRO : [NSNumber numberWithInt:2],
+                                       USER_TYPE_I502 : [NSNumber numberWithInt:3]
+                                       };
+    self.userTypeToColorMapping = @{
+                                    USER_TYPE_DISPENSARY : [ColorDefinition orangeColor],
+                                    USER_TYPE_HYDRO : [ColorDefinition blueColor],
+                                    USER_TYPE_I502 : [ColorDefinition greenColor]
+                                    };
+    
+    self.filterView = [[UIView alloc] initWithFrame:CGRectMake(0.0, self.searchInArea.frame.origin.y - FILTER_TAB_HEIGHT, self.view.frame.size.width, FILTER_TAB_HEIGHT)];
     [self.filterView setBackgroundColor:[UIColor whiteColor]];
+    [self.view insertSubview:self.filterView belowSubview:self.searchInArea];
+    [self.filterView setAlpha:0.0];
+    [self.filterView setHidden:true];
     [UIViewHelper roundCorners:self.filterView byRoundingCorners:UIRectCornerTopLeft|UIRectCornerTopRight];
     
     UILabel *filterViewArrow= [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, self.filterView.frame.size.width, 20.0)];
@@ -146,7 +198,7 @@ const double STORE_LIST_ANIMATION_VERTICAL_DELTA = 100;
     [filterViewTitle setTextAlignment:NSTextAlignmentCenter];
     [self.filterView addSubview:filterViewTitle];
     
-    UILabel *filterByStoreTypeTitle = [[UILabel alloc] initWithFrame:CGRectMake(COMPONENT_PADDING * 2/*Use double padding*/, filterViewTitle.frame.origin.y + filterViewTitle.frame.size.height + 15, self.filterView.frame.size.width - COMPONENT_PADDING * 4.0, 30.0)];
+    UILabel *filterByStoreTypeTitle = [[UILabel alloc] initWithFrame:CGRectMake(COMPONENT_PADDING * 2/*Use double padding*/, filterViewTitle.frame.origin.y + filterViewTitle.frame.size.height + 10, self.filterView.frame.size.width - COMPONENT_PADDING * 4.0, 30.0)];
     filterByStoreTypeTitle.text = @"Store type";
     [filterByStoreTypeTitle setFont:[UIFont systemFontOfSize:12]];
     filterByStoreTypeTitle.textColor = [UIColor darkGrayColor];
@@ -158,33 +210,40 @@ const double STORE_LIST_ANIMATION_VERTICAL_DELTA = 100;
     
     self.filterDispensary = [[UIButton alloc] initWithFrame:CGRectMake(COMPONENT_PADDING, filterButtonY, filterButtonWidth, 25)];
     [self.filterView addSubview:self.filterDispensary];
-    [self.filterDispensary setTitle:@"Dispensary" forState:UIControlStateNormal];
-    [self.filterDispensary.titleLabel setFont:[UIFont boldSystemFontOfSize:12]];
-    self.filterDispensary.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.9];
-    [self.filterDispensary setTitleColor:[ColorDefinition orangeColor] forState:UIControlStateNormal];
-    self.filterDispensary.layer.borderColor = [ColorDefinition orangeColor].CGColor;
-    self.filterDispensary.layer.borderWidth = 1;
-    self.filterDispensary.layer.cornerRadius = 5;
+    [self decorateFilterButton:self.filterDispensary type:USER_TYPE_DISPENSARY];
     
     self.filterHydro = [[UIButton alloc] initWithFrame:CGRectMake(self.filterDispensary.frame.origin.x + filterButtonWidth + COMPONENT_PADDING, filterButtonY, filterButtonWidth, 25)];
     [self.filterView addSubview:self.filterHydro];
-    [self.filterHydro setTitle:@"Hydro" forState:UIControlStateNormal];
-    [self.filterHydro.titleLabel setFont:[UIFont boldSystemFontOfSize:12]];
-    self.filterHydro.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.9];
-    [self.filterHydro setTitleColor:[ColorDefinition blueColor] forState:UIControlStateNormal];
-    self.filterHydro.layer.borderColor = [ColorDefinition blueColor].CGColor;
-    self.filterHydro.layer.borderWidth = 1;
-    self.filterHydro.layer.cornerRadius = 5;
+    [self decorateFilterButton:self.filterHydro type:USER_TYPE_HYDRO];
     
     self.filterI502 = [[UIButton alloc] initWithFrame:CGRectMake(self.filterHydro.frame.origin.x + filterButtonWidth + COMPONENT_PADDING, filterButtonY, filterButtonWidth, 25)];
     [self.filterView addSubview:self.filterI502];
-    [self.filterI502 setTitle:@"I-502" forState:UIControlStateNormal];
-    [self.filterI502.titleLabel setFont:[UIFont boldSystemFontOfSize:12]];
-    self.filterI502.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.9];
-    [self.filterI502 setTitleColor:[ColorDefinition greenColor] forState:UIControlStateNormal];
-    self.filterI502.layer.borderColor = [ColorDefinition greenColor].CGColor;
-    self.filterI502.layer.borderWidth = 1;
-    self.filterI502.layer.cornerRadius = 5;
+    [self decorateFilterButton:self.filterI502 type:USER_TYPE_I502];
+}
+
+- (void) decorateFilterButton:(UIButton *) button type:(NSString *) type
+{
+    NSNumber *tagValue = [self.userTypeToTagValueMapping objectForKey:type];
+    button.tag = [tagValue integerValue];
+    UIColor *color = [ColorDefinition grayColor];
+    [button setTitle:type forState:UIControlStateNormal];
+    [button.titleLabel setFont:[UIFont boldSystemFontOfSize:12]];
+    button.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.9];
+    [button setTitleColor:color forState:UIControlStateNormal];
+    button.layer.borderColor = color.CGColor;
+    button.layer.borderWidth = 1;
+    button.layer.cornerRadius = 5;
+    [button addTarget:self action:@selector(userTypeFilterClicked:)forControlEvents:UIControlEventTouchDown];
+}
+
+- (CLGeocoder *) getGeocoder
+{
+    if (self.geocoder == nil) {
+        //do not do search in current location for now
+        //[self searchInCurrentLocation:nil];
+        self.geocoder = [[CLGeocoder alloc] init];
+    }
+    return self.geocoder;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -281,7 +340,7 @@ const double STORE_LIST_ANIMATION_VERTICAL_DELTA = 100;
             [UIView animateWithDuration:0.5 animations:^{
                 [self.locationSearch setAlpha:1.0];
                 [self.locationSearch setCenter:CGPointMake(self.locationSearch.center.x, self.locationSearch.center.y + self.locationBackground.frame.size.height)];
-                [self.locationBackground setAlpha:0.75];
+                [self.locationBackground setAlpha:ALPHA_VALUE];
                 [self.locationBackground setCenter:CGPointMake(self.locationBackground.center.x, self.locationBackground.center.y + self.locationBackground.frame.size.height)];
                 [self.storeSearch setFrame:CGRectMake(0.0, self.storeSearch.frame.origin.y, self.locationSearch.frame.size.width, self.storeSearch.frame.size.height)];
                 [self.storeList setFrame:CGRectMake(0.0, self.locationBackground.frame.origin.y + self.locationBackground.frame.size.height, self.view.frame.size.width, self.searchInArea.frame.origin.y - self.locationBackground.frame.origin.y - self.locationBackground.frame.size.height)];
@@ -300,7 +359,7 @@ const double STORE_LIST_ANIMATION_VERTICAL_DELTA = 100;
     if ([self.locationSearch.text isEqualToString: @""]) {
         [self searchInArea:nil];
     } else {
-        [self.geocoder geocodeAddressString:self.locationSearch.text
+        [[self getGeocoder] geocodeAddressString:self.locationSearch.text
                       completionHandler:^(NSArray* placemarks, NSError* error){
                           if (placemarks && placemarks.count > 0) {
                               CLPlacemark *placeMark = [placemarks objectAtIndex:0];
@@ -319,7 +378,7 @@ const double STORE_LIST_ANIMATION_VERTICAL_DELTA = 100;
 
     if (searchBar.tag == LOCATION_SEARCH) {
         NSString *location = searchText;
-        [self.geocoder geocodeAddressString:location
+        [[self getGeocoder] geocodeAddressString:location
                      completionHandler:^(NSArray* placemarks, NSError* error){
                          [self hideLocationList];
                          if (placemarks && placemarks.count > 0) {
@@ -413,15 +472,16 @@ const double STORE_LIST_ANIMATION_VERTICAL_DELTA = 100;
 - (void)mapViewDidFinishRenderingMap:(MKMapView *)mapView fullyRendered:(BOOL)fullyRendered
 {
     if (fullyRendered && !self.storeList.hidden) {
-        [self.storeListBlurView setAlpha:0.0];
-        [self.storeList setAlpha:0.0];
-        [self.storeListBlurView removeFromSuperview];
-        [self.view insertSubview:self.storeListBlurView aboveSubview:self.mapView];
-        [self.storeList setAlpha:1.0];
-        [UIView animateWithDuration:0.5 animations:^{
-            [self.storeListBlurView setAlpha:1.0];
+        [UIView animateWithDuration:0.2 animations:^{
+            [self.storeListBlurView setAlpha:0.0];
         } completion:^(BOOL finished) {
-            
+            [self.storeListBlurView removeFromSuperview];
+            [self.mapView addSubview:self.storeListBlurView];
+            [UIView animateWithDuration:0.5 animations:^{
+                [self.storeListBlurView setAlpha:1.0];
+            } completion:^(BOOL finished) {
+        
+            }];
         }];
     }
 }
@@ -445,18 +505,30 @@ const double STORE_LIST_ANIMATION_VERTICAL_DELTA = 100;
     [self.stores removeAllObjects];
     NSString * feedUrl = [NSString stringWithFormat:@"user/queryUsersWithCoordinates/%f/%f/%f/%@", region.center.latitude, region.center.longitude, fmax(region.span.latitudeDelta, region.span.longitudeDelta), self.storeSearch.text];
     [[RKObjectManager sharedManager] getObjectsAtPath:feedUrl parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-        
-        for (id<MKAnnotation> annotation in self.mapView.annotations) {
-            [self.mapView removeAnnotation:annotation];
-        }
         for (User * user in mappingResult.array) {
-            [self.mapView addAnnotation:user];
             [self.stores addObject:user];
         }
-        [self.storeList reloadData];
+        [self reloadData];
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
         RKLogError(@"Load failed with error: %@", error);
     }];
+}
+
+- (void) reloadData
+{
+    [self.filteredStores removeAllObjects];
+    for (User * user in self.stores) {
+        if ([self.userTypeFilters count] == 0 || [self.userTypeFilters containsObject:user.user_type]) {
+            [self.filteredStores addObject:user];
+        }
+    }
+    for (id<MKAnnotation> annotation in self.mapView.annotations) {
+        [self.mapView removeAnnotation:annotation];
+    }
+    for (User * user in self.filteredStores) {
+        [self.mapView addAnnotation:user];
+    }
+    [self.storeList reloadData];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -464,7 +536,7 @@ const double STORE_LIST_ANIMATION_VERTICAL_DELTA = 100;
     if (tableView.tag == LOCATION_LIST_TABLE_VIEW) {
         return self.locations.count;
     } else {
-        return self.stores.count;
+        return self.filteredStores.count;
     }
 }
 
@@ -476,7 +548,7 @@ const double STORE_LIST_ANIMATION_VERTICAL_DELTA = 100;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             [cell setBackgroundColor:[UIColor clearColor]];
             NSString *suggestion = [self.locations objectAtIndex:indexPath.row];
-            [cell.textLabel setFont:[UIFont systemFontOfSize:12.0]];
+            [cell.textLabel setFont:[UIFont systemFontOfSize:14.0]];
             [cell.textLabel setText:suggestion];
         }
         return cell;
@@ -484,7 +556,7 @@ const double STORE_LIST_ANIMATION_VERTICAL_DELTA = 100;
         UserTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:STORE_LIST_CELL_REUSE_ID forIndexPath:indexPath];
         if (cell) {
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            User *store = [self.stores objectAtIndex:indexPath.row];
+            User *store = [self.filteredStores objectAtIndex:indexPath.row];
             [cell decorateCellWithUser:store];
             [cell setBackgroundColor:[UIColor clearColor]];
         }
@@ -501,7 +573,7 @@ const double STORE_LIST_ANIMATION_VERTICAL_DELTA = 100;
         }
         [self hideLocationList];
     } else {
-        User * store = [self.stores objectAtIndex:indexPath.row];
+        User * store = [self.filteredStores objectAtIndex:indexPath.row];
         [self performSegueWithIdentifier:@"showUser" sender:store.id];
     }
 }
@@ -523,21 +595,19 @@ const double STORE_LIST_ANIMATION_VERTICAL_DELTA = 100;
 }
 
 - (void)filterIconClicked:(id) sender {
-    if (self.isFilterOn) {
+    if (!self.filterView.hidden) {
         [self turnOffFilterIcon];
-        self.isFilterOn = false;
         [UIView animateWithDuration:0.5 animations:^{
             [self.filterView setAlpha:0.0];
             [self.filterView setCenter:CGPointMake(self.filterView.center.x, self.filterView.center.y + STORE_LIST_ANIMATION_VERTICAL_DELTA)];
         } completion:^(BOOL finished) {
-            [self.filterView removeFromSuperview];
+            self.filterView.hidden = true;
             [self.filterView setCenter:CGPointMake(self.filterView.center.x, self.filterView.center.y - STORE_LIST_ANIMATION_VERTICAL_DELTA)];
         }];
     } else {
         [self turnOnFilterIcon];
-        self.isFilterOn = true;
+        self.filterView.hidden = false;
         [self.filterView setCenter:CGPointMake(self.filterView.center.x, self.filterView.center.y + STORE_LIST_ANIMATION_VERTICAL_DELTA)];
-        [self.view addSubview:self.filterView];
         [UIView animateWithDuration:0.5 animations:^{
             [self.filterView setAlpha:1.0];
             [self.filterView setCenter:CGPointMake(self.filterView.center.x, self.filterView.center.y - STORE_LIST_ANIMATION_VERTICAL_DELTA)];
@@ -561,7 +631,7 @@ const double STORE_LIST_ANIMATION_VERTICAL_DELTA = 100;
         }];
     } else {
         [self turnOnListIcon];
-        [self.view insertSubview:self.storeListBlurView aboveSubview:self.mapView];
+        [self.mapView addSubview:self.storeListBlurView];
         self.listIcon.enabled = false;
         self.storeList.hidden = false;
         [self.storeList setCenter:CGPointMake(self.storeList.center.x, self.storeList.center.y - STORE_LIST_ANIMATION_VERTICAL_DELTA)];
@@ -596,6 +666,34 @@ const double STORE_LIST_ANIMATION_VERTICAL_DELTA = 100;
 {
     [self.listIcon setBackgroundImage:[UIImage imageNamed:@"list_on.png" ] forState:UIControlStateNormal];
     [self.listIcon setBackgroundImage:[UIImage imageNamed:@"list_on.png" ] forState:UIControlStateDisabled];
+}
+
+- (IBAction)userTypeFilterClicked:(id) sender
+{
+    UIButton *button = sender;
+    NSString *userType = [self.tagValueToUserTypeMapping objectForKey:[NSNumber numberWithInteger:button.tag]];
+    if ([self.userTypeFilters count] == 0 || ![self.userTypeFilters containsObject:userType]) {
+        [self switchFilterForUserType:userType on:YES];
+    } else {
+        [self switchFilterForUserType:userType on:NO];
+    }
+}
+
+- (void) switchFilterForUserType:(NSString *)userType on:(BOOL) shouldTurnOn
+{
+    NSNumber *tagValue = [self.userTypeToTagValueMapping objectForKey:userType];
+    UIButton *button = (UIButton *)[self.filterView viewWithTag:[tagValue integerValue]];
+    UIColor *color;
+    if (shouldTurnOn) {
+        color = [self.userTypeToColorMapping objectForKey:userType];
+        [self.userTypeFilters addObject:userType];
+    } else {
+        color = [ColorDefinition grayColor];
+        [self.userTypeFilters removeObject:userType];
+    }
+    [button setTitleColor:color forState:UIControlStateNormal];
+    button.layer.borderColor = color.CGColor;
+    [self reloadData];
 }
 
 @end
