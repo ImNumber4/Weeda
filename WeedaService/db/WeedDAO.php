@@ -21,27 +21,16 @@ class WeedDAO extends BaseDAO
 			$filter = "";
 
 		/* grab the users from the db */
-		$query = "SELECT weed.id as weed_id, user.id as user_id, weed.light_id as light_id, weed.root_id as root_id, currentUserWater.user_id as if_cur_user_water_it, currentUserWeed.user_id as if_cur_user_light_it, currentUserSeed.user_id as if_cur_user_seed_it, weed.water_count as water_count, weed.seed_count as seed_count, weed.light_count as light_count, weed.content as content, user.time as user_time, weed.time as weed_time, username, weed.deleted as weed_deleted, user.deleted as user_deleted, weed.image_count as image_count FROM weed left join weed currentUserWeed on currentUserWeed.root_id=weed.id or currentUserWeed.light_id=weed.id and currentUserWeed.user_id=$currentUser_id left join water currentUserWater on currentUserWater.weed_id=weed.id and currentUserWater.user_id=$currentUser_id left join seed currentUserSeed on currentUserSeed.weed_id=weed.id and currentUserSeed.user_id=$currentUser_id left join user on user.id=weed.user_id $filter GROUP BY weed.id";
+		$query = "SELECT weed.id as weed_id, user.id as user_id, weed.light_id as light_id, weed.root_id as root_id, currentUserWater.user_id as if_cur_user_water_it, currentUserWeed.user_id as if_cur_user_light_it, currentUserSeed.user_id as if_cur_user_seed_it, weed.water_count as water_count, weed.seed_count as seed_count, weed.light_count as light_count, weed.content as content, user.time as user_time, weed.time as weed_time, username, weed.deleted as weed_deleted, user.deleted as user_deleted, weed.image_count as image_count, weed.image_metadata as image_metadata FROM weed left join weed currentUserWeed on currentUserWeed.root_id=weed.id or currentUserWeed.light_id=weed.id and currentUserWeed.user_id=$currentUser_id left join water currentUserWater on currentUserWater.weed_id=weed.id and currentUserWater.user_id=$currentUser_id left join seed currentUserSeed on currentUserSeed.weed_id=weed.id and currentUserSeed.user_id=$currentUser_id left join user on user.id=weed.user_id $filter GROUP BY weed.id";
 
 		$result = $this->db_conn->query($query);
 
 		/* create one master array of the records */
 		$weeds = array();
-		$imageController = new ImageController();
 		if(mysql_num_rows($result)) {
 			while($weed = mysql_fetch_assoc($result)) {
-				
-				if ($weed['image_count']  > 0) {
-					$array_image_metadata = $imageController->query_image_metadata($weed['weed_id']);
-					if (count($array_image_metadata) > 0) {
-						$weed['images'] = $array_image_metadata;
-					} else {
-						error_log("weed image is null, weed id: " . $weed['weed_id']);
-						$weed['images'] = null;
-					}
-				}
-				
-				$weeds[] = array('id' => $weed['weed_id'], 'content' => $weed['content'], 'user_id' => $weed['user_id'], 'username' => $weed['username'], 'time' => $weed['weed_time'], 'light_id' => $weed['light_id'], 'root_id' => $weed['root_id'], 'deleted' => $weed['weed_deleted'], 'light_count' => $weed['light_count'], 'water_count' => $weed['water_count'], 'seed_count' => $weed['seed_count'], 'if_cur_user_water_it' => $weed['if_cur_user_water_it'] == $currentUser_id, 'if_cur_user_seed_it' => $weed['if_cur_user_seed_it'] == $currentUser_id, 'if_cur_user_light_it' => $weed['if_cur_user_light_it'] == $currentUser_id, 'image_count' => $weed['image_count'], 'images' => $weed['images']);
+				$images = json_decode($weed['image_metadata']);
+				$weeds[] = array('id' => $weed['weed_id'], 'content' => $weed['content'], 'user_id' => $weed['user_id'], 'username' => $weed['username'], 'time' => $weed['weed_time'], 'light_id' => $weed['light_id'], 'root_id' => $weed['root_id'], 'deleted' => $weed['weed_deleted'], 'light_count' => $weed['light_count'], 'water_count' => $weed['water_count'], 'seed_count' => $weed['seed_count'], 'if_cur_user_water_it' => $weed['if_cur_user_water_it'] == $currentUser_id, 'if_cur_user_seed_it' => $weed['if_cur_user_seed_it'] == $currentUser_id, 'if_cur_user_light_it' => $weed['if_cur_user_light_it'] == $currentUser_id, 'image_count' => $weed['image_count'], 'images' => $images);
 			}
 		}
 
@@ -50,7 +39,8 @@ class WeedDAO extends BaseDAO
 	
 	public function create($weed)
 	{
-		$query = 'INSERT INTO weed (content, user_id, time, deleted, light_id, root_id, water_count,seed_count,light_count,image_count) VALUES (\'' . $weed->get_content() . '\',\'' . $weed->get_user_id() . '\',\'' . $weed->get_time() . '\',' . $weed->get_deleted() .','. ($weed->get_light_id() == NULL ? 'NULL' : $weed->get_light_id()) .','. ($weed->get_root_id() == NULL ?  'NULL' : $weed->get_root_id()) . ',0,0,0,' . $weed->get_image_count() . ')';
+		$query = 'INSERT INTO weed (content, user_id, time, deleted, light_id, root_id, water_count,seed_count,light_count,image_count, image_metadata) VALUES (\'' . $weed->get_content() . '\',\'' . $weed->get_user_id() . '\',\'' . $weed->get_time() . '\',' . $weed->get_deleted() .','. ($weed->get_light_id() == NULL ? 'NULL' : $weed->get_light_id()) .','. ($weed->get_root_id() == NULL ?  'NULL' : $weed->get_root_id()) . ',0,0,0,' . $weed->get_image_count() . ',\'' . $weed->get_image_metadata() . '\')';
+		error_log('create weed query: ' . $query);
 		$result = $this->db_conn->insert($query);
 		$fectchId = $weed->get_light_id();
 		while (true) {
@@ -109,6 +99,22 @@ class WeedDAO extends BaseDAO
 			}
 		}
 		return $weeds;
+	}
+	
+	public function getImageMetadata($weed_id)
+	{
+		$query = 'SELECT image_metadata as image_metadata FROM weed WHERE id=' . $weed_id;
+		$result = $this->db_conn->query($query);
+		
+		$image_metadata = array();
+		if(mysql_num_rows($result)) {
+			while($weed = mysql_fetch_assoc($result)) {
+				error_log('Image_metadata4: ' . print_r($weed['image_metadata'], true));
+				$image_metadata = json_decode($weed['image_metadata']);
+				error_log('Image_metadata3: ' . print_r($image_metadata, true));
+			}
+		}
+		return $image_metadata;
 	}
 	
 	/*
@@ -177,6 +183,12 @@ class WeedDAO extends BaseDAO
 		$this->db_conn->query($query);
 		$query = "DELETE FROM water WHERE user_id = $user_id AND weed_id = $weed_id";
 		$this->db_conn->query($query);
+	}
+	
+	public function setImageMetadataWeed($image_metadata, $weed_id)
+	{
+		$query = 'UPDATE weed SET image_metadata = \'' . $image_metadata . '\' WHERE id=' . $weed_id;
+		$result = $this->db_conn->query($query);
 	}
 	
 	public function get_user_id($weed_id)

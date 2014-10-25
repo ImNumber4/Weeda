@@ -17,7 +17,7 @@
 
 + (NSString *)imageRelatedURLWithWeed: (Weed *)weed count:(NSNumber *)count;
 
-+ (NSURL *)imageURLOfWeedId: (NSNumber *)weedId userId:(NSNumber *)userId count:(long)count;
++ (NSURL *)imageURLOfWeedId:(NSNumber *)weedId userId:(NSNumber *)userId count:(long)count quality:(long)quality;
 
 + (NSURL *)imageURLOfImageId: (NSString *)imageId quality:(NSNumber *)quality;
 

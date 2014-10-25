@@ -250,7 +250,6 @@
     [self performSegueWithIdentifier:@"showUser" sender:sender];
 }
 
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     Message *message = [[self getNSFetchedResultsController] objectAtIndexPath:indexPath];

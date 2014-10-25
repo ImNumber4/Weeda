@@ -20,7 +20,8 @@
     NSIndexPath *_currentIndexPath;
 }
 
-@property (nonatomic, strong) NSArray *dataSource;
+@property (nonatomic, retain) UICollectionView *collectionView;
+@property (nonatomic, retain) NSArray *dataSource;
 
 @end
 
@@ -37,6 +38,12 @@
     CALayer * l = [self.userAvatar layer];
     [l setMasksToBounds:YES];
     [l setCornerRadius:7.0];
+    
+    [self.userAvatar addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleAvatarTapped)]];
+    self.userAvatar.userInteractionEnabled = YES;
+    
+    self.usernameLabel.userInteractionEnabled = YES;
+    [self.usernameLabel addTarget:self action:@selector(showUserViewController:) forControlEvents:UIControlEventTouchDown];
     
     if (_weedTmp) {
         _weedTmp = nil;
@@ -102,7 +109,9 @@
     self.seedCount.text = [NSString stringWithFormat:@"%@", weed.seed_count];
     self.waterCount.text = [NSString stringWithFormat:@"%@", weed.water_count];
     
-    [self.userAvatar sd_setImageWithURL:[WeedImageController imageURLOfAvatar:weed.user_id] placeholderImage:[UIImage imageNamed:@"avatar.jpg"] options:SDWebImageHandleCookies];
+    [self.userAvatar setImageURL:[WeedImageController imageURLOfAvatar:weed.user_id]];
+    self.userAvatar.allowFullScreenDisplay = NO;
+//    [self.userAvatar sd_setImageWithURL:[WeedImageController imageURLOfAvatar:weed.user_id] placeholderImage:[UIImage imageNamed:@"avatar.jpg"] options:SDWebImageHandleCookies];
     
     if (weed.images.count > 0) {
         [_collectionView setFrame:CGRectMake(0, self.weedContentLabel.frame.origin.y + self.weedContentLabel.frame.size.height, self.frame.size.width, MASTERVIEW_IMAGEVIEW_HEIGHT)];
@@ -122,21 +131,18 @@
         WeedImage *image1 = obj1;
         WeedImage *image2 = obj2;
         
-        NSArray *strArr1 = [image1.url componentsSeparatedByString:@"_"];
-        NSArray *strArr2 = [image2.url componentsSeparatedByString:@"_"];
-        
-        if ([[strArr1 objectAtIndex:(strArr1.count - 1)] integerValue] > [[strArr2 objectAtIndex:(strArr2.count - 1)] integerValue]) {
+        if (image1.imageId > image2.imageId) {
             return NSOrderedDescending;
         } else {
             return NSOrderedAscending;
         }
     }];
     
-    for (WeedImage *image in dataSource) {
-        CGSize expectedSize = [WeedImageController translateSizeWithFrameSize:CGSizeMake(image.width.floatValue, image.height.floatValue) frameSize:CGSizeMake(280, 200)];
-        image.width = [NSNumber numberWithFloat:expectedSize.width];
-        image.height = [NSNumber numberWithFloat:expectedSize.height];
-    }
+//    for (WeedImage *image in dataSource) {
+//        CGSize expectedSize = [WeedImageController translateSizeWithFrameSize:CGSizeMake(image.width.floatValue, image.height.floatValue) frameSize:CGSizeMake(280, 200)];
+//        image.width = [NSNumber numberWithFloat:expectedSize.width];
+//        image.height = [NSNumber numberWithFloat:expectedSize.height];
+//    }
 
     return dataSource;
 }
@@ -174,7 +180,7 @@
     if (cell) {
         cell.backgroundColor = [UIColor grayColor];
         WeedImage *weedImage = [_dataSource objectAtIndex:indexPath.row];
-        cell.imageView.imageURL = [WeedImageController imageURLOfImageId:weedImage.url quality:[NSNumber numberWithInt:25]];
+        cell.imageView.imageURL = [WeedImageController imageURLOfWeedId:weedImage.parent.id userId:weedImage.parent.user_id count:weedImage.imageId.longValue quality:25];
         cell.imageView.allowFullScreenDisplay = NO;
     } else {
         NSLog(@"Cell is nil.");
@@ -252,6 +258,16 @@
     } else {
         return MAX(textLableSize.height, MIN_HEIGHT_OF_TEXT_VIEW) + 20.0;
     }
+}
+
+- (void)handleAvatarTapped
+{
+    [self showUserViewController:self];
+}
+
+- (void)showUserViewController:(id)sender
+{
+    [self.delegate showUserViewController:sender];
 }
 
 #pragma WLImageCollectionView Delegate

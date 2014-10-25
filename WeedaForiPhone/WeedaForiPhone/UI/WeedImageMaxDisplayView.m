@@ -79,7 +79,7 @@
         [_backgroundView setAlpha:0.9];
     } completion:^(BOOL finished) {
         if (finished) {
-            NSURL *imageURL = [WeedImageController imageURLOfImageId:imageView.imageId quality:[NSNumber numberWithInteger:imageView.quality]];
+            NSURL *imageURL = [WeedImageController imageURLOfImageId:imageView.imageId quality:[NSNumber numberWithInteger:100]];
             [_imageView setImageURL:imageURL animate:YES];
         }
     }];

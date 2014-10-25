@@ -50,6 +50,12 @@ typedef NS_ENUM(NSInteger, EnumImageWidthType)
 - (void)awakeFromNib
 {
     // Initialization code
+    [self.userLabel addTarget:self action:@selector(showUserViewController:) forControlEvents:UIControlEventTouchDown];
+    self.userLabel.userInteractionEnabled = YES;
+    
+    [self.userAvatar addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleAvatarTapped)]];
+    self.userAvatar.userInteractionEnabled = YES;
+    
     _imageWidthDictionary = [[NSMutableDictionary alloc]initWithCapacity:3];
     [_imageWidthDictionary setObject:[NSNumber numberWithFloat:300.0] forKey:[NSNumber numberWithInteger:EnumImageWidthTypeFull]];
     [_imageWidthDictionary setObject:[NSNumber numberWithFloat:149.0] forKey:[NSNumber numberWithInteger:EnumImageWidthTypeHalf]];
@@ -177,8 +183,9 @@ typedef NS_ENUM(NSInteger, EnumImageWidthType)
 {
     WLImageCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"weedImageCell" forIndexPath:indexPath];
     if (cell) {
+        cell.backgroundColor = [UIColor grayColor];
         WeedImage *weedImage = [_dataSource objectAtIndex:indexPath.row];
-        cell.imageView.imageURL = [WeedImageController imageURLOfImageId:weedImage.url quality:[NSNumber numberWithInt:25]];
+        cell.imageView.imageURL = [WeedImageController imageURLOfWeedId:weedImage.parent.id userId:weedImage.parent.user_id count:weedImage.imageId.longValue quality:25];
         cell.imageView.allowFullScreenDisplay = NO;
     } else {
         NSLog(@"Cell not exist!");
@@ -201,6 +208,16 @@ typedef NS_ENUM(NSInteger, EnumImageWidthType)
     
     WLImageCollectionViewCell *cell = (WLImageCollectionViewCell *)[_collectionView cellForItemAtIndexPath:indexPath];
     [imageCollectionView displayWithSelectedImage:indexPath currentCell:cell];
+}
+
+- (void)handleAvatarTapped
+{
+    [self showUserViewController:self];
+}
+
+- (void)showUserViewController:(id)sender
+{
+    [self.delegate showUserViewController:sender];
 }
 
 #pragma delegate WLImageCollectionView

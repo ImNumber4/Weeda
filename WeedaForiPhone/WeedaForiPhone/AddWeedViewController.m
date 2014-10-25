@@ -273,23 +273,23 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
     weed.time = [NSDate date];
     weed.image_count = [NSNumber numberWithUnsignedInteger:self.dataArray.count];
     
+    //Adding image metadata to the weed relationship
+    NSMutableSet *images = [[NSMutableSet alloc]init];
+    for (int i = 0; i < self.dataArray.count; i++) {
+        WeedImage *weedImage = [NSEntityDescription insertNewObjectForEntityForName:@"WeedImage" inManagedObjectContext:objectStore.mainQueueManagedObjectContext];
+        weedImage.imageId = [NSNumber numberWithInt:i];
+        weedImage.width = [NSNumber numberWithFloat:((UIImage *)[self.dataArray objectAtIndex:i]).size.width];
+        weedImage.height = [NSNumber numberWithFloat:((UIImage *)[self.dataArray objectAtIndex:i]).size.height];
+        weedImage.parent = weed;
+        [images addObject:weedImage];
+    }
+    weed.images = [[NSSet alloc] initWithArray:[images allObjects]];
+    
     //Sending Request to Server
     [[RKObjectManager sharedManager] postObject:weed path:@"weed/create" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
         NSLog(@"Response: %@", mappingResult);
         Weed *newWeed = mappingResult.firstObject;
         weed.id = newWeed.id;
-        
-        //Adding image metadata to the weed relationship
-        NSMutableSet *images = [[NSMutableSet alloc]init];
-        for (int i = 0; i < self.dataArray.count; i++) {
-            WeedImage *weedImage = [NSEntityDescription insertNewObjectForEntityForName:@"WeedImage" inManagedObjectContext:objectStore.mainQueueManagedObjectContext];
-            weedImage.url = [WeedImageController imageRelatedURLWithWeed:weed count:[NSNumber numberWithInt:i]];
-            weedImage.width = [NSNumber numberWithFloat:((UIImage *)[self.dataArray objectAtIndex:i]).size.width];
-            weedImage.height = [NSNumber numberWithFloat:((UIImage *)[self.dataArray objectAtIndex:i]).size.height];
-            [images addObject:weedImage];
-        }
-        weed.images = images;
-
         
         if (self.dataArray.count > 0) {
             [self uploadImageToServer:weed];
@@ -305,9 +305,10 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
 {
     for (int i = 0; i < self.dataArray.count; i++) {
         UIImage * image = (UIImage *)[self.dataArray objectAtIndex:i];
-        [[SDImageCache sharedImageCache] storeImage:image forKey:[[WeedImageController imageURLOfWeedId:weed.id userId:weed.user_id count:i] absoluteString] toDisk:NO];
+        UIImage *thumbnails = [UIImage imageWithData:UIImageJPEGRepresentation(image, 25)];
+        [[SDImageCache sharedImageCache] storeImage:thumbnails forKey:[[WeedImageController imageURLOfWeedId:weed.id userId:weed.user_id count:i quality:25] absoluteString] toDisk:NO];
         
-        NSMutableURLRequest *request = [[RKObjectManager sharedManager] multipartFormRequestWithObject:nil method:RKRequestMethodPOST path:[NSString stringWithFormat:@"weed/upload/%@", weed.id] parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        NSMutableURLRequest *request = [[RKObjectManager sharedManager] multipartFormRequestWithObject:nil method:RKRequestMethodPOST path:[NSString stringWithFormat:@"image/upload/%@", weed.id] parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
             [formData appendPartWithFileData:UIImageJPEGRepresentation(image, 100)
                                         name:@"image"
                                     fileName:[NSString stringWithFormat:@"%d.jpeg", i]

@@ -18,7 +18,6 @@
 @property (nonatomic, retain) NSArray *dataSource;
 
 @property (nonatomic) BOOL allowFullScreenDisplay;
-@property (nonatomic) BOOL allowCollectionViewDisplay;
 
 - (void)setImageURL:(NSURL *)imageURL animate:(BOOL)animate;
 

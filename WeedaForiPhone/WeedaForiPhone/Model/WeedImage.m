@@ -10,10 +10,12 @@
 
 @implementation WeedImage
 
-@dynamic url;
+@dynamic imageId;
 @dynamic image;
 @dynamic isBig;
 @dynamic width;
 @dynamic height;
+
+@dynamic parent;
 
 @end

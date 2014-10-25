@@ -22,7 +22,6 @@
 
 @synthesize dataSource;
 @synthesize indexPath;
-@synthesize allowCollectionViewDisplay;
 
 /*
 // Only override drawRect: if you perform custom drawing.
@@ -93,7 +92,6 @@
         [self addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleTap:)]];
     } else {
         _maxDisplayView = nil;
-        self.userInteractionEnabled = NO;
     }
 }
 

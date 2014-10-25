@@ -19,6 +19,8 @@ class Weed
 	
 	private $mentions;
 	
+	private $image_metadata;
+	
 	public function set_id($id) {
 		$this->id = $id;
 	}
@@ -99,6 +101,16 @@ class Weed
 	public function set_mentions($mentions)
 	{
 		$this->mentions = $mentions;
+	}
+	
+	public function get_image_metadata()
+	{
+		return $this->image_metadata;
+	}
+	
+	public function set_image_metadata($image_metadata)
+	{
+		$this->image_metadata = $image_metadata;
 	}
 }
 ?>

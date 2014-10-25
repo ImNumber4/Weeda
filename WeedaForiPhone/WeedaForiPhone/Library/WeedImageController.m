@@ -27,9 +27,9 @@ static NSString *baseUrl = @"http://www.cannablaze.com/image/query";
     return [NSString stringWithFormat:@"weed_%@_%@_%@", weed.user_id, weed.id, count];
 }
 
-+ (NSURL *)imageURLOfWeedId:(NSNumber *)weedId userId:(NSNumber *)userId count:(long)count
++ (NSURL *)imageURLOfWeedId:(NSNumber *)weedId userId:(NSNumber *)userId count:(long)count quality:(long)quality
 {
-    return [NSURL URLWithString:[NSString stringWithFormat:@"%@/weed_%@_%@_%ld", baseUrl, userId, weedId, count]];
+    return [NSURL URLWithString:[NSString stringWithFormat:@"%@/weed_%@_%@_%ld?quality=%ld", baseUrl, userId, weedId, count, quality]];
 }
 
 + (NSURL *)imageURLOfImageId:(NSString *)imageId quality:(NSNumber *)quality

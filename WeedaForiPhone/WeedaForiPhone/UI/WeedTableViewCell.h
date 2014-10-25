@@ -7,19 +7,26 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "WLImageView.h"
 
 #define MASTERVIEW_IMAGEVIEW_HEIGHT 200
+
+@class WeedTableViewCell;
+@protocol WeedTableViewCellDelegate <NSObject>
+@required
+- (void)showUserViewController:(id)sender;
+@end
 
 @interface WeedTableViewCell : UITableViewCell <UICollectionViewDelegate, UICollectionViewDataSource> {
     int _imageCount;
     Weed *_weedTmp;
-    UICollectionView *_collectionView;
 }
+@property (nonatomic, retain) id<WeedTableViewCellDelegate> delegate;
 
 @property (nonatomic, weak) IBOutlet UIButton *usernameLabel;
 @property (nonatomic, weak) IBOutlet UITextView *weedContentLabel;
 @property (nonatomic, weak) IBOutlet UILabel *timeLabel;
-@property (nonatomic, weak) IBOutlet UIImageView *userAvatar;
+@property (nonatomic, weak) IBOutlet WLImageView *userAvatar;
 @property (nonatomic, weak) IBOutlet UIButton *seed;
 @property (nonatomic, weak) IBOutlet UILabel *seedCount;
 @property (nonatomic, weak) IBOutlet UIButton *waterDrop;
@@ -29,7 +36,6 @@
 
 @property (nonatomic, weak) IBOutlet UIView *view;
 
-@property (nonatomic, retain) UICollectionView *imageCollectionView;
 @property (nonatomic, retain) NSMutableArray *weedImages;
 
 - (void)hideControls;

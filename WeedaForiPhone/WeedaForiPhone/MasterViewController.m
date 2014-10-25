@@ -11,6 +11,7 @@
 #import "AddWeedViewController.h"
 #import "UserViewController.h"
 #import "WeedTableViewCell.h"
+#import "WeedBasicTableViewCell.h"
 #import <RestKit/RestKit.h>
 #import "Weed.h"
 #import "User.h"
@@ -18,7 +19,7 @@
 #import "ImageMetadata.h"
 
 
-@interface MasterViewController () <UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate>
+@interface MasterViewController () <UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, WeedTableViewCellDelegate>
 
 @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
 
@@ -86,11 +87,6 @@ const NSInteger NON_GLOBAL_COMPOSE_TAG = 1;
 -(void)lightIt:(id)sender {
     [self performSegueWithIdentifier:@"addWeed" sender:sender];
 }
-
--(void)showUser:(id)sender {
-    [self performSegueWithIdentifier:@"showUser" sender:sender];
-}
-
 
 -(void)refreshView:(UIRefreshControl *)refresh {
     refresh.attributedTitle = [[NSAttributedString alloc] initWithString:@"Refreshing data..."];
@@ -165,6 +161,8 @@ const NSInteger NON_GLOBAL_COMPOSE_TAG = 1;
 
 - (void)decorateCellWithWeed:(Weed *)weed cell:(WeedTableViewCell *)cell
 {
+    cell.delegate = self;
+    
     [cell decorateCellWithWeed:weed];
     [cell.waterDrop removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
     [cell.waterDrop addTarget:self action:@selector(waterIt:)forControlEvents:UIControlEventTouchDown];
@@ -174,9 +172,6 @@ const NSInteger NON_GLOBAL_COMPOSE_TAG = 1;
     
     [cell.light removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
     [cell.light addTarget:self action:@selector(lightIt:)forControlEvents:UIControlEventTouchDown];
-    
-    [cell.usernameLabel removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-    [cell.usernameLabel addTarget:self action:@selector(showUser:)forControlEvents:UIControlEventTouchDown];
     
     cell.light.tag = NON_GLOBAL_COMPOSE_TAG;
 }
@@ -313,6 +308,10 @@ const NSInteger NON_GLOBAL_COMPOSE_TAG = 1;
     [self.tableView reloadData];
 }
 
-
+#pragma WeedTableViewCell Delegate
+- (void)showUserViewController:(id)sender
+{
+    [self performSegueWithIdentifier:@"showUser" sender:sender];
+}
 
 @end

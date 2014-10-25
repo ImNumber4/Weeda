@@ -6,22 +6,32 @@
 $size = getimagesize("upload/2/103/0.jpeg");
 echo 'image width: ' . $size[0] . ', image height: ' . $size[1] . "\n";
 
-$image_path = './upload/2/136/';
-$images = scandir($image_path);
-var_dump($images);
+// $image_path = './upload/2/136/';
 
-$array_image_metadata = array();
-for ($i=0; $i < count($images); $i++) { 
-	$image = $image_path . $images[$i];
-	echo "Image:" . $image . "\n";
-	if (is_dir($image)) {
+$dir_path = scandir('./upload/2/');
+foreach($dir_path as $dir) {
+	$image_path = './upload/2/' . $dir . '/';
+	if (!is_dir($image_path)) {
 		continue;
 	}
-	$size = getimagesize($image);
-	$array_image_metadata[] = array('width'=>$size[0], 'height'=>$size[1]);
+	
+	$images = scandir($image_path);
+	$array_image_metadata = array();
+	for ($i=0; $i < count($images); $i++) { 
+		$image = $image_path . $images[$i];
+		if (is_dir($image)) {
+			continue;
+		}
+		$size = getimagesize($image);
+		$imageId = strstr($images[$i], '.', true);
+		$url = 'weed_2_' . $dir . '_' . $imageId;
+		$array_image_metadata[] = array('id'=>(int)$imageId, 'width'=>$size[0], 'height'=>$size[1]);
+	}
+	// var_dump(json_encode($array_image_metadata));
+	
+	echo 'UPDATE weed SET image_metadata = \'' . json_encode($array_image_metadata) . '\' WHERE id=' . $dir . ';';
+	echo "\n";
 }
-
-var_dump(json_encode(array('metadata'=>$array_image_metadata)));
 
 echo "\n";
 

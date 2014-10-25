@@ -3,9 +3,37 @@
 // ini_set('display_errors',1);
 // error_reporting(E_ALL);
 
+include './library/ImageHandler.php';
+
 class ImageController extends Controller
 {
 	private $UPLOAD_BASE_PATH = './upload/';
+	
+	public function upload($weed_id)
+	{
+		$user_id = $this->getCurrentUser();
+		
+		error_log('Image name: ' . $_FILES['image']['name']);
+		error_log('Image type: ' . $_FILES['image']['type']);
+		error_log('Image size: ' . $_FILES['image']['size']);
+		error_log('Image tmp name: ' . $_FILES['image']['tmp_name']);
+		
+		// $this->update_image_metadata_weed($_FILES['image'], $user_id, $weed_id);
+		// if (!$this->update_image_metadata_weed($_FILES['image'], $user_id, $weed_id)) {
+// 			header('Content-type: application/json');
+// 			http_response_code(500);
+// 			return;
+// 		}
+
+		if (!saveImageForWeedsToServer($_FILES['image'], $user_id, $weed_id)) {
+			header('Content-type: application/json');
+			http_response_code(500);
+			return;
+		}
+
+		header('Content-type: application/json');
+		http_response_code(200);
+	}
 	
 	public function query($image_id, $parameters)
 	{
@@ -31,6 +59,24 @@ class ImageController extends Controller
 		header('Content-Length: '.$size);
 		ob_end_flush();
 		imagedestroy($weed_image);
+	}
+	
+	private function update_image_metadata_weed($image, $user_id, $weed_id)
+	{
+		$image_id = strstr($image['name'], '.', true);
+		$image_url = 'weed_' . $user_id . '_' . $weed_id . '_' . $image_id;
+		$size = getimagesize($image['tmp_name']);
+		
+		$weedDAO = new WeedDAO();
+		$image_metadata = $weedDAO->getImageMetadata($weed_id);
+		error_log('Image_metadata1: ' . print_r($image_metadata, true));
+		$image_metadata[] = array('url'=>$image_url, 'width'=>$size[0], 'height'=>$size[1]);
+		error_log('Image_metadata2: ' . print_r($image_metadata, true));
+		
+		$test = $weedDAO->getImageMetadata($weed_id);
+		error_log('Image_metadata5: ' . print_r($test, true));
+		
+		return $weedDAO->setImageMetadataWeed(json_encode($image_metadata), $weed_id);
 	}
 	
 	public function query_image_metadata($weed_id)

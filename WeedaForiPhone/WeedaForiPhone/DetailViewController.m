@@ -46,7 +46,7 @@ const CGFloat COLLECTION_VIEW_PER_ROW_HEIGHT = 100.0;
 
 const CGFloat COLLECTION_VIEW_HEIGHT = 300.0;
 
-@interface DetailViewController () <UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate> {
+@interface DetailViewController () <UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, WeedDetailTableViewCellDelegate> {
     NSInteger *_ratio;
 }
 
@@ -203,11 +203,12 @@ const CGFloat COLLECTION_VIEW_HEIGHT = 300.0;
 
 - (void)configureWeedDetailTableViewCell:(WeedDetailTableViewCell *)cell
 {
+    cell.delegate = self;
+    
     NSString *content = self.currentWeed.content;
     NSString *username = self.currentWeed.username;
     NSString *nameLabel = [NSString stringWithFormat:@"@%@", username];
     [cell.userLabel setTitle:nameLabel forState:UIControlStateNormal];
-    [cell.userLabel addTarget:self action:@selector(showUser:)forControlEvents:UIControlEventTouchDown];
     
     cell.weedContentLabel.text = content;
     cell.weedContentLabel.translatesAutoresizingMaskIntoConstraints = YES;
@@ -217,14 +218,14 @@ const CGFloat COLLECTION_VIEW_HEIGHT = 300.0;
     [dateFormatter setDateFormat:@"MMM. dd yyyy hh:mm"];
     NSString *formattedDateString = [dateFormatter stringFromDate:self.currentWeed.time];
     cell.timeLabel.text = [NSString stringWithFormat:@"%@", formattedDateString];
-    [cell.userAvatar sd_setImageWithURL:[WeedImageController imageURLOfAvatar:self.currentWeed.user_id] placeholderImage:[UIImage imageNamed:@"avatar.jpg"] options:SDWebImageHandleCookies];
+
+    [cell.userAvatar setImageURL:[WeedImageController imageURLOfAvatar:self.currentWeed.user_id]];
+    cell.userAvatar.allowFullScreenDisplay = NO;
     CALayer * l = [cell.userAvatar layer];
     [l setMasksToBounds:YES];
     [l setCornerRadius:7.0];
     
     [cell decorateCellWithWeed:self.currentWeed];
-    
-//    [self createImageCollectionViewCell:cell];
 }
 
 - (void)configureWeedTableViewCell:(WeedBasicTableViewCell *)cell weed:(Weed *)weed
@@ -353,6 +354,11 @@ const CGFloat COLLECTION_VIEW_HEIGHT = 300.0;
 }
 
 -(void)showUser:(id)sender {
+    [self performSegueWithIdentifier:@"showUser" sender:sender];
+}
+
+- (void)showUserViewController:(id)sender
+{
     [self performSegueWithIdentifier:@"showUser" sender:sender];
 }
 

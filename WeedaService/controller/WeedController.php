@@ -3,8 +3,6 @@
 // ini_set('display_errors',1);
 // error_reporting(E_ALL);
 
-include './library/ImageHandler.php';
-
 class WeedController extends Controller
 {
 	protected $weed_dao;
@@ -74,25 +72,6 @@ class WeedController extends Controller
 		return json_encode(array('id' => $result));
 	}
 	
-	public function upload($weed_id)
-	{
-		$user_id = $this->getCurrentUser();
-		
-		error_log('Image name: ' . $_FILES['image']['name']);
-		error_log('Image type: ' . $_FILES['image']['type']);
-		error_log('Image size: ' . $_FILES['image']['size']);
-		error_log('Image tmp name: ' . $_FILES['image']['tmp_name']);
-
-		if (!saveImageForWeedsToServer($_FILES['image'], $user_id, $weed_id)) {
-			header('Content-type: application/json');
-			http_response_code(500);
-			return;
-		}
-
-		header('Content-type: application/json');
-		http_response_code(200);
-	}
-	
 	public function delete($id)
 	{
 		$this->weed_dao->delete($id);
@@ -152,7 +131,6 @@ class WeedController extends Controller
 		if ($_SERVER['REQUEST_METHOD'] != 'POST' && $_SERVER['REQUEST_METHOD'] != 'PUT') {
 			throw new InvalidRequestException('request has to be either POST or PUT.');
 		}
-		
 		$data = json_decode(file_get_contents('php://input'));
 		$invalidReason = $this->check_para($data);
 		if ($invalidReason) {
@@ -169,9 +147,15 @@ class WeedController extends Controller
 		$weed->set_root_id($data->root_id);
 		$weed->set_image_count($data->image_count);
 		$weed->set_mentions($data->mentions);
+		
+		$metadata = array();
+		foreach($data->images as $image) {
+			$metadata[] = array('id'=>$image->id, 'width'=>$image->width, 'height'=>$image->height);
+		}
+		$weed->set_image_metadata(json_encode($metadata));
+		
 		return $weed;
 	}
-	
 	
 	private function check_para($data)
 	{	

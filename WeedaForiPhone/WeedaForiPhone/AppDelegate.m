@@ -172,8 +172,8 @@ NSString * _deviceToken;
     [userMapping addAttributeMappingsFromDictionary:userResponseMappingDictionary];
     
     RKEntityMapping *weedImageMapping = [RKEntityMapping mappingForEntityForName:NSStringFromClass([WeedImage class]) inManagedObjectStore:managedObjectStore];
-    weedImageMapping.identificationAttributes = @[@"url"];
-    [weedImageMapping addAttributeMappingsFromDictionary:@{@"url" : @"url", @"width" : @"width", @"height" : @"height"}];
+//    weedImageMapping.identificationAttributes = @[@"id"];
+    [weedImageMapping addAttributeMappingsFromDictionary:@{@"id" : @"imageId", @"width" : @"width", @"height" : @"height"}];
     
     RKEntityMapping *weedMapping = [RKEntityMapping mappingForEntityForName:NSStringFromClass([Weed class]) inManagedObjectStore:managedObjectStore];
     
@@ -331,6 +331,8 @@ NSString * _deviceToken;
     RKObjectMapping * weedRequestMapping = [RKObjectMapping requestMapping];
     [weedRequestMapping addAttributeMappingsFromArray:@[ @"id", @"content",@"time",@"user_id", @"light_id", @"root_id", @"image_count", @"mentions"]];
     
+    [weedRequestMapping addRelationshipMappingWithSourceKeyPath:@"images" mapping:[weedImageMapping inverseMapping]];
+    
     
     [manager addRequestDescriptor:[RKRequestDescriptor requestDescriptorWithMapping:weedRequestMapping
                                                                                    objectClass:[Weed class]
@@ -362,7 +364,7 @@ NSString * _deviceToken;
     
     
     //Adding Image response descriptor
-    [self addImageHttpResponser:managedObjectStore];
+//    [self addImageHttpResponser:managedObjectStore];
     
     /**
      Complete Core Data stack initialization
@@ -390,7 +392,7 @@ NSString * _deviceToken;
 - (void) addImageHttpResponser:(RKManagedObjectStore *)managedObjectStore
 {
     RKObjectMapping *imageObjectMapping = [RKObjectMapping mappingForClass:[WeedImage class]];
-    [imageObjectMapping addAttributeMappingsFromDictionary:@{@"url": @"url"}];
+    [imageObjectMapping addAttributeMappingsFromDictionary:@{@"id": @"id"}];
     
     RKAttributeMapping *imageMapping = [RKAttributeMapping attributeMappingFromKeyPath:@"image" toKeyPath:@"image"];
     RKValueTransformer *imageTransformer = [RKBlockValueTransformer valueTransformerWithValidationBlock:^BOOL(__unsafe_unretained Class inputValueClass, __unsafe_unretained Class outputValueClass) {

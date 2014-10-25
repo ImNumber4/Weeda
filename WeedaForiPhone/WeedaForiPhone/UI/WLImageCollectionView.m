@@ -218,15 +218,16 @@
             cell.imageView.bounds = CGRectMake(0, 0, imageSize.width, imageSize.height);
         }
         
-        NSURL *imageURLFull = [WeedImageController imageURLOfImageId:weedImage.url quality:[NSNumber numberWithInt:100]];
+        NSURL *imageURLFull = [WeedImageController imageURLOfWeedId:weedImage.parent.id userId:weedImage.parent.user_id count:weedImage.imageId.longValue quality:100];
+//        NSURL *imageURLFull = [WeedImageController imageURLOfImageId:weedImage.imageId quality:[NSNumber numberWithInt:100]];
         UIImage *image = [[SDImageCache sharedImageCache]imageFromDiskCacheForKey:imageURLFull.absoluteString];
         if (image) {
             cell.imageView.imageURL = imageURLFull;
         } else {
-            cell.imageView.imageURL = [WeedImageController imageURLOfImageId:weedImage.url quality:[NSNumber numberWithInt:25]];
+            cell.imageView.imageURL = [WeedImageController imageURLOfWeedId:weedImage.parent.id userId:weedImage.parent.user_id count:weedImage.imageId.longValue quality:25];
+//            cell.imageView.imageURL = [WeedImageController imageURLOfImageId:weedImage.imageId quality:[NSNumber numberWithInt:100]];
             [cell.imageView setImageURL:imageURLFull animate:YES];
         }
-        cell.imageView.allowCollectionViewDisplay = NO;
         cell.imageView.allowFullScreenDisplay = NO;
     }
     return cell;
@@ -473,7 +474,6 @@
     self.imageView.clipsToBounds = YES;
     self.imageView.contentMode = UIViewContentModeScaleAspectFill;
     self.imageView.allowFullScreenDisplay = NO;
-    self.imageView.allowCollectionViewDisplay = NO;
     [self.contentView addSubview:self.imageView];
 }
 
