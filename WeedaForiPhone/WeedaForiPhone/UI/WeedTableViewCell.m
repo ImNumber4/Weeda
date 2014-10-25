@@ -111,18 +111,20 @@
     
     [self.userAvatar setImageURL:[WeedImageController imageURLOfAvatar:weed.user_id]];
     self.userAvatar.allowFullScreenDisplay = NO;
-//    [self.userAvatar sd_setImageWithURL:[WeedImageController imageURLOfAvatar:weed.user_id] placeholderImage:[UIImage imageNamed:@"avatar.jpg"] options:SDWebImageHandleCookies];
     
     if (weed.images.count > 0) {
         [_collectionView setFrame:CGRectMake(0, self.weedContentLabel.frame.origin.y + self.weedContentLabel.frame.size.height, self.frame.size.width, MASTERVIEW_IMAGEVIEW_HEIGHT)];
         _dataSource = [self adjustWeedImages];
         _collectionView.hidden = NO;
         [_collectionView reloadData];
-    } else {
-        if (_collectionView) {
-            _collectionView.hidden = YES;
-        }
     }
+}
+
+- (void)prepareForReuse
+{
+    _weedTmp = nil;
+    _collectionView.hidden = YES;
+    _dataSource = nil;
 }
 
 - (NSArray *)adjustWeedImages
