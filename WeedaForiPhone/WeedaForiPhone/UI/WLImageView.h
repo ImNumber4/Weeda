@@ -19,6 +19,8 @@
 
 @property (nonatomic) BOOL allowFullScreenDisplay;
 
+- (void)setImageURL:(NSURL *)imageURL isAvatar:(BOOL)isAvatar;
 - (void)setImageURL:(NSURL *)imageURL animate:(BOOL)animate;
+- (void)displayFullScreen;
 
 @end

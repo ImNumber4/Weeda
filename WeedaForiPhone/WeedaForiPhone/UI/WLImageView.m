@@ -48,15 +48,19 @@
     return self;
 }
 
-- (void)setImageURL:(NSURL *)imageURL
+- (void)setImageURL:(NSURL *)imageURL isAvatar:(BOOL)isAvatar
 {
     _imageURL = imageURL;
-    
-    [self sd_setImageWithURL:imageURL placeholderImage:nil options:SDWebImageHandleCookies progress:^(NSInteger receivedSize, NSInteger expectedSize) {
-        ;
-    } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-        ;
-    }];
+    if (isAvatar) {
+        [self sd_setImageWithURL:imageURL placeholderImage:nil options:(SDWebImageHandleCookies | SDWebImageRefreshCached)];
+    } else {
+        [self sd_setImageWithURL:imageURL placeholderImage:nil options:SDWebImageHandleCookies];
+    }
+}
+
+- (void)setImageURL:(NSURL *)imageURL
+{
+    [self setImageURL:imageURL isAvatar:NO];
 }
 
 - (void)setImageURL:(NSURL *)imageURL animate:(BOOL)animate
@@ -93,6 +97,14 @@
     } else {
         _maxDisplayView = nil;
     }
+}
+
+- (void)displayFullScreen
+{
+    _maxDisplayView = [[WeedImageMaxDisplayView alloc]initWithImageView:self];
+    self.userInteractionEnabled = YES;
+    [(UIView *)[UIApplication sharedApplication].windows.lastObject addSubview:_maxDisplayView];
+    [_maxDisplayView display:self];
 }
 
 - (void)handleTap:(UIGestureRecognizer *)gesture

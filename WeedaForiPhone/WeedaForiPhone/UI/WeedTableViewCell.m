@@ -109,7 +109,7 @@
     self.seedCount.text = [NSString stringWithFormat:@"%@", weed.seed_count];
     self.waterCount.text = [NSString stringWithFormat:@"%@", weed.water_count];
     
-    [self.userAvatar setImageURL:[WeedImageController imageURLOfAvatar:weed.user_id]];
+    [self.userAvatar setImageURL:[WeedImageController imageURLOfAvatar:weed.user_id] isAvatar:YES];
     self.userAvatar.allowFullScreenDisplay = NO;
     
     if (weed.images.count > 0) {

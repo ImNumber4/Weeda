@@ -17,13 +17,6 @@ class ImageController extends Controller
 		error_log('Image type: ' . $_FILES['image']['type']);
 		error_log('Image size: ' . $_FILES['image']['size']);
 		error_log('Image tmp name: ' . $_FILES['image']['tmp_name']);
-		
-		// $this->update_image_metadata_weed($_FILES['image'], $user_id, $weed_id);
-		// if (!$this->update_image_metadata_weed($_FILES['image'], $user_id, $weed_id)) {
-// 			header('Content-type: application/json');
-// 			http_response_code(500);
-// 			return;
-// 		}
 
 		if (!saveImageForWeedsToServer($_FILES['image'], $user_id, $weed_id)) {
 			header('Content-type: application/json');
@@ -46,19 +39,23 @@ class ImageController extends Controller
 			$image_quality = 25;
 		}
 		
-		$weed_image = $this->getImageForServer($image_id);
-		if (!$weed_image) {
+		$image = $this->getImageForServer($image_id);
+		if (!image) {
 			error_log('Image not exist. image url: ' . $image_id);
 			throw new InvalidRequestException('Image not exist');
 		}
 		
+		$type = strstr($image_id, '_', true);
+		if ($type == "avatar") {
+			header('Cache-Control: no-transform, max-age=86400');
+		}
 		header('Content-Type: image/jpeg');
 		ob_start();
-		imagejpeg($weed_image, null, $image_quality);
+		imagejpeg($image, null, $image_quality);
 		$size = ob_get_length();
 		header('Content-Length: '.$size);
 		ob_end_flush();
-		imagedestroy($weed_image);
+		imagedestroy($image);
 	}
 	
 	private function update_image_metadata_weed($image, $user_id, $weed_id)

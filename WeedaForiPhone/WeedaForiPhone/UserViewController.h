@@ -7,14 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MasterViewController.h"
 #import <MapKit/MapKit.h>
+
+#import "MasterViewController.h"
+#import "WLImageView.h"
 
 @interface UserViewController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, MKMapViewDelegate>
 
 @property (nonatomic, retain) NSNumber * user_id;
 @property (weak, nonatomic) IBOutlet UILabel *timeLabel;
-@property (weak, nonatomic) IBOutlet UIImageView *userAvatar;
+@property (weak, nonatomic) IBOutlet WLImageView *userAvatar;
 @property (weak, nonatomic) IBOutlet UIImageView *userAvatarCamera;
 @property (weak, nonatomic) IBOutlet UIButton *weedCountLabel;
 @property (weak, nonatomic) IBOutlet UIButton *followingCountLabel;

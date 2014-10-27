@@ -20,6 +20,7 @@
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "EditProfileViewController.h"
 #import "ConversationViewController.h"
+#import "BlurView.h"
 
 @interface UserViewController () <CropImageDelegate>
 
@@ -28,6 +29,13 @@
 @property (nonatomic, retain) UIImage *userPickedImage;
 
 @property (nonatomic, retain) NSMutableArray *weeds;
+
+@property (nonatomic, retain) UIView *uploadAvatarView;
+@property (nonatomic, retain) UIView *background;
+@property (nonatomic, retain) UIButton *btnViewPhoto;
+@property (nonatomic, retain) UIButton *btnTakePhoto;
+@property (nonatomic, retain) UIButton *btnSelectFromLocal;
+@property (nonatomic, retain) UIView *buttonContainerView;
 
 @end
 
@@ -50,8 +58,13 @@ const NSInteger SHOW_FOLLOWINGS = 2;
         UIBarButtonItem *settingButton = [[UIBarButtonItem alloc] initWithImage:UIGraphicsGetImageFromCurrentImageContext() style:UIBarButtonItemStylePlain target:self action:@selector(setting:)];
         [self.navigationItem setRightBarButtonItem:settingButton];
         self.userAvatarCamera.hidden = NO;
+        [self.userAvatar addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleCameraTapped)]];
+        self.userAvatar.userInteractionEnabled = YES;
+        
+        self.userAvatar.allowFullScreenDisplay = NO;
     } else {
         self.userAvatarCamera.hidden = YES;
+        self.userAvatar.allowFullScreenDisplay = YES;
     }
     
     [self.followerCountLabel addTarget:self action:@selector(showUsers:)forControlEvents:UIControlEventTouchDown];
@@ -63,6 +76,8 @@ const NSInteger SHOW_FOLLOWINGS = 2;
     
     self.tableView.tableFooterView = [[UIView alloc] init];
     self.weeds = [[NSMutableArray alloc] init];
+    
+    [self createUploadAvatarView];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -195,7 +210,7 @@ const NSInteger SHOW_FOLLOWINGS = 2;
 {
     User *user = [User new];
     NSMutableURLRequest *request = [[RKObjectManager sharedManager] multipartFormRequestWithObject:user method:RKRequestMethodPOST path:@"user/upload" parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-        [formData appendPartWithFileData:UIImageJPEGRepresentation(image, 90)
+        [formData appendPartWithFileData:UIImageJPEGRepresentation(image, 100)
                                     name:@"avatar"
                                 fileName:@"avatar.jpeg"
                                 mimeType:@"image/jpeg"];
@@ -323,8 +338,7 @@ const NSInteger SHOW_FOLLOWINGS = 2;
 {
     self.userAvatar.contentMode = UIViewContentModeScaleAspectFill;
     self.userAvatar.clipsToBounds = YES;
-    
-    [self.userAvatar sd_setImageWithURL:[WeedImageController imageURLOfAvatar:self.user_id] placeholderImage:[UIImage imageNamed:@"avatar.jpg"] options:SDWebImageHandleCookies];
+    [self.userAvatar setImageURL:[WeedImageController imageURLOfAvatar:self.user_id] isAvatar:YES];
     
     CALayer * l = [self.userAvatar layer];
     [l setMasksToBounds:YES];
@@ -366,9 +380,134 @@ const NSInteger SHOW_FOLLOWINGS = 2;
     //Upload Avatar to Server
     [self uploadImageToServer:cropedImage];
     
-    self.userAvatar.contentMode = UIViewContentModeScaleAspectFill;
-    self.userAvatar.clipsToBounds = YES;
-    self.userAvatar.image = cropedImage;
+    [[SDImageCache sharedImageCache]storeImage:cropedImage forKey:[WeedImageController imageURLOfAvatar:self.user_id].absoluteString];
+}
+
+- (void)createUploadAvatarView
+{
+    _uploadAvatarView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - self.tabBarController.tabBar.frame.size.height)];
+    _uploadAvatarView.backgroundColor = [UIColor clearColor];
+    
+    _background = [[UIView alloc]initWithFrame:_uploadAvatarView.frame];
+    _background.backgroundColor = [UIColor grayColor];
+    _background.alpha = 0.0;
+    
+    _buttonContainerView = [[UIView alloc]initWithFrame:CGRectMake(20, _uploadAvatarView.frame.size.height - 135, 280, 140)];
+    
+    CGFloat buttonHeight = 40;
+    _btnViewPhoto = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, _buttonContainerView.frame.size.width, buttonHeight)];
+    _btnTakePhoto = [[UIButton alloc]initWithFrame:CGRectMake(0, buttonHeight + 5, _buttonContainerView.frame.size.width, buttonHeight)];
+    _btnSelectFromLocal = [[UIButton alloc]initWithFrame:CGRectMake(0, buttonHeight * 2 + 5 * 2, _buttonContainerView.frame.size.width, buttonHeight)];
+    
+    [self formatButton:_btnViewPhoto title:@"View Photo"];
+    [self formatButton:_btnTakePhoto title:@"Take Photo"];
+    [self formatButton:_btnSelectFromLocal title:@"Select Exsiting Photo"];
+    
+    [_buttonContainerView addSubview:_btnViewPhoto];
+    [_buttonContainerView addSubview:_btnTakePhoto];
+    [_buttonContainerView addSubview:_btnSelectFromLocal];
+    
+    [_uploadAvatarView addSubview:_background];
+    [_uploadAvatarView addSubview:_buttonContainerView];
+    
+    _uploadAvatarView.hidden = YES;
+    [self.view addSubview:_uploadAvatarView];
+    [self.view bringSubviewToFront:_uploadAvatarView];
+    
+    [_uploadAvatarView addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleCancelTap)]];
+    [_btnViewPhoto addTarget:self action:@selector(handleViewPhotoHightlight:) forControlEvents:UIControlEventTouchDown];
+    [_btnViewPhoto addTarget:self action:@selector(handleViewPhotoNormal:) forControlEvents:UIControlEventTouchUpInside];
+    [_btnTakePhoto addTarget:self action:@selector(handleTakePhotoHightlight:) forControlEvents:UIControlEventTouchDown];
+    [_btnTakePhoto addTarget:self action:@selector(handleTakePhotoNormal:) forControlEvents:UIControlEventTouchUpInside];
+    [_btnSelectFromLocal addTarget:self action:@selector(handleSelectPhotoHightlight:) forControlEvents:UIControlEventTouchDown];
+    [_btnSelectFromLocal addTarget:self action:@selector(handleSelectPhotoNormal:) forControlEvents:UIControlEventTouchUpInside];
+}
+
+- (void)formatButton:(UIButton *)button title:(NSString *)title
+{
+    [button setTitle:title forState:UIControlStateNormal];
+    [button setTitleColor:[ColorDefinition greenColor] forState:UIControlStateNormal];
+    button.backgroundColor = [UIColor whiteColor];
+    [button.layer setBorderWidth:1.0f];
+    [button.layer setBorderColor:[ColorDefinition greenColor].CGColor];
+    [button.layer setMasksToBounds:YES];
+    [button.layer setCornerRadius:7.0f];
+}
+
+- (void)handleCancelTap
+{
+    [UIView animateWithDuration:0.5 animations:^{
+        _buttonContainerView.frame = CGRectMake(_buttonContainerView.frame.origin.x, _uploadAvatarView.frame.size.height, _buttonContainerView.frame.size.width, _buttonContainerView.frame.size.height);
+        _background.alpha = 0.0f;
+    }completion:^(BOOL finished) {
+        _uploadAvatarView.hidden = YES;
+    }];
+}
+
+- (void)handleViewPhotoHightlight:(id)sender
+{
+    _btnViewPhoto.backgroundColor = [ColorDefinition greenColor];
+    [_btnViewPhoto setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
+}
+
+- (void)handleViewPhotoNormal:(id)sender
+{
+    _btnViewPhoto.backgroundColor = [UIColor whiteColor];
+    [_btnViewPhoto setTitleColor:[ColorDefinition greenColor] forState:UIControlStateNormal];
+    
+    [self handleCancelTap];
+    [self.userAvatar displayFullScreen];
+}
+
+- (void)handleTakePhotoHightlight:(id)sender
+{
+    _btnTakePhoto.backgroundColor = [ColorDefinition greenColor];
+    [_btnTakePhoto setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
+}
+
+- (void)handleTakePhotoNormal:(id)sender
+{
+    _btnTakePhoto.backgroundColor = [UIColor whiteColor];
+    [_btnTakePhoto setTitleColor:[ColorDefinition greenColor] forState:UIControlStateNormal];
+    
+    UIImagePickerController *imagePicker = [[UIImagePickerController alloc]init];
+    imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+    imagePicker.delegate = self;
+    
+    [self handleCancelTap];
+    [self presentViewController:imagePicker animated:YES completion:nil];
+}
+
+- (void)handleSelectPhotoHightlight:(id)sender
+{
+    _btnSelectFromLocal.backgroundColor = [ColorDefinition greenColor];
+    [_btnSelectFromLocal setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
+}
+
+- (void)handleSelectPhotoNormal:(id)sender
+{
+    _btnSelectFromLocal.backgroundColor = [UIColor whiteColor];
+    [_btnSelectFromLocal setTitleColor:[ColorDefinition greenColor] forState:UIControlStateNormal];
+    
+    UIImagePickerController *pickerController = [[UIImagePickerController alloc] init];
+    pickerController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    pickerController.mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeSavedPhotosAlbum];
+    pickerController.allowsEditing = NO;
+    pickerController.delegate = self;
+    
+    [self handleCancelTap];
+    [self presentViewController:pickerController animated:YES completion:nil];
+}
+
+- (void)handleCameraTapped
+{
+    _buttonContainerView.frame = CGRectMake(_buttonContainerView.frame.origin.x, _uploadAvatarView.frame.size.height, _buttonContainerView.frame.size.width, _buttonContainerView.frame.size.height);
+    _uploadAvatarView.hidden = NO;
+    
+    [UIView animateWithDuration:0.5 animations:^{
+        _buttonContainerView.frame = CGRectMake(_buttonContainerView.frame.origin.x, _uploadAvatarView.frame.size.height - 135, _buttonContainerView.frame.size.width, _buttonContainerView.frame.size.height);
+        _background.alpha = 0.8;
+    }];
 }
 
 @end
