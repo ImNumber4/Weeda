@@ -36,8 +36,6 @@
 
 @property (nonatomic, weak) IBOutlet UIView *view;
 
-@property (nonatomic, retain) NSMutableArray *weedImages;
-
 - (void)hideControls;
 - (void)decorateCellWithWeed:(Weed *)weed;
 

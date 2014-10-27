@@ -52,7 +52,7 @@
 {
     _imageURL = imageURL;
     if (isAvatar) {
-        [self sd_setImageWithURL:imageURL placeholderImage:nil options:(SDWebImageHandleCookies | SDWebImageRefreshCached)];
+        [self sd_setImageWithURL:imageURL placeholderImage:[UIImage imageNamed:@"avatar.jpg"] options:(SDWebImageHandleCookies | SDWebImageRefreshCached)];
     } else {
         [self sd_setImageWithURL:imageURL placeholderImage:nil options:SDWebImageHandleCookies];
     }

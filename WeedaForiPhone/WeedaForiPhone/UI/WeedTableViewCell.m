@@ -49,9 +49,8 @@
         _weedTmp = nil;
     }
     
-    _dataSource = [[NSArray alloc]init];
-    
     _collectionView = [self createImageCollectionView:CGRectMake(0, 0, self.frame.size.width, MASTERVIEW_IMAGEVIEW_HEIGHT)];
+    _collectionView.hidden = YES;
     [self addSubview:_collectionView];
 }
 

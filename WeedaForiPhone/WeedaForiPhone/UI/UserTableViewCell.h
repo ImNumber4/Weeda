@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "WLUIImageView.h"
 
 #define USER_TABLE_VIEW_CELL_HEIGHT 50;
 

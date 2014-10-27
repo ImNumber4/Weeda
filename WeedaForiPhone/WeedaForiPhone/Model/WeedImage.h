@@ -11,8 +11,6 @@
 @interface WeedImage : NSManagedObject
 
 @property (nonatomic, retain) NSNumber *imageId;
-@property (nonatomic, retain) UIImage *image;
-@property (nonatomic, retain) NSNumber *isBig;
 @property (nonatomic, retain) NSNumber * width;
 @property (nonatomic, retain) NSNumber * height;
 

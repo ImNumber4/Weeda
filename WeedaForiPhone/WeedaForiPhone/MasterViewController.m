@@ -16,7 +16,6 @@
 #import "Weed.h"
 #import "User.h"
 #import "WeedImage.h"
-#import "ImageMetadata.h"
 
 
 @interface MasterViewController () <UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, WeedTableViewCellDelegate>

@@ -11,8 +11,6 @@
 @implementation WeedImage
 
 @dynamic imageId;
-@dynamic image;
-@dynamic isBig;
 @dynamic width;
 @dynamic height;
 

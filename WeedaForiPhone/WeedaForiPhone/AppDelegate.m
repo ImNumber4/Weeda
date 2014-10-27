@@ -14,7 +14,6 @@
 #import "Weed.h"
 #import "User.h"
 #import "WeedImage.h"
-#import "ImageMetadata.h"
 
 @interface AppDelegate ()
 
