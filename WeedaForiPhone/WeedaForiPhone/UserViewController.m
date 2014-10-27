@@ -21,6 +21,7 @@
 #import "EditProfileViewController.h"
 #import "ConversationViewController.h"
 #import "BlurView.h"
+#import "UIViewHelper.h"
 
 @interface UserViewController () <CropImageDelegate>
 
@@ -71,6 +72,9 @@ const NSInteger SHOW_FOLLOWINGS = 2;
     self.followerCountLabel.tag = SHOW_FOLLOWERS;
     [self.followingCountLabel addTarget:self action:@selector(showUsers:)forControlEvents:UIControlEventTouchDown];
     self.followingCountLabel.tag = SHOW_FOLLOWINGS;
+    
+    [UIViewHelper roundCorners:self.followButton byRoundingCorners:UIRectCornerBottomLeft|UIRectCornerTopLeft];
+    [UIViewHelper roundCorners:self.messageButton byRoundingCorners:UIRectCornerBottomRight|UIRectCornerTopRight];
     
     [self.tableView setSeparatorInset:UIEdgeInsetsZero];
     

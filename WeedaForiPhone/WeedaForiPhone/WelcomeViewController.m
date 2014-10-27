@@ -89,7 +89,7 @@ static NSString * PASSWORD_COOKIE_NAME = @"password";
 - (void) showLoginUI
 {
     [UIView animateWithDuration:0.5 animations:^{
-        self.titleImage.center = CGPointMake(self.titleImage.center.x, self.titleImage.center.y - 70);
+        self.titleImage.center = CGPointMake(self.titleImage.center.x, 100);
     } completion:^(BOOL finished) {
         [UIView animateWithDuration:0.5 animations:^{
             self.txtUsername.alpha = 1;
@@ -109,7 +109,7 @@ static NSString * PASSWORD_COOKIE_NAME = @"password";
         self.btnSignUp.alpha = 0;
         self.btnSignIn.alpha = 0;
         self.lbForgotPw.alpha = 0;
-        self.titleImage.center = CGPointMake(self.titleImage.center.x, self.titleImage.center.y + 70);
+        self.titleImage.center = CGPointMake(self.titleImage.center.x, 170);
     }];
 }
 

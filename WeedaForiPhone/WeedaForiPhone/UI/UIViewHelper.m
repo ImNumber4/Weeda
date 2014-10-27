@@ -13,7 +13,12 @@
 
 + (void) roundCorners:(UIView *) view byRoundingCorners:(UIRectCorner)corners
 {
-    UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:view.bounds byRoundingCorners:corners cornerRadii:CGSizeMake(10.0, 10.0)];
+    [UIViewHelper roundCorners:view byRoundingCorners:corners radius:10.0];
+}
+
++ (void) roundCorners:(UIView *) view byRoundingCorners:(UIRectCorner)corners radius:(double) radius
+{
+    UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:view.bounds byRoundingCorners:corners cornerRadii:CGSizeMake(radius, radius)];
     // Create the shape layer and set its path
     CAShapeLayer *maskLayer = [CAShapeLayer layer];
     maskLayer.frame = view.bounds;
