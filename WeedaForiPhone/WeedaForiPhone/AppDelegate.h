@@ -25,5 +25,8 @@
 
 - (void) decreaseBadgeCount:(NSInteger) decreaseBy;
 - (void) updateBadgeCount;
+- (void) populateCurrentUserFromCookie;
+- (void) clearLoginCookies;
+- (void)signout;
 
 @end

@@ -144,9 +144,9 @@ class UserController extends Controller
 	public function signout() {		
 		try {
 			$currentUser_id = $this->getCurrentUser();
-			setcookie('user_id', '', time() - 3600);
-			setcookie('username', '', time() - 3600);
-			setcookie('password', '', time() - 3600);
+			setcookie(Controller::$USER_ID_COOKIE_NAME, '', time() - 3600);
+			setcookie(Controller::$USERNAME_COOKIE_NAME, '', time() - 3600);
+			setcookie(Controller::$PASSWORD_COOKIE_NAME, '', time() - 3600);
 		} catch (DependencyDataMissingException $e) {
 			//already log out.
 			return;
@@ -170,11 +170,22 @@ class UserController extends Controller
 	
 	private function update_cookie($user){
 		error_log($user['id']);
-		error_log($user['username']);
-		error_log($user['password']);
-		setcookie('user_id', $user['id'], time() + (86400 * 7), '/');
-		setcookie('username', $user['username'], time() + (86400 * 7), '/');
-		setcookie('password', $user['password'], time() + (86400 * 7), '/');
+				error_log($user['username']);
+				error_log($user['password']);
+		setcookie(Controller::$USER_ID_COOKIE_NAME, $user['id'], time() + (86400 * 7), '/');
+		setcookie(Controller::$USERNAME_COOKIE_NAME, $user['username'], time() + (86400 * 7), '/');
+		setcookie(Controller::$PASSWORD_COOKIE_NAME, $user['password'], time() + (86400 * 7), '/');
+	}
+	
+	public function updateUsername($username) {
+		$user_id = $this->getCurrentUser();
+		$password = $this->getCurrentUserPassword();
+		$this->user_dao->updateUsername($user_id, $username);
+		$user = array();
+		$user['id'] = $user_id;
+		$user['password'] = $password;
+		$user['username'] = $username;
+		$this->update_cookie($user);
 	}
 	
 	public function update() {

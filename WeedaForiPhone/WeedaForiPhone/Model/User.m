@@ -48,6 +48,22 @@
     return coordinate;
 }
 
++ (NSString *)validatePassword:(NSString *)password
+{
+    if (password.length >= 7) {
+        return nil;
+    } else {
+        return @"Password needs to have least 7 characters.";
+    }
+}
+
++ (BOOL)isEmailValid:(NSString*)email
+{
+    NSString *emailRegex = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
+    NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
+    return [emailTest evaluateWithObject:email];
+}
+
 - (MKMapItem*)mapItem {
     NSDictionary *addressDict = @{(NSString*)kABPersonAddressStreetKey :[NSString stringWithFormat:@"%@, %@, %@, %@", self.address_street, self.address_city, self.address_state, self.address_zip]};
     

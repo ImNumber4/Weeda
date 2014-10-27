@@ -115,14 +115,14 @@ bool availableUsername = false;
             self.usernameValidImageView.image = [UIImage imageNamed:@"wrong.png"];
             break;
         case 1002:
-            if ([self validateEmailWithString:textField.text]) {
+            if ([User isEmailValid:textField.text]) {
                 self.emailValidImageView.image = [UIImage imageNamed:@"ok.png"];
             } else {
                 self.emailValidImageView.image = [UIImage imageNamed:@"wrong.png"];
             }
             break;
         case 1003:
-            if ([self validatePassword:textField.text]) {
+            if ([User validatePassword:textField.text] == nil) {
                 self.passwordValidImageView.image = [UIImage imageNamed:@"ok.png"];
             } else {
                 self.passwordValidImageView.image = [UIImage imageNamed:@"wrong.png"];
@@ -131,7 +131,7 @@ bool availableUsername = false;
         default:
             break;
     }
-    if (availableUsername && [self validateEmailWithString:self.txtEmail.text] && [self validatePassword:self.txtPassword.text]) {
+    if (availableUsername && [User isEmailValid:self.txtEmail.text] && [User validatePassword:self.txtPassword.text] == nil) {
         [self.btnSignup setEnabled:YES];
     }
     return true;
@@ -156,7 +156,7 @@ bool availableUsername = false;
         default:
             break;
     }
-    if (availableUsername && [self validateEmailWithString:self.txtEmail.text] && [self validatePassword:self.txtPassword.text]) {
+    if (availableUsername && [User isEmailValid:self.txtEmail.text] && [User validatePassword:self.txtPassword.text] == nil) {
         [self.btnSignup setEnabled:YES];
     }
     return true;
@@ -183,21 +183,7 @@ bool availableUsername = false;
     }
 }
 
-- (BOOL)validateEmailWithString:(NSString*)email
-{
-    NSString *emailRegex = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
-    NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
-    return [emailTest evaluateWithObject:email];
-}
 
-- (BOOL)validatePassword:(NSString *)password
-{
-    if (password.length >= 7) {
-        return true;
-    } else {
-        return false;
-    }
-}
 
 - (void) setCurrentUser
 {

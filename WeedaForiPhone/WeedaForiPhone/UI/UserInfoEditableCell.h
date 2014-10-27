@@ -10,16 +10,17 @@
 @protocol UserInfoEditableCellDelegate <NSObject>
 @required
 - (void) finishModifying:(NSString *)text sender:(UITableViewCell *) sender;
+- (void) contentDidChange:(NSString *)text sender:(UITableViewCell *) sender;
 @end
 
 @interface UserInfoEditableCell : UITableViewCell <UITextFieldDelegate, UITextViewDelegate>
 
-@property (nonatomic, weak) IBOutlet UITextField *contentTextField;
-@property (nonatomic, weak) IBOutlet UITextView *contentTextView;
-@property (nonatomic, weak) IBOutlet UILabel *nameLabel;
-
-@property (nonatomic, weak) IBOutlet UIView *view;
+@property (nonatomic, strong) UITextField *contentTextField;
+@property (nonatomic, strong) UITextView *contentTextView;
+@property (nonatomic, strong) UILabel *nameLabel;
 
 @property (nonatomic, weak)id<UserInfoEditableCellDelegate> delegate;
+
+- (void) adjustNameLabelWidth:(double)width;
 
 @end

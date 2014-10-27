@@ -213,14 +213,7 @@ const NSInteger SHOW_FOLLOWINGS = 2;
 
 - (void)setting:(id)sender
 {
-    // Dispose of any resources that can be recreated.
-    NSArray *cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookies];
-    for (NSHTTPCookie *cookie in cookies) {
-        [[NSHTTPCookieStorage sharedHTTPCookieStorage] deleteCookie:cookie];
-    }
-    
-    UIViewController *controller = [self.storyboard instantiateViewControllerWithIdentifier:@"WelcomeViewController"];
-    [self presentViewController:controller animated:YES completion:nil];
+    [self performSegueWithIdentifier:@"editSettings" sender:self];
 }
 
 - (void)didReceiveMemoryWarning
@@ -272,7 +265,7 @@ const NSInteger SHOW_FOLLOWINGS = 2;
     [self.location setFrame:CGRectMake(self.location.frame.origin.x, self.userDescription.frame.origin.y + self.userDescription.frame.size.height + 5, self.userDescription.frame.size.width, self.location.frame.size.height)];
     
     double tableViewYCoordinate;
-    if(![USER_TYPE_USER isEqualToString:[self.user.user_type lowercaseString]]) {
+    if(![USER_TYPE_USER isEqualToString:self.user.user_type]) {
         self.location.hidden = NO;
         CLLocationCoordinate2D zoomLocation;
         zoomLocation.latitude = self.user.latitude.doubleValue;

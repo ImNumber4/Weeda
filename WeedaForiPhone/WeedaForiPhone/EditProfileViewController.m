@@ -47,9 +47,12 @@ const NSInteger RESULT_LABEL_IN_BLUR_VIEW = 22;
 const NSInteger RESULT_TEXT_VIEW_IN_BLUR_VIEW = 23;
 const NSInteger RESULT_OKAY_BUTTON_IN_BLUR_VIEW = 24;
 
+static NSString * CELL_REUSE_ID = @"UserInfoEditableCell";
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.table.tableFooterView = [[UIView alloc] init];
+    [self.table registerClass:[UserInfoEditableCell class] forCellReuseIdentifier:CELL_REUSE_ID];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWasShown:)
                                                  name:UIKeyboardDidShowNotification object:nil];
@@ -64,7 +67,7 @@ const NSInteger RESULT_OKAY_BUTTON_IN_BLUR_VIEW = 24;
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    if(![USER_TYPE_USER isEqualToString:[self.userObject.user_type lowercaseString]]) {
+    if(![USER_TYPE_USER isEqualToString:self.userObject.user_type]) {
         return 2;
     } else {
         return 1;
@@ -84,55 +87,59 @@ const NSInteger RESULT_OKAY_BUTTON_IN_BLUR_VIEW = 24;
 
 - (UserInfoEditableCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UserInfoEditableCell *cell = (UserInfoEditableCell *)[tableView dequeueReusableCellWithIdentifier:@"UserInfoEditableCell" forIndexPath:indexPath];
-    cell.contentTextField.hidden = NO;
-    cell.contentTextView.hidden = YES;
-    if (indexPath.section == BASIC_INFO_SECTION) {
-        if (indexPath.row == EMAIL_ROW) {
-            cell.nameLabel.text = @"Email";
-            cell.contentTextField.text = self.userObject.email;
-            cell.contentTextField.placeholder = self.userObject.email;
-        } else if (indexPath.row == USER_BIO_ROW) {
-            cell.nameLabel.text = @"Bio";
-            cell.contentTextView.text = self.userObject.userDescription;
-            cell.contentTextField.hidden = YES;
-            cell.contentTextView.hidden = NO;
+    UserInfoEditableCell *cell = (UserInfoEditableCell *)[tableView dequeueReusableCellWithIdentifier:CELL_REUSE_ID forIndexPath:indexPath];
+    if (cell) {
+        cell.contentTextField.hidden = NO;
+        cell.contentTextView.hidden = YES;
+        if (indexPath.section == BASIC_INFO_SECTION) {
+            if (indexPath.row == EMAIL_ROW) {
+                cell.nameLabel.text = @"Email";
+                cell.contentTextField.text = self.userObject.email;
+                cell.contentTextField.placeholder = self.userObject.email;
+            } else if (indexPath.row == USER_BIO_ROW) {
+                cell.nameLabel.text = @"Bio";
+                cell.contentTextView.text = self.userObject.userDescription;
+                cell.contentTextField.hidden = YES;
+                cell.contentTextView.hidden = NO;
+            }
+        } else if (indexPath.section == STORE_INFO_SECTION) {
+            if (indexPath.row == STREET_ROW) {
+                cell.nameLabel.text = @"Street";
+                cell.contentTextField.text = self.userObject.address_street;
+                cell.contentTextField.placeholder = self.userObject.address_street;
+            } else if (indexPath.row == CITY_ROW) {
+                cell.nameLabel.text = @"City";
+                cell.contentTextField.text = self.userObject.address_city;
+                cell.contentTextField.placeholder = self.userObject.address_city;
+            } else if (indexPath.row == STATE_ROW) {
+                cell.nameLabel.text = @"State";
+                cell.contentTextField.text = self.userObject.address_state;
+                cell.contentTextField.placeholder = self.userObject.address_state;
+            } else if (indexPath.row == ZIP_ROW) {
+                cell.nameLabel.text = @"Zip";
+                cell.contentTextField.text = self.userObject.address_zip;
+                cell.contentTextField.placeholder = self.userObject.address_zip;
+            } else if (indexPath.row == COUNTRY_ROW) {
+                cell.nameLabel.text = @"Country";
+                cell.contentTextField.text = self.userObject.address_country;
+                cell.contentTextField.placeholder = self.userObject.address_country;
+            } else if (indexPath.row == PHONE_ROW) {
+                cell.nameLabel.text = @"Phone";
+                cell.contentTextField.text = self.userObject.phone;
+                cell.contentTextField.placeholder = self.userObject.phone;
+            } else if (indexPath.row == STORENAME_ROW) {
+                cell.nameLabel.text = @"Store Name";
+                cell.contentTextField.text = self.userObject.storename;
+                cell.contentTextField.placeholder = self.userObject.storename;
+            }
         }
-    } else if (indexPath.section == STORE_INFO_SECTION) {
-        if (indexPath.row == STREET_ROW) {
-            cell.nameLabel.text = @"Street";
-            cell.contentTextField.text = self.userObject.address_street;
-            cell.contentTextField.placeholder = self.userObject.address_street;
-        } else if (indexPath.row == CITY_ROW) {
-            cell.nameLabel.text = @"City";
-            cell.contentTextField.text = self.userObject.address_city;
-            cell.contentTextField.placeholder = self.userObject.address_city;
-        } else if (indexPath.row == STATE_ROW) {
-            cell.nameLabel.text = @"State";
-            cell.contentTextField.text = self.userObject.address_state;
-            cell.contentTextField.placeholder = self.userObject.address_state;
-        } else if (indexPath.row == ZIP_ROW) {
-            cell.nameLabel.text = @"Zip";
-            cell.contentTextField.text = self.userObject.address_zip;
-            cell.contentTextField.placeholder = self.userObject.address_zip;
-        } else if (indexPath.row == COUNTRY_ROW) {
-            cell.nameLabel.text = @"Country";
-            cell.contentTextField.text = self.userObject.address_country;
-            cell.contentTextField.placeholder = self.userObject.address_country;
-        } else if (indexPath.row == PHONE_ROW) {
-            cell.nameLabel.text = @"Phone";
-            cell.contentTextField.text = self.userObject.phone;
-            cell.contentTextField.placeholder = self.userObject.phone;
-        } else if (indexPath.row == STORENAME_ROW) {
-            cell.nameLabel.text = @"Store Name";
-            cell.contentTextField.text = self.userObject.storename;
-            cell.contentTextField.placeholder = self.userObject.storename;
-        }
+        cell.delegate = self;
     }
-    cell.delegate = self;
     
     return cell;
 }
+
+- (void) contentDidChange:(NSString *)text sender:(UserInfoEditableCell *) sender {}
 
 - (void) finishModifying:(NSString *)text sender:(UserInfoEditableCell *)sender
 {
@@ -350,6 +357,8 @@ const NSInteger RESULT_OKAY_BUTTON_IN_BLUR_VIEW = 24;
                           }
          ];
     } else {
+        [self.navigationItem.leftBarButtonItem setEnabled:NO];
+        
         UIImageView *imageView = (UIImageView *)[self.view viewWithTag:RESULT_IMAGE_VIEW_IN_BLUR_VIEW_TAG];
         if (!imageView) {
             imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0, 0.0, 40.0, 40.0)];

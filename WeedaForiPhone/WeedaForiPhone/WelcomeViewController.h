@@ -10,8 +10,6 @@
 
 @interface WelcomeViewController : UIViewController
 
-@property (nonatomic, retain) User * currentUser;
-
 - (IBAction)signIn:(id)sender;
 - (IBAction)signUp:(id)sender;
 

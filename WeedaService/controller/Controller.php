@@ -10,6 +10,10 @@ class Controller
 	protected $model;
 	
 	protected $user_dao;
+	
+	public static $USER_ID_COOKIE_NAME = 'user_id';
+    public static $USERNAME_COOKIE_NAME = 'username';
+    public static $PASSWORD_COOKIE_NAME = 'password';
 
 	function __construct($model, $controller, $action) {
 		$this->_controller = $controller;
@@ -21,7 +25,7 @@ class Controller
 	}
 	
 	protected function getCurrentUser(){
-		$currentUser_id = $_COOKIE['user_id'];
+		$currentUser_id = $_COOKIE[Controller::$USER_ID_COOKIE_NAME];
 		if (!isset($currentUser_id)) {
 			throw new DependencyDataMissingException('current user is not set');
 		}
@@ -30,11 +34,19 @@ class Controller
 	
 		
 	protected function getCurrentUsername(){
-		$currentUsername= $_COOKIE['username'];
+		$currentUsername= $_COOKIE[Controller::$USERNAME_COOKIE_NAME];
 		if (!isset($currentUsername)) {
 			throw new DependencyDataMissingException('current username is not set');
 		}
 		return $currentUsername;
+	}
+	
+	protected function getCurrentUserPassword(){
+		$currentUserPassword= $_COOKIE[Controller::$PASSWORD_COOKIE_NAME];
+		if (!isset($currentUserPassword)) {
+			throw new DependencyDataMissingException('current password is not set');
+		}
+		return $currentUserPassword;
 	}
 	
 	// function set($name,$value) {

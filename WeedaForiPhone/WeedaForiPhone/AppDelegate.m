@@ -22,11 +22,16 @@
 
 @implementation AppDelegate
 
+static NSString * USER_ID_COOKIE_NAME = @"user_id";
+static NSString * USERNAME_COOKIE_NAME = @"username";
+static NSString * PASSWORD_COOKIE_NAME = @"password";
+
 NSString * _deviceToken;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     [self setupRestKit];
+    [self populateCurrentUserFromCookie];
     // Let the device know we want to receive push notifications
     if ([[[UIDevice currentDevice] systemVersion] doubleValue] >= 8.0) {
         UIUserNotificationSettings* notificationSettings = [UIUserNotificationSettings settingsForTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert) categories:nil];
@@ -41,9 +46,86 @@ NSString * _deviceToken;
 
 - (void) setCurrentUser:(User *)currentUser
 {
+    bool userSwitched = true;
+    if (_currentUser && currentUser) {
+        if ([_currentUser.id isEqualToNumber:currentUser.id]) {
+            userSwitched = false;
+        }
+    } else if (!_currentUser && !currentUser) {
+        userSwitched = false;
+    }
+    if (userSwitched) {
+        NSLog(@"user switched from %@ to %@", _currentUser.id, currentUser.id);
+    }
     _currentUser = currentUser;
-    [self resetPersisiStores];
-    [self setupRestKit];
+    if (userSwitched) {
+        [self resetPersisiStores];
+        [self setupRestKit];
+    }
+}
+
+- (void)signout
+{
+    [self clearLoginCookies];
+    _currentUser = nil;
+}
+
+- (void) populateCurrentUserFromCookie
+{
+    NSArray *cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookies];
+    if (!cookies || cookies.count == 0) {
+        return;
+    }
+    
+    NSDate *currentTime = [NSDate date];
+    NSHTTPCookie *userIdCookie = [self findCookieByName:USER_ID_COOKIE_NAME isExpiredBy:currentTime];
+    NSHTTPCookie *usernameCookie = [self findCookieByName:USERNAME_COOKIE_NAME isExpiredBy:currentTime];
+    NSHTTPCookie *passwordCookie = [self findCookieByName:PASSWORD_COOKIE_NAME isExpiredBy:currentTime];
+    
+    if (userIdCookie == nil || userIdCookie.value == nil || usernameCookie == nil || usernameCookie.value == nil || passwordCookie == nil || passwordCookie.value == nil) {
+        NSLog(@"There is no available cookie.");
+        return;
+    }
+    User * user = [User alloc];
+
+    user.id = [NSNumber numberWithInteger:[userIdCookie.value integerValue]];
+    user.username = usernameCookie.value;
+    user.password = passwordCookie.value;
+    self.currentUser = user;
+}
+
+- (NSHTTPCookie *) findCookieByName:(NSString *)name isExpiredBy:(NSDate *) time
+{
+    NSArray *cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookies];
+    if (!cookies || cookies.count == 0) {
+        return nil;
+    }
+    for (NSHTTPCookie *cookie in cookies) {
+        if ([cookie.name isEqualToString:name] && [cookie.expiresDate compare:time] == NSOrderedDescending) {
+            return cookie;
+        }
+    }
+    return nil;
+}
+
+- (void) clearLoginCookies
+{
+    [self removeCookieByName:USER_ID_COOKIE_NAME];
+    [self removeCookieByName:USERNAME_COOKIE_NAME];
+    [self removeCookieByName:PASSWORD_COOKIE_NAME];
+}
+
+- (void) removeCookieByName:(NSString *)name
+{
+    NSArray *cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookies];
+    if (!cookies || cookies.count == 0) {
+        return;
+    }
+    for (NSHTTPCookie *cookie in cookies) {
+        if ([cookie.name isEqualToString:name]) {
+            [[NSHTTPCookieStorage sharedHTTPCookieStorage] deleteCookie:cookie];
+        }
+    }
 }
 
 - (void) registerDeviceToken

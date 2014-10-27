@@ -26,7 +26,7 @@ function Hook($request) {
         
         //check the authentication
         if ($action != 'login' && $action != 'signup' && $action != 'username' ) {
-        	$currentUser_id = $_COOKIE['user_id'];
+        	$currentUser_id = $_COOKIE[Controller::$USER_ID_COOKIE_NAME];
         	if (!isset($currentUser_id)) {
 				error_log('Please log first. url: ' . $url);
         		http_response_code(401);

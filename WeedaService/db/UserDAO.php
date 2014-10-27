@@ -16,6 +16,14 @@ class UserDAO extends BaseDAO
 		return $result;
 	}
 	
+	public function updateUsername($user_id, $username) {
+		$query = 'UPDATE user SET '
+			.'username = \'' . $username. '\''
+		    . ' WHERE id = ' . $user_id;
+		$this->db_conn->query($query);
+	}
+		
+	
 	public function update($user) {
 		$query = 'UPDATE user SET '
 			.'email = \'' . $user->get_email() . '\', '
@@ -62,7 +70,7 @@ class UserDAO extends BaseDAO
 		$latitude_upper_bound = $latitude + $range;
 		$longitude_lower_bound = $longitude - $range;
 		$longitude_upper_bound = $longitude + $range;
-		$query = "SELECT * FROM user where latitude > $latitude_lower_bound and latitude < $latitude_upper_bound and longitude > $longitude_lower_bound && longitude < $longitude_upper_bound && user_type <> 'user'";
+		$query = "SELECT * FROM user where latitude > $latitude_lower_bound and latitude < $latitude_upper_bound and longitude > $longitude_lower_bound && longitude < $longitude_upper_bound && user_type <> '" . User::$TYPE_USER . "'";
 		if (isset($search_key)) {
 			$query = "$query && storename like '%$search_key%'";
 		}
@@ -103,7 +111,7 @@ class UserDAO extends BaseDAO
 	}
 	
 	public function get_follower_usernames($user_id, $currentUser_id, $count_limit) {		
-		$query = 'SELECT user.id as id, user.username as username, user.storename as storename, user.address_street as address_street, user.address_city as address_city, user.address_state as address_state, user.address_country as address_country, user.address_zip as address_zip, user.user_type as user_type FROM follow join user on follow.follower_uid = user.id where follow.followee_uid = '. $user_id . ' LIMIT ' . $count_limit;
+		$query = 'SELECT user.id as id, user.username as username, user.storename as storename, user.address_street as address_street, user.address_city as address_city, user.address_state as address_state, user.address_country as address_country, user.address_zip as address_zip, user.user_type as user_type9 FROM follow join user on follow.follower_uid = user.id where follow.followee_uid = '. $user_id . ' LIMIT ' . $count_limit;
 		$result = $this->db_conn->query($query);
 		$users = array();
 		if (mysql_num_rows($result)) {

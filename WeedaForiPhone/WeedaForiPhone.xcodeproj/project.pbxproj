@@ -112,6 +112,11 @@
 		A9A46830190E1E8E00461E90 /* WeedDetailTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A9A4682F190E1E8E00461E90 /* WeedDetailTableViewCell.m */; };
 		A9A46833190E210900461E90 /* WeedDetailControlTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A9A46832190E210900461E90 /* WeedDetailControlTableViewCell.m */; };
 		A9B45DDE194EAC40007AFB06 /* WeedTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9B45DDD194EAC40007AFB06 /* WeedTableViewCell.xib */; };
+		A9C0879719F8B9B700B0622B /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C0879619F8B9B700B0622B /* SettingsViewController.m */; };
+		A9C087A119FB0C0300B0622B /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C087A019FB0C0300B0622B /* AboutViewController.m */; };
+		A9C087A419FB0C1800B0622B /* TermsAndPoliciesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C087A319FB0C1800B0622B /* TermsAndPoliciesViewController.m */; };
+		A9C087A719FB0C3600B0622B /* UpdateUsernameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C087A619FB0C3600B0622B /* UpdateUsernameViewController.m */; };
+		A9C087AA19FB0C4600B0622B /* ChangePasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C087A919FB0C4600B0622B /* ChangePasswordViewController.m */; };
 		A9C1BDE219F643D6003672DD /* UIViewHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C1BDE119F643D6003672DD /* UIViewHelper.m */; };
 		A9CA8E5918E8DB1E004F095D /* RemoteObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A9CA8E5818E8DB1E004F095D /* RemoteObject.m */; };
 		A9CA8E6618E9132C004F095D /* AddWeedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9CA8E6518E9132C004F095D /* AddWeedViewController.m */; };
@@ -124,7 +129,6 @@
 		A9DFADE019A055E900AB00BA /* ColorDefinition.m in Sources */ = {isa = PBXBuildFile; fileRef = A9DFADDF19A055E900AB00BA /* ColorDefinition.m */; };
 		A9FB79F31985A4C100DB35CB /* EditProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9FB79F21985A4C100DB35CB /* EditProfileViewController.m */; };
 		A9FB79F91985A94500DB35CB /* UserInfoEditableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A9FB79F81985A94500DB35CB /* UserInfoEditableCell.m */; };
-		A9FB79FB1985A97000DB35CB /* UserInfoEditableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9FB79FA1985A97000DB35CB /* UserInfoEditableCell.xib */; };
 		EA152C5F19187D9F009E5337 /* title.png in Resources */ = {isa = PBXBuildFile; fileRef = EA152C5E19187D9F009E5337 /* title.png */; };
 		EA1B050F18F3668A0033AB06 /* WelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA1B050E18F3668A0033AB06 /* WelcomeViewController.m */; };
 		EA1E4D9419E5179600222BF4 /* WeedImageMaxDisplayView.m in Sources */ = {isa = PBXBuildFile; fileRef = EA1E4D9319E5179600222BF4 /* WeedImageMaxDisplayView.m */; };
@@ -363,6 +367,16 @@
 		A9A46831190E210900461E90 /* WeedDetailControlTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WeedDetailControlTableViewCell.h; path = WeedaForiPhone/UI/WeedDetailControlTableViewCell.h; sourceTree = "<group>"; };
 		A9A46832190E210900461E90 /* WeedDetailControlTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WeedDetailControlTableViewCell.m; path = WeedaForiPhone/UI/WeedDetailControlTableViewCell.m; sourceTree = "<group>"; };
 		A9B45DDD194EAC40007AFB06 /* WeedTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = WeedTableViewCell.xib; path = WeedaForiPhone/UI/WeedTableViewCell.xib; sourceTree = "<group>"; };
+		A9C0879519F8B9B700B0622B /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
+		A9C0879619F8B9B700B0622B /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
+		A9C0879F19FB0C0300B0622B /* AboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutViewController.h; sourceTree = "<group>"; };
+		A9C087A019FB0C0300B0622B /* AboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutViewController.m; sourceTree = "<group>"; };
+		A9C087A219FB0C1800B0622B /* TermsAndPoliciesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TermsAndPoliciesViewController.h; sourceTree = "<group>"; };
+		A9C087A319FB0C1800B0622B /* TermsAndPoliciesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TermsAndPoliciesViewController.m; sourceTree = "<group>"; };
+		A9C087A519FB0C3600B0622B /* UpdateUsernameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UpdateUsernameViewController.h; sourceTree = "<group>"; };
+		A9C087A619FB0C3600B0622B /* UpdateUsernameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UpdateUsernameViewController.m; sourceTree = "<group>"; };
+		A9C087A819FB0C4600B0622B /* ChangePasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangePasswordViewController.h; sourceTree = "<group>"; };
+		A9C087A919FB0C4600B0622B /* ChangePasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangePasswordViewController.m; sourceTree = "<group>"; };
 		A9C1BDE119F643D6003672DD /* UIViewHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIViewHelper.m; path = WeedaForiPhone/UI/UIViewHelper.m; sourceTree = "<group>"; };
 		A9C1BDE919F6440F003672DD /* UIViewHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = UIViewHelper.h; path = WeedaForiPhone/UI/UIViewHelper.h; sourceTree = "<group>"; };
 		A9CA8E5718E8DB1E004F095D /* RemoteObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RemoteObject.h; path = WeedaForiPhone/Model/RemoteObject.h; sourceTree = "<group>"; };
@@ -384,7 +398,6 @@
 		A9FB79F21985A4C100DB35CB /* EditProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditProfileViewController.m; sourceTree = "<group>"; };
 		A9FB79F71985A94500DB35CB /* UserInfoEditableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserInfoEditableCell.h; path = WeedaForiPhone/UI/UserInfoEditableCell.h; sourceTree = "<group>"; };
 		A9FB79F81985A94500DB35CB /* UserInfoEditableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserInfoEditableCell.m; path = WeedaForiPhone/UI/UserInfoEditableCell.m; sourceTree = "<group>"; };
-		A9FB79FA1985A97000DB35CB /* UserInfoEditableCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = UserInfoEditableCell.xib; path = WeedaForiPhone/UI/UserInfoEditableCell.xib; sourceTree = "<group>"; };
 		EA152C5E19187D9F009E5337 /* title.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = title.png; path = WeedaForiPhone/Images/title.png; sourceTree = "<group>"; };
 		EA1B050D18F3668A0033AB06 /* WelcomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WelcomeViewController.h; sourceTree = "<group>"; };
 		EA1B050E18F3668A0033AB06 /* WelcomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WelcomeViewController.m; sourceTree = "<group>"; };
@@ -620,6 +633,16 @@
 				0E4E2C9519B860290025C3EC /* MessageViewController.m */,
 				0ECB453B19C5C8E900690944 /* ConversationViewController.h */,
 				0ECB453C19C5C8E900690944 /* ConversationViewController.m */,
+				A9C0879519F8B9B700B0622B /* SettingsViewController.h */,
+				A9C0879619F8B9B700B0622B /* SettingsViewController.m */,
+				A9C0879F19FB0C0300B0622B /* AboutViewController.h */,
+				A9C087A019FB0C0300B0622B /* AboutViewController.m */,
+				A9C087A219FB0C1800B0622B /* TermsAndPoliciesViewController.h */,
+				A9C087A319FB0C1800B0622B /* TermsAndPoliciesViewController.m */,
+				A9C087A519FB0C3600B0622B /* UpdateUsernameViewController.h */,
+				A9C087A619FB0C3600B0622B /* UpdateUsernameViewController.m */,
+				A9C087A819FB0C4600B0622B /* ChangePasswordViewController.h */,
+				A9C087A919FB0C4600B0622B /* ChangePasswordViewController.m */,
 			);
 			path = WeedaForiPhone;
 			sourceTree = "<group>";
@@ -779,7 +802,6 @@
 				0ECB452D19C5C55D00690944 /* VendorCallOutView.xib */,
 				A9FB79F71985A94500DB35CB /* UserInfoEditableCell.h */,
 				A9FB79F81985A94500DB35CB /* UserInfoEditableCell.m */,
-				A9FB79FA1985A97000DB35CB /* UserInfoEditableCell.xib */,
 				A9653A9319984FFA00B9E124 /* BlurView.h */,
 				A9653A9419984FFA00B9E124 /* BlurView.m */,
 				EA1E4D9219E5179600222BF4 /* WeedImageMaxDisplayView.h */,
@@ -1019,7 +1041,6 @@
 				0EDDDB0219F08E7800337B59 /* list.png in Resources */,
 				0EB8C4E119C5C00900BD64E1 /* send@2x.png in Resources */,
 				0EB8C4E319C5C00900BD64E1 /* messageSent.aiff in Resources */,
-				A9FB79FB1985A97000DB35CB /* UserInfoEditableCell.xib in Resources */,
 				0EB8C4E219C5C00900BD64E1 /* messageReceived.aiff in Resources */,
 				0EB8C4D919C5C00900BD64E1 /* bubble-typing@2x.png in Resources */,
 				A991C05018FB517600A3D2CD /* selected_profile_icon.png in Resources */,
@@ -1063,6 +1084,7 @@
 				A9A46833190E210900461E90 /* WeedDetailControlTableViewCell.m in Sources */,
 				0EB8C4C119C5C00800BD64E1 /* JSMessageSoundEffect.m in Sources */,
 				A9A46830190E1E8E00461E90 /* WeedDetailTableViewCell.m in Sources */,
+				A9C0879719F8B9B700B0622B /* SettingsViewController.m in Sources */,
 				A91816C8195637B400E7DD02 /* WeedBasicTableViewCell.m in Sources */,
 				0EB8C4C019C5C00800BD64E1 /* JSMessageInputView.m in Sources */,
 				0EB8C4E619C5C00900BD64E1 /* UIImage+JSMessagesView.m in Sources */,
@@ -1081,16 +1103,19 @@
 				EA76A500194E923200B60F04 /* WeedAddingToolbar.m in Sources */,
 				EA1B050F18F3668A0033AB06 /* WelcomeViewController.m in Sources */,
 				0ECB452E19C5C55D00690944 /* VendorCallOutView.m in Sources */,
+				A9C087AA19FB0C4600B0622B /* ChangePasswordViewController.m in Sources */,
 				A9653A9019984D3300B9E124 /* UIImage+ImageEffects.m in Sources */,
 				EA1E4D9419E5179600222BF4 /* WeedImageMaxDisplayView.m in Sources */,
 				A991C04818FB3B7700A3D2CD /* TabBarController.m in Sources */,
 				EA38FC68190D6D26007D652B /* CropImageViewController.m in Sources */,
 				A914CCB618CD756200B870D8 /* AppDelegate.m in Sources */,
 				EAF6762C18FB62E4003BB138 /* SignupViewController.m in Sources */,
+				A9C087A419FB0C1800B0622B /* TermsAndPoliciesViewController.m in Sources */,
 				0EB8C4C219C5C00800BD64E1 /* JSMessagesViewController.m in Sources */,
 				EAFF8D6719ECDB9F006632A4 /* WLImageCollectionView.m in Sources */,
 				A9CA8E8F18F264BA004F095D /* User.m in Sources */,
 				A9645DDB196A0A6C00DDE2DB /* DiscoverViewController.m in Sources */,
+				A9C087A119FB0C0300B0622B /* AboutViewController.m in Sources */,
 				EAAE7B4B19611295003F0C65 /* WeedImageView.m in Sources */,
 				0EB8C4BF19C5C00800BD64E1 /* JSDismissiveTextView.m in Sources */,
 				A9CA8E7E18F0F814004F095D /* UserViewController.m in Sources */,
@@ -1110,6 +1135,7 @@
 				A98A89C51960C46D005A5871 /* VendorMKAnnotationView.m in Sources */,
 				A9DFADE019A055E900AB00BA /* ColorDefinition.m in Sources */,
 				0ECB453A19C5C5AF00690944 /* Model.xcdatamodeld in Sources */,
+				A9C087A719FB0C3600B0622B /* UpdateUsernameViewController.m in Sources */,
 				0ECB453D19C5C8E900690944 /* ConversationViewController.m in Sources */,
 				0EA09D0419BF56EC00E5214E /* Message.m in Sources */,
 				A9FB79F91985A94500DB35CB /* UserInfoEditableCell.m in Sources */,
