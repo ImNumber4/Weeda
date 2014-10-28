@@ -304,7 +304,7 @@ class UserController extends Controller
 		}
 		
 		$user_type = trim($data->user_type);
-		if ($user_type && strtolower($user_type) != User::$TYPE_USER) {
+		if ($user_type && $user_type != User::$TYPE_USER) {
 			$storename = trim($data->storename);
 			if ($storename == '') {
 				$invalidReasons[] = 'Storename can not be empty';
