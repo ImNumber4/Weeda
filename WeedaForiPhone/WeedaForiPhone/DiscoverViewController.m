@@ -98,8 +98,7 @@ static const double FILTER_TAB_HEIGHT = 150;
     UIView *statusBarBackground = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, statusBarSize.width, statusBarSize.height)];
     [statusBarBackground setBackgroundColor:[ColorDefinition greenColor]];
     [self.view addSubview:statusBarBackground];
-//    [self.searchBackground setBackgroundColor:[ColorDefinition greenColor]];
-//    [self.locationBackground setBackgroundColor:[ColorDefinition greenColor]];
+    
     [self.searchBackground setAlpha:ALPHA_VALUE];
     [self.locationBackground setAlpha:ALPHA_VALUE];
 

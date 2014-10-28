@@ -11,6 +11,7 @@
 @interface ColorDefinition : NSObject
 + (UIColor *) blueColor;
 + (UIColor *) grayColor;
++ (UIColor *) darkGreenColor;
 + (UIColor *) greenColor;
 + (UIColor *) lightGreenColor;
 + (UIColor *) shiningGreenColor;

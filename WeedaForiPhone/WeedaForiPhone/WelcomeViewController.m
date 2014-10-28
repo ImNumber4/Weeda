@@ -11,6 +11,7 @@
 #import "TabBarController.h"
 #import "LoginViewController.h"
 #import "MasterViewController.h"
+#import "UIViewHelper.h"
 
 @interface WelcomeViewController () {
     
@@ -46,32 +47,55 @@ static NSString * PASSWORD_COOKIE_NAME = @"password";
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.view.backgroundColor = [UIColor colorWithRed:62.0/255.0 green:165.0/255.0 blue:64.0/255.0 alpha:1];
+    self.view.backgroundColor = [ColorDefinition greenColor];
     
-    self.titleImage = [[UIImageView alloc]initWithFrame:CGRectMake(65, 170, 192, 27)];
+    self.titleImage = [[UIImageView alloc]initWithFrame:CGRectMake(65, 190, 192, 27)];
     self.titleImage.image = [UIImage imageNamed:@"title.png"];
     [self.view addSubview:self.titleImage];
     [self.view bringSubviewToFront:self.titleImage];
     
     self.txtUsername.alpha = 0;
     self.txtUsername.placeholder = @"Username";
-    self.txtUsername.textColor = [UIColor whiteColor];
+    [self.txtUsername setFrame:CGRectMake(20, self.txtUsername.frame.origin.y, self.view.frame.size.width - 40, 35)];
+    self.txtUsername.textColor = [ColorDefinition greenColor];
+    self.txtUsername.layer.borderWidth = 1;
     self.txtUsername.layer.borderColor = [[UIColor whiteColor] CGColor];
-    self.txtUsername.layer.borderWidth = 1.0;
-    self.txtUsername.layer.cornerRadius = 7.0;
-    self.txtUsername.backgroundColor = [UIColor colorWithRed:62.0/255.0 green:165.0/255.0 blue:64.0/255.0 alpha:1];
+    self.txtUsername.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, self.txtUsername.frame.size.height)];
+    self.txtUsername.leftViewMode = UITextFieldViewModeAlways;
+    self.txtUsername.backgroundColor = [UIColor whiteColor];
+    self.txtUsername.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    self.txtUsername.autocorrectionType = UITextAutocorrectionTypeNo;
+    [UIViewHelper roundCorners:self.txtUsername byRoundingCorners:UIRectCornerTopLeft|UIRectCornerTopRight radius:5];
     
     self.txtPassword.alpha = 0;
     self.txtPassword.placeholder = @"Password";
-    self.txtPassword.textColor = [UIColor whiteColor];
+    self.txtPassword.textColor = [ColorDefinition greenColor];
     self.txtPassword.layer.borderColor = [[UIColor whiteColor] CGColor];
-    self.txtPassword.layer.borderWidth = 1.0;
-    self.txtPassword.layer.cornerRadius = 7.0;
-    self.txtPassword.backgroundColor = [UIColor colorWithRed:62.0/255.0 green:165.0/255.0 blue:64.0/255.0 alpha:1];
+    self.txtPassword.layer.borderWidth = 1;
+    self.txtPassword.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, self.txtUsername.frame.size.height)];
+    self.txtPassword.leftViewMode = UITextFieldViewModeAlways;
+    self.txtPassword.backgroundColor = [UIColor whiteColor];
+    [self.txtPassword setFrame:CGRectMake(self.txtUsername.frame.origin.x, self.txtUsername.frame.origin.y + self.txtUsername.frame.size.height + 1,  self.txtUsername.frame.size.width,  self.txtUsername.frame.size.height)];
+    self.txtPassword.backgroundColor = [UIColor whiteColor];
+    [UIViewHelper roundCorners:self.txtPassword byRoundingCorners:UIRectCornerBottomLeft|UIRectCornerBottomRight radius:5];
+    
+    [self.lbForgotPw setFrame:CGRectMake(self.lbForgotPw.frame.origin.x, self.txtPassword.frame.origin.y + self.txtPassword.frame.size.height + 1, self.lbForgotPw.frame.size.width, self.lbForgotPw.frame.size.height)];
+    [self.btnSignIn setBackgroundColor:[ColorDefinition darkGreenColor]];
+    self.btnSignIn.layer.cornerRadius = 5;
+    [self.btnSignIn setFrame:CGRectMake(self.txtUsername.frame.origin.x, self.lbForgotPw.frame.origin.y + self.lbForgotPw.frame.size.height + 20, self.txtUsername.frame.size.width, self.txtUsername.frame.size.height)];
+    [self.btnSignUp setFrame:CGRectMake(self.txtUsername.frame.origin.x, self.btnSignIn.frame.origin.y + self.btnSignIn.frame.size.height + 5, self.txtUsername.frame.size.width, self.txtUsername.frame.size.height)];
+    [self.btnSignUp.titleLabel setFont:self.lbForgotPw.font];
     
     self.btnSignIn.alpha = 0;
     self.btnSignUp.alpha = 0;
     self.lbForgotPw.alpha = 0;
+    
+    UITapGestureRecognizer *singleFingerTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
+    [self.view addGestureRecognizer:singleFingerTap];
+}
+
+- (void)handleSingleTap:(UITapGestureRecognizer *)recognizer {
+    [self.view endEditing:YES];
 }
 
 - (void)didReceiveMemoryWarning
@@ -89,7 +113,7 @@ static NSString * PASSWORD_COOKIE_NAME = @"password";
 - (void) showLoginUI
 {
     [UIView animateWithDuration:0.5 animations:^{
-        self.titleImage.center = CGPointMake(self.titleImage.center.x, 100);
+        self.titleImage.center = CGPointMake(self.titleImage.center.x, 120);
     } completion:^(BOOL finished) {
         [UIView animateWithDuration:0.5 animations:^{
             self.txtUsername.alpha = 1;
@@ -109,7 +133,7 @@ static NSString * PASSWORD_COOKIE_NAME = @"password";
         self.btnSignUp.alpha = 0;
         self.btnSignIn.alpha = 0;
         self.lbForgotPw.alpha = 0;
-        self.titleImage.center = CGPointMake(self.titleImage.center.x, 170);
+        self.titleImage.center = CGPointMake(self.titleImage.center.x, 190);
     }];
 }
 

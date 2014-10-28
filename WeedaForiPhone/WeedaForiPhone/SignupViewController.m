@@ -87,7 +87,8 @@ bool availableUsername = false;
     [[RKObjectManager sharedManager] postObject:user path:@"user/signup" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
         NSLog(@"Response: %@", mappingResult);
         
-        [self setCurrentUser];
+        AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+        [appDelegate populateCurrentUserFromCookie];
         [self performSegueWithIdentifier:@"signupSuccess" sender:self];
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
         RKLogError(@"Load failed with error: %@", error);
@@ -181,28 +182,6 @@ bool availableUsername = false;
         availableUsername = true;
         return true;
     }
-}
-
-
-
-- (void) setCurrentUser
-{
-    User *user = [[User alloc] init];
-
-    NSArray *cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookies];
-    for (NSHTTPCookie *cookie in cookies) {
-        if ([cookie.name isEqualToString:@"user_id"]) {
-            user.id = [NSNumber numberWithInteger:[cookie.value integerValue]];
-        } else if ([cookie.name isEqualToString:@"username"]) {
-            user.username = cookie.value;
-        } else if ([cookie.name isEqualToString:@"password"]) {
-            user.password = cookie.value;
-        } else {
-            NSLog(@"Extra cookie in the app, cookie name is %@", cookie.name);
-        }
-    }
-    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    [appDelegate setCurrentUser:user];
 }
 
 @end
