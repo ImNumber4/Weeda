@@ -30,7 +30,7 @@ class UserDAO extends BaseDAO
 			.'username = \'' . $user->get_username() . '\', '
 			.'description = \'' . $user->get_description() . '\'';
 		
-		if ($user->get_user_type() && strtolower($user->get_user_type()) != User::$TYPE_USER) {
+		if ($user->get_user_type() && $user->get_user_type() != User::$TYPE_USER) {
 			$query = $query . ', storename = \'' . $user->get_storename() . '\', '
 				.'address_street = \'' . $user->get_address_street() . '\', '
 				.'address_city = \'' . $user->get_address_city() . '\', '
