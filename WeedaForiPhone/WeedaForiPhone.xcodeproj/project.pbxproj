@@ -148,6 +148,7 @@
 		EA9B504E19E9EAF7008B2464 /* WLProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = EA9B504D19E9EAF7008B2464 /* WLProgressView.m */; };
 		EAA18EDE18F0ADFD0081482D /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA18EDD18F0ADFD0081482D /* LoginViewController.m */; };
 		EAAE7B4B19611295003F0C65 /* WeedImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = EAAE7B4A19611295003F0C65 /* WeedImageView.m */; };
+		EAB381AC19FF0A4F00C4C3BA /* Oops.png in Resources */ = {isa = PBXBuildFile; fileRef = EAB381AB19FF0A4F00C4C3BA /* Oops.png */; };
 		EAB57B0C197B6F3F00C79E05 /* libSDWebImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EAB57AF0197B6BD500C79E05 /* libSDWebImage.a */; };
 		EAC6AAF0197B616A00017240 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAC6AACA19798F1100017240 /* ImageIO.framework */; };
 		EACD1157197CA76F00E45475 /* WeedImageController.m in Sources */ = {isa = PBXBuildFile; fileRef = EACD1156197CA76F00E45475 /* WeedImageController.m */; };
@@ -427,6 +428,7 @@
 		EAA18EDD18F0ADFD0081482D /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		EAAE7B4919611295003F0C65 /* WeedImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WeedImageView.h; path = WeedaForiPhone/UI/WeedImageView.h; sourceTree = "<group>"; };
 		EAAE7B4A19611295003F0C65 /* WeedImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WeedImageView.m; path = WeedaForiPhone/UI/WeedImageView.m; sourceTree = "<group>"; };
+		EAB381AB19FF0A4F00C4C3BA /* Oops.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Oops.png; path = WeedaForiPhone/Images/Oops.png; sourceTree = "<group>"; };
 		EAB57AE8197B6BD500C79E05 /* SDWebImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDWebImage.xcodeproj; path = SDWebImage/SDWebImage.xcodeproj; sourceTree = "<group>"; };
 		EAC6AACA19798F1100017240 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		EACD1155197CA76F00E45475 /* WeedImageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WeedImageController.h; path = WeedaForiPhone/Library/WeedImageController.h; sourceTree = "<group>"; };
@@ -711,6 +713,7 @@
 		A9CA8E9218F3DAC6004F095D /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				EAB381AB19FF0A4F00C4C3BA /* Oops.png */,
 				A93BB0B919F3AB3A00514940 /* hydro_icon.png */,
 				A93BB0BA19F3AB3A00514940 /* i502_icon.png */,
 				A93BB0B519F1B64F00514940 /* filter_on.png */,
@@ -984,6 +987,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EAB381AC19FF0A4F00C4C3BA /* Oops.png in Resources */,
 				0EB8C4D719C5C00900BD64E1 /* bubble-square-outgoing@2x.png in Resources */,
 				A9B45DDE194EAC40007AFB06 /* WeedTableViewCell.xib in Resources */,
 				A93BB0B619F1B64F00514940 /* filter_on.png in Resources */,

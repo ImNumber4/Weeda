@@ -219,7 +219,7 @@ const CGFloat COLLECTION_VIEW_HEIGHT = 300.0;
     NSString *formattedDateString = [dateFormatter stringFromDate:self.currentWeed.time];
     cell.timeLabel.text = [NSString stringWithFormat:@"%@", formattedDateString];
 
-    [cell.userAvatar setImageURL:[WeedImageController imageURLOfAvatar:self.currentWeed.user_id]];
+    [cell.userAvatar setImageURL:[WeedImageController imageURLOfAvatar:self.currentWeed.user_id] isAvatar:YES];
     cell.userAvatar.allowFullScreenDisplay = NO;
     CALayer * l = [cell.userAvatar layer];
     [l setMasksToBounds:YES];

@@ -183,7 +183,6 @@ typedef NS_ENUM(NSInteger, EnumImageWidthType)
 {
     WLImageCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"weedImageCell" forIndexPath:indexPath];
     if (cell) {
-        cell.backgroundColor = [UIColor grayColor];
         WeedImage *weedImage = [_dataSource objectAtIndex:indexPath.row];
         cell.imageView.imageURL = [WeedImageController imageURLOfWeedId:weedImage.parent.id userId:weedImage.parent.user_id count:weedImage.imageId.longValue quality:25];
         cell.imageView.allowFullScreenDisplay = NO;

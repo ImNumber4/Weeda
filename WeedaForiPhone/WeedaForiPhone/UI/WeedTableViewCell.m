@@ -179,7 +179,6 @@
 {
     WLImageCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"weedImageCell" forIndexPath:indexPath];
     if (cell) {
-        cell.backgroundColor = [UIColor grayColor];
         WeedImage *weedImage = [_dataSource objectAtIndex:indexPath.row];
         cell.imageView.imageURL = [WeedImageController imageURLOfWeedId:weedImage.parent.id userId:weedImage.parent.user_id count:weedImage.imageId.longValue quality:25];
         cell.imageView.allowFullScreenDisplay = NO;
@@ -220,7 +219,7 @@
     UICollectionView *collectionView = (UICollectionView *)scrollView;
     CGPoint endOffset = scrollView.contentOffset;
     if (abs(endOffset.x - _beginOffset.x) > 50) {
-        if (endOffset.x > _beginOffset.x && _currentIndexPath.item < _dataSource.count) {
+        if (endOffset.x > _beginOffset.x && _currentIndexPath.item < (_dataSource.count - 1)) {
             _currentIndexPath = [NSIndexPath indexPathForItem:(_currentIndexPath.item + 1) inSection:_currentIndexPath.section];
         } else if (endOffset.x < _beginOffset.x && _currentIndexPath.item > 0) {
             _currentIndexPath = [NSIndexPath indexPathForItem:(_currentIndexPath.item - 1) inSection:_currentIndexPath.section];

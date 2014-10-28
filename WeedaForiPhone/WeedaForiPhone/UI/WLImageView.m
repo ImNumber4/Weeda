@@ -54,7 +54,13 @@
     if (isAvatar) {
         [self sd_setImageWithURL:imageURL placeholderImage:[UIImage imageNamed:@"avatar.jpg"] options:(SDWebImageHandleCookies | SDWebImageRefreshCached)];
     } else {
-        [self sd_setImageWithURL:imageURL placeholderImage:nil options:SDWebImageHandleCookies];
+        [self sd_setImageWithURL:imageURL placeholderImage:nil options:SDWebImageHandleCookies
+        completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+            if (!image) {
+                NSLog(@"Loading image failed, url: %@, error: %@.", imageURL.absoluteString, error);
+                self.image = [UIImage imageNamed:@"Oops.png"];
+            }
+        }];
     }
 }
 
