@@ -273,6 +273,7 @@
                                 <segment title="Notifications"/>
                                 <segment title="Messages"/>
                             </segments>
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         </segmentedControl>
                     </navigationItem>
                     <connections>
@@ -1100,11 +1101,11 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="aBn-FK-paW"/>
-        <segue reference="xm8-7m-xi9"/>
-        <segue reference="drt-oA-QVo"/>
+        <segue reference="qcm-SY-fma"/>
+        <segue reference="Jrw-vo-Y1B"/>
+        <segue reference="TQF-vn-XK1"/>
         <segue reference="gr4-Yl-zIz"/>
-        <segue reference="Z8M-XG-GdH"/>
-        <segue reference="dSx-Us-Hdx"/>
+        <segue reference="xm8-7m-xi9"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="0.24313727021217346" green="0.64705884456634521" blue="0.24705883860588074" alpha="1" colorSpace="deviceRGB"/>
 </document>

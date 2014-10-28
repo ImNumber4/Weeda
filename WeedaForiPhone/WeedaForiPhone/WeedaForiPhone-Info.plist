@@ -36,6 +36,10 @@
 	<string>1.0</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Weeda</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Weeda</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
@@ -60,9 +64,7 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Weeda</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Weeda</string>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
 </dict>
 </plist>

@@ -64,8 +64,6 @@ const NSInteger ME_TAB_BAR_ITEM_INDEX = 3;
     meTabBarItem.selectedImage = [[self getImage:@"selected_profile_icon.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     
     self.tabBar.tintColor = [ColorDefinition greenColor];
-    
-    [self.tabBar drawRect:CGRectMake(self.tabBar.frame.origin.x, self.tabBar.frame.origin.y, self.tabBar.frame.size.width, TAB_BAR_HEIGHT)];
 
     appDelegate.notificationDelegate = self;
     [appDelegate updateBadgeCount];
@@ -92,7 +90,7 @@ const NSInteger ME_TAB_BAR_ITEM_INDEX = 3;
 - (UIImage *)getImage:(NSString *)imageName
 {
     UIImage * image = [UIImage imageNamed:imageName];
-    CGSize sacleSize = CGSizeMake(30, 30);
+    CGSize sacleSize = CGSizeMake(25, 25);
     UIGraphicsBeginImageContextWithOptions(sacleSize, NO, 0.0);
     [image drawInRect:CGRectMake(0, 0, sacleSize.width, sacleSize.height)];
     return UIGraphicsGetImageFromCurrentImageContext();

@@ -31,6 +31,14 @@ NSString * _deviceToken;
 {
     [self setupRestKit];
     [self populateCurrentUserFromCookie];
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
+    [[UINavigationBar appearance] setBackgroundColor:[ColorDefinition greenColor]];
+    [[UINavigationBar appearance] setTranslucent:YES];
+    [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
+    [[UINavigationBar appearance] setBarTintColor:[ColorDefinition greenColor]];
+    
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     // Let the device know we want to receive push notifications
     if ([[[UIDevice currentDevice] systemVersion] doubleValue] >= 8.0) {
         UIUserNotificationSettings* notificationSettings = [UIUserNotificationSettings settingsForTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert) categories:nil];

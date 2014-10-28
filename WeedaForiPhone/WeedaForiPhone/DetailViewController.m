@@ -75,7 +75,6 @@ const CGFloat COLLECTION_VIEW_HEIGHT = 300.0;
             }
         }
         
-//        [self.tableView reloadData];
         NSIndexSet *section = [NSIndexSet indexSetWithIndex:CHILD_WEEDS_SECTION_INDEX];
         [self.tableView reloadSections:section withRowAnimation:UITableViewRowAnimationAutomatic];
         [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/getAncestorWeeds/%@", self.currentWeed.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
@@ -88,9 +87,10 @@ const CGFloat COLLECTION_VIEW_HEIGHT = 300.0;
             CGFloat orginalOffset = self.tableView.contentOffset.y;
             
             [self.tableView setContentOffset:CGPointMake(0, orginalOffset + self.parentWeeds.count * WEED_CELL_HEIGHT)];
-//            [self.tableView reloadData];
             NSIndexSet *section = [NSIndexSet indexSetWithIndex:PARENT_WEEDS_SECTION_INDEX];
-            [self.tableView reloadSections:section withRowAnimation:UITableViewRowAnimationAutomatic];
+            [UIView setAnimationsEnabled:NO];
+            [self.tableView reloadSections:section withRowAnimation:UITableViewRowAnimationNone];
+            [UIView setAnimationsEnabled:YES];
         } failure:^(RKObjectRequestOperation *operation, NSError *error) {
             RKLogError(@"getAncestorWeeds failed with error: %@", error);
         }];
@@ -164,7 +164,7 @@ const CGFloat COLLECTION_VIEW_HEIGHT = 300.0;
         return CURRENT_WEED_CONTROL_CELL_HEIGHT;
     } else if ([indexPath section] == PLACEHOLDER_SECTION_INDEX) {
         CGFloat orginalOffset = self.tableView.contentOffset.y;
-        CGFloat contentHeight = self.tableView.bounds.size.height - [self getCurrentWeedCellHeight] - (self.parentWeeds.count + self.lights.count) * WEED_CELL_HEIGHT + orginalOffset - TAB_BAR_HEIGHT- CURRENT_WEED_CONTROL_CELL_HEIGHT + 1;
+        CGFloat contentHeight = self.tableView.bounds.size.height - [self getCurrentWeedCellHeight] - (self.parentWeeds.count + self.lights.count) * WEED_CELL_HEIGHT + orginalOffset - self.tabBarController.tabBar.frame.size.height - CURRENT_WEED_CONTROL_CELL_HEIGHT + 1;
         if (contentHeight > 0.0) {
             return contentHeight;
         }else{
