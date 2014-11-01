@@ -7,23 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SignUpSubViewController.h"
 
-@interface SignupViewController : UIViewController <UITextFieldDelegate>
+@interface SignupViewController : UIViewController <SignUpSubViewDelegate, UIPageViewControllerDataSource>
 
-@property (weak, nonatomic) IBOutlet UITextField *txtUsername;
-@property (weak, nonatomic) IBOutlet UITextField *txtEmail;
-@property (weak, nonatomic) IBOutlet UITextField *txtPassword;
-
-@property (weak, nonatomic) IBOutlet UIImageView *usernameValidImageView;
-@property (weak, nonatomic) IBOutlet UIImageView *emailValidImageView;
-@property (weak, nonatomic) IBOutlet UIImageView *passwordValidImageView;
-
-@property (weak, nonatomic) IBOutlet UIButton *btnSignup;
-
-@property (weak, nonatomic) IBOutlet UIImageView *titleImageView;
-
-- (IBAction)signupClicked:(id)sender;
-- (IBAction)cancel:(id)sender;
-
+@property (strong, nonatomic) UIPageViewController *pageController;
 
 @end

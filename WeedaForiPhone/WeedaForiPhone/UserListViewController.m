@@ -68,6 +68,11 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
     return cell;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [self performSegueWithIdentifier:@"showUser" sender:self];
+}
+
 - (void)decorateCellWithUser:(User *)user cell:(UserTableViewCell *)cell {
     [cell decorateCellWithUser:user];
     cell.followButton.tintColor = [UIColor whiteColor];

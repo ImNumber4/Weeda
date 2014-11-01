@@ -16,13 +16,14 @@
 @interface WelcomeViewController () {
     
 }
-@property (weak, nonatomic) IBOutlet UITextField *txtUsername;
-@property (weak, nonatomic) IBOutlet UITextField *txtPassword;
-@property (weak, nonatomic) IBOutlet UIButton *btnSignIn;
-@property (weak, nonatomic) IBOutlet UIButton *btnSignUp;
-@property (weak, nonatomic) IBOutlet UILabel *lbForgotPw;
 
-@property (nonatomic, retain) UIImageView *titleImage;
+@property (strong, nonatomic) UITextField *txtUsername;
+@property (strong, nonatomic) UITextField *txtPassword;
+@property (strong, nonatomic) UIButton *btnSignIn;
+@property (strong, nonatomic) UIButton *btnSignUp;
+@property (strong, nonatomic) UILabel *lbForgotPw;
+
+@property (nonatomic, strong) UIImageView *titleImage;
 
 - (IBAction)backgroudTab:(id)sender;
 
@@ -54,37 +55,66 @@ static NSString * PASSWORD_COOKIE_NAME = @"password";
     [self.view addSubview:self.titleImage];
     [self.view bringSubviewToFront:self.titleImage];
     
+    double leftPadding = 20;
+    
+    self.txtUsername = [[UITextField alloc] initWithFrame:CGRectMake(leftPadding, 175, self.view.frame.size.width - 2 * leftPadding, 35)];
+    [self.view addSubview:self.txtUsername];
     self.txtUsername.alpha = 0;
+    [self.txtUsername setFont:[UIFont systemFontOfSize:14]];
     self.txtUsername.placeholder = @"Username";
-    [self.txtUsername setFrame:CGRectMake(20, self.txtUsername.frame.origin.y, self.view.frame.size.width - 40, 35)];
     self.txtUsername.textColor = [ColorDefinition greenColor];
     self.txtUsername.layer.borderWidth = 1;
     self.txtUsername.layer.borderColor = [[UIColor whiteColor] CGColor];
-    self.txtUsername.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, self.txtUsername.frame.size.height)];
-    self.txtUsername.leftViewMode = UITextFieldViewModeAlways;
+    [UIViewHelper insertLeftPaddingToTextField:self.txtUsername width:10];
     self.txtUsername.backgroundColor = [UIColor whiteColor];
     self.txtUsername.autocapitalizationType = UITextAutocapitalizationTypeNone;
     self.txtUsername.autocorrectionType = UITextAutocorrectionTypeNo;
+    self.txtUsername.returnKeyType = UIReturnKeyGo;
+    self.txtUsername.clearButtonMode = UITextFieldViewModeWhileEditing;
+    self.txtUsername.delegate = self;
     [UIViewHelper roundCorners:self.txtUsername byRoundingCorners:UIRectCornerTopLeft|UIRectCornerTopRight radius:5];
     
+    self.txtPassword = [[UITextField alloc] initWithFrame:CGRectMake(self.txtUsername.frame.origin.x, self.txtUsername.frame.origin.y + self.txtUsername.frame.size.height + 1,  self.txtUsername.frame.size.width,  self.txtUsername.frame.size.height)];
+    [self.view addSubview:self.txtPassword];
     self.txtPassword.alpha = 0;
+    [self.txtPassword setFont:self.txtUsername.font];
     self.txtPassword.placeholder = @"Password";
+    self.txtPassword.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    self.txtPassword.autocorrectionType = UITextAutocorrectionTypeNo;
+    self.txtPassword.returnKeyType = UIReturnKeyGo;
+    self.txtPassword.clearButtonMode = UITextFieldViewModeWhileEditing;
+    self.txtPassword.delegate = self;
     self.txtPassword.textColor = [ColorDefinition greenColor];
     self.txtPassword.layer.borderColor = [[UIColor whiteColor] CGColor];
     self.txtPassword.layer.borderWidth = 1;
-    self.txtPassword.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, self.txtUsername.frame.size.height)];
-    self.txtPassword.leftViewMode = UITextFieldViewModeAlways;
-    self.txtPassword.backgroundColor = [UIColor whiteColor];
-    [self.txtPassword setFrame:CGRectMake(self.txtUsername.frame.origin.x, self.txtUsername.frame.origin.y + self.txtUsername.frame.size.height + 1,  self.txtUsername.frame.size.width,  self.txtUsername.frame.size.height)];
+    self.txtPassword.secureTextEntry = true;
+    [UIViewHelper insertLeftPaddingToTextField:self.txtPassword width:10];
     self.txtPassword.backgroundColor = [UIColor whiteColor];
     [UIViewHelper roundCorners:self.txtPassword byRoundingCorners:UIRectCornerBottomLeft|UIRectCornerBottomRight radius:5];
     
-    [self.lbForgotPw setFrame:CGRectMake(self.lbForgotPw.frame.origin.x, self.txtPassword.frame.origin.y + self.txtPassword.frame.size.height + 1, self.lbForgotPw.frame.size.width, self.lbForgotPw.frame.size.height)];
+    double lbForgotPwWidth = 105;
+    double lbForgotPwHeight = 21;
+    self.lbForgotPw = [[UILabel alloc] initWithFrame:CGRectMake(self.txtPassword.frame.origin.x + self.txtPassword.frame.size.width - lbForgotPwWidth, self.txtPassword.frame.origin.y + self.txtPassword.frame.size.height + 1, lbForgotPwWidth, lbForgotPwHeight)];
+    self.lbForgotPw.text = @"Forgot Password?";
+    [self.lbForgotPw setFont:[UIFont systemFontOfSize:12]];
+    [self.lbForgotPw setTextColor:[UIColor whiteColor]];
+    [self.view addSubview:self.lbForgotPw];
+    
+    self.btnSignIn = [[UIButton alloc] initWithFrame:CGRectMake(self.txtUsername.frame.origin.x, self.lbForgotPw.frame.origin.y + self.lbForgotPw.frame.size.height + 20, self.txtUsername.frame.size.width, self.txtUsername.frame.size.height)];
+    [self.btnSignIn addTarget:self action:@selector(signIn:) forControlEvents:UIControlEventTouchDown];
     [self.btnSignIn setBackgroundColor:[ColorDefinition darkGreenColor]];
+    [self.btnSignIn setTitle:@"Sign In" forState:UIControlStateNormal];
+    [self.btnSignIn.titleLabel setTextColor:[UIColor whiteColor]];
+    [self.btnSignIn.titleLabel setFont:[UIFont systemFontOfSize:15]];
     self.btnSignIn.layer.cornerRadius = 5;
-    [self.btnSignIn setFrame:CGRectMake(self.txtUsername.frame.origin.x, self.lbForgotPw.frame.origin.y + self.lbForgotPw.frame.size.height + 20, self.txtUsername.frame.size.width, self.txtUsername.frame.size.height)];
-    [self.btnSignUp setFrame:CGRectMake(self.txtUsername.frame.origin.x, self.btnSignIn.frame.origin.y + self.btnSignIn.frame.size.height + 5, self.txtUsername.frame.size.width, self.txtUsername.frame.size.height)];
+    [self.view addSubview:self.btnSignIn];
+    
+    self.btnSignUp = [[UIButton alloc] initWithFrame:CGRectMake(self.txtUsername.frame.origin.x, self.btnSignIn.frame.origin.y + self.btnSignIn.frame.size.height + 5, self.txtUsername.frame.size.width, self.txtUsername.frame.size.height)];
+    [self.btnSignUp addTarget:self action:@selector(signUp:) forControlEvents:UIControlEventTouchDown];
+    [self.btnSignUp setTitle:@"Sign Up" forState:UIControlStateNormal];
+    [self.btnSignUp.titleLabel setTextColor:[UIColor whiteColor]];
     [self.btnSignUp.titleLabel setFont:self.lbForgotPw.font];
+    [self.view addSubview:self.btnSignUp];
     
     self.btnSignIn.alpha = 0;
     self.btnSignUp.alpha = 0;
@@ -92,6 +122,20 @@ static NSString * PASSWORD_COOKIE_NAME = @"password";
     
     UITapGestureRecognizer *singleFingerTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
     [self.view addGestureRecognizer:singleFingerTap];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWasShown:)
+                                                 name:UIKeyboardDidShowNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillBeHidden:)
+                                                 name:UIKeyboardWillHideNotification object:nil];
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textField resignFirstResponder];
+    [self signIn:textField];
+    return YES;
 }
 
 - (void)handleSingleTap:(UITapGestureRecognizer *)recognizer {
@@ -170,7 +214,7 @@ static NSString * PASSWORD_COOKIE_NAME = @"password";
     [alertView show];
 }
 
-- (IBAction)signIn:(id)sender {
+- (void)signIn:(id)sender {
     if ([[self.txtUsername text] isEqualToString:@""] || [[self.txtPassword text] isEqualToString:@""]) {
         [self alertStatus:@"Please enter Username and Password" :@"" :0];
         return;
@@ -194,11 +238,32 @@ static NSString * PASSWORD_COOKIE_NAME = @"password";
     }];
 }
 
-- (IBAction)signUp:(id)sender {
+- (void)signUp:(id)sender {
     [self performSegueWithIdentifier:@"signUp" sender:self];
 }
 
-- (IBAction)backgroudTab:(id)sender {
+- (void)backgroudTab:(id)sender {
     [self.view endEditing:YES];
 }
+
+// Called when the UIKeyboardDidShowNotification is sent.
+- (void)keyboardWasShown:(NSNotification*)aNotification
+{
+    [UIView animateWithDuration:0.2 animations:^{
+        [self.view setCenter:CGPointMake(self.view.center.x, self.view.frame.size.height/2.0 - 25)];
+    } completion:^(BOOL finished) {
+        
+    }];
+}
+
+// Called when the UIKeyboardWillHideNotification is sent
+- (void)keyboardWillBeHidden:(NSNotification*)aNotification
+{
+    [UIView animateWithDuration:0.2 animations:^{
+        [self.view setCenter:CGPointMake(self.view.center.x, self.view.frame.size.height/2.0)];
+    } completion:^(BOOL finished) {
+        
+    }];
+}
+
 @end

@@ -218,11 +218,19 @@ class UserController extends Controller
 		$this->user_dao->update_has_avatar($user_id);
 	}
 	
-	public function username($username) {
+	public function hasUsername($username) {
 		if (!isset($username)) {
 			throw new InvalidRequestException('Input error, username is null');
 		}
 		$exist = $this->user_dao->username_exist($username);
+		return json_encode(array('exist' => $exist));
+	}
+	
+	public function hasEmail($email) {
+		if (!isset($email)) {
+			throw new InvalidRequestException('Input error, email is null');
+		}
+		$exist = $this->user_dao->email_exist($email);
 		return json_encode(array('exist' => $exist));
 	}
 	

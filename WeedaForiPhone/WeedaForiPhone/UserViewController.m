@@ -277,7 +277,12 @@ const NSInteger SHOW_FOLLOWINGS = 2;
 - (void)updateView
 {
     self.navigationController.navigationBar.topItem.title = [NSString stringWithFormat:@"%@", self.user.username];
-    self.userDescription.text = self.user.userDescription;
+    if (self.user.userDescription && [self.user.userDescription length] > 0) {
+        self.userDescription.text = self.user.userDescription;
+    } else {
+        self.userDescription.text = @"No description.";
+    }
+    
     CGRect tempFrame = CGRectMake(0, 0, self.userDescription.frame.size.width, 50);
     CGSize tvsize = [self.userDescription sizeThatFits:CGSizeMake(tempFrame.size.width, tempFrame.size.height)];
     [self.userDescription setFrame:CGRectMake(self.userDescription.frame.origin.x, self.userDescription.frame.origin.y, self.userDescription.frame.size.width, tvsize.height)];

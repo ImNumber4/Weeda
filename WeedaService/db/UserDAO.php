@@ -6,12 +6,11 @@ class UserDAO extends BaseDAO
 {
 	
 	public function create($user) {
-		$query = 'INSERT INTO user (username, password, email, time, deleted) VALUES (\'' 
+		$query = 'INSERT INTO user (username, password, email, time) VALUES (\'' 
 				. $user->get_username() . '\',\'' 
 				. $user->get_password() . '\',\''
 				. $user->get_email() . '\',\'' 
-				. $user->get_time() . '\',' 
-				. $user->get_deleted() . ')';
+				. $user->get_time() . '\')';
 		$result = $this->db_conn->insert($query);
 		return $result;
 	}
@@ -28,15 +27,15 @@ class UserDAO extends BaseDAO
 		$query = 'UPDATE user SET '
 			.'email = \'' . $user->get_email() . '\', '
 			.'username = \'' . $user->get_username() . '\', '
-			.'description = \'' . mysql_real_escape_string($user->get_description()) . '\'';
+			.'description = \'' . $user->get_description() . '\'';
 		
 		if ($user->get_user_type() && $user->get_user_type() != User::$TYPE_USER) {
-			$query = $query . ', storename = \'' . mysql_real_escape_string($user->get_storename()) . '\', '
-				.'address_street = \'' . mysql_real_escape_string($user->get_address_street()) . '\', '
-				.'address_city = \'' . mysql_real_escape_string($user->get_address_city()) . '\', '
-				.'address_state = \'' . mysql_real_escape_string($user->get_address_state()) . '\', '
-				.'address_country = \'' . mysql_real_escape_string($user->get_address_country()) . '\', '
-				.'address_zip = \'' . mysql_real_escape_string($user->get_address_zip()) . '\', '
+			$query = $query . ', storename = \'' . $user->get_storename() . '\', '
+				.'address_street = \'' . $user->get_address_street() . '\', '
+				.'address_city = \'' . $user->get_address_city() . '\', '
+				.'address_state = \'' . $user->get_address_state() . '\', '
+				.'address_country = \'' . $user->get_address_country() . '\', '
+				.'address_zip = \'' . $user->get_address_zip() . '\', '
 				.'phone = \'' . $user->get_phone() . '\', '
 				.'latitude = ' . $user->get_latitude() . ', '
 				.'longitude = ' . $user->get_longitude();
@@ -56,6 +55,17 @@ class UserDAO extends BaseDAO
 	
 	public function username_exist($username) {
 		$query = 'SELECT COUNT(*) as number FROM user where username=\'' . $username . '\'';
+		$result = $this->db_conn->query($query);
+		$data = mysql_fetch_assoc($result);
+		if ($data['number'] == 0) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	public function email_exist($email) {
+		$query = 'SELECT COUNT(*) as number FROM user where email=\'' . $email . '\'';
 		$result = $this->db_conn->query($query);
 		$data = mysql_fetch_assoc($result);
 		if ($data['number'] == 0) {

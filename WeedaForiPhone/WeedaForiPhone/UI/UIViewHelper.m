@@ -27,4 +27,10 @@
     view.layer.mask = maskLayer;
 }
 
++ (void) insertLeftPaddingToTextField:(UITextField *) textField width:(double)width
+{
+    textField.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, width, textField.frame.size.height)];
+    textField.leftViewMode = UITextFieldViewModeAlways;
+}
+
 @end

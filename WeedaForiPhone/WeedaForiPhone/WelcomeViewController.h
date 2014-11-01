@@ -8,9 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface WelcomeViewController : UIViewController
-
-- (IBAction)signIn:(id)sender;
-- (IBAction)signUp:(id)sender;
+@interface WelcomeViewController : UIViewController <UITextFieldDelegate>
 
 @end

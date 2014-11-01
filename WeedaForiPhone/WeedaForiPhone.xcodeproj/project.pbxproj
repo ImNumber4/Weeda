@@ -125,6 +125,7 @@
 		A9CA8E9718F3DD67004F095D /* avatar.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A9CA8E9618F3DD67004F095D /* avatar.jpg */; };
 		A9CA8EA018F3E255004F095D /* WeedTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A9CA8E9E18F3E255004F095D /* WeedTableViewCell.m */; };
 		A9D0B16819A043FF00BC2196 /* No.png in Resources */ = {isa = PBXBuildFile; fileRef = A9D0B16719A043FF00BC2196 /* No.png */; };
+		A9D4D6881A02E81300283363 /* SignUpSubViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9D4D6871A02E81300283363 /* SignUpSubViewController.m */; };
 		A9D5A05819736F100099664B /* search_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A9D5A05719736F100099664B /* search_icon.png */; };
 		A9DFADE019A055E900AB00BA /* ColorDefinition.m in Sources */ = {isa = PBXBuildFile; fileRef = A9DFADDF19A055E900AB00BA /* ColorDefinition.m */; };
 		A9FB79F31985A4C100DB35CB /* EditProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9FB79F21985A4C100DB35CB /* EditProfileViewController.m */; };
@@ -390,6 +391,8 @@
 		A9CA8E9D18F3E255004F095D /* WeedTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WeedTableViewCell.h; path = WeedaForiPhone/UI/WeedTableViewCell.h; sourceTree = "<group>"; };
 		A9CA8E9E18F3E255004F095D /* WeedTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WeedTableViewCell.m; path = WeedaForiPhone/UI/WeedTableViewCell.m; sourceTree = "<group>"; };
 		A9D0B16719A043FF00BC2196 /* No.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = No.png; path = WeedaForiPhone/Images/No.png; sourceTree = "<group>"; };
+		A9D4D6861A02E81300283363 /* SignUpSubViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpSubViewController.h; sourceTree = "<group>"; };
+		A9D4D6871A02E81300283363 /* SignUpSubViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignUpSubViewController.m; sourceTree = "<group>"; };
 		A9D5A05719736F100099664B /* search_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = search_icon.png; path = WeedaForiPhone/Images/search_icon.png; sourceTree = "<group>"; };
 		A9DFADDE19A055E900AB00BA /* ColorDefinition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ColorDefinition.h; path = WeedaForiPhone/ColorUtil/ColorDefinition.h; sourceTree = "<group>"; };
 		A9DFADDF19A055E900AB00BA /* ColorDefinition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ColorDefinition.m; path = WeedaForiPhone/ColorUtil/ColorDefinition.m; sourceTree = "<group>"; };
@@ -619,6 +622,8 @@
 				A991C04718FB3B7700A3D2CD /* TabBarController.m */,
 				EAF6762A18FB62E4003BB138 /* SignupViewController.h */,
 				EAF6762B18FB62E4003BB138 /* SignupViewController.m */,
+				A9D4D6861A02E81300283363 /* SignUpSubViewController.h */,
+				A9D4D6871A02E81300283363 /* SignUpSubViewController.m */,
 				A91A62EB18FF8F48008726E5 /* UserListViewController.h */,
 				A91A62EC18FF8F48008726E5 /* UserListViewController.m */,
 				A9645DD9196A0A6C00DDE2DB /* DiscoverViewController.h */,
@@ -1126,6 +1131,7 @@
 				0EB8C4E519C5C00900BD64E1 /* UIColor+JSMessagesView.m in Sources */,
 				A98A89C51960C46D005A5871 /* VendorMKAnnotationView.m in Sources */,
 				A9DFADE019A055E900AB00BA /* ColorDefinition.m in Sources */,
+				A9D4D6881A02E81300283363 /* SignUpSubViewController.m in Sources */,
 				0ECB453A19C5C5AF00690944 /* Model.xcdatamodeld in Sources */,
 				A9C087A719FB0C3600B0622B /* UpdateUsernameViewController.m in Sources */,
 				0ECB453D19C5C8E900690944 /* ConversationViewController.m in Sources */,

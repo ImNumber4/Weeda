@@ -8,17 +8,25 @@
 
 #import "AppDelegate.h"
 #import "SignupViewController.h"
+#import "UIViewHelper.h"
 
 @interface SignupViewController ()
 
+@property (strong, nonatomic) User *user;
+@property (strong, nonatomic) SignUpSubViewController *usernameController;
+@property (strong, nonatomic) SignUpSubViewController *emailController;
+@property (strong, nonatomic) SignUpSubViewController *passwordController;
+@property (nonatomic) NSInteger currentIndex;
 
 @end
 
 @implementation SignupViewController
 
-#define ALPHA                   @"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-#define NUMERIC                 @"1234567890"
-#define ALPHA_NUMERIC           ALPHA NUMERIC
+static const NSInteger USERNAME_INDEX = 0;
+static const NSInteger EMAIL_INDEX = 1;
+static const NSInteger PASSWORD_INDEX = 2;
+
+static const NSInteger STEPS = 3;
 
 bool availableUsername = false;
 
@@ -35,39 +43,43 @@ bool availableUsername = false;
 {
     [super viewDidLoad];
     
-    // Do any additional setup after loading the view.
-    self.titleImageView.image = [UIImage imageNamed:@"title.png"];
-    [self.view bringSubviewToFront:self.titleImageView];
+    self.pageController = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:nil];
+    UIPageControl *pageControl = [UIPageControl appearanceWhenContainedIn:[SignupViewController class], nil];
+    pageControl.pageIndicatorTintColor = [ColorDefinition grayColor];
+    pageControl.currentPageIndicatorTintColor = [ColorDefinition greenColor];
+    self.pageController.dataSource = self;
+    [[self.pageController view] setFrame:[[self view] bounds]];
     
-    self.view.backgroundColor = [UIColor colorWithRed:62.0/255.0 green:165.0/255.0 blue:64.0/255.0 alpha:1];
-    
-    self.txtUsername.placeholder = @"username";
-    self.txtUsername.textColor = [UIColor whiteColor];
-    self.txtUsername.layer.borderColor = [[UIColor whiteColor] CGColor];
-    self.txtUsername.layer.borderWidth = 1.0;
-    self.txtUsername.layer.cornerRadius = 7.0;
-    self.txtUsername.backgroundColor = [UIColor colorWithRed:62.0/255.0 green:165.0/255.0 blue:64.0/255.0 alpha:1];
-    
-    self.txtPassword.placeholder = @"password";
-    self.txtPassword.textColor = [UIColor whiteColor];
-    self.txtPassword.layer.borderColor = [[UIColor whiteColor] CGColor];
-    self.txtPassword.layer.borderWidth = 1.0;
-    self.txtPassword.layer.cornerRadius = 7.0;
-    self.txtPassword.backgroundColor = [UIColor colorWithRed:62.0/255.0 green:165.0/255.0 blue:64.0/255.0 alpha:1];
-    
-    self.txtEmail.placeholder = @"email";
-    self.txtEmail.textColor = [UIColor whiteColor];
-    self.txtEmail.layer.borderColor = [[UIColor whiteColor] CGColor];
-    self.txtEmail.layer.borderWidth = 1.0;
-    self.txtEmail.layer.cornerRadius = 7.0;
-    self.txtEmail.backgroundColor = [UIColor colorWithRed:62.0/255.0 green:165.0/255.0 blue:64.0/255.0 alpha:1];
-    
-    [self.txtUsername becomeFirstResponder];
+    self.currentIndex = 0;
+    [self scrollToIndex:0];
 
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)];
+    [self addChildViewController:self.pageController];
+    [[self view] addSubview:[self.pageController view]];
+    [self.pageController didMoveToParentViewController:self];
     
-    [self.btnSignup setEnabled:NO];
+    for (UIScrollView *view in self.pageController.view.subviews) {
+        if ([view isKindOfClass:[UIScrollView class]]) {
+            view.scrollEnabled = NO;
+        }
+    }
+    UISwipeGestureRecognizer *gestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeHandler:)];
+    [gestureRecognizer setDirection:(UISwipeGestureRecognizerDirectionRight)];
+    [self.view addGestureRecognizer:gestureRecognizer];
     
+    self.user = [[User alloc] init];
+}
+
+- (void) scrollToIndex:(NSInteger)index
+{
+    SignUpSubViewController *initialViewController = [self viewControllerAtIndex:index];
+    
+    NSArray *viewControllers = [NSArray arrayWithObject:initialViewController];
+    
+    UIPageViewControllerNavigationDirection direction = (index < self.currentIndex ? UIPageViewControllerNavigationDirectionReverse : UIPageViewControllerNavigationDirectionForward);
+    
+    self.currentIndex = index;
+    
+    [self.pageController setViewControllers:viewControllers direction:direction animated:YES completion:nil];
 }
 
 - (void)didReceiveMemoryWarning
@@ -76,27 +88,157 @@ bool availableUsername = false;
     // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)signupClicked:(id)sender {
-    User *user = [[User alloc] init];
-    user.id = [NSNumber numberWithInt:-1];
-    user.username = self.txtUsername.text;
-    user.password = self.txtPassword.text;
-    user.email = self.txtEmail.text;
-    user.time = [NSDate date];
+- (SignUpSubViewController *)viewControllerAtIndex:(NSInteger)index {
     
-    [[RKObjectManager sharedManager] postObject:user path:@"user/signup" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-        NSLog(@"Response: %@", mappingResult);
-        
+    switch (index) {
+        case USERNAME_INDEX:
+            if (!self.usernameController) {
+                self.usernameController = [[SignUpSubViewController alloc] initWithNibName:nil bundle:nil];
+                self.usernameController.index = index;
+                self.usernameController.delegate = self;
+                self.usernameController.viewTitle = @"What username you want to use?";
+                self.usernameController.information = @"Username should be unique and it will be used by other user to find/identify you.";
+                self.usernameController.isSecureEntry = false;
+            }
+            return self.usernameController;
+        case EMAIL_INDEX:
+            if (!self.emailController) {
+                self.emailController = [[SignUpSubViewController alloc] initWithNibName:nil bundle:nil];
+                self.emailController.index = index;
+                self.emailController.delegate = self;
+                self.emailController.viewTitle = @"What is your email address?";
+                self.emailController.information = @"Email will only be used by us to contact you. Other user will not have access to it.";
+                self.emailController.isSecureEntry = false;
+                self.emailController.keyboardType = UIKeyboardTypeEmailAddress;
+            }
+            return self.emailController;
+        case PASSWORD_INDEX:
+            if (!self.passwordController) {
+                self.passwordController = [[SignUpSubViewController alloc] initWithNibName:nil bundle:nil];
+                self.passwordController.index = index;
+                self.passwordController.delegate = self;
+                self.passwordController.viewTitle = @"What password you want to use?";
+                self.passwordController.information = @"To better protect your account, we recommend you to use a combination of uppercase and lowercase letters, and numbers.";
+                self.passwordController.isSecureEntry = true;
+            }
+            return self.passwordController;
+        default:
+            break;
+    }
+    SignUpSubViewController *childViewController = [[SignUpSubViewController alloc] initWithNibName:nil bundle:nil];
+    childViewController.index = index;
+    return childViewController;
+    
+}
+
+- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController {
+    return nil;
+}
+
+- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController {
+    return nil;
+}
+
+- (NSInteger)presentationCountForPageViewController:(UIPageViewController *)pageViewController {
+    // The number of items reflected in the page indicator.
+    return STEPS;
+}
+
+- (NSInteger)presentationIndexForPageViewController:(UIPageViewController *)pageViewController {
+    // The selected item reflected in the page indicator.
+    return self.currentIndex;
+}
+
+- (void)signupThroughServer
+{
+    self.user.time = [NSDate date];
+    
+    [[RKObjectManager sharedManager] postObject:self.user path:@"user/signup" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
         AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
         [appDelegate populateCurrentUserFromCookie];
         [self performSegueWithIdentifier:@"signupSuccess" sender:self];
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-        RKLogError(@"Load failed with error: %@", error);
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil
+                                                            message:@"Sorry we failed to set up your account. Please try again."
+                                                           delegate:self
+                                                  cancelButtonTitle:@"Ok"
+                                                  otherButtonTitles:nil, nil];
+        [alertView show];
+        [self scrollToIndex:0];
     }];
 }
 
-- (IBAction)cancel:(id)sender {
+- (void)cancelClicked:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)continueClicked:(id)sender {
+    switch (self.currentIndex) {
+        case USERNAME_INDEX:
+            self.user.username = self.usernameController.inputField.text;
+            break;
+        case EMAIL_INDEX:
+            self.user.email = self.emailController.inputField.text;
+            break;
+        case PASSWORD_INDEX:
+            self.user.password = self.passwordController.inputField.text;
+            break;
+        default:
+            break;
+    }
+    if (self.currentIndex < STEPS - 1) {
+        [self scrollToIndex:(self.currentIndex + 1)];
+    } else {
+        [self signupThroughServer];
+    }
+}
+
+- (void)swipeHandler:(UISwipeGestureRecognizer *)recognizer {
+    if (self.currentIndex > 0) {
+        switch (self.currentIndex) {
+            case EMAIL_INDEX:
+                self.user.email = nil;
+                break;
+            case PASSWORD_INDEX:
+                self.user.password = nil;
+                break;
+            default:
+                break;
+        }
+        [self scrollToIndex:(self.currentIndex - 1)];
+    }
+}
+
+- (NSString *) validateInputValue: (NSString *) inputValue sender:(id)sender
+{
+    if (!inputValue || [inputValue length] == 0) {
+        return @"Value can not be empty.";
+    }
+    switch (((SignUpSubViewController *)sender).index) {
+        case EMAIL_INDEX:
+            if ([User isEmailValid:inputValue]) {
+                return nil;
+            } else {
+                return @"Email address is not considered valid.";
+            }
+        case PASSWORD_INDEX:
+            return [User validatePassword:inputValue];
+        default:
+            break;
+    }
+    return nil;
+}
+
+- (NSString *) finalValidateInputValue: (NSString *) inputValue sender:(id) sender
+{
+    switch (((SignUpSubViewController *)sender).index) {
+        case USERNAME_INDEX:
+            return [self validateUsername:inputValue];
+        case EMAIL_INDEX:
+            return [self validateEmail:inputValue];
+        default:
+            return nil;
+    }
 }
 
 /*
@@ -110,77 +252,56 @@ bool availableUsername = false;
 }
 */
 
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    switch (textField.tag) {
-        case 1001:
-            self.usernameValidImageView.image = [UIImage imageNamed:@"wrong.png"];
-            break;
-        case 1002:
-            if ([User isEmailValid:textField.text]) {
-                self.emailValidImageView.image = [UIImage imageNamed:@"ok.png"];
-            } else {
-                self.emailValidImageView.image = [UIImage imageNamed:@"wrong.png"];
-            }
-            break;
-        case 1003:
-            if ([User validatePassword:textField.text] == nil) {
-                self.passwordValidImageView.image = [UIImage imageNamed:@"ok.png"];
-            } else {
-                self.passwordValidImageView.image = [UIImage imageNamed:@"wrong.png"];
-            }
-            break;
-        default:
-            break;
-    }
-    if (availableUsername && [User isEmailValid:self.txtEmail.text] && [User validatePassword:self.txtPassword.text] == nil) {
-        [self.btnSignup setEnabled:YES];
-    }
-    return true;
-}
 
-- (BOOL)textFieldShouldEndEditing:(UITextField *)textField
+- (NSString *)validateUsername:(NSString *)username
 {
-    switch (textField.tag) {
-        case 1001:
-            if ([self validateUsername:textField.text]) {
-                self.usernameValidImageView.image = [UIImage imageNamed:@"ok.png"];
-            } else {
-                self.usernameValidImageView.image = [UIImage imageNamed:@"wrong.png"];
-            }
-            break;
-        case 1002:
-            NSLog(@"email");
-            break;
-        case 1003:
-            NSLog(@"password");
-            break;
-        default:
-            break;
+    if (!username || [username length] == 0) {
+        return @"Username can not be empty.";
     }
-    if (availableUsername && [User isEmailValid:self.txtEmail.text] && [User validatePassword:self.txtPassword.text] == nil) {
-        [self.btnSignup setEnabled:YES];
-    }
-    return true;
-}
+    
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@user/hasUsername/%@", ROOT_URL, username]];
 
-- (BOOL)validateUsername:(NSString *)username
-{
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@user/username/%@", ROOT_URL, username]];
+    NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:6];
     
-    NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReturnCacheDataElseLoad timeoutInterval:60];
-    
-    NSData *returnData = [NSURLConnection sendSynchronousRequest:urlRequest returningResponse: nil error: nil ];
-    NSString *responseString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
-    NSLog(@"%@", responseString);
-    NSDictionary *parsedObject = [NSJSONSerialization JSONObjectWithData:returnData options:0 error:nil];
+    NSError *error = nil;
+    NSData *returnData = [NSURLConnection sendSynchronousRequest:urlRequest returningResponse: nil error: &error ];
+    if (error) {
+        return @"Failed to validate if username already exists. Please make sure you have internet access or try again later.";
+    }
+    error = nil;
+    NSDictionary *parsedObject = [NSJSONSerialization JSONObjectWithData:returnData options:0 error:&error];
+    if (error) {
+        return @"Failed to validate if username already exists. Please make sure you have internet access or try again later.";
+    }
     
     BOOL result = [[parsedObject valueForKey:@"exist"] boolValue];
     if (result) {
-        availableUsername = false;
-        return false;
+        return @"Username has already been taken.";
     } else {
-        availableUsername = true;
-        return true;
+        return nil;
+    }
+}
+
+- (NSString *)validateEmail:(NSString *)email
+{
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@user/hasEmail/%@", ROOT_URL, email]];
+    
+    NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:6];
+    
+    NSError *error = nil;
+    NSData *returnData = [NSURLConnection sendSynchronousRequest:urlRequest returningResponse: nil error: &error ];
+    if (error) {
+        return @"Failed to validate if email has already been registered. Please make sure you have internet access or try again later.";
+    }
+    NSDictionary *parsedObject = [NSJSONSerialization JSONObjectWithData:returnData options:0 error:&error];
+    if (error) {
+        return @"Failed to validate if email has already been registered. Please make sure you have internet access or try again later.";
+    }
+    BOOL result = [[parsedObject valueForKey:@"exist"] boolValue];
+    if (result) {
+        return @"Email has been registered.";
+    } else {
+        return nil;
     }
 }
 
