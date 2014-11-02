@@ -45,6 +45,7 @@
 - (MKMapItem*)mapItem;
 - (NSString *) getFormatedAddress;
 - (NSString *) getSimpleFormatedAddress;
+- (UIImage *) getUserIcon;
 - (void) updateAddress:(CLPlacemark *)placeMark;
 + (NSString *) getFormatedAddressWithPlaceMark:(CLPlacemark *)placeMark;
 /*

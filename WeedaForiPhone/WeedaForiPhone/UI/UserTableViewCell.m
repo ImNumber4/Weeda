@@ -73,15 +73,7 @@ const double STORE_TYPE_ICON_SIZE = 15;
     }
     self.usernameLabel.text = nameLabel;
     self.addressLabel.text = [user getSimpleFormatedAddress];
-    self.storeTypeIcon.image = [UIImage imageNamed:@"dispensary_icon.png"];
-    
-    if ([USER_TYPE_DISPENSARY isEqualToString:user.user_type]) {
-        self.storeTypeIcon.image = [UIImage imageNamed:@"dispensary_icon.png"];
-    } else if ([USER_TYPE_HYDRO isEqualToString:user.user_type]) {
-        self.storeTypeIcon.image = [UIImage imageNamed:@"hydro_icon.png"];
-    } else if ([USER_TYPE_I502 isEqualToString:user.user_type]) {
-        self.storeTypeIcon.image = [UIImage imageNamed:@"i502_icon.png"];
-    }
+    self.storeTypeIcon.image = [user getUserIcon];
     
     if (user.relationshipWithCurrentUser) {
         self.followButton.hidden = false;
