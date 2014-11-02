@@ -9,7 +9,6 @@
 #import "AppDelegate.h"
 
 #import "MasterViewController.h"
-#import "LoginViewController.h"
 #import <RestKit/RestKit.h>
 #import "Weed.h"
 #import "User.h"

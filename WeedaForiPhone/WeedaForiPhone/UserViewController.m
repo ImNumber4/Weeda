@@ -8,7 +8,6 @@
 
 #import <RestKit/RestKit.h>
 #import "UserViewController.h"
-#import "LoginViewController.h"
 #import "CropImageViewController.h"
 #import "AppDelegate.h"
 #import "WeedBasicTableViewCell.h"

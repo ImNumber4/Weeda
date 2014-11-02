@@ -15,6 +15,8 @@
 
 @implementation SignUpSubViewController
 
+static double CANCEL_BUTTON_SIZE = 100;
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -90,7 +92,7 @@
     [self.view addSubview:self.continueButton];
     [self.continueButton addTarget:self action:@selector(continueClicked:) forControlEvents:UIControlEventTouchDown];
     
-    self.cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(self.continueButton.frame.origin.x, self.continueButton.frame.origin.y + self.continueButton.frame.size.height + padding, self.continueButton.frame.size.width, 25)];
+    self.cancelButton = [[UIButton alloc] initWithFrame:CGRectMake((self.view.frame.size.width - CANCEL_BUTTON_SIZE)/2.0, self.continueButton.frame.origin.y + self.continueButton.frame.size.height + padding, CANCEL_BUTTON_SIZE, 25)];
     [self.cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
     [self.cancelButton.titleLabel setFont:[UIFont systemFontOfSize:12]];
     [self.cancelButton setTitleColor:[ColorDefinition greenColor] forState:UIControlStateNormal];

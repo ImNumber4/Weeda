@@ -9,7 +9,6 @@
 #import "AppDelegate.h"
 #import "WelcomeViewController.h"
 #import "TabBarController.h"
-#import "LoginViewController.h"
 #import "MasterViewController.h"
 #import "UIViewHelper.h"
 
@@ -34,6 +33,8 @@
 static NSString * USER_ID_COOKIE_NAME = @"user_id";
 static NSString * USERNAME_COOKIE_NAME = @"username";
 static NSString * PASSWORD_COOKIE_NAME = @"password";
+static double ICON_INITIAL_SIZE = 60;
+static double SIGN_UP_SIZE = 100;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -50,8 +51,8 @@ static NSString * PASSWORD_COOKIE_NAME = @"password";
     // Do any additional setup after loading the view.
     self.view.backgroundColor = [ColorDefinition greenColor];
     
-    self.titleImage = [[UIImageView alloc]initWithFrame:CGRectMake(65, 190, 192, 27)];
-    self.titleImage.image = [UIImage imageNamed:@"title.png"];
+    self.titleImage = [[UIImageView alloc]initWithFrame:CGRectMake((self.view.frame.size.width - ICON_INITIAL_SIZE)/2.0, 190, ICON_INITIAL_SIZE, ICON_INITIAL_SIZE)];
+    self.titleImage.image = [UIImage imageNamed:@"icon_white.png"];
     [self.view addSubview:self.titleImage];
     [self.view bringSubviewToFront:self.titleImage];
     
@@ -109,7 +110,7 @@ static NSString * PASSWORD_COOKIE_NAME = @"password";
     self.btnSignIn.layer.cornerRadius = 5;
     [self.view addSubview:self.btnSignIn];
     
-    self.btnSignUp = [[UIButton alloc] initWithFrame:CGRectMake(self.txtUsername.frame.origin.x, self.btnSignIn.frame.origin.y + self.btnSignIn.frame.size.height + 5, self.txtUsername.frame.size.width, self.txtUsername.frame.size.height)];
+    self.btnSignUp = [[UIButton alloc] initWithFrame:CGRectMake((self.view.frame.size.width - SIGN_UP_SIZE) / 2.0, self.btnSignIn.frame.origin.y + self.btnSignIn.frame.size.height + 5, SIGN_UP_SIZE, self.txtUsername.frame.size.height)];
     [self.btnSignUp addTarget:self action:@selector(signUp:) forControlEvents:UIControlEventTouchDown];
     [self.btnSignUp setTitle:@"Sign Up" forState:UIControlStateNormal];
     [self.btnSignUp.titleLabel setTextColor:[UIColor whiteColor]];
@@ -157,7 +158,7 @@ static NSString * PASSWORD_COOKIE_NAME = @"password";
 - (void) showLoginUI
 {
     [UIView animateWithDuration:0.5 animations:^{
-        self.titleImage.center = CGPointMake(self.titleImage.center.x, 120);
+        self.titleImage.center = CGPointMake(self.titleImage.center.x, 110);
     } completion:^(BOOL finished) {
         [UIView animateWithDuration:0.5 animations:^{
             self.txtUsername.alpha = 1;
