@@ -163,10 +163,16 @@ CGFloat const kJSAvatarSize = 50.0f;
                                   textSize.width,
                                   textSize.height);
     self.type == JSBubbleMessageTypeOutgoing ? [[UIColor blackColor] set] : [[UIColor whiteColor] set];
-	[self.text drawInRect:textFrame
-                 withFont:[JSBubbleView font]
-            lineBreakMode:NSLineBreakByWordWrapping
-                alignment:NSTextAlignmentLeft];
+    
+    NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+    /// Set line break mode
+    paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
+    /// Set text alignment
+    paragraphStyle.alignment = NSTextAlignmentLeft;
+    NSDictionary *attributes = @{ NSFontAttributeName: [JSBubbleView font],
+                                  NSParagraphStyleAttributeName: paragraphStyle,
+                                  NSForegroundColorAttributeName: (self.type == JSBubbleMessageTypeOutgoing ? [UIColor blackColor] : [UIColor whiteColor])};
+    [self.text drawInRect:textFrame withAttributes:attributes];
 }
 
 #pragma mark - Bubble view
@@ -229,9 +235,15 @@ CGFloat const kJSAvatarSize = 50.0f;
     CGFloat height = MAX([JSBubbleView numberOfLinesForMessage:txt],
                          [txt numberOfLines]) * [JSMessageInputView textViewLineHeight];
     
-    CGSize size = [txt sizeWithFont:[JSBubbleView font]
-           constrainedToSize:CGSizeMake(width - kJSAvatarSize, height + kJSAvatarSize)
-               lineBreakMode:NSLineBreakByWordWrapping];
+    NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+    /// Set line break mode
+    paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
+    
+    NSDictionary *attributes = @{ NSFontAttributeName: [JSBubbleView font],
+                                  NSParagraphStyleAttributeName: paragraphStyle};
+    
+    CGSize size = [txt boundingRectWithSize:CGSizeMake(width - kJSAvatarSize, height + kJSAvatarSize) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:attributes context:nil].size;
+    
     return CGSizeMake(ceil(size.width), ceil(size.height));
 }
 
