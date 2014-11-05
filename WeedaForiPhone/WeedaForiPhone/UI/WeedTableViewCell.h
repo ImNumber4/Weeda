@@ -15,6 +15,7 @@
 @protocol WeedTableViewCellDelegate <NSObject>
 @required
 - (void)showUserViewController:(id)sender;
+- (void)selectWeedContent:(UIGestureRecognizer *)recognizer;
 @end
 
 @interface WeedTableViewCell : UITableViewCell <UICollectionViewDelegate, UICollectionViewDataSource> {

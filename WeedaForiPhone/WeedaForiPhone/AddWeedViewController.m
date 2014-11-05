@@ -13,11 +13,17 @@
 #import "WeedAddingImageCell.h"
 #import "WeedImage.h"
 #import "WeedImageController.h"
+#import "WLTinyURL.h"
+
 
 #import <RestKit/RestKit.h>
 #import <SDWebImage/UIImageView+WebCache.h>
 
+#
+
 @interface AddWeedViewController () <UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UICollectionViewDelegate,UICollectionViewDataSource,UIGestureRecognizerDelegate, WeedAddingToolbarDelegate, WeedAddingImageViewDelegate>
+
+@property (nonatomic) BOOL hasEdited;
 
 @property (nonatomic, retain) WeedAddingToolbar *toolbar;
 
@@ -31,7 +37,9 @@
 
 @property (nonatomic, weak) UIPanGestureRecognizer *pan;
 
-@property (nonatomic, strong) NSMutableDictionary * mentionedUsernameToUserId;//
+@property (nonatomic, strong) NSMutableDictionary * mentionedUsernameToUserId;
+
+@property (nonatomic, retain) UILabel *placeHolder;
 
 @end
 
@@ -52,14 +60,30 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)];
     UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithTitle:@"Weed it" style:UIBarButtonItemStyleBordered target:self action:@selector(save:)];
     self.navigationItem.rightBarButtonItem = saveButton;
     if (self.lightWeed != nil) {
         self.weedContentView.text = [NSString stringWithFormat:@"@%@ %@", self.lightWeed.username, self.weedContentView.text] ;
+    } else {
+        _hasEdited = NO;
+//        self.weedContentView.text = @"Share the moment...";
+//        self.weedContentView.textColor = [UIColor lightGrayColor];
+//        [self.weedContentView setSelectedRange:NSMakeRange(0, 0)];
+        
+        _placeHolder = [[UILabel alloc]initWithFrame:CGRectMake(6, 70, 200, 20)];
+        _placeHolder.text = @"Share the moment...";
+        _placeHolder.font = self.weedContentView.font;
+        _placeHolder.textColor = [UIColor lightGrayColor];
+        [self.view addSubview:_placeHolder];
+//        [_placeHolder sendSubviewToBack:self.weedContentView];
     }
     self.weedContentView.delegate = self;
+    self.weedContentView.backgroundColor = [UIColor clearColor];
+    self.weedContentView.dataDetectorTypes = UIDataDetectorTypeLink;
     [self.weedContentView becomeFirstResponder];
+    
     self.userList.hidden = true;
     [self.userList setSeparatorInset:UIEdgeInsetsZero];
     self.userList.tableFooterView = [[UIView alloc] init];
@@ -75,6 +99,7 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
                                                  name:UIKeyboardWillHideNotification object:nil];
     
     self.toolbar = [[WeedAddingToolbar alloc]init];
+    self.toolbar.frame = CGRectMake(0, self.view.frame.size.height - self.toolbar.frame.size.height, self.toolbar.frame.size.width, self.toolbar.frame.size.height);
     self.toolbar.delegate = self;
     [self.view addSubview:self.toolbar];
     [self.view bringSubviewToFront:self.toolbar];
@@ -91,6 +116,7 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
     [self.imageCollectionView registerNib:[UINib nibWithNibName:@"WeedAddingImageCell" bundle:nil] forCellWithReuseIdentifier:@"imageCell"];
     [self.imageCollectionView setBackgroundColor:[UIColor whiteColor]];
     [self.view addSubview:self.imageCollectionView];
+    self.imageCollectionView.hidden = YES;
     self.dataArray = [[NSMutableArray alloc]initWithCapacity:9];
     
     [self.view bringSubviewToFront:self.userList];
@@ -106,6 +132,28 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
+    //detecting text if it is url, need to shorten it (here, we only deal with the situation which paste url from user)
+    if (text.length > 10) {
+        NSError *error = nil;
+        NSDataDetector *detector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeLink error: &error];
+        NSArray *urls = [detector matchesInString:text options:NSMatchingReportCompletion range:NSMakeRange(0, text.length)];
+        if (urls.count > 0) {
+            for (NSTextCheckingResult *result in urls) {
+                NSString *tinyUrl = [WLTinyURL tinyURLWithString:result.URL.absoluteString];
+                if (!tinyUrl) {
+                    return YES;
+                }
+                
+                textView.text = [[textView.text substringToIndex:(range.length > 0 ? range.location : range.location)] stringByAppendingString:[NSString stringWithFormat:@"%@ ", tinyUrl]];
+                if (!_hasEdited) {
+                    _hasEdited = YES;
+                    _placeHolder.hidden = YES;
+                }
+            }
+            return NO;
+        }
+    }
+    
     NSString * textNeedToBeProcessed = [[textView.text substringToIndex:(range.length > 0 ? range.location : range.location - range.length)] stringByAppendingString:text];
     NSArray *allWords = [textNeedToBeProcessed componentsSeparatedByCharactersInSet:[NSMutableCharacterSet whitespaceAndNewlineCharacterSet]];
     NSString *mostRecentWord = [allWords lastObject];
@@ -136,8 +184,39 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
     return true;
 }
 
+//- (void)textViewDidBeginEditing:(UITextView *)textView
+//{
+//    if (!_hasEdited)  {
+//        self.weedContentView.text = @"";
+//        self.weedContentView.textColor = [UIColor blackColor];
+//        _hasEdited = YES;
+//        
+//    }
+//    [self.weedContentView becomeFirstResponder];
+//}
+
+- (void)textViewDidEndEditing:(UITextView *)textView
+{
+    if (self.weedContentView.text.length == 0) {
+        _hasEdited = NO;
+        _placeHolder.hidden = NO;
+    }
+    
+    NSError *error = nil;
+    NSDataDetector *detector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeLink error: &error];
+    [detector enumerateMatchesInString:textView.text options:NSMatchingReportCompletion range:NSMakeRange(0, textView.text.length)
+    usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+        NSLog(@"NSTextChecking Result: %@", result.URL);
+    }];
+}
+
 - (void)textViewDidChange:(UITextView *)textView
 {
+    if (!_hasEdited) {
+        _placeHolder.hidden = YES;
+        _hasEdited = YES;
+    }
+    
     //make sure mentions map in sync with text, so if user removed any mention, we need to remove it from mentions
     NSArray * tokens = [textView.text componentsSeparatedByCharactersInSet:[NSMutableCharacterSet whitespaceAndNewlineCharacterSet]];
     NSMutableSet * validMentions = [[NSMutableSet alloc] init];
@@ -269,7 +348,7 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
     
     // If appropriate, configure the new managed object.
     // Normally you should use accessor methods, but using KVC here avoids the need to add a custom class to the template.
-    weed.content = self.weedContentView.text;
+    weed.content = [self parseURLWithContent:self.weedContentView.text];
     weed.time = [NSDate date];
     weed.image_count = [NSNumber numberWithUnsignedInteger:self.dataArray.count];
     
@@ -327,6 +406,9 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
 }
 
 - (IBAction) cancel: (id) sender {
+    if ([self.weedContentView isFirstResponder]) {
+        [self.weedContentView resignFirstResponder];
+    }
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -362,10 +444,32 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
     UIImage *pickImage = [info objectForKey:UIImagePickerControllerOriginalImage];
     [self dismissViewControllerAnimated:YES completion:nil];
     
+    if (self.imageCollectionView.hidden) {
+        self.imageCollectionView.hidden = NO;
+    }
     [self.dataArray addObject: [self generatePhotoThumbnail:pickImage]];
+    
     [self.imageCollectionView reloadData];
     
     [self.weedContentView becomeFirstResponder];
+}
+
+#pragma mark -- process weed content
+- (NSString *)parseURLWithContent:(NSString *)weedContent
+{
+    NSError *error = nil;
+    NSDataDetector *detector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeLink error: &error];
+    NSArray *urls = [detector matchesInString:weedContent options:NSMatchingReportCompletion range:NSMakeRange(0, weedContent.length)];
+    
+    for (NSTextCheckingResult *result in urls) {
+        NSString *tinyUrl = [WLTinyURL tinyURLWithString:result.URL.absoluteString];
+        if (!tinyUrl) {
+            continue;
+        }
+        
+        weedContent = [weedContent stringByReplacingCharactersInRange:result.range withString:tinyUrl];
+    }
+    return weedContent;
 }
 
 #pragma mark -- WeedAddingImageViewDelegate
@@ -513,7 +617,6 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
     return imageCopy;
     
 }
-
 
 /*
 #pragma mark - Navigation

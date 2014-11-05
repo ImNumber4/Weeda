@@ -18,6 +18,7 @@
 #import "WeedShowImageCell.h"
 #import "WeedImageController.h"
 #import "WeedImage.h"
+#import "WLWebViewController.h"
 
 #import <SDWebImage/UIImageView+WebCache.h>
 
@@ -46,7 +47,7 @@ const CGFloat COLLECTION_VIEW_PER_ROW_HEIGHT = 100.0;
 
 const CGFloat COLLECTION_VIEW_HEIGHT = 300.0;
 
-@interface DetailViewController () <UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, WeedDetailTableViewCellDelegate> {
+@interface DetailViewController () <UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, UITextViewDelegate, WeedDetailTableViewCellDelegate> {
     NSInteger *_ratio;
 }
 
@@ -211,6 +212,7 @@ const CGFloat COLLECTION_VIEW_HEIGHT = 300.0;
     [cell.userLabel setTitle:nameLabel forState:UIControlStateNormal];
     
     cell.weedContentLabel.text = content;
+    cell.weedContentLabel.delegate = self;
     cell.weedContentLabel.translatesAutoresizingMaskIntoConstraints = YES;
     [cell.weedContentLabel setFrame:CGRectMake(cell.weedContentLabel.frame.origin.x, cell.weedContentLabel.frame.origin.y, cell.weedContentLabel.frame.size.width, [self getTextLableHeight])];
     
@@ -400,6 +402,30 @@ const CGFloat COLLECTION_VIEW_HEIGHT = 300.0;
     UIGraphicsBeginImageContextWithOptions(sacleSize, NO, 0.0);
     [image drawInRect:CGRectMake(0, 0, sacleSize.width, sacleSize.height)];
     return UIGraphicsGetImageFromCurrentImageContext();
+}
+
+#pragma UITextView Delegate
+- (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange
+{
+    NSLog(@"Click url: %@", URL);
+    
+    WLWebViewController *webViewController = [[WLWebViewController alloc]init];
+    webViewController.url = URL;
+    
+    CATransition *transition = [CATransition animation];
+    transition.duration = 0.5f;
+    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    transition.type = kCATransitionMoveIn;
+    transition.subtype = kCATransitionFromTop;
+    [self.navigationController.view.layer addAnimation:transition forKey:nil];
+    [self.navigationController pushViewController:webViewController animated:NO];
+    
+    
+    [UIView animateWithDuration:0.5 animations:^{
+        self.tabBarController.tabBar.alpha = 0.0;
+    }];
+    
+    return NO;
 }
 
 @end

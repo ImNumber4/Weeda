@@ -89,12 +89,14 @@
 
 - (void)handleTap:(UITapGestureRecognizer *)gesture
 {
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
+    [[UIDevice currentDevice]endGeneratingDeviceOrientationNotifications];
+    
     [UIView animateWithDuration:0.5 animations:^{
         [self rotateImageView:UIDeviceOrientationPortrait];
         _imageView.frame = [self originalImageViewRect];
         [_backgroundView setAlpha:0.0];
     } completion:^(BOOL finished) {
-        [[UIDevice currentDevice]endGeneratingDeviceOrientationNotifications];
         [self removeFromSuperview];
     }];
 }

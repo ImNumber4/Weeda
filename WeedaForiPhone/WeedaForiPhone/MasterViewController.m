@@ -12,13 +12,14 @@
 #import "UserViewController.h"
 #import "WeedTableViewCell.h"
 #import "WeedBasicTableViewCell.h"
-#import <RestKit/RestKit.h>
 #import "Weed.h"
 #import "User.h"
 #import "WeedImage.h"
+#import "WLWebViewController.h"
 
+#import <RestKit/RestKit.h>
 
-@interface MasterViewController () <UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, WeedTableViewCellDelegate>
+@interface MasterViewController () <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, NSFetchedResultsControllerDelegate, WeedTableViewCellDelegate>
 
 @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
 
@@ -183,9 +184,11 @@ const NSInteger NON_GLOBAL_COMPOSE_TAG = 1;
 
 - (void)decorateCellWithWeed:(Weed *)weed cell:(WeedTableViewCell *)cell
 {
-    cell.delegate = self;
-    
     [cell decorateCellWithWeed:weed];
+    
+    cell.delegate = self;
+    cell.weedContentLabel.delegate = self;
+    
     [cell.waterDrop removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
     [cell.waterDrop addTarget:self action:@selector(waterIt:)forControlEvents:UIControlEventTouchDown];
     
@@ -276,7 +279,6 @@ const NSInteger NON_GLOBAL_COMPOSE_TAG = 1;
     [self decorateCellWithWeed:weed cell:cell];
 }
 
-
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return NO;
@@ -324,6 +326,11 @@ const NSInteger NON_GLOBAL_COMPOSE_TAG = 1;
     return [sectionInfo name];
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [self performSegueWithIdentifier:@"showWeed" sender:self];
+}
+
 #pragma mark - NSFetchedResultsControllerDelegate
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller{
@@ -334,6 +341,14 @@ const NSInteger NON_GLOBAL_COMPOSE_TAG = 1;
 - (void)showUserViewController:(id)sender
 {
     [self performSegueWithIdentifier:@"showUser" sender:sender];
+}
+
+- (void)selectWeedContent:(UIGestureRecognizer *)recognizer
+{
+    CGPoint selectPoint = [recognizer locationInView:self.tableView];
+    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:selectPoint];
+    [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+    [self tableView:self.tableView didSelectRowAtIndexPath:indexPath];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
@@ -390,6 +405,28 @@ const NSInteger NON_GLOBAL_COMPOSE_TAG = 1;
         [self.navigationController.navigationBar setFrame:frame];
         [self updateBarButtonItems:alpha];
     }];
+}
+
+#pragma UITextView Delegate
+- (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange
+{
+    WLWebViewController *webViewController = [[WLWebViewController alloc]init];
+    webViewController.url = URL;
+
+    CATransition *transition = [CATransition animation];
+    transition.duration = 0.5f;
+    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    transition.type = kCATransitionMoveIn;
+    transition.subtype = kCATransitionFromTop;
+    [self.navigationController.view.layer addAnimation:transition forKey:nil];
+    [self.navigationController pushViewController:webViewController animated:NO];
+
+    
+    [UIView animateWithDuration:0.5 animations:^{
+        self.tabBarController.tabBar.alpha = 0.0;
+    }];
+    
+    return NO;
 }
 
 @end

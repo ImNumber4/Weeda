@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="95h-tk-Uat">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14B17" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="95h-tk-Uat">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
@@ -304,9 +304,6 @@
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="79"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
-                                <connections>
-                                    <segue destination="6ro-Wi-h5r" kind="push" identifier="showWeed" id="i1k-fC-0aj"/>
-                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <sections/>
@@ -321,6 +318,7 @@
                     <connections>
                         <segue destination="Up2-bL-hL3" kind="modal" identifier="addWeed" modalTransitionStyle="coverVertical" id="xm8-7m-xi9"/>
                         <segue destination="UY4-39-rji" kind="push" identifier="showUser" id="drt-oA-QVo"/>
+                        <segue destination="6ro-Wi-h5r" kind="push" identifier="showWeed" id="6VO-gD-9Hh"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6Cn-md-YlS" sceneMemberID="firstResponder"/>
@@ -354,13 +352,6 @@
                                             <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="jLb-uc-KAe">
-                                            <rect key="frame" x="8" y="59" width="303" height="25"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                            <nil key="highlightedColor"/>
-                                            <size key="shadowOffset" width="0.0" height="0.0"/>
-                                        </label>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="EVe-Bi-u2E">
                                             <rect key="frame" x="55" y="10" width="233" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -370,13 +361,21 @@
                                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
                                         </button>
+                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" id="EEO-PF-9gy">
+                                            <rect key="frame" x="8" y="59" width="303" height="29"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                            <dataDetectorType key="dataDetectorTypes" link="YES"/>
+                                        </textView>
                                     </subviews>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="timeLabel" destination="QTI-gT-Uhe" id="WDz-Yg-z4c"/>
                                     <outlet property="userAvatar" destination="ZTC-sK-Cdc" id="C4A-SW-N9R"/>
                                     <outlet property="userLabel" destination="EVe-Bi-u2E" id="pVa-13-qjn"/>
-                                    <outlet property="weedContentLabel" destination="jLb-uc-KAe" id="EvK-EF-gf7"/>
+                                    <outlet property="weedContentLabel" destination="EEO-PF-9gy" id="wFb-Ul-WOR"/>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="0.0" reuseIdentifier="WeedDetailControlCell" rowHeight="27" id="eRh-Kf-39R" customClass="WeedDetailControlTableViewCell">
@@ -924,7 +923,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="interactive" text="Share the moment..." id="T4K-bK-L1t">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="interactive" id="T4K-bK-L1t">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -933,7 +932,6 @@
                                 </accessibility>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences" keyboardType="twitter"/>
-                                <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES" address="YES" calendarEvent="YES"/>
                             </textView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="36" sectionHeaderHeight="22" sectionFooterHeight="22" id="uPt-ZK-oQw">
                                 <rect key="frame" x="0.0" y="97" width="320" height="471"/>
@@ -970,12 +968,12 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="xm8-7m-xi9"/>
+        <segue reference="JEh-w8-48C"/>
+        <segue reference="6VO-gD-9Hh"/>
         <segue reference="aBn-FK-paW"/>
-        <segue reference="hHZ-jg-Kly"/>
-        <segue reference="gr4-Yl-zIz"/>
+        <segue reference="Th6-6F-Dxp"/>
+        <segue reference="Cu1-Di-ade"/>
         <segue reference="Z8M-XG-GdH"/>
-        <segue reference="dSx-Us-Hdx"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="0.24313727021217346" green="0.64705884456634521" blue="0.24705883860588074" alpha="1" colorSpace="deviceRGB"/>
 </document>

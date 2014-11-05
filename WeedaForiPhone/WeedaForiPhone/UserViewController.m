@@ -385,10 +385,11 @@ const NSInteger SHOW_FOLLOWINGS = 2;
 
 - (void)addItemViewContrller:(CropImageViewController *)controller didFinishCropImage:(UIImage *)cropedImage
 {
+    //Restore Image to SDWebImage cache
+     [[SDImageCache sharedImageCache]storeImage:cropedImage forKey:[WeedImageController imageURLOfAvatar:self.user_id].absoluteString];
+    
     //Upload Avatar to Server
     [self uploadImageToServer:cropedImage];
-    
-    [[SDImageCache sharedImageCache]storeImage:cropedImage forKey:[WeedImageController imageURLOfAvatar:self.user_id].absoluteString];
 }
 
 - (void)createUploadAvatarView

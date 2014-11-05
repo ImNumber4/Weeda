@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "DetailViewController.h"
 
 @interface AddWeedViewController :  UIViewController
 @property (weak, nonatomic) IBOutlet UITextView *weedContentView;

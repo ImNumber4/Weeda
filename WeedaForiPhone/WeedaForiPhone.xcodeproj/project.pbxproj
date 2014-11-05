@@ -148,7 +148,13 @@
 		EA76A50F1952833900B60F04 /* WeedAddingImageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EA76A50D1952833900B60F04 /* WeedAddingImageCell.xib */; };
 		EA9B504E19E9EAF7008B2464 /* WLProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = EA9B504D19E9EAF7008B2464 /* WLProgressView.m */; };
 		EAAE7B4B19611295003F0C65 /* WeedImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = EAAE7B4A19611295003F0C65 /* WeedImageView.m */; };
+		EAAFA44F1A0206A5005AC429 /* WLWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAAFA44E1A0206A5005AC429 /* WLWebViewController.m */; };
+		EAAFA4571A020D50005AC429 /* web_close.png in Resources */ = {isa = PBXBuildFile; fileRef = EAAFA4561A020D50005AC429 /* web_close.png */; };
+		EAAFA4591A0309A3005AC429 /* open_by_others.png in Resources */ = {isa = PBXBuildFile; fileRef = EAAFA4581A0309A3005AC429 /* open_by_others.png */; };
+		EAAFA4741A044BD9005AC429 /* WLActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = EAAFA4731A044BD9005AC429 /* WLActionSheet.m */; };
 		EAB381AC19FF0A4F00C4C3BA /* Oops.png in Resources */ = {isa = PBXBuildFile; fileRef = EAB381AB19FF0A4F00C4C3BA /* Oops.png */; };
+		EAB381BA19FF62CE00C4C3BA /* link.png in Resources */ = {isa = PBXBuildFile; fileRef = EAB381B919FF62CE00C4C3BA /* link.png */; };
+		EAB381CE1A00AFF100C4C3BA /* WLTinyURL.m in Sources */ = {isa = PBXBuildFile; fileRef = EAB381CD1A00AFF100C4C3BA /* WLTinyURL.m */; };
 		EAB57B0C197B6F3F00C79E05 /* libSDWebImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EAB57AF0197B6BD500C79E05 /* libSDWebImage.a */; };
 		EAC6AAF0197B616A00017240 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAC6AACA19798F1100017240 /* ImageIO.framework */; };
 		EACD1157197CA76F00E45475 /* WeedImageController.m in Sources */ = {isa = PBXBuildFile; fileRef = EACD1156197CA76F00E45475 /* WeedImageController.m */; };
@@ -428,7 +434,16 @@
 		EA9B504D19E9EAF7008B2464 /* WLProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WLProgressView.m; path = WeedaForiPhone/UI/WLProgressView.m; sourceTree = "<group>"; };
 		EAAE7B4919611295003F0C65 /* WeedImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WeedImageView.h; path = WeedaForiPhone/UI/WeedImageView.h; sourceTree = "<group>"; };
 		EAAE7B4A19611295003F0C65 /* WeedImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WeedImageView.m; path = WeedaForiPhone/UI/WeedImageView.m; sourceTree = "<group>"; };
+		EAAFA44D1A0206A5005AC429 /* WLWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WLWebViewController.h; sourceTree = "<group>"; };
+		EAAFA44E1A0206A5005AC429 /* WLWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WLWebViewController.m; sourceTree = "<group>"; };
+		EAAFA4561A020D50005AC429 /* web_close.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = web_close.png; path = WeedaForiPhone/Images/web_close.png; sourceTree = "<group>"; };
+		EAAFA4581A0309A3005AC429 /* open_by_others.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = open_by_others.png; path = WeedaForiPhone/Images/open_by_others.png; sourceTree = "<group>"; };
+		EAAFA4721A044BD9005AC429 /* WLActionSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WLActionSheet.h; path = WeedaForiPhone/UI/WLUIKit/WLActionSheet.h; sourceTree = "<group>"; };
+		EAAFA4731A044BD9005AC429 /* WLActionSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WLActionSheet.m; path = WeedaForiPhone/UI/WLUIKit/WLActionSheet.m; sourceTree = "<group>"; };
 		EAB381AB19FF0A4F00C4C3BA /* Oops.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Oops.png; path = WeedaForiPhone/Images/Oops.png; sourceTree = "<group>"; };
+		EAB381B919FF62CE00C4C3BA /* link.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = link.png; path = WeedaForiPhone/Images/link.png; sourceTree = "<group>"; };
+		EAB381CC1A00AFF100C4C3BA /* WLTinyURL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WLTinyURL.h; path = WeedaForiPhone/UrlUtil/WLTinyURL.h; sourceTree = "<group>"; };
+		EAB381CD1A00AFF100C4C3BA /* WLTinyURL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WLTinyURL.m; path = WeedaForiPhone/UrlUtil/WLTinyURL.m; sourceTree = "<group>"; };
 		EAB57AE8197B6BD500C79E05 /* SDWebImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDWebImage.xcodeproj; path = SDWebImage/SDWebImage.xcodeproj; sourceTree = "<group>"; };
 		EAC6AACA19798F1100017240 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		EACD1155197CA76F00E45475 /* WeedImageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WeedImageController.h; path = WeedaForiPhone/Library/WeedImageController.h; sourceTree = "<group>"; };
@@ -555,6 +570,7 @@
 				A9CA8E9A18F3E01C004F095D /* UI */,
 				A9DFADD719A055B200AB00BA /* ColorUtil */,
 				A9653A8A19984C7400B9E124 /* ImageUtil */,
+				EAB381C51A00AF2B00C4C3BA /* urlUtil */,
 				A9CA8E9218F3DAC6004F095D /* Images */,
 				A914CCAB18CD756200B870D8 /* WeedaForiPhone */,
 				A914CCD118CD756200B870D8 /* WeedaForiPhoneTests */,
@@ -639,6 +655,8 @@
 				A9C087A619FB0C3600B0622B /* UpdateUsernameViewController.m */,
 				A9C087A819FB0C4600B0622B /* ChangePasswordViewController.h */,
 				A9C087A919FB0C4600B0622B /* ChangePasswordViewController.m */,
+				EAAFA44D1A0206A5005AC429 /* WLWebViewController.h */,
+				EAAFA44E1A0206A5005AC429 /* WLWebViewController.m */,
 			);
 			path = WeedaForiPhone;
 			sourceTree = "<group>";
@@ -714,6 +732,9 @@
 			isa = PBXGroup;
 			children = (
 				A94BFD501A05B48800757715 /* icon_white.png */,
+				EAAFA4581A0309A3005AC429 /* open_by_others.png */,
+				EAAFA4561A020D50005AC429 /* web_close.png */,
+				EAB381B919FF62CE00C4C3BA /* link.png */,
 				EAB381AB19FF0A4F00C4C3BA /* Oops.png */,
 				A93BB0B919F3AB3A00514940 /* hydro_icon.png */,
 				A93BB0BA19F3AB3A00514940 /* i502_icon.png */,
@@ -762,6 +783,7 @@
 		A9CA8E9A18F3E01C004F095D /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				EAAFA4681A044B41005AC429 /* WLUIKit */,
 				0EB8C47719C5BD1100BD64E1 /* Message */,
 				EA76A505194E94AF00B60F04 /* WeedAddingImageView.h */,
 				EA76A506194E94AF00B60F04 /* WeedAddingImageView.m */,
@@ -818,6 +840,24 @@
 				A9DFADDF19A055E900AB00BA /* ColorDefinition.m */,
 			);
 			name = ColorUtil;
+			sourceTree = "<group>";
+		};
+		EAAFA4681A044B41005AC429 /* WLUIKit */ = {
+			isa = PBXGroup;
+			children = (
+				EAAFA4721A044BD9005AC429 /* WLActionSheet.h */,
+				EAAFA4731A044BD9005AC429 /* WLActionSheet.m */,
+			);
+			name = WLUIKit;
+			sourceTree = "<group>";
+		};
+		EAB381C51A00AF2B00C4C3BA /* urlUtil */ = {
+			isa = PBXGroup;
+			children = (
+				EAB381CC1A00AFF100C4C3BA /* WLTinyURL.h */,
+				EAB381CD1A00AFF100C4C3BA /* WLTinyURL.m */,
+			);
+			name = urlUtil;
 			sourceTree = "<group>";
 		};
 		EAB57AE9197B6BD500C79E05 /* Products */ = {
@@ -1007,6 +1047,7 @@
 				A914CCC418CD756200B870D8 /* Images.xcassets in Resources */,
 				EA38FC851917067F007D652B /* welcome.png in Resources */,
 				0EB8C4C519C5C00800BD64E1 /* bubble-default-incoming-green@2x.png in Resources */,
+				EAB381BA19FF62CE00C4C3BA /* link.png in Resources */,
 				A991C05E18FB75A900A3D2CD /* waterdrop.png in Resources */,
 				EA76A504194E927500B60F04 /* WeedAddingToolbar.xib in Resources */,
 				0EB8C4D119C5C00800BD64E1 /* bubble-square-incoming-selected@2x.png in Resources */,
@@ -1019,8 +1060,10 @@
 				A92E514019048B0400FC518F /* followed.png in Resources */,
 				A914CCB018CD756200B870D8 /* InfoPlist.strings in Resources */,
 				EA76A4FD194E77A100B60F04 /* picture.png in Resources */,
+				EAAFA4591A0309A3005AC429 /* open_by_others.png in Resources */,
 				A986EFC5197230B700174AE4 /* current_location.png in Resources */,
 				0EB8C4C919C5C00800BD64E1 /* bubble-default-incoming@2x.png in Resources */,
+				EAAFA4571A020D50005AC429 /* web_close.png in Resources */,
 				A91A62FA1903602B008726E5 /* wrong.png in Resources */,
 				A986EFC719723CEA00174AE4 /* current_location_gray.png in Resources */,
 				0EB8C4C719C5C00800BD64E1 /* bubble-default-incoming-selected@2x.png in Resources */,
@@ -1089,10 +1132,12 @@
 				EA69A1D819E5D75E00532722 /* WLImageView.m in Sources */,
 				A914CCBF18CD756200B870D8 /* MasterViewController.m in Sources */,
 				A9C1BDE219F643D6003672DD /* UIViewHelper.m in Sources */,
+				EAAFA4741A044BD9005AC429 /* WLActionSheet.m in Sources */,
 				A9CA8E5918E8DB1E004F095D /* RemoteObject.m in Sources */,
 				A9FB79F31985A4C100DB35CB /* EditProfileViewController.m in Sources */,
 				0E4E2C9619B860290025C3EC /* MessageViewController.m in Sources */,
 				EA76A500194E923200B60F04 /* WeedAddingToolbar.m in Sources */,
+				EAB381CE1A00AFF100C4C3BA /* WLTinyURL.m in Sources */,
 				EA1B050F18F3668A0033AB06 /* WelcomeViewController.m in Sources */,
 				0ECB452E19C5C55D00690944 /* VendorCallOutView.m in Sources */,
 				A9C087AA19FB0C4600B0622B /* ChangePasswordViewController.m in Sources */,
@@ -1117,6 +1162,7 @@
 				EA4DB14C196114D6005ED7F7 /* WeedShowImageCell.m in Sources */,
 				0EB8C4BD19C5C00800BD64E1 /* JSBubbleMessageCell.m in Sources */,
 				A9653A9519984FFA00B9E124 /* BlurView.m in Sources */,
+				EAAFA44F1A0206A5005AC429 /* WLWebViewController.m in Sources */,
 				0EB8C4C319C5C00800BD64E1 /* NSString+JSMessagesView.m in Sources */,
 				EA38FC5F190C9A9D007D652B /* WeedImage.m in Sources */,
 				A914CCB218CD756200B870D8 /* main.m in Sources */,

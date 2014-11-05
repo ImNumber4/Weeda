@@ -51,6 +51,8 @@
 - (void)setImageURL:(NSURL *)imageURL isAvatar:(BOOL)isAvatar
 {
     _imageURL = imageURL;
+    [self getImageIdWithURL:imageURL];
+    
     if (isAvatar) {
         [self sd_setImageWithURL:imageURL placeholderImage:[UIImage imageNamed:@"avatar.jpg"] options:(SDWebImageHandleCookies | SDWebImageRefreshCached)];
     } else {
@@ -61,6 +63,19 @@
                 self.image = [UIImage imageNamed:@"Oops.png"];
             }
         }];
+    }
+}
+
+- (void)getImageIdWithURL:(NSURL *)imageURL
+{
+    NSArray *str = [imageURL.absoluteString componentsSeparatedByString:@"/"];
+    if (str && str.count > 0) {
+        NSString *imageId = [str objectAtIndex:(str.count - 1)];
+        if ([imageId containsString:@"?"]) {
+            _imageId = [[imageId componentsSeparatedByString:@"?"] objectAtIndex:0];
+        } else {
+            _imageId = imageId;
+        }
     }
 }
 
@@ -107,6 +122,9 @@
 
 - (void)displayFullScreen
 {
+    if (!_imageURL) {
+        return;
+    }
     _maxDisplayView = [[WeedImageMaxDisplayView alloc]initWithImageView:self];
     self.userInteractionEnabled = YES;
     [(UIView *)[UIApplication sharedApplication].windows.lastObject addSubview:_maxDisplayView];

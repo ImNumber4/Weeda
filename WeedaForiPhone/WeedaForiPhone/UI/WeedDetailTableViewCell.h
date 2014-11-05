@@ -21,7 +21,7 @@
 
 @property (nonatomic, retain) id<WeedDetailTableViewCellDelegate> delegate;
 
-@property (weak, nonatomic) IBOutlet UILabel *weedContentLabel;
+@property (weak, nonatomic) IBOutlet UITextView *weedContentLabel;
 @property (weak, nonatomic) IBOutlet UIButton *userLabel;
 @property (weak, nonatomic) IBOutlet UILabel *timeLabel;
 @property (weak, nonatomic) IBOutlet WLImageView *userAvatar;

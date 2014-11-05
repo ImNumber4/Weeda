@@ -13,9 +13,9 @@
 #import <SDWebImage/UIImageView+WebCache.h>
 
 #define MIN_HEIGHT_OF_TEXT_VIEW 40.0
-#define DEFAULT_WEED_CONTENT_LABLE_WIDTH 200.0
+#define DEFAULT_WEED_CONTENT_LABLE_WIDTH 256.0
 
-@interface WeedTableViewCell() <WLImageCollectionViewDelegate> {
+@interface WeedTableViewCell() <UITextViewDelegate, WLImageCollectionViewDelegate> {
     CGPoint _beginOffset;
     NSIndexPath *_currentIndexPath;
 }
@@ -52,6 +52,9 @@
     _collectionView = [self createImageCollectionView:CGRectMake(0, 0, self.frame.size.width, MASTERVIEW_IMAGEVIEW_HEIGHT)];
     _collectionView.hidden = YES;
     [self addSubview:_collectionView];
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tappedContentView:)];
+    [self.weedContentLabel addGestureRecognizer:tap];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
@@ -83,6 +86,7 @@
     
     NSString *nameLabel = [NSString stringWithFormat:@"@%@", weed.username];
     [self.usernameLabel setTitle:nameLabel forState:UIControlStateNormal];
+    [self.usernameLabel sizeToFit];
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"MMM. dd yyyy"];
@@ -236,7 +240,7 @@
 - (CGFloat)weedContentLableHeight:(Weed *)weed
 {
     UITextView *temp = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, DEFAULT_WEED_CONTENT_LABLE_WIDTH, 44)]; //This initial size doesn't matter
-    temp.font = [UIFont systemFontOfSize:12.0];
+    temp.font = [UIFont systemFontOfSize:11.0];
     temp.text = weed.content;
     
     CGFloat textViewWidth = DEFAULT_WEED_CONTENT_LABLE_WIDTH;
@@ -249,14 +253,17 @@
 + (CGFloat)heightOfWeedTableViewCell:(Weed *)weed
 {
     UITextView *temp = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, DEFAULT_WEED_CONTENT_LABLE_WIDTH, 44)]; //This initial size doesn't matter
+    temp.font = [UIFont systemFontOfSize:11.0];
     temp.attributedText = [[NSAttributedString alloc]initWithString:weed.content];
     CGSize textLableSize = [temp sizeThatFits:CGSizeMake(DEFAULT_WEED_CONTENT_LABLE_WIDTH, MIN_HEIGHT_OF_TEXT_VIEW)];
     
     //Add the height of the other UI elements inside your cell
-    if ([weed.image_count intValue] > 0) {
-        return MAX(textLableSize.height, MIN_HEIGHT_OF_TEXT_VIEW) + 20.0 + MASTERVIEW_IMAGEVIEW_HEIGHT + 30.0; //For Image View
+    if (weed.images.count > 0) {
+        CGFloat height = MAX(textLableSize.height, MIN_HEIGHT_OF_TEXT_VIEW) + 20.0 + MASTERVIEW_IMAGEVIEW_HEIGHT + 30.0; //For Image View
+        return height;
     } else {
-        return MAX(textLableSize.height, MIN_HEIGHT_OF_TEXT_VIEW) + 20.0;
+        CGFloat height = MAX(textLableSize.height, MIN_HEIGHT_OF_TEXT_VIEW) + 35.0;
+        return height;
     }
 }
 
@@ -275,6 +282,13 @@
 {
     _currentIndexPath = indexPath;
     [_collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
+}
+
+- (void)tappedContentView:(UIGestureRecognizer *)recognizer
+{
+    if ([self.delegate respondsToSelector:@selector(selectWeedContent:)]) {
+        [self.delegate selectWeedContent:recognizer];
+    }
 }
 
 @end

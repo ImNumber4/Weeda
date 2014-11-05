@@ -37,7 +37,7 @@
     if (self.delegate) {
         [self.delegate pressTakingPicture:self];
     } else {
-        NSLog(@"Don't have delegate!");
+        NSLog(@"Do not have delegate!");
     }
 }
 
@@ -46,7 +46,8 @@
     if (self.delegate) {
         [self.delegate pressPickingPicture:self];
     } else {
-        NSLog(@"Don't have delegate!");
+        NSLog(@"Do not have delegate!");
     }
 }
+
 @end

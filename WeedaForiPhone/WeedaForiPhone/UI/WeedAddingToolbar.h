@@ -13,6 +13,7 @@
 @required
 - (void)pressTakingPicture:(WeedAddingToolbar *)view;
 - (void)pressPickingPicture:(WeedAddingToolbar *)view;
+- (void)pressCopyLink:(WeedAddingToolbar *)view;
 @end
 
 @interface WeedAddingToolbar : UIView
@@ -23,5 +24,6 @@
 
 - (IBAction)takePicturePress:(id)sender;
 - (IBAction)pickPicturePress:(id)sender;
+- (IBAction)copyLinkPress:(id)sender;
 
 @end
