@@ -22,4 +22,6 @@
 @property (nonatomic, retain) NSNumber * participant_id;
 @property (nonatomic, retain) NSString * participant_username;
 @property (nonatomic, retain) NSNumber * is_read;
+@property (nonatomic, retain) NSManagedObject * image;
+
 @end

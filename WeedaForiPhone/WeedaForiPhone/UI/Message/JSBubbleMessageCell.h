@@ -53,11 +53,11 @@ typedef enum {
          reuseIdentifier:(NSString *)reuseIdentifier;
 
 #pragma mark - Message cell
-- (void)setMessage:(NSString *)msg;
+- (void)setMessage:(Message *)msg;
 - (void)setTimestamp:(NSDate *)date;
 - (void)setAvatarImage:(UIImage *)image;
 
-+ (CGFloat)neededHeightForText:(NSString *)bubbleViewText
++ (CGFloat)neededHeightForMessage:(Message *)message
                      timestamp:(BOOL)hasTimestamp
                         avatar:(BOOL)hasAvatar;
 

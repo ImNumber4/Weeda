@@ -18,6 +18,8 @@
 @property (nonatomic, retain) NSArray *dataSource;
 
 @property (nonatomic) BOOL allowFullScreenDisplay;
+@property (nonatomic) BOOL shouldDownloadForFullScreenDisplay;
+@property (nonatomic) BOOL changeAlphaValueDuringAnimation;
 
 - (void)setImageURL:(NSURL *)imageURL isAvatar:(BOOL)isAvatar;
 - (void)setImageURL:(NSURL *)imageURL animate:(BOOL)animate;

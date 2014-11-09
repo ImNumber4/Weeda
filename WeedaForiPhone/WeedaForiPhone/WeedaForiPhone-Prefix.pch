@@ -17,6 +17,7 @@
 #import "User.h"
 #import "Weed.h"
 #import "Message.h"
+#import "WeedImage.h"
 #import "ColorDefinition.h"
 #import <RestKit/RestKit.h>
 #endif

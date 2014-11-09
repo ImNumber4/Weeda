@@ -234,22 +234,6 @@ class UserController extends Controller
 		return json_encode(array('exist' => $exist));
 	}
 	
-	public function avatar($user_id) {
-		if (!isset($user_id)) {
-			throw new InvalidRequestException('user_id user is not set');
-		}
-		
-		//Get the user avatar
-		$avatar = getAvatarFromServer($user_id, 50);
-		if (!$avatar) {
-			throw new DependencyFailureException('Get avatar failed.');
-		}
-		$image['url'] = 'http://localhost/upload/xx/xx/avatar.jpeg';
-		$image['image'] = $avatar;
-		
-		return json_encode(array('image' => $image));
-	}
-	
 	private function parse_body_request() {
 		if ($_SERVER['REQUEST_METHOD'] != 'POST' && $_SERVER['REQUEST_METHOD'] != 'PUT') {
 			throw new InvalidRequestException('request has to be either POST or PUT.');

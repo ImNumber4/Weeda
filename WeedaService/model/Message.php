@@ -13,6 +13,7 @@ class Message
 	private $type;
 	private $related_weed_id;
 	private $is_read;
+	private $image_metadata;
 	
 	public static $MESSAGE_TYPE_NOTIFICATION = 'notification';
 	public static $MESSAGE_TYPE_MESSAGE = 'message';
@@ -87,6 +88,16 @@ class Message
 	
 	public function set_is_read($is_read) {
 		$this->is_read = $is_read;
+	}
+	
+	public function get_image_metadata()
+	{
+		return $this->image_metadata;
+	}
+	
+	public function set_image_metadata($image_metadata)
+	{
+		$this->image_metadata = $image_metadata;
 	}
 }
 

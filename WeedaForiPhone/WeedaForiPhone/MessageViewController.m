@@ -220,7 +220,7 @@
         }
     }
     
-    [cell decorateCellWithWeed:message.message username:message.participant_username time:message.time user_id:message.participant_id];
+    [cell decorateCellWithWeed:(message.image ? @"[image]" : message.message) username:message.participant_username time:message.time user_id:message.participant_id];
     cell.delegate = self;
     
     return cell;

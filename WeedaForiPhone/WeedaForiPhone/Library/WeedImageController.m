@@ -7,19 +7,23 @@
 //
 
 #import "WeedImageController.h"
-
-static NSString *baseUrl = @"http://www.cannablaze.com/image/query";
+#import "AppDelegate.h"
 
 @implementation WeedImageController
 
 + (NSURL *)imageURLOfAvatar:(NSNumber *)userId
 {
-    return [NSURL URLWithString:[NSString stringWithFormat:@"%@/avatar_%@", baseUrl, userId]];
+    return [NSURL URLWithString:[NSString stringWithFormat:@"%@/avatar_%@", [WeedImageController getBaseUrl], userId]];
 }
 
 + (NSURL *)imageURLOfWeed:(Weed *)weed
 {
-    return [NSURL URLWithString:[NSString stringWithFormat:@"%@/weed_%@_%@_%@", baseUrl, weed.user_id, weed.id, weed.image_count]];
+    return [NSURL URLWithString:[NSString stringWithFormat:@"%@/weed_%@_%@_%@", [WeedImageController getBaseUrl], weed.user_id, weed.id, weed.image_count]];
+}
+
++ (NSURL *)imageURLOfMessage:(Message *)message
+{
+    return [NSURL URLWithString:[NSString stringWithFormat:@"%@/message_%@_%@", [WeedImageController getBaseUrl], message.sender_id, message.id]];
 }
 
 + (NSString *)imageRelatedURLWithWeed:(Weed *)weed count:(NSNumber *)count
@@ -29,12 +33,12 @@ static NSString *baseUrl = @"http://www.cannablaze.com/image/query";
 
 + (NSURL *)imageURLOfWeedId:(NSNumber *)weedId userId:(NSNumber *)userId count:(long)count quality:(long)quality
 {
-    return [NSURL URLWithString:[NSString stringWithFormat:@"%@/weed_%@_%@_%ld?quality=%ld", baseUrl, userId, weedId, count, quality]];
+    return [NSURL URLWithString:[NSString stringWithFormat:@"%@/weed_%@_%@_%ld?quality=%ld", [WeedImageController getBaseUrl], userId, weedId, count, quality]];
 }
 
 + (NSURL *)imageURLOfImageId:(NSString *)imageId quality:(NSNumber *)quality
 {
-    return [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@?quality=%@", baseUrl, imageId, quality]];
+    return [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@?quality=%@", [WeedImageController getBaseUrl], imageId, quality]];
 }
 
 + (UIImage *)imageWithImage:(UIImage*)originalImage scaledToSize:(CGSize)size
@@ -142,6 +146,11 @@ static NSString *baseUrl = @"http://www.cannablaze.com/image/query";
     UIGraphicsEndImageContext();
     
     return newImage;
+}
+
++ (NSString *) getBaseUrl
+{
+    return [ROOT_URL stringByAppendingString:@"image/query"];
 }
 
 @end

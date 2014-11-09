@@ -304,7 +304,7 @@ NSString * _deviceToken;
                                           };
     
     [messageMapping addAttributeMappingsFromDictionary:messageObjectMapping];
-    
+    [messageMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"image_metadata" toKeyPath:@"image" withMapping:weedImageMapping]];
     [messageMapping addAttributeMappingsFromDictionary:parentObjectMapping];
     
     messageMapping.deletionPredicate = predicate;
@@ -444,6 +444,8 @@ NSString * _deviceToken;
     
     //message creation mapping
     [manager addResponseDescriptor:[RKResponseDescriptor responseDescriptorWithMapping:messageMapping method:RKRequestMethodPOST pathPattern:@"message/create" keyPath:nil statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)]];
+    
+    [manager addResponseDescriptor:[RKResponseDescriptor responseDescriptorWithMapping:messageMapping method:RKRequestMethodPOST pathPattern:@"message/upload/:receiver_id" keyPath:nil statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)]];
     
     [manager addRequestDescriptor:[RKRequestDescriptor requestDescriptorWithMapping:[messageMapping inverseMapping]
                                                                         objectClass:[Message class]

@@ -623,7 +623,7 @@
                                     <outlet property="delegate" destination="UY4-39-rji" id="HAT-6d-Te7"/>
                                 </connections>
                             </tableView>
-                            <imageView userInteractionEnabled="NO" alpha="0.80000000000000004" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="caremar.png" id="p1F-TD-SVd">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="p1F-TD-SVd">
                                 <rect key="frame" x="49" y="114" width="15" height="15"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
@@ -957,7 +957,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="caremar.png" width="76" height="76"/>
         <image name="light.png" width="60" height="58"/>
         <image name="seed.png" width="512" height="307"/>
         <image name="waterdrop.png" width="50" height="90"/>
@@ -968,12 +967,12 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="JEh-w8-48C"/>
-        <segue reference="6VO-gD-9Hh"/>
         <segue reference="aBn-FK-paW"/>
-        <segue reference="Th6-6F-Dxp"/>
-        <segue reference="Cu1-Di-ade"/>
+        <segue reference="dSx-Us-Hdx"/>
+        <segue reference="JEh-w8-48C"/>
+        <segue reference="gr4-Yl-zIz"/>
         <segue reference="Z8M-XG-GdH"/>
+        <segue reference="Th6-6F-Dxp"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="0.24313727021217346" green="0.64705884456634521" blue="0.24705883860588074" alpha="1" colorSpace="deviceRGB"/>
 </document>

@@ -39,10 +39,12 @@
 #import "UIColor+JSMessagesView.h"
 #import "JSDismissiveTextView.h"
 #import "JSMessageInputView.h"
+#import "WLActionSheet.h"
+#import "UserViewController.h"
 
 #define INPUT_HEIGHT 35.0f
 
-@interface JSMessagesViewController () <JSDismissiveTextViewDelegate>
+@interface JSMessagesViewController () <JSDismissiveTextViewDelegate, WLActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 - (void)setup;
 
@@ -51,6 +53,9 @@
 
 
 @implementation JSMessagesViewController
+
+static NSString * PHOTO_LIBARARY = @"Photo Library";
+static NSString * TAKE_PHOTO = @"Take Photo";
 
 #pragma mark - Initialization
 - (void)setup
@@ -85,6 +90,12 @@
                    action:@selector(sendPressed:)
          forControlEvents:UIControlEventTouchUpInside];
     [self.inputToolBarView setSendButton:sendButton];
+    
+    UIButton *takePhotoButton = [[UIButton alloc] initWithFrame:CGRectMake(LEFT_PADDING, self.inputToolBarView.frame.size.height / 2.0 - TAKE_PHOTO_BUTTON_WIDTH/2.0, TAKE_PHOTO_BUTTON_WIDTH, TAKE_PHOTO_BUTTON_WIDTH)];
+    [takePhotoButton setBackgroundImage:[UIImage imageNamed:@"caremar.png"] forState:UIControlStateNormal];
+    [takePhotoButton addTarget:self action:@selector(takePhotoPressed:) forControlEvents:UIControlEventTouchUpInside];
+    [self.inputToolBarView setTakePhotoButton:takePhotoButton];
+    
     [self.view addSubview:self.inputToolBarView];
 }
 
@@ -117,7 +128,6 @@
 {
     [self.tableView reloadData];
     [self scrollToBottomAnimated:YES];
-    [self.inputToolBarView.textView becomeFirstResponder];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -159,6 +169,42 @@
 {
     [self.delegate sendPressed:sender
                       withText:[self.inputToolBarView.textView.text trimWhitespace]];
+}
+
+#pragma mark - ActionSheet delegate
+- (void)actionSheet:(WLActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    NSString *buttonString = [actionSheet buttonTitleAtIndex:buttonIndex];
+    UIImagePickerController *imagePicker = [[UIImagePickerController alloc]init];
+    imagePicker.delegate = self;
+    if ([TAKE_PHOTO isEqualToString:buttonString]) {
+        imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        [self presentViewController:imagePicker animated:YES completion:nil];
+    } else if ([PHOTO_LIBARARY isEqualToString:buttonString]) {
+        imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        imagePicker.mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeSavedPhotosAlbum];
+        imagePicker.allowsEditing = NO;
+        [self presentViewController:imagePicker animated:YES completion:nil];
+    }
+}
+
+- (void)takePhotoPressed:(UIButton *)sender
+{
+    WLActionSheet *as;
+    if (![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        as = [[WLActionSheet alloc]initWithTitle:nil
+                                        delegate:self
+                               cancelButtonTitle:@"Cancel"
+                          destructiveButtonTitle:nil
+                               otherButtonTitles:PHOTO_LIBARARY, nil];
+    } else {
+        as = [[WLActionSheet alloc]initWithTitle:nil
+                                                   delegate:self
+                                          cancelButtonTitle:@"Cancel"
+                                     destructiveButtonTitle:nil
+                                          otherButtonTitles:TAKE_PHOTO, PHOTO_LIBARARY, nil];
+    }
+    [as showInView:self.view];
 }
 
 #pragma mark - Table view data source
@@ -214,7 +260,7 @@
 #pragma mark - Table view delegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return [JSBubbleMessageCell neededHeightForText:[self.dataSource textForRowAtIndexPath:indexPath]
+    return [JSBubbleMessageCell neededHeightForMessage:[self.dataSource textForRowAtIndexPath:indexPath]
                                           timestamp:[self shouldHaveTimestampForRowAtIndexPath:indexPath]
                                              avatar:[self shouldHaveAvatarForRowAtIndexPath:indexPath]];
 }
@@ -335,6 +381,7 @@
                                                                       inputViewFrame.size.width,
                                                                       inputViewFrame.size.height + changeInHeight);
                              [self.inputToolBarView.sendButton setCenter:CGPointMake(self.inputToolBarView.sendButton.center.x, self.inputToolBarView.frame.size.height/2.0)];
+                             [self.inputToolBarView.takePhotoButton setCenter:CGPointMake(self.inputToolBarView.takePhotoButton.center.x, self.inputToolBarView.frame.size.height/2.0)];
                          }
                          completion:^(BOOL finished) {
                              if(isShrinking)
@@ -420,6 +467,16 @@
     CGPoint keyboardOrigin = [self.view convertPoint:pt fromView:nil];
     inputViewFrame.origin.y = keyboardOrigin.y - inputViewFrame.size.height;
     self.inputToolBarView.frame = inputViewFrame;
+}
+
+- (void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    UIImage * image = [info objectForKey:UIImagePickerControllerOriginalImage];
+//    UIViewController* infoController = [self.storyboard instantiateViewControllerWithIdentifier:@"WelcomeViewController"];
+//    [picker pushViewController:infoController animated:YES];
+    [self dismissViewControllerAnimated:YES completion:^{
+        [self.delegate selectedImage:image];
+    }];
 }
 
 @end

@@ -37,14 +37,18 @@
 #import "JSMessageInputView.h"
 #import "NSString+JSMessagesView.h"
 #import "UIImage+JSMessagesView.h"
+#import <SDWebImage/UIImageView+WebCache.h>
+#import "WeedImageController.h"
+#import "ImageUtil.h"
 
 CGFloat const kJSAvatarSize = 50.0f;
 
 #define kMarginTop 8.0f
-#define kMarginBottom 4.0f
+#define kMarginBottom 8.0f
 #define kPaddingTop 8.0f
 #define kPaddingBottom 8.0f
 #define kBubblePaddingRight 35.0f
+#define kMaxImageWidth 200.0f
 
 @interface JSBubbleView()
 
@@ -61,7 +65,7 @@ CGFloat const kJSAvatarSize = 50.0f;
 
 @synthesize type;
 @synthesize style;
-@synthesize text;
+@synthesize message;
 @synthesize selectedToShowCopyMenu;
 
 #pragma mark - Setup
@@ -81,13 +85,20 @@ CGFloat const kJSAvatarSize = 50.0f;
         [self setup];
         self.type = bubleType;
         self.style = bubbleStyle;
+        self.imageView = [[WLImageView alloc] initWithFrame:CGRectMake(0, 0, rect.size.width, rect.size.height)];
+        [self addSubview:self.imageView];
+        self.imageView.hidden = true;
+        self.imageView.allowFullScreenDisplay = true;
+        self.imageView.shouldDownloadForFullScreenDisplay = false;
+        UITapGestureRecognizer *singleFingerTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
+        [self addGestureRecognizer:singleFingerTap];
     }
     return self;
 }
 
 - (void)dealloc
 {
-    self.text = nil;
+    self.message = nil;
 }
 
 #pragma mark - Setters
@@ -103,9 +114,9 @@ CGFloat const kJSAvatarSize = 50.0f;
     [self setNeedsDisplay];
 }
 
-- (void)setText:(NSString *)newText
+- (void)setMessage:(Message *)newMessage
 {
-    text = newText;
+    message = newMessage;
     [self setNeedsDisplay];
 }
 
@@ -118,9 +129,9 @@ CGFloat const kJSAvatarSize = 50.0f;
 #pragma mark - Drawing
 - (CGRect)bubbleFrame
 {
-    CGSize bubbleSize = [JSBubbleView bubbleSizeForText:self.text];
+    CGSize bubbleSize = [JSBubbleView bubbleSizeForMessage:self.message];
     return CGRectMake((self.type == JSBubbleMessageTypeOutgoing ? self.frame.size.width - bubbleSize.width : 0.0f),
-                      kMarginTop,
+                      self.frame.size.height - kMarginBottom - bubbleSize.height,
                       bubbleSize.width,
                       bubbleSize.height);
 }
@@ -148,31 +159,96 @@ CGFloat const kJSAvatarSize = 50.0f;
 - (void)drawRect:(CGRect)frame
 {
     [super drawRect:frame];
-    
-	UIImage *image = (self.selectedToShowCopyMenu) ? [self bubbleImageHighlighted] : [self bubbleImage];
-    
     CGRect bubbleFrame = [self bubbleFrame];
-	[image drawInRect:bubbleFrame blendMode:kCGBlendModeNormal alpha:0.8];
-	
-	CGSize textSize = [JSBubbleView textSizeForText:self.text];
-	
-    CGFloat textX = image.leftCapWidth - 3.0f + (self.type == JSBubbleMessageTypeOutgoing ? bubbleFrame.origin.x : 0.0f);
+    UIImage *bgImage = (self.selectedToShowCopyMenu) ? [self bubbleImageHighlighted] : [self bubbleImage];
+    [bgImage drawInRect:bubbleFrame blendMode:kCGBlendModeNormal alpha:0.8];
+    NSNumber * message_id = message.id;
+    if (message.image) {
+        [[SDWebImageManager sharedManager] downloadImageWithURL:[WeedImageController imageURLOfMessage:message]
+                                                        options:(SDWebImageHandleCookies)
+                                                       progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+                                                           
+                                                       } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+                                                           if (finished && [message_id isEqualToNumber:message.id]/*check if cell has been reused*/) {
+                                                               if (image) {
+                                                                   UIImage *originalImg = [ImageUtil renderImage:image atSize:bubbleFrame.size];
+                                                                   [self.imageView setFrame:bubbleFrame];
+                                                                   self.imageView.hidden = false;
+                                                                   [self.imageView setAlpha:0.0];
+                                                                   self.imageView.image = image;
+                                                                   UIImage *maskImgOrg = [JSBubbleView bubbleImageMaskForType:self.type style:self.style];
+                                                                   
+                                                                   UIImage *maskImg = [ImageUtil renderImage:maskImgOrg atSize:originalImg.size];
+                                                                   
+                                                                   [[self maskImage:originalImg withMask:maskImg] drawInRect:bubbleFrame blendMode:kCGBlendModeNormal alpha:1.0];
+                                                               } else {
+                                                                   UIImage * missingImage = [ImageUtil colorImage:[UIImage imageNamed:@"Oops.png"] color:[UIColor whiteColor]];
+                                                                   double height = missingImage.size.height;
+                                                                   double width = missingImage.size.width;
+                                                                   if (width > bubbleFrame.size.width) {
+                                                                       height = bubbleFrame.size.width/width*height;
+                                                                       width = bubbleFrame.size.width;
+                                                                   }
+                                                                   if (height > bubbleFrame.size.height) {
+                                                                       width = bubbleFrame.size.height/height*width;
+                                                                       height = bubbleFrame.size.height;
+                                                                   }
+                                                                   
+                                                                   [missingImage drawInRect:CGRectMake(bubbleFrame.origin.x + bubbleFrame.size.width/2.0 - width/2.0, bubbleFrame.origin.y + bubbleFrame.size.height/2.0 - height/2.0, width, height) blendMode:kCGBlendModeNormal alpha:1.0];
+                                                                   
+                                                               }
+                                                               
+                                                               [self setNeedsDisplay];
+                                                           }
+                                                       }];
+        
+        
+        
+    } else {
+        self.imageView.hidden = true;
+        
+        CGSize textSize = [JSBubbleView textSizeForText:self.message.message];
+        
+        CGFloat textX = bgImage.leftCapWidth - 3.0f + (self.type == JSBubbleMessageTypeOutgoing ? bubbleFrame.origin.x : 0.0f);
+        
+        CGRect textFrame = CGRectMake(textX,
+                                      kPaddingTop + kMarginTop,
+                                      textSize.width,
+                                      textSize.height);
+        self.type == JSBubbleMessageTypeOutgoing ? [[UIColor blackColor] set] : [[UIColor whiteColor] set];
+        
+        NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+        /// Set line break mode
+        paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
+        /// Set text alignment
+        paragraphStyle.alignment = NSTextAlignmentLeft;
+        NSDictionary *attributes = @{ NSFontAttributeName: [JSBubbleView font],
+                                      NSParagraphStyleAttributeName: paragraphStyle,
+                                      NSForegroundColorAttributeName: (self.type == JSBubbleMessageTypeOutgoing ? [UIColor blackColor] : [UIColor whiteColor])};
+        [self.message.message drawInRect:textFrame withAttributes:attributes];
+    }
+}
+
+- (UIImage*) maskImage:(UIImage *)originalImage withMask:(UIImage *)maskImage {
     
-    CGRect textFrame = CGRectMake(textX,
-                                  kPaddingTop + kMarginTop,
-                                  textSize.width,
-                                  textSize.height);
-    self.type == JSBubbleMessageTypeOutgoing ? [[UIColor blackColor] set] : [[UIColor whiteColor] set];
+    CGImageRef maskRef = maskImage.CGImage;
     
-    NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
-    /// Set line break mode
-    paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
-    /// Set text alignment
-    paragraphStyle.alignment = NSTextAlignmentLeft;
-    NSDictionary *attributes = @{ NSFontAttributeName: [JSBubbleView font],
-                                  NSParagraphStyleAttributeName: paragraphStyle,
-                                  NSForegroundColorAttributeName: (self.type == JSBubbleMessageTypeOutgoing ? [UIColor blackColor] : [UIColor whiteColor])};
-    [self.text drawInRect:textFrame withAttributes:attributes];
+    CGImageRef mask = CGImageMaskCreate(CGImageGetWidth(maskRef),
+                                        CGImageGetHeight(maskRef),
+                                        CGImageGetBitsPerComponent(maskRef),
+                                        CGImageGetBitsPerPixel(maskRef),
+                                        CGImageGetBytesPerRow(maskRef),
+                                        CGImageGetDataProvider(maskRef), NULL, false);
+    
+    CGImageRef masked = CGImageCreateWithMask([originalImage CGImage], mask);
+    return [UIImage imageWithCGImage:masked];
+    
+}
+
+- (void)handleSingleTap:(UITapGestureRecognizer *)recognizer {
+    if (!self.imageView.hidden) {
+        [self.imageView displayFullScreen];
+    }
 }
 
 #pragma mark - Bubble view
@@ -184,6 +260,21 @@ CGFloat const kJSAvatarSize = 50.0f;
             
         case JSBubbleMessageTypeOutgoing:
             return [self bubbleImageTypeOutgoingWithStyle:aStyle];
+            
+        default:
+            return nil;
+    }
+}
+
++ (UIImage *)bubbleImageMaskForType:(JSBubbleMessageType)aType style:(JSBubbleMessageStyle)aStyle
+{
+    //need to add support for different style
+    switch (aType) {
+        case JSBubbleMessageTypeIncoming:
+            return [UIImage bubbleImageIncomingMask];
+            
+        case JSBubbleMessageTypeOutgoing:
+            return [UIImage bubbleImageOutgoingMask];
             
         default:
             return nil;
@@ -247,16 +338,27 @@ CGFloat const kJSAvatarSize = 50.0f;
     return CGSizeMake(ceil(size.width), ceil(size.height));
 }
 
-+ (CGSize)bubbleSizeForText:(NSString *)txt
++ (CGSize)bubbleSizeForMessage:(Message *)message
 {
-	CGSize textSize = [JSBubbleView textSizeForText:txt];
-	return CGSizeMake(textSize.width + kBubblePaddingRight,
-                      textSize.height + kPaddingTop + kPaddingBottom);
+    if (message.image) {
+        WeedImage *image = (WeedImage *)message.image;
+
+        if ([image.width floatValue] < kMaxImageWidth) {
+            return CGSizeMake([image.width floatValue], [image.height floatValue]);
+        } else {
+            return CGSizeMake(kMaxImageWidth,
+                              [image.height floatValue] /[image.width floatValue] * kMaxImageWidth);
+        }
+    } else {
+        CGSize textSize = [JSBubbleView textSizeForText:message.message];
+        return CGSizeMake(textSize.width + kBubblePaddingRight,
+                          textSize.height + kPaddingTop + kPaddingBottom);
+    }
 }
 
-+ (CGFloat)cellHeightForText:(NSString *)txt
++ (CGFloat)cellHeightForMessage:(Message *)message
 {
-    return [JSBubbleView bubbleSizeForText:txt].height + kMarginTop + kMarginBottom;
+    return [JSBubbleView bubbleSizeForMessage:message].height + kMarginTop + kMarginBottom;
 }
 
 + (int)maxCharactersPerLine

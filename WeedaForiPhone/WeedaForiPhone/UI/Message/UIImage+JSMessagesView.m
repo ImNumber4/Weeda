@@ -114,29 +114,31 @@
 #pragma mark - Bubble cap insets
 - (UIImage *)makeStretchableDefaultIncoming
 {
-    return [self resizableImageWithCapInsets:UIEdgeInsetsMake(15.0f, 20.0f, 15.0f, 20.0f)];
-                                //resizingMode:UIImageResizingModeStretch];
+    return [self resizableImageWithCapInsets:UIEdgeInsetsMake(15.0f, 20.0f, 15.0f, 20.0f) resizingMode:UIImageResizingModeStretch];
 }
 
 - (UIImage *)makeStretchableDefaultOutgoing
 {
-    return [self resizableImageWithCapInsets:UIEdgeInsetsMake(15.0f, 20.0f, 15.0f, 20.0f)];
-                                //resizingMode:UIImageResizingModeStretch];
+    return [self resizableImageWithCapInsets:UIEdgeInsetsMake(15.0f, 20.0f, 15.0f, 20.0f) resizingMode:UIImageResizingModeStretch];
 }
 
 - (UIImage *)makeStretchableSquareIncoming
 {
-    return [self resizableImageWithCapInsets:UIEdgeInsetsMake(15.0f, 25.0f, 16.0f, 23.0f)];
-                                //resizingMode:UIImageResizingModeStretch];
+    return [self resizableImageWithCapInsets:UIEdgeInsetsMake(15.0f, 25.0f, 15.0f, 20.0f) resizingMode:UIImageResizingModeStretch];
 }
 
 - (UIImage *)makeStretchableSquareOutgoing
 {
-    return [self resizableImageWithCapInsets:UIEdgeInsetsMake(15.0f, 18.0f, 16.0f, 23.0f)];
-                                //resizingMode:UIImageResizingModeStretch];
+    return [self resizableImageWithCapInsets:UIEdgeInsetsMake(15.0f, 15.0f, 15.0f, 20.0f) resizingMode:UIImageResizingModeStretch];
 }
 
 #pragma mark - Incoming message bubbles
+
++ (UIImage *)bubbleImageIncomingMask
+{
+    return [[UIImage imageNamed:@"bubble-square-incoming-image-mask"] makeStretchableDefaultIncoming];
+}
+
 + (UIImage *)bubbleDefaultIncoming
 {
     return [[UIImage imageNamed:@"bubble-default-incoming"] makeStretchableDefaultIncoming];
@@ -163,6 +165,12 @@
 }
 
 #pragma mark - Outgoing message bubbles
+
++ (UIImage *)bubbleImageOutgoingMask
+{
+    return [[UIImage imageNamed:@"bubble-square-outgoing-image-mask"] makeStretchableDefaultIncoming];
+}
+
 + (UIImage *)bubbleDefaultOutgoing
 {
     return [[UIImage imageNamed:@"bubble-default-outgoing"] makeStretchableDefaultOutgoing];

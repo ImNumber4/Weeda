@@ -123,7 +123,6 @@
                                                                              self.contentView.frame.size.height - kJSAvatarSize,
                                                                              kJSAvatarSize,
                                                                              kJSAvatarSize)];
-        
         self.avatarImageView.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin
                                                  | UIViewAutoresizingFlexibleLeftMargin
                                                  | UIViewAutoresizingFlexibleRightMargin
@@ -139,7 +138,6 @@
     self.bubbleView = [[JSBubbleView alloc] initWithFrame:frame
                                                bubbleType:type
                                               bubbleStyle:bubbleStyle];
-    
     [self.contentView addSubview:self.bubbleView];
     [self.contentView sendSubviewToBack:self.bubbleView];
 }
@@ -180,9 +178,9 @@
 }
 
 #pragma mark - Message Cell
-- (void)setMessage:(NSString *)msg
+- (void)setMessage:(Message *)message
 {
-    self.bubbleView.text = msg;
+    self.bubbleView.message = message;
 }
 
 - (void)setTimestamp:(NSDate *)date
@@ -212,11 +210,11 @@
     self.avatarImageView.image = styledImg;
 }
 
-+ (CGFloat)neededHeightForText:(NSString *)bubbleViewText timestamp:(BOOL)hasTimestamp avatar:(BOOL)hasAvatar
++ (CGFloat)neededHeightForMessage:(Message *)message timestamp:(BOOL)hasTimestamp avatar:(BOOL)hasAvatar
 {
     CGFloat timestampHeight = (hasTimestamp) ? TIMESTAMP_LABEL_HEIGHT : 0.0f;
     CGFloat avatarHeight = (hasAvatar) ? kJSAvatarSize : 0.0f;
-    return MAX(avatarHeight, [JSBubbleView cellHeightForText:bubbleViewText]) + timestampHeight;
+    return MAX(avatarHeight, [JSBubbleView cellHeightForMessage:message]) + timestampHeight;
 }
 
 #pragma mark - Copying
@@ -240,7 +238,7 @@
 
 - (void)copy:(id)sender
 {
-    [[UIPasteboard generalPasteboard] setString:self.bubbleView.text];
+    [[UIPasteboard generalPasteboard] setString:self.bubbleView.message.message];
     [self resignFirstResponder];
 }
 

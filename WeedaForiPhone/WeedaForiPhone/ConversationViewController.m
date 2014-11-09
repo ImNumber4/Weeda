@@ -12,6 +12,7 @@
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "NSString+JSMessagesView.h"
 #import "UserTableViewCell.h"
+#import "WeedImageController.h"
 
 @interface ConversationViewController ()
 
@@ -80,12 +81,25 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
         [self.fetchedResultsController setDelegate:self];
         
         
-        UIImageView *avatar =  [[UIImageView alloc] init];
-        [avatar sd_setImageWithURL:[WeedImageController imageURLOfAvatar:self.participant_id] placeholderImage:[UIImage imageNamed:@"avatar.jpg"] options:SDWebImageHandleCookies];
-        self.participant_avatar = avatar.image;
+        self.participant_avatar = [UIImage imageNamed:@"avatar.jpg"];
+        
+        [[SDWebImageManager sharedManager] downloadImageWithURL:[WeedImageController imageURLOfAvatar:self.participant_id]
+                                                        options:(SDWebImageHandleCookies | SDWebImageRefreshCached)
+                                                       progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+                                                           
+                                                       } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+                                                           self.participant_avatar = image;
+                                                       }];
+        
+        self.current_user_avatar = [UIImage imageNamed:@"avatar.jpg"];
         AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-        [avatar sd_setImageWithURL:[WeedImageController imageURLOfAvatar:appDelegate.currentUser.id] placeholderImage:[UIImage imageNamed:@"avatar.jpg"] options:SDWebImageHandleCookies];
-        self.current_user_avatar = avatar.image;
+        [[SDWebImageManager sharedManager] downloadImageWithURL:[WeedImageController imageURLOfAvatar:appDelegate.currentUser.id]
+                                                        options:(SDWebImageHandleCookies | SDWebImageRefreshCached)
+                                                       progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+                                                           
+                                                       } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+                                                           self.current_user_avatar = image;
+                                                       }];
         
         self.inputToolBarView.hidden = false;
         self.title = self.participant_username;
@@ -245,6 +259,29 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
     }];
 }
 
+- (void)selectedImage:(UIImage *)image
+{
+    RKManagedObjectStore *objectStore = [[RKObjectManager sharedManager] managedObjectStore];
+    NSString *url = [NSString stringWithFormat:@"message/upload/%@", self.participant_id];
+    NSMutableURLRequest *request = [[RKObjectManager sharedManager] multipartFormRequestWithObject:nil method:RKRequestMethodPOST path:url parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        [formData appendPartWithFileData:UIImageJPEGRepresentation(image, 100)
+                                    name:@"image"
+                                fileName:@"image.jpeg"
+                                mimeType:@"image/jpeg"];
+    }];
+    
+    RKManagedObjectRequestOperation *operation = [[RKObjectManager sharedManager] managedObjectRequestOperationWithRequest:(NSURLRequest *)request
+                                                                                                      managedObjectContext:(NSManagedObjectContext *)objectStore.mainQueueManagedObjectContext
+                                                                                                     success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                                                                                                         [self loadData];
+                                                                                                         [self showConversation];
+                                                                                                     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                                                                                                         NSLog(@"Uploading image failed. url:%@, error: %@", url, error);
+                                                                                                     }];
+    
+    [[RKObjectManager sharedManager] enqueueObjectRequestOperation:operation];
+}
+
 - (JSBubbleMessageType)messageTypeForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     Message *message = [self.fetchedResultsController objectAtIndexPath:indexPath];
@@ -297,10 +334,10 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
 //
 
 #pragma mark - Messages view data source
-- (NSString *)textForRowAtIndexPath:(NSIndexPath *)indexPath
+- (Message *)textForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     Message *message = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    return message.message;
+    return message;
 }
 
 - (NSDate *)timestampForRowAtIndexPath:(NSIndexPath *)indexPath

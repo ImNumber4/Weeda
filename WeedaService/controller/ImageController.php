@@ -19,13 +19,8 @@ class ImageController extends Controller
 		error_log('Image tmp name: ' . $_FILES['image']['tmp_name']);
 
 		if (!saveImageForWeedsToServer($_FILES['image'], $user_id, $weed_id)) {
-			header('Content-type: application/json');
-			http_response_code(500);
-			return;
+			throw new DependencyFailureException('Failed to upload image for weed ' . $weed_id);
 		}
-
-		header('Content-type: application/json');
-		http_response_code(200);
 	}
 	
 	public function query($image_id, $parameters)
@@ -57,54 +52,7 @@ class ImageController extends Controller
 		ob_end_flush();
 		imagedestroy($image);
 	}
-	
-	private function update_image_metadata_weed($image, $user_id, $weed_id)
-	{
-		$image_id = strstr($image['name'], '.', true);
-		$image_url = 'weed_' . $user_id . '_' . $weed_id . '_' . $image_id;
-		$size = getimagesize($image['tmp_name']);
-		
-		$weedDAO = new WeedDAO();
-		$image_metadata = $weedDAO->getImageMetadata($weed_id);
-		error_log('Image_metadata1: ' . print_r($image_metadata, true));
-		$image_metadata[] = array('url'=>$image_url, 'width'=>$size[0], 'height'=>$size[1]);
-		error_log('Image_metadata2: ' . print_r($image_metadata, true));
-		
-		$test = $weedDAO->getImageMetadata($weed_id);
-		error_log('Image_metadata5: ' . print_r($test, true));
-		
-		return $weedDAO->setImageMetadataWeed(json_encode($image_metadata), $weed_id);
-	}
-	
-	public function query_image_metadata($weed_id)
-	{
-		if (!isset($weed_id)) {
-			throw new InvalidRequestException('Input error, weed_id is null');
-		}
-		
-		$weedDAO = new WeedDAO();
-		$user_id = $weedDAO->get_user_id($weed_id);
-		if (!isset($user_id)) {
-			error_log('Weed not exist, weed_id is' . $weed_id);
-			throw new InvalidRequestException('Weed not exist, weed_id is' . $weed_id);
-		}
-		$image_path = $this->get_weed_image_path($user_id, $weed_id);
-		$images = scandir($image_path);
 
-		$array_image = array();
-		for ($i=0; $i < count($images); $i++) {
-			$image = $image_path . $images[$i];
-			if (is_dir($image)) {
-				continue;
-			}
-			$image_id = 'weed_' . $user_id . '_' . $weed_id . '_' . str_replace(strrchr($images[$i], "."), "", $images[$i]); 
-			$size = getimagesize($image);
-			$array_image[] = array('url'=>$image_id, 'width'=>$size[0], 'height'=>$size[1]);
-		}
-		
-		return $array_image;
-	}
-	
 	private function getImageForServer($image_url)
 	{	
 		$url_arr = array();
@@ -127,7 +75,16 @@ class ImageController extends Controller
 				return null;
 			}
 			$filename = $this->get_weed_image_filename($user_id, $weed_id, $count);
-		} else if ($type == 'avatar') {
+		} else if ($type == 'message') {
+			$user_id = array_shift($url_arr);
+			$message_id = array_shift($url_arr);
+			$quality = array_shift($url_arr);
+			if (!$user_id || !$message_id) {
+				error_log('Invalid url, url: ' . $image_url);
+				return null;
+			}
+			$filename = $this->get_message_image_filename($user_id, $message_id);
+		} elseif ($type == 'avatar') {
 			$user_id = array_shift($url_arr);
 			if (!user_id) {
 				error_log('Invalid url, url: ' . $image_url);
@@ -149,12 +106,12 @@ class ImageController extends Controller
 	
 	private function get_weed_image_filename($user_id, $weed_id, $count)
 	{
-		return $this->UPLOAD_BASE_PATH . $user_id . '/' . $weed_id . '/' . $count . '.jpeg';
+		return $this->UPLOAD_BASE_PATH . $user_id . '/weed/' . $weed_id . '/' . $count . '.jpeg';
 	}
 	
-	private function get_weed_image_path($user_id, $weed_id)
+	private function get_message_image_filename($user_id, $message_id)
 	{
-		return $this->UPLOAD_BASE_PATH . $user_id . '/' . $weed_id . '/';
+		return $this->UPLOAD_BASE_PATH . $user_id . '/message/' . $message_id . '.jpeg';
 	}
 	
 	private function get_avatar_filename($user_id)
@@ -162,5 +119,4 @@ class ImageController extends Controller
 		return $this->UPLOAD_BASE_PATH . $user_id . '/avatar/avatar.jpeg';
 	}
 }
-
 ?>

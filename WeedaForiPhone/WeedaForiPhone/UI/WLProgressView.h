@@ -18,6 +18,8 @@
 
 @property (nonatomic) CGFloat progress;
 
+@property (nonatomic) BOOL changeAlphaValueDuringAnimation;
+
 - (void)setTrackImage:(UIImage *)image;
 - (void)setProgressImage:(UIImage *)image;
 

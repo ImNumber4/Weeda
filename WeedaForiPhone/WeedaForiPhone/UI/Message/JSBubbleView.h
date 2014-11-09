@@ -34,6 +34,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "WLImageView.h"
 
 extern CGFloat const kJSAvatarSize;
 
@@ -54,7 +55,8 @@ typedef enum {
 
 @property (assign, nonatomic) JSBubbleMessageType type;
 @property (assign, nonatomic) JSBubbleMessageStyle style;
-@property (copy, nonatomic) NSString *text;
+@property (copy, nonatomic) Message *message;
+@property (strong, nonatomic) WLImageView *imageView;
 @property (assign, nonatomic) BOOL selectedToShowCopyMenu;
 
 #pragma mark - Initialization
@@ -71,11 +73,13 @@ typedef enum {
 + (UIImage *)bubbleImageForType:(JSBubbleMessageType)aType
                           style:(JSBubbleMessageStyle)aStyle;
 
++ (UIImage *)bubbleImageMaskForType:(JSBubbleMessageType)aType style:(JSBubbleMessageStyle)aStyle;
+
 + (UIFont *)font;
 
 + (CGSize)textSizeForText:(NSString *)txt;
-+ (CGSize)bubbleSizeForText:(NSString *)txt;
-+ (CGFloat)cellHeightForText:(NSString *)txt;
++ (CGSize)bubbleSizeForMessage:(Message *)message;
++ (CGFloat)cellHeightForMessage:(Message *)message;
 
 + (int)maxCharactersPerLine;
 + (int)numberOfLinesForMessage:(NSString *)txt;

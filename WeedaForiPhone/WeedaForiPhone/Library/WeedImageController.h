@@ -15,6 +15,8 @@
 
 + (NSURL *)imageURLOfWeed: (Weed *)weed;
 
++ (NSURL *)imageURLOfMessage:(Message *)message;
+
 + (NSString *)imageRelatedURLWithWeed: (Weed *)weed count:(NSNumber *)count;
 
 + (NSURL *)imageURLOfWeedId:(NSNumber *)weedId userId:(NSNumber *)userId count:(long)count quality:(long)quality;

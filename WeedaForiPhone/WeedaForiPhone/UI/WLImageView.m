@@ -31,20 +31,29 @@
 }
 */
 
-- (id)initWithFrame:(CGRect)frame imageURL:(NSURL *)url
+- (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.contentMode = UIViewContentModeScaleAspectFit;
-        [self sd_setImageWithURL:url placeholderImage:nil options:SDWebImageHandleCookies progress:^(NSInteger receivedSize, NSInteger expectedSize) {
-            ;
-        } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-            ;
-        }];
-        
-        _allowFullScreenDisplay = NO;
+        [self initVariables];
     }
-    
+    return self;
+}
+
+- (void) initVariables
+{
+    self.contentMode = UIViewContentModeScaleAspectFit;
+    _allowFullScreenDisplay = NO;
+    _changeAlphaValueDuringAnimation = YES;
+    _shouldDownloadForFullScreenDisplay = YES;
+}
+
+- (id)initWithCoder:(NSCoder *)decoder
+{
+    self = [super initWithCoder:decoder];
+    if (self) {
+        [self initVariables];
+    }
     return self;
 }
 
@@ -122,10 +131,12 @@
 
 - (void)displayFullScreen
 {
-    if (!_imageURL) {
+    if (!_imageURL && _shouldDownloadForFullScreenDisplay) {
         return;
     }
     _maxDisplayView = [[WeedImageMaxDisplayView alloc]initWithImageView:self];
+    _maxDisplayView.changeAlphaValueDuringAnimation = _changeAlphaValueDuringAnimation;
+    _maxDisplayView.shouldDownloadForFullScreenDisplay = _shouldDownloadForFullScreenDisplay;
     self.userInteractionEnabled = YES;
     [(UIView *)[UIApplication sharedApplication].windows.lastObject addSubview:_maxDisplayView];
     [_maxDisplayView display:self];

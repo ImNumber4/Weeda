@@ -15,5 +15,5 @@
 @dynamic height;
 
 @dynamic parent;
-
+@dynamic message_parent;
 @end

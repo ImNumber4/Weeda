@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6252" systemVersion="14A389" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6252" systemVersion="14B17" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Message" representedClassName="Message" parentEntity="RemoteObject" syncable="YES">
         <attribute name="is_read" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="message" optional="YES" attributeType="String" syncable="YES"/>
@@ -8,6 +8,7 @@
         <attribute name="related_weed_id" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="sender_id" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="image" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="WeedImage" inverseName="message_parent" inverseEntity="WeedImage" syncable="YES"/>
     </entity>
     <entity name="RemoteObject" representedClassName="RemoteObject" isAbstract="YES" syncable="YES">
         <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
@@ -33,12 +34,13 @@
         <attribute name="height" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="imageId" optional="YES" attributeType="Integer 32" defaultValueString="-1" syncable="YES"/>
         <attribute name="width" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <relationship name="message_parent" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Message" inverseName="image" inverseEntity="Message" syncable="YES"/>
         <relationship name="parent" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Weed" inverseName="images" inverseEntity="Weed" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Message" positionX="207" positionY="191" width="146" height="150"/>
+        <element name="Message" positionX="207" positionY="191" width="146" height="163"/>
         <element name="RemoteObject" positionX="-90" positionY="-61" width="128" height="90"/>
-        <element name="Weed" positionX="18" positionY="212" width="144" height="240"/>
-        <element name="WeedImage" positionX="72" positionY="90" width="128" height="105"/>
+        <element name="Weed" positionX="18" positionY="212" width="144" height="238"/>
+        <element name="WeedImage" positionX="72" positionY="90" width="128" height="118"/>
     </elements>
 </model>

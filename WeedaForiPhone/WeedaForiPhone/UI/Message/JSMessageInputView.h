@@ -37,7 +37,8 @@
 #import "JSDismissiveTextView.h"
 
 #define SEND_BUTTON_WIDTH 60.0f
-#define LEFT_PADDING 5.0f
+#define TAKE_PHOTO_BUTTON_WIDTH 20.0f
+#define LEFT_PADDING 10.0f
 #define CHARACTER_COUNT_LABEL_WIDTH 25.0f
 #define CHARACTER_COUNT_LABEL_RIGHT_PAD 5.0f
 #define MAX_CHARACTER_COUNT 140
@@ -48,6 +49,7 @@
 @property (strong, nonatomic) JSDismissiveTextView *textView;
 @property (strong, nonatomic) UILabel *characterCountLabel;
 @property (strong, nonatomic) UIButton *sendButton;
+@property (strong, nonatomic) UIButton *takePhotoButton;
 
 #pragma mark - Initialization
 - (id)initWithFrame:(CGRect)frame

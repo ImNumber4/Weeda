@@ -50,6 +50,7 @@
 @implementation JSMessageInputView
 
 @synthesize sendButton;
+@synthesize takePhotoButton;
 
 #pragma mark - Initialization
 - (id)initWithFrame:(CGRect)frame
@@ -81,10 +82,10 @@
 
 - (void)setupTextView
 {
-    CGFloat width = self.frame.size.width - SEND_BUTTON_WIDTH - LEFT_PADDING;
+    CGFloat width = self.frame.size.width - SEND_BUTTON_WIDTH - LEFT_PADDING - TAKE_PHOTO_BUTTON_WIDTH - LEFT_PADDING;
     CGFloat height = [JSMessageInputView textViewLineHeight];
     
-    self.textView = [[JSDismissiveTextView  alloc] initWithFrame:CGRectMake(LEFT_PADDING, (self.frame.size.height - [JSMessageInputView textViewLineHeight])/2.0, width, height)];
+    self.textView = [[JSDismissiveTextView  alloc] initWithFrame:CGRectMake(LEFT_PADDING * 2 + TAKE_PHOTO_BUTTON_WIDTH, (self.frame.size.height - [JSMessageInputView textViewLineHeight])/2.0, width, height)];
     self.textView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     self.textView.textContainerInset = UIEdgeInsetsMake(5, 0, 5, CHARACTER_COUNT_LABEL_WIDTH + CHARACTER_COUNT_LABEL_RIGHT_PAD);
     self.textView.backgroundColor = [UIColor whiteColor];
@@ -126,6 +127,16 @@
     sendButton = btn;
     [self addSubview:self.sendButton];
 }
+
+- (void)setTakePhotoButton:(UIButton *)btn
+{
+    if(takePhotoButton)
+        [takePhotoButton removeFromSuperview];
+    
+    takePhotoButton = btn;
+    [self addSubview:self.takePhotoButton];
+}
+
 
 #pragma mark - Message input view
 - (void)adjustTextViewHeightBy:(CGFloat)changeInHeight

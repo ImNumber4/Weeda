@@ -7,8 +7,6 @@
 //
 
 #import "Message.h"
-#import "AppDelegate.h"
-
 
 @implementation Message
 
@@ -19,5 +17,6 @@
 @dynamic participant_id;
 @dynamic participant_username;
 @dynamic is_read;
+@dynamic image;
 
 @end

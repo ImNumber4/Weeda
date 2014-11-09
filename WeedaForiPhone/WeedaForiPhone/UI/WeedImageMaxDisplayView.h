@@ -16,6 +16,9 @@
     UIView *_backgroundView;
 }
 
+@property (nonatomic) BOOL changeAlphaValueDuringAnimation;
+@property (nonatomic) BOOL shouldDownloadForFullScreenDisplay;
+
 - (id)initWithImageView:(UIImageView *)imageView;
 - (void)display:(UIImageView *)imageView;
 

@@ -1,6 +1,7 @@
 <?php
 // ini_set('display_errors',1);
 // error_reporting(E_ALL);
+include './library/ImageHandler.php';
 
 class MessageController extends Controller
 {
@@ -35,6 +36,34 @@ class MessageController extends Controller
 	    return json_encode(array('id' => $id));
 	}
 	
+	public function upload($receiver_id)
+	{
+		$currentUser_id = $this->getCurrentUser();
+		$message = new Message();
+		$message->set_sender_id($currentUser_id);
+		$message->set_receiver_id($receiver_id);
+		$message->set_time(date('Y-m-d H:i:s'));
+		$message->set_type(Message::$MESSAGE_TYPE_MESSAGE);
+		list($width, $height) = getimagesize( $_FILES['image']['tmp_name']);
+		$metadata = array('width'=>$width, 'height'=>$height);
+		$message->set_image_metadata(json_encode($metadata));	
+		error_log('Image name: ' . $_FILES['image']['name']);
+		error_log('Image width: ' . $width);
+		error_log('Image height: ' . $height);
+		error_log('Image type: ' . $_FILES['image']['type']);
+		error_log('Image size: ' . $_FILES['image']['size']);
+		error_log('Image tmp name: ' . $_FILES['image']['tmp_name']);
+		$notification_message = $this->getCurrentUsername() . ' sent you a photo';
+		$message_id = $this->message_dao->create($message, $notification_message);
+		$_FILES['image']['name'] = $message_id . ".jpeg";
+		if (!saveImageForMessageToServer($_FILES['image'], $currentUser_id, $message_id)) {
+			$this->message_dao->delete($message_id);
+			throw new DependencyFailureException('Failed to upload image for message ' . $message_id);
+		}
+		$messages = $this->message_dao->query($currentUser_id, $message_id);
+	    return json_encode($messages[0]);
+	}
+	
 	private function parse_create_request_body() {
 		if ($_SERVER['REQUEST_METHOD'] != 'POST' && $_SERVER['REQUEST_METHOD'] != 'PUT') {
 			throw new InvalidRequestException('create message request has to be either POST or PUT.');
@@ -60,12 +89,7 @@ class MessageController extends Controller
 	}
 	
 	private function check_para($data)
-	{	
-		$message = trim($data->message);
-		if ($message == '') {
-			return 'Input error, message is null';
-		}
-			
+	{		
 		$time = trim($data->time);
 		if ($time == '') {
 			return 'Input error, time is null';

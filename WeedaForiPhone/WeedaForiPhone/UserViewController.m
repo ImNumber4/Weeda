@@ -21,6 +21,7 @@
 #import "ConversationViewController.h"
 #import "BlurView.h"
 #import "UIViewHelper.h"
+#import "ImageUtil.h"
 
 @interface UserViewController () <CropImageDelegate>
 
@@ -60,7 +61,11 @@ const NSInteger SHOW_FOLLOWINGS = 2;
         self.userAvatarCamera.hidden = NO;
         [self.userAvatar addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleCameraTapped)]];
         self.userAvatar.userInteractionEnabled = YES;
-        
+        self.userAvatarCamera.image = [ImageUtil colorImage:[UIImage imageNamed:@"caremar.png"] color:[UIColor whiteColor]];
+        self.userAvatarCamera.layer.shadowColor = [ColorDefinition greenColor].CGColor;
+        self.userAvatarCamera.layer.shadowOffset = CGSizeMake(0, 1);
+        self.userAvatarCamera.layer.shadowOpacity = 0.8;
+        self.userAvatarCamera.layer.shadowRadius = 2.0;
         self.userAvatar.allowFullScreenDisplay = NO;
     } else {
         self.userAvatarCamera.hidden = YES;

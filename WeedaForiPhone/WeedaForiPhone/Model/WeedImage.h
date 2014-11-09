@@ -14,6 +14,7 @@
 @property (nonatomic, retain) NSNumber * width;
 @property (nonatomic, retain) NSNumber * height;
 
-@property (nonatomic, retain) Weed *parent;
+@property (nonatomic, retain) Weed * parent;
+@property (nonatomic, retain) Message * message_parent;
 
 @end

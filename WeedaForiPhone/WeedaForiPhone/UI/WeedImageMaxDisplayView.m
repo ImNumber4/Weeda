@@ -52,6 +52,8 @@
         [self addGestureRecognizer:tapGesture];
         
         self.userInteractionEnabled = YES;
+        _changeAlphaValueDuringAnimation = YES;
+        _shouldDownloadForFullScreenDisplay = YES;
     }
     
     return self;
@@ -73,12 +75,16 @@
     _originalImageView = imageView;
     _imageView.frame = [self originalImageViewRect];
     _imageView.image = imageView.image;
+    if (_changeAlphaValueDuringAnimation) {
+        [_imageView setAlpha:0.0];
+    }
     
     [UIView animateWithDuration:0.5 animations:^{
         _imageView.frame = [self imageFrame];
         [_backgroundView setAlpha:0.9];
+        [_imageView setAlpha:1.0];
     } completion:^(BOOL finished) {
-        if (finished) {
+        if (finished && _shouldDownloadForFullScreenDisplay) {
             NSURL *imageURL = [WeedImageController imageURLOfImageId:imageView.imageId quality:[NSNumber numberWithInteger:100]];
             [_imageView setImageURL:imageURL animate:YES];
         }
@@ -96,6 +102,9 @@
         [self rotateImageView:UIDeviceOrientationPortrait];
         _imageView.frame = [self originalImageViewRect];
         [_backgroundView setAlpha:0.0];
+        if (_changeAlphaValueDuringAnimation) {
+            [_imageView setAlpha:0.0];
+        }
     } completion:^(BOOL finished) {
         [self removeFromSuperview];
     }];
