@@ -72,8 +72,23 @@ NSString * _deviceToken;
 
 - (void)signout
 {
-    [self clearLoginCookies];
-    _currentUser = nil;
+    if (_deviceToken) {
+        [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"user/unregisterDevice/%@", _deviceToken] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+            [self clearLoginCookies];
+            _currentUser = nil;
+            UIViewController *vc = self.window.rootViewController;
+            UIViewController *controller = [vc.storyboard instantiateViewControllerWithIdentifier:@"WelcomeViewController"];
+            [vc presentViewController:controller animated:YES completion:nil];
+        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+            RKLogError(@"unregisterDevice failed with error: %@", error);
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil
+                                                                message:@"Failed to logout. Please try again later."
+                                                               delegate:self
+                                                      cancelButtonTitle:@"Ok"
+                                                      otherButtonTitles:nil, nil];
+            [alertView show];
+        }];
+    }
 }
 
 - (void) populateCurrentUserFromCookie

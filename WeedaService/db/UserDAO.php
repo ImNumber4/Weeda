@@ -179,6 +179,12 @@ class UserDAO extends BaseDAO
 			$this->db_conn->insert($query);
 		}
 	}
+	
+	public function unsetUserDevice($user_id, $device_id) {
+		$query = "DELETE FROM device WHERE user_id = $user_id and device_id = '$device_id'";
+		
+		$result = $this->db_conn->query($query);
+	}
 		
 	public function find_by_id($id, $currentUser_id) {
 		

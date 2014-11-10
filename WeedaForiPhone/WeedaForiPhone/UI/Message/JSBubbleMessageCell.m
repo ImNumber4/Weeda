@@ -259,7 +259,7 @@
 - (void)handleLongPress:(UILongPressGestureRecognizer *)longPress
 {
     if(longPress.state != UIGestureRecognizerStateBegan
-       || ![self becomeFirstResponder])
+       || ![self becomeFirstResponder] || self.bubbleView.message.image)
         return;
     
     UIMenuController *menu = [UIMenuController sharedMenuController];

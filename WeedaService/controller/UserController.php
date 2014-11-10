@@ -44,6 +44,15 @@ class UserController extends Controller
 		$result = $this->user_dao->setUserDevice($currentUser_id, $device_id);
 	}
 	
+	public function unregisterDevice($device_id) {
+		if (!isset($device_id)) {
+			throw new InvalidRequestException('Input error, device_id is null.');
+		}
+		
+		$currentUser_id = $this->getCurrentUser();
+		$result = $this->user_dao->unsetUserDevice($currentUser_id, $device_id);
+	}
+	
 	public function getUsernamesByPrefix($prefix){
 		$currentUser_id = $this->getCurrentUser();
 		$count = 10;

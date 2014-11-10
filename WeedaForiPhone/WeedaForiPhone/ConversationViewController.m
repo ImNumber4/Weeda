@@ -81,25 +81,13 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
         [self.fetchedResultsController setDelegate:self];
         
         
-        self.participant_avatar = [UIImage imageNamed:@"avatar.jpg"];
-        
-        [[SDWebImageManager sharedManager] downloadImageWithURL:[WeedImageController imageURLOfAvatar:self.participant_id]
-                                                        options:(SDWebImageHandleCookies | SDWebImageRefreshCached)
-                                                       progress:^(NSInteger receivedSize, NSInteger expectedSize) {
-                                                           
-                                                       } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
-                                                           self.participant_avatar = image;
-                                                       }];
-        
-        self.current_user_avatar = [UIImage imageNamed:@"avatar.jpg"];
+        UIImageView *participantAvatar =  [[UIImageView alloc] init];
+        [participantAvatar sd_setImageWithURL:[WeedImageController imageURLOfAvatar:self.participant_id] placeholderImage:[UIImage imageNamed:@"avatar.jpg"] options:SDWebImageHandleCookies];
+        self.participant_avatar = participantAvatar.image;
         AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-        [[SDWebImageManager sharedManager] downloadImageWithURL:[WeedImageController imageURLOfAvatar:appDelegate.currentUser.id]
-                                                        options:(SDWebImageHandleCookies | SDWebImageRefreshCached)
-                                                       progress:^(NSInteger receivedSize, NSInteger expectedSize) {
-                                                           
-                                                       } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
-                                                           self.current_user_avatar = image;
-                                                       }];
+        UIImageView *avatar =  [[UIImageView alloc] init];
+        [avatar sd_setImageWithURL:[WeedImageController imageURLOfAvatar:appDelegate.currentUser.id] placeholderImage:[UIImage imageNamed:@"avatar.jpg"] options:SDWebImageHandleCookies];
+        self.current_user_avatar = avatar.image;
         
         self.inputToolBarView.hidden = false;
         self.title = self.participant_username;

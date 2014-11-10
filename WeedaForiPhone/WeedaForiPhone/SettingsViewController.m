@@ -164,10 +164,6 @@ static const NSInteger ABOUT_INDEX = 3;
     // Dispose of any resources that can be recreated.
      AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     [appDelegate signout];
-    
-    UIViewController *controller = [self.storyboard instantiateViewControllerWithIdentifier:@"WelcomeViewController"];
-    [self presentViewController:controller animated:YES completion:nil];
-
 }
 
 /*

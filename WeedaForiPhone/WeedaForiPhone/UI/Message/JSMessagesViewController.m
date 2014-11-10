@@ -190,6 +190,7 @@ static NSString * TAKE_PHOTO = @"Take Photo";
 
 - (void)takePhotoPressed:(UIButton *)sender
 {
+    [self.view endEditing:TRUE];
     WLActionSheet *as;
     if (![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
         as = [[WLActionSheet alloc]initWithTitle:nil
