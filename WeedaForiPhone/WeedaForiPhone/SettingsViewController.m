@@ -163,7 +163,7 @@ static const NSInteger ABOUT_INDEX = 3;
 {
     // Dispose of any resources that can be recreated.
      AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    [appDelegate signout];
+    [appDelegate signoutFrom:self];
 }
 
 /*

@@ -27,6 +27,6 @@
 - (void) updateBadgeCount;
 - (void) populateCurrentUserFromCookie;
 - (void) clearLoginCookies;
-- (void)signout;
+- (void)signoutFrom:(UIViewController *) sender;
 
 @end
