@@ -21,6 +21,7 @@
 @property (nonatomic, weak) id<CropImageDelegate> delegate;
 
 @property (nonatomic, retain) UIImage *image;
+@property (nonatomic) BOOL enableImageCrop;
 
 - (IBAction)selected:(id)sender;
 - (IBAction)canceled:(id)sender;

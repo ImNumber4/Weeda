@@ -41,10 +41,12 @@
 #import "JSMessageInputView.h"
 #import "WLActionSheet.h"
 #import "UserViewController.h"
+#import "AppDelegate.h"
+#import "CropImageViewController.h"
 
 #define INPUT_HEIGHT 35.0f
 
-@interface JSMessagesViewController () <JSDismissiveTextViewDelegate, WLActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@interface JSMessagesViewController () <JSDismissiveTextViewDelegate, WLActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CropImageDelegate>
 
 - (void)setup;
 
@@ -472,12 +474,25 @@ static NSString * TAKE_PHOTO = @"Take Photo";
 
 - (void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-    UIImage * image = [info objectForKey:UIImagePickerControllerOriginalImage];
-//    UIViewController* infoController = [self.storyboard instantiateViewControllerWithIdentifier:@"WelcomeViewController"];
-//    [picker pushViewController:infoController animated:YES];
-    [self dismissViewControllerAnimated:YES completion:^{
-        [self.delegate selectedImage:image];
-    }];
+    UIImage *userPickedImage = [info objectForKey:UIImagePickerControllerOriginalImage];
+    CropImageViewController* viewController = [[CropImageViewController alloc] initWithNibName:nil bundle:nil];
+    viewController.image = userPickedImage;
+    viewController.delegate = self;
+    if (picker.sourceType == UIImagePickerControllerSourceTypeCamera) {
+        [picker dismissViewControllerAnimated:YES completion:^{[self presentViewController:viewController animated:YES completion:nil];}];
+    } else {
+        [picker pushViewController:viewController animated:YES];
+    }
+}
+
+- (void)addItemViewContrller:(CropImageViewController *)controller didFinishCropImage:(UIImage *)cropedImage
+{
+    [self.delegate selectedImage:cropedImage];
+}
+
+- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
+    [[UIApplication sharedApplication] setStatusBarStyle:[AppDelegate getUIStatusBarStyle]];
 }
 
 @end

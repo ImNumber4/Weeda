@@ -29,4 +29,6 @@
 - (void) clearLoginCookies;
 - (void)signoutFrom:(UIViewController *) sender;
 
++ (UIStatusBarStyle) getUIStatusBarStyle;
+
 @end

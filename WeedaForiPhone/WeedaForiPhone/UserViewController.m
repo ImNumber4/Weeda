@@ -27,8 +27,6 @@
 
 @property (nonatomic, retain) User *user;
 
-@property (nonatomic, retain) UIImage *userPickedImage;
-
 @property (nonatomic, retain) NSMutableArray *weeds;
 
 @property (nonatomic, retain) UIView *uploadAvatarView;
@@ -86,6 +84,13 @@ const NSInteger SHOW_FOLLOWINGS = 2;
     self.weeds = [[NSMutableArray alloc] init];
     
     [self createUploadAvatarView];
+    
+    self.userAvatar.contentMode = UIViewContentModeScaleAspectFill;
+    self.userAvatar.clipsToBounds = YES;
+    
+    CALayer * l = [self.userAvatar layer];
+    [l setMasksToBounds:YES];
+    [l setCornerRadius:7.0];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -162,36 +167,28 @@ const NSInteger SHOW_FOLLOWINGS = 2;
     [cell decorateCellWithWeed:weed.content username:weed.username time:weed.time user_id:weed.user_id];
 }
 
-- (IBAction)handleSelectAvatar:(id)sender {
-    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    if ([self.user_id isEqualToNumber:appDelegate.currentUser.id]) {
-        UIImagePickerController *pickerController = [[UIImagePickerController alloc] init];
-        pickerController.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
-        pickerController.mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeSavedPhotosAlbum];
-        pickerController.allowsEditing = NO;
-        pickerController.delegate = self;
-    
-        [self presentViewController:pickerController animated:YES completion:nil];
+- (void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    UIImage *userPickedImage = [info objectForKey:UIImagePickerControllerOriginalImage];
+    CropImageViewController* viewController = [[CropImageViewController alloc] initWithNibName:nil bundle:nil];
+    viewController.image = userPickedImage;
+    viewController.enableImageCrop = YES;
+    viewController.delegate = self;
+    if (picker.sourceType == UIImagePickerControllerSourceTypeCamera) {
+        [picker dismissViewControllerAnimated:YES completion:^{[self presentViewController:viewController animated:YES completion:nil];}];
+    } else {
+        [picker pushViewController:viewController animated:YES];
     }
 }
 
-- (void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
 {
-    self.userPickedImage = [info objectForKey:UIImagePickerControllerOriginalImage];
-
-    [self dismissViewControllerAnimated:YES completion:^{
-         [self performSegueWithIdentifier:@"cropImage" sender:self];
-    }];
+    [[UIApplication sharedApplication] setStatusBarStyle:[AppDelegate getUIStatusBarStyle]];
 }
 
 - (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([[segue identifier] isEqualToString:@"cropImage"]) {
-        UINavigationController *nav = [segue destinationViewController];
-        CropImageViewController *view = (CropImageViewController *)[nav topViewController];
-        view.image = self.userPickedImage;
-        view.delegate = self;
-    } else if([[segue identifier] isEqualToString:@"showUsers"]) {
+    if([[segue identifier] isEqualToString:@"showUsers"]) {
         if ([sender tag] == SHOW_FOLLOWERS) {
             [[segue destinationViewController] setTitle:@"Followed by"];
         } else {
@@ -349,13 +346,7 @@ const NSInteger SHOW_FOLLOWINGS = 2;
 
 - (void)updateUserAvatar
 {
-    self.userAvatar.contentMode = UIViewContentModeScaleAspectFill;
-    self.userAvatar.clipsToBounds = YES;
     [self.userAvatar setImageURL:[WeedImageController imageURLOfAvatar:self.user_id] isAvatar:YES];
-    
-    CALayer * l = [self.userAvatar layer];
-    [l setMasksToBounds:YES];
-    [l setCornerRadius:7.0];
 }
 
 - (void)editProfile:(id)sender
@@ -487,6 +478,7 @@ const NSInteger SHOW_FOLLOWINGS = 2;
     UIImagePickerController *imagePicker = [[UIImagePickerController alloc]init];
     imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
     imagePicker.delegate = self;
+    imagePicker.allowsEditing = NO;
     
     [self handleCancelTap];
     [self presentViewController:imagePicker animated:YES completion:nil];

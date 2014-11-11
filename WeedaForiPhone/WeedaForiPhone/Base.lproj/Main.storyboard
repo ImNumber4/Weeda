@@ -654,7 +654,6 @@
                         <outlet property="userAvatarCamera" destination="p1F-TD-SVd" id="07m-Aa-1Nc"/>
                         <outlet property="userDescription" destination="zVj-7G-XWn" id="3Y2-hy-UhU"/>
                         <outlet property="weedCountLabel" destination="DOP-si-5x5" id="gXL-er-7hv"/>
-                        <segue destination="cE6-OT-Fvo" kind="modal" identifier="cropImage" id="fNi-3r-yho"/>
                         <segue destination="kcP-Br-rTe" kind="push" identifier="showUsers" id="gr4-Yl-zIz"/>
                         <segue destination="Yp8-Ok-QlB" kind="modal" identifier="editProfile" modalTransitionStyle="coverVertical" id="we0-76-yLy"/>
                         <segue destination="PuH-Xh-jza" kind="push" identifier="messageUser" id="Z8M-XG-GdH"/>
@@ -796,70 +795,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="o8h-fS-CNO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2759" y="-1121"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="mPU-Df-T4H">
-            <objects>
-                <navigationController definesPresentationContext="YES" navigationBarHidden="YES" id="cE6-OT-Fvo" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="V4T-OY-FUF">
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="LxZ-Ej-0mI" kind="relationship" relationship="rootViewController" id="4Hy-JE-Nkq"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="9kq-AZ-YUF" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2759" y="-569"/>
-        </scene>
-        <!--Crop Image View Controller-->
-        <scene sceneID="lcf-ah-kUU">
-            <objects>
-                <viewController storyboardIdentifier="SquareImageViewController" autoresizesArchivedViewToFullSize="NO" automaticallyAdjustsScrollViewInsets="NO" id="LxZ-Ej-0mI" customClass="CropImageViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="t0t-Gj-T37">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="6od-Q5-0No">
-                                <rect key="frame" x="229" y="518" width="43" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Select">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="selected:" destination="LxZ-Ej-0mI" eventType="touchUpInside" id="Suu-yf-VoU"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="UCD-c5-U0G">
-                                <rect key="frame" x="67" y="518" width="48" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Cancel">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="canceled:" destination="LxZ-Ej-0mI" eventType="touchUpInside" id="pSb-Le-dgC"/>
-                                </connections>
-                            </button>
-                            <view clipsSubviews="YES" contentMode="scaleToFill" id="3oM-qu-OB8">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="507"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                            </view>
-                        </subviews>
-                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="lph-fc-oFo"/>
-                    <connections>
-                        <outlet property="btnCancel" destination="UCD-c5-U0G" id="XC5-3a-qQK"/>
-                        <outlet property="btnSelect" destination="6od-Q5-0No" id="B29-vP-WAa"/>
-                        <outlet property="cropBackgroundView" destination="3oM-qu-OB8" id="tHp-sl-hxl"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Uoo-oH-tW1" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3220" y="-569"/>
         </scene>
         <!--Sign Up-->
         <scene sceneID="ZfZ-Hu-wIG">
