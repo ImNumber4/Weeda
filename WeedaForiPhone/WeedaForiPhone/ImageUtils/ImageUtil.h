@@ -15,4 +15,6 @@
 
 + (UIImage *) colorImage:(UIImage *)image color:(UIColor *)color;
 
++ (UIImage *)generatePhotoThumbnail:(UIImage *)image;
+
 @end

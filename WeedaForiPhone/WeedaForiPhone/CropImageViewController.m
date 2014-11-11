@@ -7,6 +7,7 @@
 //
 
 #import "CropImageViewController.h"
+#import "ImageUtil.h"
 
 @interface CropImageViewController () <UIGestureRecognizerDelegate> {
 
@@ -111,6 +112,11 @@ static const double TOOLBAR_HEIGHT = 70;
     self.pinch = pinch;
 }
 
+- (void) setImage:(UIImage *)newImage
+{
+    image = [ImageUtil generatePhotoThumbnail:newImage];
+}
+
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -195,8 +201,6 @@ static const double TOOLBAR_HEIGHT = 70;
                 gesture.view.center = self.originalCenter;
             }];
         }
-    } else {
-        NSLog(@"Pinch failed, reason: %ld", gesture.state);
     }
 }
 
@@ -212,8 +216,6 @@ static const double TOOLBAR_HEIGHT = 70;
         if ([self isFillFrame:self.maskView.cropBounds currentImageFrame:gesture.view.frame]) {
             self.originalFrame = gesture.view.frame;
         }
-    } else {
-        NSLog(@"Pinch failed, reason: %ld", gesture.state);
     }
     
     if (gesture.state == UIGestureRecognizerStateEnded) {
@@ -288,9 +290,7 @@ static const double TOOLBAR_HEIGHT = 70;
         UIImage *cropImage = [UIImage imageWithCGImage:imageRef];
         [self.delegate addItemViewContrller:self didFinishCropImage:cropImage];
     } else {
-        CGImageRef imageRef = CGImageCreateWithImageInRect([self.image CGImage], CGRectMake(0, 0, self.image.size.width, self.image.size.height));
-        UIImage *cropImage = [UIImage imageWithCGImage:imageRef];
-        [self.delegate addItemViewContrller:self didFinishCropImage:cropImage];
+        [self.delegate addItemViewContrller:self didFinishCropImage:self.image];
     }
     [self dismissViewControllerAnimated:YES completion:nil];
 }
@@ -299,6 +299,7 @@ static const double TOOLBAR_HEIGHT = 70;
 {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
+
 @end
 
 @implementation WLCropImageMaskView
