@@ -236,14 +236,17 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
 }
 
 - (void) createMessageOnServer:(Message *) message {
+    [self showProgressBar];
     [[RKObjectManager sharedManager] postObject:message path:@"message/create" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
         [self loadData];
         [self finishSend];
+        [self hideProgressBar];
         self.sendButton.enabled = true;
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
         NSLog(@"Failure saving message: %@", error.localizedDescription);
         [[[RKObjectManager sharedManager] managedObjectStore].mainQueueManagedObjectContext deleteObject:message];
         self.sendButton.enabled = true;
+        [self hideProgressBar];
     }];
 }
 
@@ -257,17 +260,40 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
                                 fileName:@"image.jpeg"
                                 mimeType:@"image/jpeg"];
     }];
-    
+    [self showProgressBar];
     RKManagedObjectRequestOperation *operation = [[RKObjectManager sharedManager] managedObjectRequestOperationWithRequest:(NSURLRequest *)request
                                                                                                       managedObjectContext:(NSManagedObjectContext *)objectStore.mainQueueManagedObjectContext
                                                                                                      success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                                                                                                          [self loadData];
                                                                                                          [self showConversation];
+                                                                                                         [self hideProgressBar];
                                                                                                      } failure:^(RKObjectRequestOperation *operation, NSError *error) {
                                                                                                          NSLog(@"Uploading image failed. url:%@, error: %@", url, error);
+                                                                                                         [self hideProgressBar];
                                                                                                      }];
     
     [[RKObjectManager sharedManager] enqueueObjectRequestOperation:operation];
+}
+
+- (void) showProgressBar
+{
+    [self.sendMessageProgressBar setProgress:0.0 animated:NO];
+    self.sendMessageProgressBar.hidden = false;
+    double delayInSeconds = 0.5;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        [self.sendMessageProgressBar setProgress:0.5 animated:YES];
+    });
+}
+
+- (void) hideProgressBar
+{
+    [self.sendMessageProgressBar setProgress:1 animated:YES];
+    double delayInSeconds = 1.0;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        [self.sendMessageProgressBar setHidden:YES];
+    });
 }
 
 - (JSBubbleMessageType)messageTypeForRowAtIndexPath:(NSIndexPath *)indexPath

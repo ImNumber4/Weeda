@@ -99,6 +99,10 @@ static NSString * TAKE_PHOTO = @"Take Photo";
     [self.inputToolBarView setTakePhotoButton:takePhotoButton];
     
     [self.view addSubview:self.inputToolBarView];
+    
+    self.sendMessageProgressBar = [[UIProgressView alloc] initWithFrame:CGRectMake(self.inputToolBarView.frame.origin.x, self.inputToolBarView.frame.origin.y - 1, self.inputToolBarView.frame.size.width, self.inputToolBarView.frame.size.height)];
+    [self.view addSubview:self.sendMessageProgressBar];
+    self.sendMessageProgressBar.hidden = true;
 }
 
 - (UIButton *)sendButton
@@ -393,6 +397,7 @@ static NSString * TAKE_PHOTO = @"Take Photo";
         
         self.previousTextViewContentHeight = MIN(textViewContentHeight, maxHeight);
     }
+    [self.sendMessageProgressBar setFrame:CGRectMake(self.inputToolBarView.frame.origin.x, self.inputToolBarView.frame.origin.y - 1, self.inputToolBarView.frame.size.width, self.inputToolBarView.frame.size.height)];
     [self.inputToolBarView textDidChange];
 }
 
@@ -434,7 +439,7 @@ static NSString * TAKE_PHOTO = @"Take Photo";
                                                            inputViewFrameY,
                                                            inputViewFrame.size.width,
                                                            inputViewFrame.size.height);
-                         
+                         [self.sendMessageProgressBar setFrame:CGRectMake(self.inputToolBarView.frame.origin.x, self.inputToolBarView.frame.origin.y - 1, self.inputToolBarView.frame.size.width, self.inputToolBarView.frame.size.height)];
                          UIEdgeInsets insets = UIEdgeInsetsMake(0.0f,
                                                                 0.0f,
                                                                 self.view.frame.size.height - self.inputToolBarView.frame.origin.y - INPUT_HEIGHT,
