@@ -173,7 +173,7 @@
 
 + (CGFloat)textViewLineHeight
 {
-    return 26.0f;
+    return 27.0f;
 }
 
 + (CGFloat)maxLines

@@ -47,7 +47,6 @@ CGFloat const kJSAvatarSize = 50.0f;
 #define kMarginBottom 8.0f
 #define kPaddingTop 8.0f
 #define kPaddingBottom 8.0f
-#define kBubblePaddingLeft 35.0f
 #define kBubblePaddingRight 35.0f
 #define kMaxImageWidth 200.0f
 
