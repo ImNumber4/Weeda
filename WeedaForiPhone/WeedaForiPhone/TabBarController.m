@@ -11,9 +11,10 @@
 #import "UserViewController.h"
 
 const NSInteger WEEDS_TAB_BAR_ITEM_INDEX = 0;
-const NSInteger MESSAGES_TAB_BAR_ITEM_INDEX = 1;
-const NSInteger DISCOVER_TAB_BAR_ITEM_INDEX = 2;
-const NSInteger ME_TAB_BAR_ITEM_INDEX = 3;
+const NSInteger BONGS_TAB_BAR_ITEM_INDEX = 1;
+const NSInteger MESSAGES_TAB_BAR_ITEM_INDEX = 2;
+const NSInteger DISCOVER_TAB_BAR_ITEM_INDEX = 3;
+const NSInteger ME_TAB_BAR_ITEM_INDEX = 4;
 
 
 @interface TabBarController ()
@@ -38,17 +39,19 @@ const NSInteger ME_TAB_BAR_ITEM_INDEX = 3;
     // Assign tab bar item with titles
     UITabBar *tabBar = self.tabBar;
     UITabBarItem *weedsTabBarItem = [tabBar.items objectAtIndex:WEEDS_TAB_BAR_ITEM_INDEX];
+    UITabBarItem *bongsTabBarItem = [tabBar.items objectAtIndex:BONGS_TAB_BAR_ITEM_INDEX];
     UITabBarItem *messagesTabBarItem = [tabBar.items objectAtIndex:MESSAGES_TAB_BAR_ITEM_INDEX];
     UITabBarItem *discoverTabBarItem = [tabBar.items objectAtIndex:DISCOVER_TAB_BAR_ITEM_INDEX];
     UITabBarItem *meTabBarItem = [tabBar.items objectAtIndex:ME_TAB_BAR_ITEM_INDEX];
     
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     
-    UINavigationController *userViewNav = [self.viewControllers objectAtIndex:3];
+    UINavigationController *userViewNav = [self.viewControllers objectAtIndex:ME_TAB_BAR_ITEM_INDEX];
     UserViewController *userView = (UserViewController *)userViewNav.topViewController;
     [userView setUser_id:appDelegate.currentUser.id];
     
     weedsTabBarItem.title = @"Weeds";
+    bongsTabBarItem.title = @"Bongs";
     messagesTabBarItem.title = @"Messages";
     discoverTabBarItem.title = @"Discover";
     meTabBarItem.title = @"Me";
@@ -56,6 +59,8 @@ const NSInteger ME_TAB_BAR_ITEM_INDEX = 3;
     
     weedsTabBarItem.selectedImage = [[self getImage:@"selected_weed.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     weedsTabBarItem.image = [[self getImage:@"weed.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    bongsTabBarItem.selectedImage = [[self getImage:@"selected_bong.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    bongsTabBarItem.image = [[self getImage:@"bong.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     messagesTabBarItem.image = [[self getImage:@"message.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     messagesTabBarItem.selectedImage = [[self getImage:@"selected_message.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     discoverTabBarItem.image = [[self getImage:@"map.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];

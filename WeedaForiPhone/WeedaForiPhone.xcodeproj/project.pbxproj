@@ -70,6 +70,9 @@
 		A91A62ED18FF8F48008726E5 /* UserListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A91A62EC18FF8F48008726E5 /* UserListViewController.m */; };
 		A91A62F819035FCC008726E5 /* ok.png in Resources */ = {isa = PBXBuildFile; fileRef = A91A62F719035FCC008726E5 /* ok.png */; };
 		A91A62FA1903602B008726E5 /* wrong.png in Resources */ = {isa = PBXBuildFile; fileRef = A91A62F91903602B008726E5 /* wrong.png */; };
+		A926EEFC1A14B8DF00AB2F04 /* bong.png in Resources */ = {isa = PBXBuildFile; fileRef = A926EEFA1A14B8DF00AB2F04 /* bong.png */; };
+		A926EEFD1A14B8DF00AB2F04 /* selected_bong.png in Resources */ = {isa = PBXBuildFile; fileRef = A926EEFB1A14B8DF00AB2F04 /* selected_bong.png */; };
+		A926EF061A1577DB00AB2F04 /* BongsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A926EF051A1577DB00AB2F04 /* BongsViewController.m */; };
 		A92E513A19046E2A00FC518F /* UserTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A92E513919046E2A00FC518F /* UserTableViewCell.m */; };
 		A92E513D19047C6000FC518F /* follow.png in Resources */ = {isa = PBXBuildFile; fileRef = A92E513B19047C6000FC518F /* follow.png */; };
 		A92E514019048B0400FC518F /* followed.png in Resources */ = {isa = PBXBuildFile; fileRef = A92E513F19048B0400FC518F /* followed.png */; };
@@ -324,6 +327,10 @@
 		A91A62EC18FF8F48008726E5 /* UserListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserListViewController.m; sourceTree = "<group>"; };
 		A91A62F719035FCC008726E5 /* ok.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ok.png; path = WeedaForiPhone/Images/ok.png; sourceTree = "<group>"; };
 		A91A62F91903602B008726E5 /* wrong.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = wrong.png; path = WeedaForiPhone/Images/wrong.png; sourceTree = "<group>"; };
+		A926EEFA1A14B8DF00AB2F04 /* bong.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bong.png; path = WeedaForiPhone/Images/bong.png; sourceTree = "<group>"; };
+		A926EEFB1A14B8DF00AB2F04 /* selected_bong.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = selected_bong.png; path = WeedaForiPhone/Images/selected_bong.png; sourceTree = "<group>"; };
+		A926EF041A1577DB00AB2F04 /* BongsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BongsViewController.h; sourceTree = "<group>"; };
+		A926EF051A1577DB00AB2F04 /* BongsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BongsViewController.m; sourceTree = "<group>"; };
 		A92E513819046E2A00FC518F /* UserTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserTableViewCell.h; path = WeedaForiPhone/UI/UserTableViewCell.h; sourceTree = "<group>"; };
 		A92E513919046E2A00FC518F /* UserTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserTableViewCell.m; path = WeedaForiPhone/UI/UserTableViewCell.m; sourceTree = "<group>"; };
 		A92E513B19047C6000FC518F /* follow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = follow.png; path = WeedaForiPhone/Images/follow.png; sourceTree = "<group>"; };
@@ -666,6 +673,8 @@
 				A9C087A919FB0C4600B0622B /* ChangePasswordViewController.m */,
 				EAAFA44D1A0206A5005AC429 /* WLWebViewController.h */,
 				EAAFA44E1A0206A5005AC429 /* WLWebViewController.m */,
+				A926EF041A1577DB00AB2F04 /* BongsViewController.h */,
+				A926EF051A1577DB00AB2F04 /* BongsViewController.m */,
 			);
 			path = WeedaForiPhone;
 			sourceTree = "<group>";
@@ -742,6 +751,8 @@
 		A9CA8E9218F3DAC6004F095D /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				A926EEFA1A14B8DF00AB2F04 /* bong.png */,
+				A926EEFB1A14B8DF00AB2F04 /* selected_bong.png */,
 				A94BFD501A05B48800757715 /* icon_white.png */,
 				EAAFA4581A0309A3005AC429 /* open_by_others.png */,
 				EAAFA4561A020D50005AC429 /* web_close.png */,
@@ -1103,11 +1114,13 @@
 				A9A46824190DE2C600461E90 /* lightgray.png in Resources */,
 				A98A89B8195FB168005A5871 /* dispensary_icon.png in Resources */,
 				A991C04E18FB42EC00A3D2CD /* profile_icon.png in Resources */,
+				A926EEFC1A14B8DF00AB2F04 /* bong.png in Resources */,
 				A9180C46192B2EAF00668E4F /* icon.png in Resources */,
 				A91816C9195637B400E7DD02 /* WeedBasicTableViewCell.xib in Resources */,
 				A91A62DE18FBBE0F008726E5 /* setting.png in Resources */,
 				A914CCB918CD756200B870D8 /* Main.storyboard in Resources */,
 				A93BB0BB19F3AB3A00514940 /* hydro_icon.png in Resources */,
+				A926EEFD1A14B8DF00AB2F04 /* selected_bong.png in Resources */,
 				A991C05718FB70D400A3D2CD /* waterdropgray.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1131,6 +1144,7 @@
 				A914CCC218CD756200B870D8 /* DetailViewController.m in Sources */,
 				0EB8C4E419C5C00900BD64E1 /* UIButton+JSMessagesView.m in Sources */,
 				A9A46833190E210900461E90 /* WeedDetailControlTableViewCell.m in Sources */,
+				A926EF061A1577DB00AB2F04 /* BongsViewController.m in Sources */,
 				0EB8C4C119C5C00800BD64E1 /* JSMessageSoundEffect.m in Sources */,
 				A9A46830190E1E8E00461E90 /* WeedDetailTableViewCell.m in Sources */,
 				A9C0879719F8B9B700B0622B /* SettingsViewController.m in Sources */,

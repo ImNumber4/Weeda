@@ -73,10 +73,7 @@ NSString * _deviceToken;
 {
     if (_deviceToken) {
         [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"user/unregisterDevice/%@", _deviceToken] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-            [self clearLoginCookies];
-            _currentUser = nil;
-            UIViewController *controller = [sender.storyboard instantiateViewControllerWithIdentifier:@"WelcomeViewController"];
-            [sender presentViewController:controller animated:YES completion:nil];
+            [self logoutLocally:sender];
         } failure:^(RKObjectRequestOperation *operation, NSError *error) {
             RKLogError(@"unregisterDevice failed with error: %@", error);
             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil
@@ -86,7 +83,16 @@ NSString * _deviceToken;
                                                       otherButtonTitles:nil, nil];
             [alertView show];
         }];
+    } else {
+        [self logoutLocally:sender];
     }
+}
+
+- (void) logoutLocally:(UIViewController *) sender {
+    [self clearLoginCookies];
+    _currentUser = nil;
+    UIViewController *controller = [sender.storyboard instantiateViewControllerWithIdentifier:@"WelcomeViewController"];
+    [sender presentViewController:controller animated:YES completion:nil];
 }
 
 - (void) populateCurrentUserFromCookie
