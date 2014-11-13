@@ -47,6 +47,7 @@ CGFloat const kJSAvatarSize = 50.0f;
 #define kMarginBottom 8.0f
 #define kPaddingTop 8.0f
 #define kPaddingBottom 8.0f
+#define kBubblePaddingLeft 35.0f
 #define kBubblePaddingRight 35.0f
 #define kMaxImageWidth 200.0f
 
@@ -159,6 +160,7 @@ CGFloat const kJSAvatarSize = 50.0f;
 - (void)drawRect:(CGRect)frame
 {
     [super drawRect:frame];
+    
     CGRect bubbleFrame = [self bubbleFrame];
     UIImage *bgImage = (self.selectedToShowCopyMenu) ? [self bubbleImageHighlighted] : [self bubbleImage];
     [bgImage drawInRect:bubbleFrame blendMode:kCGBlendModeNormal alpha:0.8];
@@ -317,7 +319,7 @@ CGFloat const kJSAvatarSize = 50.0f;
 
 + (UIFont *)font
 {
-    return [UIFont systemFontOfSize:13.0f];
+    return [UIFont systemFontOfSize:15.0f];
 }
 
 + (CGSize)textSizeForText:(NSString *)txt
@@ -344,10 +346,10 @@ CGFloat const kJSAvatarSize = 50.0f;
         WeedImage *image = (WeedImage *)message.image;
 
         if ([image.width floatValue] < kMaxImageWidth) {
-            return CGSizeMake([image.width floatValue], [image.height floatValue]);
+            return CGSizeMake(round([image.width floatValue]), round([image.height floatValue]));
         } else {
             return CGSizeMake(kMaxImageWidth,
-                              [image.height floatValue] /[image.width floatValue] * kMaxImageWidth);
+                              round([image.height floatValue] /[image.width floatValue] * kMaxImageWidth));
         }
     } else {
         CGSize textSize = [JSBubbleView textSizeForText:message.message];

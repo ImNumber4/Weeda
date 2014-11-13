@@ -317,6 +317,7 @@ static NSString * TAKE_PHOTO = @"Take Photo";
 - (void)finishSend
 {
     [self.inputToolBarView.textView setText:nil];
+    [self.inputToolBarView.textView setContentSize:CGSizeMake(self.inputToolBarView.textView.contentSize.width, [self.inputToolBarView.textView sizeThatFits:self.inputToolBarView.textView.contentSize].height)];
     [self textViewDidChange:self.inputToolBarView.textView];
     [self showConversation];
 }
