@@ -208,7 +208,7 @@ class UserDAO extends BaseDAO
 	}
 	
 	public function getUsersWaterWeed($currentUser_id, $weed_id) {
-		$query = "SELECT user.username, user.id FROM water, user WHERE water.user_id = user.id AND water.weed_id = $weed_id";
+		$query = "SELECT user.id as id, user.username as username, user.storename as storename, user.address_street as address_street, user.address_city as address_city, user.address_state as address_state, user.address_country as address_country, user.address_zip as address_zip, user.user_type as user_type FROM water, user WHERE water.user_id = user.id AND water.weed_id = $weed_id";
 		$result = $this->db_conn->query($query);
 		$users = array();
 		if (mysql_num_rows($result)) {
@@ -222,7 +222,7 @@ class UserDAO extends BaseDAO
 	}
 	
 	public function getUsersSeedWeed($currentUser_id, $weed_id) {
-		$query = "SELECT user.username, user.id FROM seed, user WHERE seed.user_id = user.id AND seed.weed_id = $weed_id";
+		$query = "SELECT user.id as id, user.username as username, user.storename as storename, user.address_street as address_street, user.address_city as address_city, user.address_state as address_state, user.address_country as address_country, user.address_zip as address_zip, user.user_type as user_type FROM seed, user WHERE seed.user_id = user.id AND seed.weed_id = $weed_id";
 		$result = $this->db_conn->query($query);
 		$users = array();
 		if (mysql_num_rows($result)) {

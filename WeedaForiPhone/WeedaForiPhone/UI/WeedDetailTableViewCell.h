@@ -23,10 +23,17 @@
 
 @property (nonatomic, retain) id<WeedDetailTableViewCellDelegate> delegate;
 
-@property (weak, nonatomic) IBOutlet UITextView *weedContentLabel;
-@property (weak, nonatomic) IBOutlet UIButton *userLabel;
-@property (weak, nonatomic) IBOutlet UILabel *timeLabel;
-@property (weak, nonatomic) IBOutlet WLImageView *userAvatar;
+@property (strong, nonatomic) UITextView *weedContentLabel;
+@property (strong, nonatomic) UIButton *userLabel;
+@property (strong, nonatomic) UILabel *timeLabel;
+@property (strong, nonatomic) WLImageView *userAvatar;
+@property (strong, nonatomic) UIButton *waterCount;
+@property (strong, nonatomic) UIButton *seedCount;
+@property (nonatomic, strong) UIButton *seed;
+@property (nonatomic, strong) UIButton *waterDrop;
+@property (nonatomic, strong) UIButton *light;
+@property (nonatomic, strong) UIButton *lightCount;
+@property (nonatomic, strong) UITableView *lights;
 
 - (void)decorateCellWithWeed:(Weed *)weed;
 - (void)cellWillDisappear;

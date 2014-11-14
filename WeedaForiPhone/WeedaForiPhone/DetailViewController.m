@@ -62,6 +62,8 @@ const CGFloat COLLECTION_VIEW_HEIGHT = 300.0;
 
 @implementation DetailViewController
 
+static NSString * WEED_DETAIL_TABLE_CELL_REUSE_ID = @"WeedDetailCell";
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -80,6 +82,8 @@ const CGFloat COLLECTION_VIEW_HEIGHT = 300.0;
     [self.tableView setSeparatorInset:UIEdgeInsetsZero];
     self.tableView.tableFooterView = [[UIView alloc] init];
     self.tableView.delegate = self;
+    
+    [self.tableView registerClass:[WeedDetailTableViewCell class] forCellReuseIdentifier:WEED_DETAIL_TABLE_CELL_REUSE_ID];
     
     [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/getLights/%@", self.currentWeed.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
         NSSortDescriptor *descriptor=[[NSSortDescriptor alloc] initWithKey:@"id" ascending:YES];
@@ -150,24 +154,27 @@ const CGFloat COLLECTION_VIEW_HEIGHT = 300.0;
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if ([indexPath section] == CURRENT_WEED_SECTION_INDEX) {
-        static NSString *CellIdentifier = @"WeedDetailCell";
-        WeedDetailTableViewCell *cell = (WeedDetailTableViewCell *) [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+        WeedDetailTableViewCell *cell = (WeedDetailTableViewCell *) [tableView dequeueReusableCellWithIdentifier:WEED_DETAIL_TABLE_CELL_REUSE_ID forIndexPath:indexPath];
         [self configureWeedDetailTableViewCell:cell];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
     } else if ([indexPath section] == CURRENT_WEED_CONTROL_SECTION_INDEX) {
         static NSString *CellIdentifier = @"WeedDetailControlCell";
         WeedDetailControlTableViewCell *cell = (WeedDetailControlTableViewCell *) [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
         [self configureWeedDetailControlTableViewCell:cell];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
     } else if ([indexPath section] == PLACEHOLDER_SECTION_INDEX) {
         static NSString *CellIdentifier = @"PlaceHolderCell";
-        UITableViewCell *cell = (WeedBasicTableViewCell *) [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+        UITableViewCell *cell = (UITableViewCell *) [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
     } else {
         Weed *weed = [self getWeed:indexPath];
         static NSString *CellIdentifier = @"WeedCell";
         WeedBasicTableViewCell *cell = (WeedBasicTableViewCell *) [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
         [self configureWeedTableViewCell:cell weed:weed];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
     }
 }

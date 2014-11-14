@@ -378,50 +378,6 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="0.0" reuseIdentifier="WeedDetailCell" rowHeight="111" id="5zd-AW-O8w" customClass="WeedDetailTableViewCell">
-                                <rect key="frame" x="0.0" y="86" width="320" height="111"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="5zd-AW-O8w" id="ZZX-P6-xy2">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="110"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="ZTC-sK-Cdc" customClass="WLImageView">
-                                            <rect key="frame" x="5" y="10" width="40" height="40"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        </imageView>
-                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="QTI-gT-Uhe">
-                                            <rect key="frame" x="55" y="22" width="223" height="20"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="9"/>
-                                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="EVe-Bi-u2E">
-                                            <rect key="frame" x="55" y="10" width="233" height="16"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
-                                            <state key="normal" title="Button">
-                                                <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                            </state>
-                                        </button>
-                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" id="EEO-PF-9gy">
-                                            <rect key="frame" x="8" y="59" width="303" height="29"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                            <dataDetectorType key="dataDetectorTypes" link="YES"/>
-                                        </textView>
-                                    </subviews>
-                                </tableViewCellContentView>
-                                <connections>
-                                    <outlet property="timeLabel" destination="QTI-gT-Uhe" id="WDz-Yg-z4c"/>
-                                    <outlet property="userAvatar" destination="ZTC-sK-Cdc" id="C4A-SW-N9R"/>
-                                    <outlet property="userLabel" destination="EVe-Bi-u2E" id="pVa-13-qjn"/>
-                                    <outlet property="weedContentLabel" destination="EEO-PF-9gy" id="wFb-Ul-WOR"/>
-                                </connections>
-                            </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="0.0" reuseIdentifier="WeedDetailControlCell" rowHeight="27" id="eRh-Kf-39R" customClass="WeedDetailControlTableViewCell">
                                 <rect key="frame" x="0.0" y="197" width="320" height="27"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -947,12 +903,12 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="drt-oA-QVo"/>
-        <segue reference="aBn-FK-paW"/>
-        <segue reference="6VO-gD-9Hh"/>
-        <segue reference="Cu1-Di-ade"/>
-        <segue reference="Th6-6F-Dxp"/>
         <segue reference="Z8M-XG-GdH"/>
+        <segue reference="JEh-w8-48C"/>
+        <segue reference="6VO-gD-9Hh"/>
+        <segue reference="aBn-FK-paW"/>
+        <segue reference="Th6-6F-Dxp"/>
+        <segue reference="Cu1-Di-ade"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="0.24313727021217346" green="0.64705884456634521" blue="0.24705883860588074" alpha="1" colorSpace="deviceRGB"/>
 </document>

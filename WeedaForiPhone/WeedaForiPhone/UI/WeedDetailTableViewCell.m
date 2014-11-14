@@ -69,42 +69,58 @@ typedef NS_ENUM(NSInteger, DetailCellShowingType)
 
 @implementation WeedDetailTableViewCell
 
+static const double PADDING = 10;
+
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        // Initialization code
+        self.userAvatar = [[WLImageView alloc] initWithFrame:CGRectMake(PADDING, PADDING, 40, 40)];
+        [self.userAvatar addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleAvatarTapped)]];
+        self.userAvatar.userInteractionEnabled = YES;
+        [self addSubview:self.userAvatar];
         
+        self.userLabel = [[UIButton alloc] initWithFrame:CGRectMake(PADDING * 2 + self.userAvatar.frame.size.width, self.userAvatar.frame.origin.y, self.frame.size.width - PADDING * 3 - self.userAvatar.frame.size.width, self.userAvatar.frame.size.height/2.0)];
+        [self.userLabel.titleLabel setFont:[UIFont boldSystemFontOfSize:12]];
+        [self.userLabel setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        self.userLabel.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+        [self.userLabel addTarget:self action:@selector(showUserViewController:) forControlEvents:UIControlEventTouchDown];
+        self.userLabel.userInteractionEnabled = YES;
+        [self addSubview:self.userLabel];
+        
+        self.timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.userLabel.frame.origin.x, self.userLabel.frame.origin.y + self.userLabel.frame.size.height, self.userLabel.frame.size.width, self.userAvatar.frame.size.height/2.0)];
+        self.timeLabel.font = [UIFont systemFontOfSize:9.0];
+        [self.timeLabel setTextColor:[UIColor darkGrayColor]];
+        [self addSubview:self.timeLabel];
+        
+        self.weedContentLabel = [[UITextView alloc] initWithFrame:CGRectMake(self.userAvatar.frame.origin.x, self.userAvatar.frame.origin.y + self.userAvatar.frame.size.height, self.frame.size.width - PADDING * 2, 30)];
+        self.weedContentLabel.editable = false;
+        [self.weedContentLabel setFont:[UIFont systemFontOfSize:14.0]];
+        self.weedContentLabel.scrollEnabled = false;
+        self.weedContentLabel.userInteractionEnabled = true;
+        self.weedContentLabel.dataDetectorTypes = UIDataDetectorTypeAll;
+        [self addSubview:self.weedContentLabel];
+        
+        _imageWidthDictionary = [[NSMutableDictionary alloc]initWithCapacity:3];
+        [_imageWidthDictionary setObject:[NSNumber numberWithFloat:300.0] forKey:[NSNumber numberWithInteger:EnumImageWidthTypeFull]];
+        [_imageWidthDictionary setObject:[NSNumber numberWithFloat:149.0] forKey:[NSNumber numberWithInteger:EnumImageWidthTypeHalf]];
+        [_imageWidthDictionary setObject:[NSNumber numberWithFloat:98.6] forKey:[NSNumber numberWithInteger:EnumImageWidthTypeOneThird]];
+        
+        _adjustedCellSize = [NSMutableArray new];
+        _urlDictionary = [NSMutableDictionary new];
+        _dataSource = [[NSArray alloc]init];
+        
+        _collectionView = [self createCollectionViewWithRect:CGRectMake(0, 0, self.frame.size.width, DEFAULT_IMAGE_DISPLAY_BOARD_HEIGHT1)];
+        _collectionView.scrollEnabled = false;
+        [self addSubview:_collectionView];
+        _collectionView.hidden = YES;
+        
+        [self createWebSummaryView];
+        
+        //Add notification about quit full screen display
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(exitFullScreen:) name:UIWindowDidBecomeHiddenNotification object:self.window];
     }
     return self;
-}
-
-- (void)awakeFromNib
-{
-    // Initialization code
-    [self.userLabel addTarget:self action:@selector(showUserViewController:) forControlEvents:UIControlEventTouchDown];
-    self.userLabel.userInteractionEnabled = YES;
-    
-    [self.userAvatar addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleAvatarTapped)]];
-    self.userAvatar.userInteractionEnabled = YES;
-    
-    _imageWidthDictionary = [[NSMutableDictionary alloc]initWithCapacity:3];
-    [_imageWidthDictionary setObject:[NSNumber numberWithFloat:300.0] forKey:[NSNumber numberWithInteger:EnumImageWidthTypeFull]];
-    [_imageWidthDictionary setObject:[NSNumber numberWithFloat:149.0] forKey:[NSNumber numberWithInteger:EnumImageWidthTypeHalf]];
-    [_imageWidthDictionary setObject:[NSNumber numberWithFloat:98.6] forKey:[NSNumber numberWithInteger:EnumImageWidthTypeOneThird]];
-    
-    _adjustedCellSize = [NSMutableArray new];
-    _urlDictionary = [NSMutableDictionary new];
-    _dataSource = [[NSArray alloc]init];
-    
-    _collectionView = [self createCollectionViewWithRect:CGRectMake(0, 0, self.frame.size.width, DEFAULT_IMAGE_DISPLAY_BOARD_HEIGHT1)];
-    [self addSubview:_collectionView];
-    _collectionView.hidden = YES;
-    
-    [self createWebSummaryView];
-    
-    //Add notification about quit full screen display
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(exitFullScreen:) name:UIWindowDidBecomeHiddenNotification object:self.window];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
