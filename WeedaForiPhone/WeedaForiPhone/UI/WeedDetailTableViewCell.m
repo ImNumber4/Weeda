@@ -60,6 +60,7 @@ typedef NS_ENUM(NSInteger, DetailCellShowingType)
 
 @property (nonatomic, retain) NSLayoutConstraint *titleHeightConstraint;
 @property (nonatomic, retain) NSLayoutConstraint *descHeightConstraint;
+@property (nonatomic, retain) NSLayoutConstraint *playerHeightConstraint;
 
 @property (nonatomic) DetailCellShowingType type;
 
@@ -115,10 +116,6 @@ static const double PADDING = 10;
         [self addSubview:_collectionView];
         _collectionView.hidden = YES;
         
-        [self createWebSummaryView];
-        
-        //Add notification about quit full screen display
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(exitFullScreen:) name:UIWindowDidBecomeHiddenNotification object:self.window];
     }
     return self;
 }
@@ -185,6 +182,8 @@ static const double PADDING = 10;
     if (self.delegate) {
         [self.delegate tableViewCell:self height:height needReload:NO];
     }
+    
+    [self createWebSummaryView];
 }
 
 - (void)cellWillDisappear
@@ -384,37 +383,43 @@ static const double PADDING = 10;
     _titleView.selectable = NO;
     _titleView.textColor = [UIColor darkGrayColor];
     
-    _playerView = [YTPlayerView new];
-    _playerView.delegate = self;
-    _playerView.hidden = YES;
-    
-    
     _descriptionView = [UITextView new];
     _descriptionView.editable = NO;
     _descriptionView.selectable = NO;
     _descriptionView.hidden = YES;
     _descriptionView.textColor = [UIColor darkGrayColor];
+    [_webSummaryView addSubview:_descriptionView];
+    
+    _playerView = [YTPlayerView new];
+    _playerView.delegate = self;
+    _playerView.hidden = YES;
+    [_webSummaryView addSubview:_playerView];
     
     [_webSummaryView addSubview:_faviconView];
     [_webSummaryView addSubview:_titleView];
-    [_webSummaryView addSubview:_playerView];
-    [_webSummaryView addSubview:_descriptionView];
     
     _faviconView.translatesAutoresizingMaskIntoConstraints = NO;
     _titleView.translatesAutoresizingMaskIntoConstraints = NO;
-    _playerView.translatesAutoresizingMaskIntoConstraints = NO;
     _descriptionView.translatesAutoresizingMaskIntoConstraints = NO;
+    _playerView.translatesAutoresizingMaskIntoConstraints = NO;
     NSDictionary *vs = NSDictionaryOfVariableBindings(_faviconView, _titleView, _playerView, _descriptionView);
     [_webSummaryView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_faviconView(20)][_titleView]|" options:0 metrics:nil views:vs]];
     [_webSummaryView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_faviconView(30)]" options:0 metrics:nil views:vs]];
-    [_webSummaryView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_titleView][_descriptionView]|" options:0 metrics:nil views:vs]];
-    [_webSummaryView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_playerView]|" options:0 metrics:nil views:vs]];
-    [_webSummaryView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[_titleView][_playerView]|" options:0 metrics:nil views:vs]];
-    [_webSummaryView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_descriptionView]|" options:0 metrics:nil views:vs]];
-    _titleHeightConstraint = [NSLayoutConstraint constraintWithItem:_titleView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:30];
+    _titleHeightConstraint = [NSLayoutConstraint constraintWithItem:_titleView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:30];
     [_titleView addConstraint:_titleHeightConstraint];
-    _descHeightConstraint = [NSLayoutConstraint constraintWithItem:_descriptionView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:40];
-    [_descriptionView addConstraint:_descHeightConstraint];
+    
+    if (_type == DetailCellShowingTypeVideo) {
+        [_webSummaryView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_titleView][_playerView]|" options:0 metrics:nil views:vs]];
+        [_webSummaryView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_playerView]|" options:0 metrics:nil views:vs]];
+        _playerHeightConstraint = [NSLayoutConstraint constraintWithItem:_playerView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:0];
+        [_playerView addConstraint:_playerHeightConstraint];
+    }
+    if (_type == DetailCellShowingTypeUrl) {
+        [_webSummaryView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_titleView][_descriptionView]|" options:0 metrics:nil views:vs]];
+        [_webSummaryView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_descriptionView]|" options:0 metrics:nil views:vs]];
+        _descHeightConstraint = [NSLayoutConstraint constraintWithItem:_descriptionView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:0];
+        [_descriptionView addConstraint:_descHeightConstraint];
+    }
     
     [self addSubview:_webSummaryView];
     _webSummaryView.hidden = YES;
@@ -553,10 +558,11 @@ static const double PADDING = 10;
     _titleHeightConstraint.constant = [self heightOfTextView:_titleView];
     
     if (_type == DetailCellShowingTypeVideo) {
-        CGFloat textLableHeight = [self getTextLableHeight:self.weedContentLabel.text];
+        _playerHeightConstraint.constant = DEFAULT_VIDEO_HEIGHT;
         
+        CGFloat textLableHeight = [self getTextLableHeight:self.weedContentLabel.text];
         CGRect frame = _webSummaryView.frame;
-        frame.size.height = [self heightOfTextView:_titleView] + CGRectGetHeight(_playerView.frame);
+        frame.size.height = [self heightOfTextView:_titleView] + DEFAULT_VIDEO_HEIGHT;
         CGFloat height = TEXTLABLE_WEED_CONTENT_ORIGIN_Y + textLableHeight + CGRectGetHeight(_webSummaryView.frame) + 10;
         [self.delegate tableViewCell:self height:height needReload:YES];
         _webSummaryView.hidden = NO;
@@ -590,14 +596,6 @@ static const double PADDING = 10;
 {
     NSLog(@"Http Request failed, url: %@, error: %@", connection.description, error.localizedDescription);
     [_playerView stopVideo];
-}
-
-#pragma mark - get notification when user quit full screen display
-- (void)exitFullScreen:(NSNotification *)notification
-{
-    if ([UIApplication sharedApplication].statusBarOrientation != UIInterfaceOrientationPortrait) {
-        [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationPortrait];
-    }
 }
 
 @end
