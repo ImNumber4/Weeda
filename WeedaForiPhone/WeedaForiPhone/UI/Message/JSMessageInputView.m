@@ -173,7 +173,7 @@
 
 + (CGFloat)textViewLineHeight
 {
-    return 27.0f;
+    return [JSBubbleView font].lineHeight;
 }
 
 + (CGFloat)maxLines

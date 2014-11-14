@@ -23,6 +23,10 @@
 
 @interface AddWeedViewController () <UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UICollectionViewDelegate,UICollectionViewDataSource,UIGestureRecognizerDelegate, WeedAddingToolbarDelegate, WeedAddingImageViewDelegate>
 
+@property (retain, nonatomic) UITextView *weedContentView;
+
+@property (nonatomic, retain) UITableView *userList;
+
 @property (nonatomic) BOOL hasEdited;
 
 @property (nonatomic, retain) WeedAddingToolbar *toolbar;
@@ -40,6 +44,8 @@
 @property (nonatomic, strong) NSMutableDictionary * mentionedUsernameToUserId;
 
 @property (nonatomic, retain) UILabel *placeHolder;
+
+@property (strong) NSArray *users;
 
 @end
 
@@ -60,6 +66,28 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    [self.view setBackgroundColor:[UIColor whiteColor]];
+    
+    CGSize statusBarSize = [[UIApplication sharedApplication] statusBarFrame].size;
+    self.weedContentView = [[UITextView alloc] initWithFrame:CGRectMake(0, statusBarSize.height + self.navigationController.navigationBar.frame.size.height, self.view.frame.size.width, self.view.frame.size.height)];
+    [self.weedContentView setFont:[UIFont systemFontOfSize:14.0]];
+    double lineHeight = self.weedContentView.font.lineHeight + 10;
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyle.lineHeightMultiple = lineHeight;
+    paragraphStyle.maximumLineHeight = lineHeight;
+    paragraphStyle.minimumLineHeight = lineHeight;
+    NSDictionary *attribute = @{
+                                NSParagraphStyleAttributeName : paragraphStyle,
+                                };
+    self.weedContentView.attributedText = [[NSAttributedString alloc] initWithString:@"" attributes:attribute];
+    
+    self.weedContentView.keyboardType = UIKeyboardTypeTwitter;
+    self.weedContentView.delegate = self;
+    self.weedContentView.backgroundColor = [UIColor clearColor];
+    self.weedContentView.dataDetectorTypes = UIDataDetectorTypeLink;
+    [self.weedContentView becomeFirstResponder];
+    [self.view addSubview:self.weedContentView];
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)];
     UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithTitle:@"Weed it" style:UIBarButtonItemStyleBordered target:self action:@selector(save:)];
@@ -69,22 +97,22 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
     } else {
         _hasEdited = NO;
         
-        _placeHolder = [[UILabel alloc]initWithFrame:CGRectMake(6, 70, 200, 20)];
+        _placeHolder = [[UILabel alloc]initWithFrame:CGRectMake(6, self.weedContentView.frame.origin.y, 200, lineHeight)];
         _placeHolder.text = @"Share the moment...";
         _placeHolder.font = self.weedContentView.font;
         _placeHolder.textColor = [UIColor lightGrayColor];
         [self.view addSubview:_placeHolder];
     }
-    self.weedContentView.delegate = self;
-    self.weedContentView.backgroundColor = [UIColor clearColor];
-    self.weedContentView.dataDetectorTypes = UIDataDetectorTypeLink;
-    [self.weedContentView becomeFirstResponder];
     
+    double userListY = self.weedContentView.frame.origin.y + lineHeight + (lineHeight - self.weedContentView.font.lineHeight)/2.0;
+    self.userList = [[UITableView alloc] initWithFrame:CGRectMake(0, userListY, self.view.frame.size.width, self.view.frame.size.height - userListY)];
     self.userList.hidden = true;
     [self.userList setSeparatorInset:UIEdgeInsetsZero];
     self.userList.tableFooterView = [[UIView alloc] init];
     self.userList.delegate = self;
+    self.userList.dataSource = self;
     [self.userList registerClass:[UserTableViewCell class] forCellReuseIdentifier:USER_TABLE_CELL_REUSE_ID];
+    [self.view addSubview:self.userList];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWasShown:)
@@ -230,6 +258,16 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
     }
 }
 
+- (void) adjustWeedContentViewContentInset
+{
+    [self.weedContentView setFrame:CGRectMake(self.weedContentView.frame.origin.x, self.weedContentView.frame.origin.y, self.weedContentView.frame.size.width, (self.imageCollectionView.hidden?self.toolbar.frame.origin.y:self.imageCollectionView.frame.origin.y) - self.weedContentView.frame.origin.y)];
+    CGPoint bottomOffset = CGPointMake(0, self.weedContentView.contentSize.height - self.weedContentView.bounds.size.height);
+    if (bottomOffset.y > 0) {
+        [self.weedContentView setContentOffset:bottomOffset animated:YES];
+    }
+    
+}
+
 // Called when the UIKeyboardDidShowNotification is sent.
 - (void)keyboardWasShown:(NSNotification*)aNotification
 {
@@ -241,12 +279,11 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
     UIEdgeInsets userListContentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0.0);
     self.userList.contentInset = userListContentInsets;
     self.userList.scrollIndicatorInsets = userListContentInsets;
-    UIEdgeInsets weedContentViewContentInsets = UIEdgeInsetsMake(self.weedContentView.contentInset.top, 0.0, kbSize.height, 0.0);
-    self.weedContentView.contentInset = weedContentViewContentInsets;
-    self.weedContentView.scrollIndicatorInsets = weedContentViewContentInsets;
     
     self.toolbar.center = CGPointMake(self.toolbar.bounds.size.width / 2, kbPosition.y - (self.toolbar.bounds.size.height / 2));
     self.imageCollectionView.center = CGPointMake(self.toolbar.center.x, self.toolbar.center.y - (self.toolbar.bounds.size.height / 2) - (self.imageCollectionView.bounds.size.height / 2));
+    
+    [self adjustWeedContentViewContentInset];
 }
 
 // Called when the UIKeyboardWillHideNotification is sent
@@ -257,6 +294,7 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
     self.userList.scrollIndicatorInsets = contentInsets;
     self.toolbar.center = CGPointMake(self.toolbar.bounds.size.width / 2, self.view.superview.bounds.size.height - (self.toolbar.bounds.size.height / 2));
     self.imageCollectionView.center = CGPointMake(self.toolbar.center.x, self.toolbar.center.y - (self.toolbar.bounds.size.height / 2) - (self.imageCollectionView.bounds.size.height / 2));
+    [self adjustWeedContentViewContentInset];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -301,7 +339,7 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
 
 #pragma mark -
 #pragma mark Save and Cancel
-- (IBAction) save: (id) sender {
+- (void) save: (id) sender {
     
     RKManagedObjectStore *objectStore = [[RKObjectManager sharedManager] managedObjectStore];
     Weed *weed = [NSEntityDescription insertNewObjectForEntityForName:@"Weed" inManagedObjectContext:objectStore.mainQueueManagedObjectContext];
@@ -379,7 +417,7 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
     }
 }
 
-- (IBAction) cancel: (id) sender {
+- (void) cancel: (id) sender {
     if ([self.weedContentView isFirstResponder]) {
         [self.weedContentView resignFirstResponder];
     }
@@ -424,8 +462,12 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
     [self.dataArray addObject: [ImageUtil generatePhotoThumbnail:pickImage]];
     
     [self.imageCollectionView reloadData];
-    
     [self.weedContentView becomeFirstResponder];
+}
+
+- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
+    [[UIApplication sharedApplication] setStatusBarStyle:[AppDelegate getUIStatusBarStyle]];
 }
 
 #pragma mark -- WeedAddingImageViewDelegate
@@ -434,6 +476,10 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
 {
     [self.dataArray removeObject:view.image];
     [self.imageCollectionView reloadData];
+    if ([self.dataArray count] == 0) {
+        self.imageCollectionView.hidden = true;
+        [self adjustWeedContentViewContentInset];
+    }
 }
 
 #pragma mark -- UICollectionViewDataSource
@@ -459,6 +505,15 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
     if (horizontal.y > 0) {
         [self.weedContentView endEditing:YES];
     }
+}
+
++(void) presentControllerFrom:(UIViewController*) controller withWeed:(Weed*) weed
+{
+    AddWeedViewController* viewController = [[AddWeedViewController alloc] initWithNibName:nil bundle:nil];
+    [viewController setLightWeed:weed];
+    UINavigationController *nav = [[UINavigationController alloc] initWithNibName:nil bundle:nil];
+    [nav setViewControllers:[[NSArray alloc] initWithObjects:viewController, nil]];
+    [controller presentViewController:nav animated:YES completion:nil];
 }
 
 /*

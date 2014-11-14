@@ -108,7 +108,14 @@ const NSInteger NON_GLOBAL_COMPOSE_TAG = 1;
 }
 
 -(void)lightIt:(id)sender {
-    [self performSegueWithIdentifier:@"addWeed" sender:sender];
+    if ([sender tag] != GLOBAL_COMPOSE_TAG) {
+        CGPoint buttonPosition = [sender convertPoint:CGPointZero toView:self.tableView];
+        NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:buttonPosition];
+        Weed *weed = [[self fetchedResultsController] objectAtIndexPath:indexPath];
+        [AddWeedViewController presentControllerFrom:self withWeed:weed];
+    } else {
+        [AddWeedViewController presentControllerFrom:self withWeed:nil];
+    }
 }
 
 -(void)refreshView:(UIRefreshControl *)refresh {
@@ -289,15 +296,6 @@ const NSInteger NON_GLOBAL_COMPOSE_TAG = 1;
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         Weed *weed = [[self fetchedResultsController] objectAtIndexPath:indexPath];
         [[segue destinationViewController] setCurrentWeed:weed];
-    } else if ([[segue identifier] isEqualToString:@"addWeed"]) {
-        if ([sender tag] != GLOBAL_COMPOSE_TAG) {
-            CGPoint buttonPosition = [sender convertPoint:CGPointZero toView:self.tableView];
-            NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:buttonPosition];
-            Weed *weed = [[self fetchedResultsController] objectAtIndexPath:indexPath];
-            UINavigationController* nav = [segue destinationViewController];
-            AddWeedViewController* addWeedController = (AddWeedViewController *) nav.topViewController;
-            [addWeedController setLightWeed:weed];
-        }
     } else if ([[segue identifier] isEqualToString:@"showUser"]) {
         CGPoint buttonPosition = [sender convertPoint:CGPointZero toView:self.tableView];
         NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:buttonPosition];

@@ -349,7 +349,7 @@ static NSString * WEED_DETAIL_TABLE_CELL_REUSE_ID = @"WeedDetailCell";
 }
 
 -(void)lightIt:(id)sender {
-    [self performSegueWithIdentifier:@"addWeed" sender:sender];
+    [AddWeedViewController presentControllerFrom:self withWeed:self.currentWeed];
 }
 
 -(void)showUsers:(id)sender {
@@ -396,10 +396,6 @@ static NSString * WEED_DETAIL_TABLE_CELL_REUSE_ID = @"WeedDetailCell";
             [[segue destinationViewController] setTitle:@"Seeded by"];
         }
         [[segue destinationViewController] setUsers:self.users];
-    } else if ([[segue identifier] isEqualToString:@"addWeed"]) {
-        UINavigationController* nav = [segue destinationViewController];
-        AddWeedViewController* addWeedController = (AddWeedViewController *) nav.topViewController;
-        [addWeedController setLightWeed:self.currentWeed];
     } else if ([[segue identifier] isEqualToString:@"showLight"]) {
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         Weed *weed = [self getWeed:indexPath];

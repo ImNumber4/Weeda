@@ -360,7 +360,6 @@
                         <barButtonItem key="rightBarButtonItem" id="1df-P9-XJc"/>
                     </navigationItem>
                     <connections>
-                        <segue destination="Up2-bL-hL3" kind="modal" identifier="addWeed" modalTransitionStyle="coverVertical" id="xm8-7m-xi9"/>
                         <segue destination="UY4-39-rji" kind="push" identifier="showUser" id="drt-oA-QVo"/>
                         <segue destination="6ro-Wi-h5r" kind="push" identifier="showWeed" id="6VO-gD-9Hh"/>
                     </connections>
@@ -471,7 +470,6 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="Weed" id="Ptm-OJ-FaH"/>
                     <connections>
-                        <segue destination="Up2-bL-hL3" kind="modal" identifier="addWeed" modalTransitionStyle="coverVertical" id="Th6-6F-Dxp"/>
                         <segue destination="UY4-39-rji" kind="push" identifier="showUser" id="JEh-w8-48C"/>
                         <segue destination="kcP-Br-rTe" kind="push" identifier="showUsers" id="Cu1-Di-ade"/>
                     </connections>
@@ -836,61 +834,6 @@
             </objects>
             <point key="canvasLocation" x="-739" y="175"/>
         </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="zjz-fH-nBj">
-            <objects>
-                <navigationController definesPresentationContext="YES" id="Up2-bL-hL3" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="PkP-Ok-xo5">
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="t7z-DZ-Kwv" kind="relationship" relationship="rootViewController" id="cUP-do-7dF"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="HAp-V5-L5u" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2161" y="1255"/>
-        </scene>
-        <!--Add weed-->
-        <scene sceneID="pyh-c2-iUW">
-            <objects>
-                <viewController title="Add weed" id="t7z-DZ-Kwv" customClass="AddWeedViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="cPi-6L-8i4">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="interactive" id="T4K-bK-L1t">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <accessibility key="accessibilityConfiguration" hint="">
-                                    <accessibilityTraits key="traits" none="YES"/>
-                                </accessibility>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" keyboardType="twitter"/>
-                            </textView>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="36" sectionHeaderHeight="22" sectionFooterHeight="22" id="uPt-ZK-oQw">
-                                <rect key="frame" x="0.0" y="97" width="320" height="471"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <connections>
-                                    <outlet property="dataSource" destination="t7z-DZ-Kwv" id="F32-DU-07x"/>
-                                    <outlet property="delegate" destination="t7z-DZ-Kwv" id="wOc-Ed-8qa"/>
-                                </connections>
-                            </tableView>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="Iaz-Pf-9Eh"/>
-                    <connections>
-                        <outlet property="userList" destination="uPt-ZK-oQw" id="mhp-tJ-Z6z"/>
-                        <outlet property="weedContentView" destination="T4K-bK-L1t" id="ngt-Xz-vXd"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Zyl-34-KtR" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2832" y="1255"/>
-        </scene>
     </scenes>
     <resources>
         <image name="light.png" width="60" height="58"/>
@@ -903,12 +846,11 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="Z8M-XG-GdH"/>
-        <segue reference="JEh-w8-48C"/>
-        <segue reference="6VO-gD-9Hh"/>
         <segue reference="aBn-FK-paW"/>
-        <segue reference="Th6-6F-Dxp"/>
-        <segue reference="Cu1-Di-ade"/>
+        <segue reference="6VO-gD-9Hh"/>
+        <segue reference="hHZ-jg-Kly"/>
+        <segue reference="gr4-Yl-zIz"/>
+        <segue reference="Z8M-XG-GdH"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="0.24313727021217346" green="0.64705884456634521" blue="0.24705883860588074" alpha="1" colorSpace="deviceRGB"/>
 </document>
