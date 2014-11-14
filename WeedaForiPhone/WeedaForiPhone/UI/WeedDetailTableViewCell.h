@@ -29,5 +29,6 @@
 @property (weak, nonatomic) IBOutlet WLImageView *userAvatar;
 
 - (void)decorateCellWithWeed:(Weed *)weed;
+- (void)cellWillDisappear;
 
 @end

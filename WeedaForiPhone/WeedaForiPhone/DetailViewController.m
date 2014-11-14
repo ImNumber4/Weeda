@@ -116,6 +116,17 @@ const CGFloat COLLECTION_VIEW_HEIGHT = 300.0;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(exitFullScreen:) name:UIWindowDidBecomeHiddenNotification object:self.view.window];
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    NSArray *cells = [self.tableView visibleCells];
+    for (UITableViewCell *cell in cells) {
+        if ([cell isKindOfClass:[WeedDetailTableViewCell class]]) {
+            WeedDetailTableViewCell *detailCell = (WeedDetailTableViewCell *)cell;
+            [detailCell cellWillDisappear];
+        }
+    }
+}
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return SECTION_COUNT;

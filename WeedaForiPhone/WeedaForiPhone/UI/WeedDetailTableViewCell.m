@@ -63,6 +63,8 @@ typedef NS_ENUM(NSInteger, DetailCellShowingType)
 
 @property (nonatomic) DetailCellShowingType type;
 
+@property (nonatomic, retain) NSURLConnection *connection;
+
 @end
 
 @implementation WeedDetailTableViewCell
@@ -149,14 +151,14 @@ typedef NS_ENUM(NSInteger, DetailCellShowingType)
         {
             NSString *videoUrl = [self stringURLFromYouTube];
             NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:videoUrl]];
-            [NSURLConnection connectionWithRequest:request delegate:self];
+            _connection = [NSURLConnection connectionWithRequest:request delegate:self];
             break;
         }
         case DetailCellShowingTypeUrl:
         {
             NSString *url = _urlDictionary.allValues.firstObject;
             NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
-            [NSURLConnection connectionWithRequest:request delegate:self];
+            _connection = [NSURLConnection connectionWithRequest:request delegate:self];
             break;
         }
         default:
@@ -167,6 +169,16 @@ typedef NS_ENUM(NSInteger, DetailCellShowingType)
     if (self.delegate) {
         [self.delegate tableViewCell:self height:height needReload:NO];
     }
+}
+
+- (void)cellWillDisappear
+{
+    if (_playerView.playerState == kYTPlayerStatePlaying) {
+        [_playerView stopVideo];
+    }
+    [_playerView clearVideo];
+    
+    [_connection cancel];
 }
 
 - (UICollectionView *)createCollectionViewWithRect:(CGRect)rect
@@ -487,6 +499,12 @@ typedef NS_ENUM(NSInteger, DetailCellShowingType)
 #pragma mark - NSURLConnectionData Delegate
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
+    NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*)response;
+    if (httpResponse.statusCode >= 400) {
+        NSLog(@"http request failed, code: %ld, reason: %@.", httpResponse.statusCode, [NSHTTPURLResponse localizedStringForStatusCode:httpResponse.statusCode]);
+        return;
+    }
+    
     NSString *videoId = [self videoIdWithURL:response.URL];
     _webSummaryView.frame = CGRectMake((self.frame.size.width - _webSummaryView.frame.size.width) * 0.5f, self.weedContentLabel.frame.origin.y + self.weedContentLabel.frame.size.height, CGRectGetWidth(_webSummaryView.frame), CGRectGetHeight(_webSummaryView.frame));
     
