@@ -68,16 +68,12 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
         self.weedContentView.text = [NSString stringWithFormat:@"@%@ %@", self.lightWeed.username, self.weedContentView.text] ;
     } else {
         _hasEdited = NO;
-//        self.weedContentView.text = @"Share the moment...";
-//        self.weedContentView.textColor = [UIColor lightGrayColor];
-//        [self.weedContentView setSelectedRange:NSMakeRange(0, 0)];
         
         _placeHolder = [[UILabel alloc]initWithFrame:CGRectMake(6, 70, 200, 20)];
         _placeHolder.text = @"Share the moment...";
         _placeHolder.font = self.weedContentView.font;
         _placeHolder.textColor = [UIColor lightGrayColor];
         [self.view addSubview:_placeHolder];
-//        [_placeHolder sendSubviewToBack:self.weedContentView];
     }
     self.weedContentView.delegate = self;
     self.weedContentView.backgroundColor = [UIColor clearColor];
@@ -132,28 +128,6 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
-    //detecting text if it is url, need to shorten it (here, we only deal with the situation which paste url from user)
-    if (text.length > 10) {
-        NSError *error = nil;
-        NSDataDetector *detector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeLink error: &error];
-        NSArray *urls = [detector matchesInString:text options:NSMatchingReportCompletion range:NSMakeRange(0, text.length)];
-        if (urls.count > 0) {
-            for (NSTextCheckingResult *result in urls) {
-                NSString *tinyUrl = [WLTinyURL tinyURLWithString:result.URL.absoluteString];
-                if (!tinyUrl) {
-                    return YES;
-                }
-                
-                textView.text = [[textView.text substringToIndex:(range.length > 0 ? range.location : range.location)] stringByAppendingString:[NSString stringWithFormat:@"%@ ", tinyUrl]];
-                if (!_hasEdited) {
-                    _hasEdited = YES;
-                    _placeHolder.hidden = YES;
-                }
-            }
-            return NO;
-        }
-    }
-    
     NSString * textNeedToBeProcessed = [[textView.text substringToIndex:(range.length > 0 ? range.location : range.location - range.length)] stringByAppendingString:text];
     NSArray *allWords = [textNeedToBeProcessed componentsSeparatedByCharactersInSet:[NSMutableCharacterSet whitespaceAndNewlineCharacterSet]];
     NSString *mostRecentWord = [allWords lastObject];
@@ -348,7 +322,7 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
     
     // If appropriate, configure the new managed object.
     // Normally you should use accessor methods, but using KVC here avoids the need to add a custom class to the template.
-    weed.content = [self parseURLWithContent:self.weedContentView.text];
+    weed.content = self.weedContentView.text;
     weed.time = [NSDate date];
     weed.image_count = [NSNumber numberWithUnsignedInteger:self.dataArray.count];
     
@@ -452,24 +426,6 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
     [self.imageCollectionView reloadData];
     
     [self.weedContentView becomeFirstResponder];
-}
-
-#pragma mark -- process weed content
-- (NSString *)parseURLWithContent:(NSString *)weedContent
-{
-    NSError *error = nil;
-    NSDataDetector *detector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeLink error: &error];
-    NSArray *urls = [detector matchesInString:weedContent options:NSMatchingReportCompletion range:NSMakeRange(0, weedContent.length)];
-    
-    for (NSTextCheckingResult *result in urls) {
-        NSString *tinyUrl = [WLTinyURL tinyURLWithString:result.URL.absoluteString];
-        if (!tinyUrl) {
-            continue;
-        }
-        
-        weedContent = [weedContent stringByReplacingCharactersInRange:result.range withString:tinyUrl];
-    }
-    return weedContent;
 }
 
 #pragma mark -- WeedAddingImageViewDelegate

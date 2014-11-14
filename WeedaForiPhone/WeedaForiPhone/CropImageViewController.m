@@ -300,6 +300,16 @@ static const double TOOLBAR_HEIGHT = 70;
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (BOOL)shouldAutorotate
+{
+    return NO;
+}
+
+- (NSUInteger)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskPortrait;
+}
+
 @end
 
 @implementation WLCropImageMaskView

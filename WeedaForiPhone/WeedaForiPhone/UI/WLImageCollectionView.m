@@ -160,7 +160,7 @@
 {
     //Add Rotation Gesture
     [[UIDevice currentDevice]beginGeneratingDeviceOrientationNotifications];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(handleOrentation:) name:UIDeviceOrientationDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(handleOrientation:) name:UIDeviceOrientationDidChangeNotification object:nil];
     
     _currentIndexPath = indexPath;
     
@@ -314,7 +314,7 @@
     }];
 }
 
-- (void)handleOrentation:(NSNotification *)rotationNotification
+- (void)handleOrientation:(NSNotification *)rotationNotification
 {
     UIDeviceOrientation orientation = [[UIDevice currentDevice]orientation];
     [self rotateCollectionView:orientation];

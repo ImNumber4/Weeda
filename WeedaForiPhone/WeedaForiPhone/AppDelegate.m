@@ -14,6 +14,9 @@
 #import "User.h"
 #import "WeedImage.h"
 
+#define IS_OS_6_OR_LATER    ([[[UIDevice currentDevice] systemVersion] floatValue] >= 6.0)
+#define IS_OS_8_OR_LATER    ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
+
 @interface AppDelegate ()
 
 @end
@@ -46,7 +49,13 @@ NSString * _deviceToken;
         [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
     }
     self.badgeCount = [UIApplication sharedApplication].applicationIconBadgeNumber;
+    
     return YES;
+}
+
+- (NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window
+{
+    return UIInterfaceOrientationMaskPortrait;
 }
 
 - (void) setCurrentUser:(User *)currentUser

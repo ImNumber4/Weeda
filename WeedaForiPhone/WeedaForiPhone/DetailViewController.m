@@ -54,6 +54,10 @@ const CGFloat COLLECTION_VIEW_HEIGHT = 300.0;
 @property (nonatomic, retain) UICollectionView *imageCollectionView;
 @property (nonatomic, strong) NSFetchedResultsController *fetchMetadataResultController;
 
+@property (nonatomic) CGFloat detailWeedCellHeight;
+
+//@property (nonatomic, retain) UIView *statusBarBackground;
+
 @end
 
 @implementation DetailViewController
@@ -61,6 +65,16 @@ const CGFloat COLLECTION_VIEW_HEIGHT = 300.0;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+//    _statusBarBackground = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 20)];
+//    _statusBarBackground.backgroundColor = [ColorDefinition greenColor];
+//    [self.view addSubview:_statusBarBackground];
+    
+//    _statusBarBackground.translatesAutoresizingMaskIntoConstraints = NO;
+//    NSDictionary *vs = NSDictionaryOfVariableBindings(_statusBarBackground);
+//    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_statusBarBackground(20)]" options:0 metrics:nil views:vs]];
+//    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_statusBarBackground]|" options:0 metrics:nil views:vs]];
+    
     self.parentWeeds = [[NSMutableArray alloc] init];
     self.lights = [[NSMutableArray alloc] init];
     [self.tableView setSeparatorInset:UIEdgeInsetsZero];
@@ -98,6 +112,8 @@ const CGFloat COLLECTION_VIEW_HEIGHT = 300.0;
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
         RKLogError(@"getLights failed with error: %@", error);
     }];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(exitFullScreen:) name:UIWindowDidBecomeHiddenNotification object:self.view.window];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -160,12 +176,12 @@ const CGFloat COLLECTION_VIEW_HEIGHT = 300.0;
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == CURRENT_WEED_SECTION_INDEX) {
-        return [self getCurrentWeedCellHeight];
+        return _detailWeedCellHeight;
     } else if ([indexPath section] == CURRENT_WEED_CONTROL_SECTION_INDEX) {
         return CURRENT_WEED_CONTROL_CELL_HEIGHT;
     } else if ([indexPath section] == PLACEHOLDER_SECTION_INDEX) {
         CGFloat orginalOffset = self.tableView.contentOffset.y;
-        CGFloat contentHeight = self.tableView.bounds.size.height - [self getCurrentWeedCellHeight] - (self.parentWeeds.count + self.lights.count) * WEED_CELL_HEIGHT + orginalOffset - self.tabBarController.tabBar.frame.size.height - CURRENT_WEED_CONTROL_CELL_HEIGHT + 1;
+        CGFloat contentHeight = self.tableView.bounds.size.height - _detailWeedCellHeight - (self.parentWeeds.count + self.lights.count) * WEED_CELL_HEIGHT + orginalOffset - self.tabBarController.tabBar.frame.size.height - CURRENT_WEED_CONTROL_CELL_HEIGHT + 1;
         if (contentHeight > 0.0) {
             return contentHeight;
         }else{
@@ -205,28 +221,6 @@ const CGFloat COLLECTION_VIEW_HEIGHT = 300.0;
 - (void)configureWeedDetailTableViewCell:(WeedDetailTableViewCell *)cell
 {
     cell.delegate = self;
-    
-    NSString *content = self.currentWeed.content;
-    NSString *username = self.currentWeed.username;
-    NSString *nameLabel = [NSString stringWithFormat:@"@%@", username];
-    [cell.userLabel setTitle:nameLabel forState:UIControlStateNormal];
-    
-    cell.weedContentLabel.text = content;
-    cell.weedContentLabel.delegate = self;
-    cell.weedContentLabel.translatesAutoresizingMaskIntoConstraints = YES;
-    [cell.weedContentLabel setFrame:CGRectMake(cell.weedContentLabel.frame.origin.x, cell.weedContentLabel.frame.origin.y, cell.weedContentLabel.frame.size.width, [self getTextLableHeight])];
-    
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"MMM. dd yyyy hh:mm"];
-    NSString *formattedDateString = [dateFormatter stringFromDate:self.currentWeed.time];
-    cell.timeLabel.text = [NSString stringWithFormat:@"%@", formattedDateString];
-
-    [cell.userAvatar setImageURL:[WeedImageController imageURLOfAvatar:self.currentWeed.user_id] isAvatar:YES];
-    cell.userAvatar.allowFullScreenDisplay = NO;
-    CALayer * l = [cell.userAvatar layer];
-    [l setMasksToBounds:YES];
-    [l setCornerRadius:7.0];
-    
     [cell decorateCellWithWeed:self.currentWeed];
 }
 
@@ -404,13 +398,13 @@ const CGFloat COLLECTION_VIEW_HEIGHT = 300.0;
     return UIGraphicsGetImageFromCurrentImageContext();
 }
 
-#pragma UITextView Delegate
-- (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange
+#pragma tablecell Delegate
+- (BOOL)pressURL:(NSURL *)url
 {
-    NSLog(@"Click url: %@", URL);
+    NSLog(@"Click url: %@", url);
     
     WLWebViewController *webViewController = [[WLWebViewController alloc]init];
-    webViewController.url = URL;
+    webViewController.url = url;
     
     CATransition *transition = [CATransition animation];
     transition.duration = 0.5f;
@@ -426,6 +420,34 @@ const CGFloat COLLECTION_VIEW_HEIGHT = 300.0;
     }];
     
     return NO;
+}
+
+- (void)tableViewCell:(WeedDetailTableViewCell *)cell height:(CGFloat)height needReload:(BOOL)needReload
+{
+    _detailWeedCellHeight = height;
+    if (needReload) {
+        [self.tableView beginUpdates];
+        [self.tableView endUpdates];
+    }
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
+}
+
+- (BOOL)prefersStatusBarHidden
+{
+    return NO;
+}
+
+- (void)exitFullScreen:(NSNotification *)notification
+{
+//    CGRect navigationFrame =  self.navigationController.navigationBar.frame;
+//    NSLog(@"navigation bar: %f-%f-%f-%f", navigationFrame.origin.x, navigationFrame.origin.y, CGRectGetWidth(navigationFrame), CGRectGetHeight(navigationFrame));
+//    navigationFrame.size.height = 64;
+//    self.navigationController.navigationBar.frame = navigationFrame;
+//    [self setNeedsStatusBarAppearanceUpdate];
 }
 
 @end

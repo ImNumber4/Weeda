@@ -187,7 +187,6 @@ const NSInteger NON_GLOBAL_COMPOSE_TAG = 1;
     [cell decorateCellWithWeed:weed];
     
     cell.delegate = self;
-    cell.weedContentLabel.delegate = self;
     
     [cell.waterDrop removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
     [cell.waterDrop addTarget:self action:@selector(waterIt:)forControlEvents:UIControlEventTouchDown];
@@ -407,26 +406,36 @@ const NSInteger NON_GLOBAL_COMPOSE_TAG = 1;
     }];
 }
 
-#pragma UITextView Delegate
-- (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange
+#pragma WeedTableViewCell Delegate
+- (BOOL)pressURL:(NSURL *)url
 {
     WLWebViewController *webViewController = [[WLWebViewController alloc]init];
-    webViewController.url = URL;
+    webViewController.url = url;
 
     CATransition *transition = [CATransition animation];
     transition.duration = 0.5f;
     transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
     transition.type = kCATransitionMoveIn;
     transition.subtype = kCATransitionFromTop;
+    
     [self.navigationController.view.layer addAnimation:transition forKey:nil];
     [self.navigationController pushViewController:webViewController animated:NO];
 
-    
     [UIView animateWithDuration:0.5 animations:^{
         self.tabBarController.tabBar.alpha = 0.0;
     }];
     
     return NO;
+}
+
+- (BOOL)shouldAutorotate
+{
+    return NO;
+}
+
+- (NSUInteger)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskPortrait;
 }
 
 @end

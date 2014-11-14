@@ -8,7 +8,7 @@
         <!--Navigation Controller-->
         <scene sceneID="sAc-gn-EsW">
             <objects>
-                <navigationController definesPresentationContext="YES" navigationBarHidden="YES" id="E1o-G2-Zkj" sceneMemberID="viewController">
+                <navigationController definesPresentationContext="YES" navigationBarHidden="YES" id="E1o-G2-Zkj" customClass="WLNavigationController" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="pVl-Xm-tdn">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -210,7 +210,7 @@
         <!--Weeds Navigation Controller-->
         <scene sceneID="cUi-kZ-frf">
             <objects>
-                <navigationController title="Weeds Navigation Controller" id="rS3-R9-Ivy" sceneMemberID="viewController">
+                <navigationController title="Weeds Navigation Controller" id="rS3-R9-Ivy" customClass="WLNavigationController" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Item" id="1L0-5V-pZh"/>
                     <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="yXu-0R-QUA">
                         <autoresizingMask key="autoresizingMask"/>
@@ -947,12 +947,12 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
+        <segue reference="drt-oA-QVo"/>
         <segue reference="aBn-FK-paW"/>
-        <segue reference="dSx-Us-Hdx"/>
-        <segue reference="JEh-w8-48C"/>
-        <segue reference="gr4-Yl-zIz"/>
-        <segue reference="Z8M-XG-GdH"/>
+        <segue reference="6VO-gD-9Hh"/>
+        <segue reference="Cu1-Di-ade"/>
         <segue reference="Th6-6F-Dxp"/>
+        <segue reference="Z8M-XG-GdH"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="0.24313727021217346" green="0.64705884456634521" blue="0.24705883860588074" alpha="1" colorSpace="deviceRGB"/>
 </document>

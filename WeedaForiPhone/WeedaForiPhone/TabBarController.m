@@ -118,4 +118,14 @@ const NSInteger ME_TAB_BAR_ITEM_INDEX = 4;
 }
 */
 
+- (BOOL)shouldAutorotate
+{
+    return NO;
+}
+
+- (NSUInteger)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskPortrait;
+}
+
 @end

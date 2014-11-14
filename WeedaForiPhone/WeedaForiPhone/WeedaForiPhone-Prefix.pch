@@ -19,5 +19,6 @@
 #import "Message.h"
 #import "WeedImage.h"
 #import "ColorDefinition.h"
+#import "NSURL+ShortenURL.h"
 #import <RestKit/RestKit.h>
 #endif

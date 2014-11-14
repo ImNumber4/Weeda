@@ -39,9 +39,10 @@
     [self.navigationItem setRightBarButtonItem:openWithButton];
     
     _webView = [[UIWebView alloc]initWithFrame:CGRectMake(0, 0, CGRectGetWidth([UIScreen mainScreen].bounds), CGRectGetHeight([UIScreen mainScreen].bounds) + 50)];
+    _webView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
     _webView.delegate = self;
     _webView.backgroundColor = [UIColor clearColor];
-    _webView.contentMode = UIViewContentModeTop;
+    _webView.scrollView.bounces = NO;
     [self.view addSubview:_webView];
     
     _progressView = [[UIProgressView alloc]initWithProgressViewStyle:UIProgressViewStyleDefault];
@@ -139,6 +140,10 @@
     }
     [self finishLoading];
     
+    [UIView animateWithDuration:0.5 animations:^{
+        self.tabBarController.tabBar.alpha = 1.0;
+    }];
+    
     CATransition*transition = [CATransition animation];
     transition.duration = 0.5f;
     transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionDefault];
@@ -146,6 +151,7 @@
     transition.subtype = kCATransitionFromBottom;
     [self.navigationController.view.layer addAnimation:transition forKey:nil];
     [self.navigationController popViewControllerAnimated:NO];
+    
 }
 
 - (void)openWith:(id)sender

@@ -16,6 +16,8 @@
 @required
 - (void)showUserViewController:(id)sender;
 - (void)selectWeedContent:(UIGestureRecognizer *)recognizer;
+@optional
+- (BOOL)pressURL:(NSURL *)url;
 @end
 
 @interface WeedTableViewCell : UITableViewCell <UICollectionViewDelegate, UICollectionViewDataSource> {

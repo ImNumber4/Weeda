@@ -267,4 +267,14 @@ static double SIGN_UP_SIZE = 100;
     }];
 }
 
+- (BOOL)shouldAutorotate
+{
+    return NO;
+}
+
+- (NSUInteger)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskPortrait;
+}
+
 @end

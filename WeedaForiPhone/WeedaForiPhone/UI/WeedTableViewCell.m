@@ -23,6 +23,8 @@
 @property (nonatomic, retain) UICollectionView *collectionView;
 @property (nonatomic, retain) NSArray *dataSource;
 
+@property (nonatomic, retain) NSMutableDictionary *urlDictionary;
+
 @end
 
 @implementation WeedTableViewCell
@@ -32,6 +34,8 @@
     [[NSBundle mainBundle] loadNibNamed:@"WeedTableViewCell" owner:self options:nil];
     self.bounds = self.view.bounds;
     [self addSubview:self.view];
+    
+    _urlDictionary = [NSMutableDictionary new];
     
     self.userAvatar.contentMode = UIViewContentModeScaleAspectFill;
     self.userAvatar.clipsToBounds = YES;
@@ -79,10 +83,14 @@
     _weedTmp = weed;
     
     [self.view setFrame:CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.frame.size.width, self.frame.size.height)];
-    self.weedContentLabel.attributedText = [[NSAttributedString alloc]initWithString:weed.content];
+    
+    
+    NSString *content = [self shortenURLInContent:weed.content];
+    self.weedContentLabel.attributedText = [[NSAttributedString alloc]initWithString:content];
     self.weedContentLabel.translatesAutoresizingMaskIntoConstraints = YES;
     CGSize textLableSize = [self.weedContentLabel sizeThatFits:CGSizeMake(DEFAULT_WEED_CONTENT_LABLE_WIDTH, MIN_HEIGHT_OF_TEXT_VIEW)];
     [self.weedContentLabel setFrame:CGRectMake(self.weedContentLabel.frame.origin.x, self.weedContentLabel.frame.origin.y, self.weedContentLabel.frame.size.width, MAX(MIN_HEIGHT_OF_TEXT_VIEW, textLableSize.height))];
+    self.weedContentLabel.delegate = self;
     
     NSString *nameLabel = [NSString stringWithFormat:@"@%@", weed.username];
     [self.usernameLabel setTitle:nameLabel forState:UIControlStateNormal];
@@ -142,15 +150,11 @@
             return NSOrderedAscending;
         }
     }];
-    
-//    for (WeedImage *image in dataSource) {
-//        CGSize expectedSize = [WeedImageController translateSizeWithFrameSize:CGSizeMake(image.width.floatValue, image.height.floatValue) frameSize:CGSizeMake(280, 200)];
-//        image.width = [NSNumber numberWithFloat:expectedSize.width];
-//        image.height = [NSNumber numberWithFloat:expectedSize.height];
-//    }
 
     return dataSource;
 }
+
+#pragma mark - private
 
 - (UICollectionView *)createImageCollectionView:(CGRect)rect
 {
@@ -173,6 +177,23 @@
     
     return collectionView;
 }
+
+- (NSString *)shortenURLInContent:(NSString *)content
+{
+    NSError *error = nil;
+    NSDataDetector *detector = [[NSDataDetector alloc]initWithTypes:NSTextCheckingTypeLink error:&error];
+    NSArray *results = [detector matchesInString:content options:NSMatchingReportCompletion range:NSMakeRange(0, content.length)];
+    for (NSTextCheckingResult *result in results) {
+        if (result.URL) {
+            NSString *url = result.URL.shortenString;
+            [_urlDictionary setObject:result.URL.absoluteString forKey:url];
+            content = [content stringByReplacingCharactersInRange:result.range withString:url];
+        }
+    }
+    return content;
+}
+
+#pragma mark - CollectionView & DataSource delegate
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
@@ -237,19 +258,6 @@
     [self scrollViewDidEndDragging:scrollView willDecelerate:NO];
 }
 
-- (CGFloat)weedContentLableHeight:(Weed *)weed
-{
-    UITextView *temp = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, DEFAULT_WEED_CONTENT_LABLE_WIDTH, 44)]; //This initial size doesn't matter
-    temp.font = [UIFont systemFontOfSize:11.0];
-    temp.text = weed.content;
-    
-    CGFloat textViewWidth = DEFAULT_WEED_CONTENT_LABLE_WIDTH;
-    CGRect tempFrame = CGRectMake(0, 0, textViewWidth, MIN_HEIGHT_OF_TEXT_VIEW); //The height of this frame doesn't matter.
-    CGSize tvsize = [temp sizeThatFits:CGSizeMake(tempFrame.size.width, tempFrame.size.height)]; //This calculates the necessary size so that all the text fits in the necessary width.
-
-    return MAX(tvsize.height, MIN_HEIGHT_OF_TEXT_VIEW);
-}
-
 + (CGFloat)heightOfWeedTableViewCell:(Weed *)weed
 {
     UITextView *temp = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, DEFAULT_WEED_CONTENT_LABLE_WIDTH, 44)]; //This initial size doesn't matter
@@ -289,6 +297,19 @@
     if ([self.delegate respondsToSelector:@selector(selectWeedContent:)]) {
         [self.delegate selectWeedContent:recognizer];
     }
+}
+
+#pragma mark - UITextViewDelegate
+- (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange
+{
+    if ([self.delegate respondsToSelector:@selector(pressURL:)]) {
+        NSError *error = nil;
+        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"((http|https):\\/\\/)" options:NSRegularExpressionCaseInsensitive error:&error];
+        NSString *shortenUrl = [regex stringByReplacingMatchesInString:URL.absoluteString options:NSMatchingReportCompletion range:NSMakeRange(0, URL.absoluteString.length) withTemplate:@""];
+        NSString *url = [_urlDictionary objectForKey:shortenUrl];
+        return [self.delegate pressURL:[NSURL URLWithString:url]];
+    }
+    return YES;
 }
 
 @end

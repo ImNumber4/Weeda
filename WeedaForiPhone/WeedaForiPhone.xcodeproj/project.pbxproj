@@ -152,7 +152,13 @@
 		EA76A507194E94AF00B60F04 /* WeedAddingImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = EA76A506194E94AF00B60F04 /* WeedAddingImageView.m */; };
 		EA76A50E1952833900B60F04 /* WeedAddingImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EA76A50C1952833900B60F04 /* WeedAddingImageCell.m */; };
 		EA76A50F1952833900B60F04 /* WeedAddingImageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EA76A50D1952833900B60F04 /* WeedAddingImageCell.xib */; };
+		EA76C3531A0AF32300C11467 /* Assets in Resources */ = {isa = PBXBuildFile; fileRef = EA76C3501A0AF32200C11467 /* Assets */; };
+		EA76C3541A0AF32300C11467 /* YTPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = EA76C3521A0AF32300C11467 /* YTPlayerView.m */; };
+		EA76C3AA1A0D866C00C11467 /* TFHpple.m in Sources */ = {isa = PBXBuildFile; fileRef = EA76C3A51A0D866C00C11467 /* TFHpple.m */; };
+		EA76C3AB1A0D866C00C11467 /* TFHppleElement.m in Sources */ = {isa = PBXBuildFile; fileRef = EA76C3A71A0D866C00C11467 /* TFHppleElement.m */; };
+		EA76C3AC1A0D866C00C11467 /* XPathQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = EA76C3A91A0D866C00C11467 /* XPathQuery.m */; };
 		EA9B504E19E9EAF7008B2464 /* WLProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = EA9B504D19E9EAF7008B2464 /* WLProgressView.m */; };
+		EAAC1A991A10A97F00242496 /* WLNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAAC1A981A10A97F00242496 /* WLNavigationController.m */; };
 		EAAE7B4B19611295003F0C65 /* WeedImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = EAAE7B4A19611295003F0C65 /* WeedImageView.m */; };
 		EAAFA44F1A0206A5005AC429 /* WLWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAAFA44E1A0206A5005AC429 /* WLWebViewController.m */; };
 		EAAFA4571A020D50005AC429 /* web_close.png in Resources */ = {isa = PBXBuildFile; fileRef = EAAFA4561A020D50005AC429 /* web_close.png */; };
@@ -164,6 +170,7 @@
 		EAB57B0C197B6F3F00C79E05 /* libSDWebImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EAB57AF0197B6BD500C79E05 /* libSDWebImage.a */; };
 		EAC6AAF0197B616A00017240 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAC6AACA19798F1100017240 /* ImageIO.framework */; };
 		EACD1157197CA76F00E45475 /* WeedImageController.m in Sources */ = {isa = PBXBuildFile; fileRef = EACD1156197CA76F00E45475 /* WeedImageController.m */; };
+		EAEA92F61A1440A900D3DFEC /* NSURL+ShortenURL.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEA92F51A1440A800D3DFEC /* NSURL+ShortenURL.m */; };
 		EAF6762C18FB62E4003BB138 /* SignupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAF6762B18FB62E4003BB138 /* SignupViewController.m */; };
 		EAFF8D6719ECDB9F006632A4 /* WLImageCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = EAFF8D6619ECDB9F006632A4 /* WLImageCollectionView.m */; };
 /* End PBXBuildFile section */
@@ -444,8 +451,19 @@
 		EA76A50B1952833900B60F04 /* WeedAddingImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WeedAddingImageCell.h; path = WeedaForiPhone/UI/WeedAddingImageCell.h; sourceTree = "<group>"; };
 		EA76A50C1952833900B60F04 /* WeedAddingImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WeedAddingImageCell.m; path = WeedaForiPhone/UI/WeedAddingImageCell.m; sourceTree = "<group>"; };
 		EA76A50D1952833900B60F04 /* WeedAddingImageCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = WeedAddingImageCell.xib; path = WeedaForiPhone/UI/WeedAddingImageCell.xib; sourceTree = "<group>"; };
+		EA76C3501A0AF32200C11467 /* Assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Assets; path = WeedaForiPhone/YouTubeUtil/Assets; sourceTree = "<group>"; };
+		EA76C3511A0AF32300C11467 /* YTPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YTPlayerView.h; path = WeedaForiPhone/YouTubeUtil/YTPlayerView.h; sourceTree = "<group>"; };
+		EA76C3521A0AF32300C11467 /* YTPlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YTPlayerView.m; path = WeedaForiPhone/YouTubeUtil/YTPlayerView.m; sourceTree = "<group>"; };
+		EA76C3A41A0D866C00C11467 /* TFHpple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TFHpple.h; path = WeedaForiPhone/hpple/TFHpple.h; sourceTree = "<group>"; };
+		EA76C3A51A0D866C00C11467 /* TFHpple.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TFHpple.m; path = WeedaForiPhone/hpple/TFHpple.m; sourceTree = "<group>"; };
+		EA76C3A61A0D866C00C11467 /* TFHppleElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TFHppleElement.h; path = WeedaForiPhone/hpple/TFHppleElement.h; sourceTree = "<group>"; };
+		EA76C3A71A0D866C00C11467 /* TFHppleElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TFHppleElement.m; path = WeedaForiPhone/hpple/TFHppleElement.m; sourceTree = "<group>"; };
+		EA76C3A81A0D866C00C11467 /* XPathQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XPathQuery.h; path = WeedaForiPhone/hpple/XPathQuery.h; sourceTree = "<group>"; };
+		EA76C3A91A0D866C00C11467 /* XPathQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XPathQuery.m; path = WeedaForiPhone/hpple/XPathQuery.m; sourceTree = "<group>"; };
 		EA9B504C19E9EAF7008B2464 /* WLProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WLProgressView.h; path = WeedaForiPhone/UI/WLProgressView.h; sourceTree = "<group>"; };
 		EA9B504D19E9EAF7008B2464 /* WLProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WLProgressView.m; path = WeedaForiPhone/UI/WLProgressView.m; sourceTree = "<group>"; };
+		EAAC1A971A10A97F00242496 /* WLNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WLNavigationController.h; sourceTree = "<group>"; };
+		EAAC1A981A10A97F00242496 /* WLNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WLNavigationController.m; sourceTree = "<group>"; };
 		EAAE7B4919611295003F0C65 /* WeedImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WeedImageView.h; path = WeedaForiPhone/UI/WeedImageView.h; sourceTree = "<group>"; };
 		EAAE7B4A19611295003F0C65 /* WeedImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WeedImageView.m; path = WeedaForiPhone/UI/WeedImageView.m; sourceTree = "<group>"; };
 		EAAFA44D1A0206A5005AC429 /* WLWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WLWebViewController.h; sourceTree = "<group>"; };
@@ -462,6 +480,8 @@
 		EAC6AACA19798F1100017240 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		EACD1155197CA76F00E45475 /* WeedImageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WeedImageController.h; path = WeedaForiPhone/Library/WeedImageController.h; sourceTree = "<group>"; };
 		EACD1156197CA76F00E45475 /* WeedImageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WeedImageController.m; path = WeedaForiPhone/Library/WeedImageController.m; sourceTree = "<group>"; };
+		EAEA92F41A1440A800D3DFEC /* NSURL+ShortenURL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSURL+ShortenURL.h"; path = "WeedaForiPhone/UrlUtil/NSURL+ShortenURL.h"; sourceTree = "<group>"; };
+		EAEA92F51A1440A800D3DFEC /* NSURL+ShortenURL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSURL+ShortenURL.m"; path = "WeedaForiPhone/UrlUtil/NSURL+ShortenURL.m"; sourceTree = "<group>"; };
 		EAF6762A18FB62E4003BB138 /* SignupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignupViewController.h; sourceTree = "<group>"; };
 		EAF6762B18FB62E4003BB138 /* SignupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignupViewController.m; sourceTree = "<group>"; };
 		EAFF8D6519ECDB9F006632A4 /* WLImageCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WLImageCollectionView.h; path = WeedaForiPhone/UI/WLImageCollectionView.h; sourceTree = "<group>"; };
@@ -473,6 +493,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A953B6F018D6D7BC001CDD4C /* libxml2.dylib in Frameworks */,
 				A98A89C2195FCAC6005A5871 /* AddressBook.framework in Frameworks */,
 				EAB57B0C197B6F3F00C79E05 /* libSDWebImage.a in Frameworks */,
 				EAC6AAF0197B616A00017240 /* ImageIO.framework in Frameworks */,
@@ -482,7 +503,6 @@
 				A953B6F618D6D7D2001CDD4C /* Security.framework in Frameworks */,
 				A953B6F418D6D7CB001CDD4C /* QuartzCore.framework in Frameworks */,
 				A953B6F218D6D7C3001CDD4C /* MobileCoreServices.framework in Frameworks */,
-				A953B6F018D6D7BC001CDD4C /* libxml2.dylib in Frameworks */,
 				A953B6EE18D6D7B5001CDD4C /* CFNetwork.framework in Frameworks */,
 				A914CCA618CD756200B870D8 /* CoreGraphics.framework in Frameworks */,
 				A914CCAA18CD756200B870D8 /* CoreData.framework in Frameworks */,
@@ -581,12 +601,14 @@
 			children = (
 				EAB57AE8197B6BD500C79E05 /* SDWebImage.xcodeproj */,
 				A953B6DC18D6D794001CDD4C /* RestKit.xcodeproj */,
+				EA76C3A31A0D865A00C11467 /* hpple */,
 				A914CCE218CD76C500B870D8 /* Model */,
 				EACD114E197CA72900E45475 /* Library */,
 				A9CA8E9A18F3E01C004F095D /* UI */,
 				A9DFADD719A055B200AB00BA /* ColorUtil */,
 				A9653A8A19984C7400B9E124 /* ImageUtil */,
 				EAB381C51A00AF2B00C4C3BA /* UrlUtil */,
+				EA76C3441A0AF22D00C11467 /* YouTubeUtil */,
 				A9CA8E9218F3DAC6004F095D /* Images */,
 				A914CCAB18CD756200B870D8 /* WeedaForiPhone */,
 				A914CCD118CD756200B870D8 /* WeedaForiPhoneTests */,
@@ -675,6 +697,8 @@
 				EAAFA44E1A0206A5005AC429 /* WLWebViewController.m */,
 				A926EF041A1577DB00AB2F04 /* BongsViewController.h */,
 				A926EF051A1577DB00AB2F04 /* BongsViewController.m */,
+				EAAC1A971A10A97F00242496 /* WLNavigationController.h */,
+				EAAC1A981A10A97F00242496 /* WLNavigationController.m */,
 			);
 			path = WeedaForiPhone;
 			sourceTree = "<group>";
@@ -864,6 +888,29 @@
 			name = ColorUtil;
 			sourceTree = "<group>";
 		};
+		EA76C3441A0AF22D00C11467 /* YouTubeUtil */ = {
+			isa = PBXGroup;
+			children = (
+				EA76C3501A0AF32200C11467 /* Assets */,
+				EA76C3511A0AF32300C11467 /* YTPlayerView.h */,
+				EA76C3521A0AF32300C11467 /* YTPlayerView.m */,
+			);
+			name = YouTubeUtil;
+			sourceTree = "<group>";
+		};
+		EA76C3A31A0D865A00C11467 /* hpple */ = {
+			isa = PBXGroup;
+			children = (
+				EA76C3A41A0D866C00C11467 /* TFHpple.h */,
+				EA76C3A51A0D866C00C11467 /* TFHpple.m */,
+				EA76C3A61A0D866C00C11467 /* TFHppleElement.h */,
+				EA76C3A71A0D866C00C11467 /* TFHppleElement.m */,
+				EA76C3A81A0D866C00C11467 /* XPathQuery.h */,
+				EA76C3A91A0D866C00C11467 /* XPathQuery.m */,
+			);
+			name = hpple;
+			sourceTree = "<group>";
+		};
 		EAAFA4681A044B41005AC429 /* WLUIKit */ = {
 			isa = PBXGroup;
 			children = (
@@ -878,6 +925,8 @@
 			children = (
 				EAB381CC1A00AFF100C4C3BA /* WLTinyURL.h */,
 				EAB381CD1A00AFF100C4C3BA /* WLTinyURL.m */,
+				EAEA92F41A1440A800D3DFEC /* NSURL+ShortenURL.h */,
+				EAEA92F51A1440A800D3DFEC /* NSURL+ShortenURL.m */,
 			);
 			name = UrlUtil;
 			sourceTree = "<group>";
@@ -1106,6 +1155,7 @@
 				0EB8C4D919C5C00900BD64E1 /* bubble-typing@2x.png in Resources */,
 				A991C05018FB517600A3D2CD /* selected_profile_icon.png in Resources */,
 				A9180C4D192B329D00668E4F /* setting_icon.png in Resources */,
+				EA76C3531A0AF32300C11467 /* Assets in Resources */,
 				A959D30719282A9A0085F6C1 /* map.png in Resources */,
 				0ECB453719C5C58300690944 /* delete.png in Resources */,
 				A9653A9719988E2C00B9E124 /* Yes.png in Resources */,
@@ -1171,6 +1221,9 @@
 				A9653A9019984D3300B9E124 /* UIImage+ImageEffects.m in Sources */,
 				EA1E4D9419E5179600222BF4 /* WeedImageMaxDisplayView.m in Sources */,
 				A991C04818FB3B7700A3D2CD /* TabBarController.m in Sources */,
+				EAAC1A991A10A97F00242496 /* WLNavigationController.m in Sources */,
+				EA76C3AA1A0D866C00C11467 /* TFHpple.m in Sources */,
+				EA76C3541A0AF32300C11467 /* YTPlayerView.m in Sources */,
 				EA38FC68190D6D26007D652B /* CropImageViewController.m in Sources */,
 				A914CCB618CD756200B870D8 /* AppDelegate.m in Sources */,
 				EAF6762C18FB62E4003BB138 /* SignupViewController.m in Sources */,
@@ -1184,11 +1237,13 @@
 				EAAE7B4B19611295003F0C65 /* WeedImageView.m in Sources */,
 				0EB8C4BF19C5C00800BD64E1 /* JSDismissiveTextView.m in Sources */,
 				A9CA8E7E18F0F814004F095D /* UserViewController.m in Sources */,
+				EAEA92F61A1440A900D3DFEC /* NSURL+ShortenURL.m in Sources */,
 				A91A62ED18FF8F48008726E5 /* UserListViewController.m in Sources */,
 				A9CA8E6618E9132C004F095D /* AddWeedViewController.m in Sources */,
 				0EB8C4E719C5C00900BD64E1 /* UIView+AnimationOptionsForCurve.m in Sources */,
 				EA4DB14C196114D6005ED7F7 /* WeedShowImageCell.m in Sources */,
 				0EB8C4BD19C5C00800BD64E1 /* JSBubbleMessageCell.m in Sources */,
+				EA76C3AC1A0D866C00C11467 /* XPathQuery.m in Sources */,
 				A9653A9519984FFA00B9E124 /* BlurView.m in Sources */,
 				EAAFA44F1A0206A5005AC429 /* WLWebViewController.m in Sources */,
 				0EB8C4C319C5C00800BD64E1 /* NSString+JSMessagesView.m in Sources */,
@@ -1203,6 +1258,7 @@
 				0ECB453A19C5C5AF00690944 /* Model.xcdatamodeld in Sources */,
 				A9C087A719FB0C3600B0622B /* UpdateUsernameViewController.m in Sources */,
 				0ECB453D19C5C8E900690944 /* ConversationViewController.m in Sources */,
+				EA76C3AB1A0D866C00C11467 /* TFHppleElement.m in Sources */,
 				0EA09D0419BF56EC00E5214E /* Message.m in Sources */,
 				A9FB79F91985A94500DB35CB /* UserInfoEditableCell.m in Sources */,
 			);
@@ -1296,6 +1352,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(SDKROOT)/usr/include/libxml2",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE = "D16937DF-CDF6-4E24-93D9-B6F02CF041A0";
@@ -1330,6 +1391,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(SDKROOT)/usr/include/libxml2",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				PROVISIONING_PROFILE = "D16937DF-CDF6-4E24-93D9-B6F02CF041A0";
 				SDKROOT = iphoneos;
@@ -1346,7 +1412,10 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "WeedaForiPhone/WeedaForiPhone-Prefix.pch";
-				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"";
+				HEADER_SEARCH_PATHS = (
+					"\"$(BUILT_PRODUCTS_DIR)/../../Headers\"",
+					/usr/include/libxml2,
+				);
 				INFOPLIST_FILE = "WeedaForiPhone/WeedaForiPhone-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1368,7 +1437,10 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "WeedaForiPhone/WeedaForiPhone-Prefix.pch";
-				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"";
+				HEADER_SEARCH_PATHS = (
+					"\"$(BUILT_PRODUCTS_DIR)/../../Headers\"",
+					/usr/include/libxml2,
+				);
 				INFOPLIST_FILE = "WeedaForiPhone/WeedaForiPhone-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
