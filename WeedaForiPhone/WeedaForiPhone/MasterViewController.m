@@ -19,7 +19,7 @@
 
 #import <RestKit/RestKit.h>
 
-@interface MasterViewController () <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, NSFetchedResultsControllerDelegate, WeedTableViewCellDelegate>
+@interface MasterViewController () <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, WeedTableViewCellDelegate>
 
 @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
 
@@ -65,8 +65,6 @@ const NSInteger NON_GLOBAL_COMPOSE_TAG = 1;
     UIBarButtonItem *composeButton = [[UIBarButtonItem alloc] initWithImage:[self getImage:@"compose.png" width:30 height:30] style:UIBarButtonItemStylePlain target:self action:@selector(lightIt:)];
     composeButton.tag = GLOBAL_COMPOSE_TAG;
     [self.navigationItem setRightBarButtonItem:composeButton];
-    
-    [self.fetchedResultsController setDelegate:self];
     
     BOOL fetchSuccessful = [self.fetchedResultsController performFetch:&error];
     if (! fetchSuccessful) {

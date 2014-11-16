@@ -73,6 +73,8 @@
 		A926EEFC1A14B8DF00AB2F04 /* bong.png in Resources */ = {isa = PBXBuildFile; fileRef = A926EEFA1A14B8DF00AB2F04 /* bong.png */; };
 		A926EEFD1A14B8DF00AB2F04 /* selected_bong.png in Resources */ = {isa = PBXBuildFile; fileRef = A926EEFB1A14B8DF00AB2F04 /* selected_bong.png */; };
 		A926EF061A1577DB00AB2F04 /* BongsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A926EF051A1577DB00AB2F04 /* BongsViewController.m */; };
+		A926EF0B1A16E37100AB2F04 /* WeedControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = A926EF0A1A16E37100AB2F04 /* WeedControlView.m */; };
+		A926EF181A18165B00AB2F04 /* TrendTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A926EF171A18165B00AB2F04 /* TrendTableViewController.m */; };
 		A92E513A19046E2A00FC518F /* UserTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A92E513919046E2A00FC518F /* UserTableViewCell.m */; };
 		A92E513D19047C6000FC518F /* follow.png in Resources */ = {isa = PBXBuildFile; fileRef = A92E513B19047C6000FC518F /* follow.png */; };
 		A92E514019048B0400FC518F /* followed.png in Resources */ = {isa = PBXBuildFile; fileRef = A92E513F19048B0400FC518F /* followed.png */; };
@@ -117,7 +119,6 @@
 		A9A4680F190DDF4100461E90 /* light.png in Resources */ = {isa = PBXBuildFile; fileRef = A9A4680E190DDF4100461E90 /* light.png */; };
 		A9A46824190DE2C600461E90 /* lightgray.png in Resources */ = {isa = PBXBuildFile; fileRef = A9A46823190DE2C600461E90 /* lightgray.png */; };
 		A9A46830190E1E8E00461E90 /* WeedDetailTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A9A4682F190E1E8E00461E90 /* WeedDetailTableViewCell.m */; };
-		A9A46833190E210900461E90 /* WeedDetailControlTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A9A46832190E210900461E90 /* WeedDetailControlTableViewCell.m */; };
 		A9B45DDE194EAC40007AFB06 /* WeedTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9B45DDD194EAC40007AFB06 /* WeedTableViewCell.xib */; };
 		A9C0879719F8B9B700B0622B /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C0879619F8B9B700B0622B /* SettingsViewController.m */; };
 		A9C087A119FB0C0300B0622B /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C087A019FB0C0300B0622B /* AboutViewController.m */; };
@@ -338,6 +339,10 @@
 		A926EEFB1A14B8DF00AB2F04 /* selected_bong.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = selected_bong.png; path = WeedaForiPhone/Images/selected_bong.png; sourceTree = "<group>"; };
 		A926EF041A1577DB00AB2F04 /* BongsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BongsViewController.h; sourceTree = "<group>"; };
 		A926EF051A1577DB00AB2F04 /* BongsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BongsViewController.m; sourceTree = "<group>"; };
+		A926EF091A16E37100AB2F04 /* WeedControlView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WeedControlView.h; path = WeedaForiPhone/WeedControlView.h; sourceTree = "<group>"; };
+		A926EF0A1A16E37100AB2F04 /* WeedControlView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WeedControlView.m; path = WeedaForiPhone/WeedControlView.m; sourceTree = "<group>"; };
+		A926EF161A18165B00AB2F04 /* TrendTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrendTableViewController.h; sourceTree = "<group>"; };
+		A926EF171A18165B00AB2F04 /* TrendTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TrendTableViewController.m; sourceTree = "<group>"; };
 		A92E513819046E2A00FC518F /* UserTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserTableViewCell.h; path = WeedaForiPhone/UI/UserTableViewCell.h; sourceTree = "<group>"; };
 		A92E513919046E2A00FC518F /* UserTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserTableViewCell.m; path = WeedaForiPhone/UI/UserTableViewCell.m; sourceTree = "<group>"; };
 		A92E513B19047C6000FC518F /* follow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = follow.png; path = WeedaForiPhone/Images/follow.png; sourceTree = "<group>"; };
@@ -391,8 +396,6 @@
 		A9A46823190DE2C600461E90 /* lightgray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = lightgray.png; path = WeedaForiPhone/Images/lightgray.png; sourceTree = "<group>"; };
 		A9A4682E190E1E8E00461E90 /* WeedDetailTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WeedDetailTableViewCell.h; path = WeedaForiPhone/UI/WeedDetailTableViewCell.h; sourceTree = "<group>"; };
 		A9A4682F190E1E8E00461E90 /* WeedDetailTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WeedDetailTableViewCell.m; path = WeedaForiPhone/UI/WeedDetailTableViewCell.m; sourceTree = "<group>"; };
-		A9A46831190E210900461E90 /* WeedDetailControlTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WeedDetailControlTableViewCell.h; path = WeedaForiPhone/UI/WeedDetailControlTableViewCell.h; sourceTree = "<group>"; };
-		A9A46832190E210900461E90 /* WeedDetailControlTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WeedDetailControlTableViewCell.m; path = WeedaForiPhone/UI/WeedDetailControlTableViewCell.m; sourceTree = "<group>"; };
 		A9B45DDD194EAC40007AFB06 /* WeedTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = WeedTableViewCell.xib; path = WeedaForiPhone/UI/WeedTableViewCell.xib; sourceTree = "<group>"; };
 		A9C0879519F8B9B700B0622B /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		A9C0879619F8B9B700B0622B /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
@@ -699,6 +702,8 @@
 				A926EF051A1577DB00AB2F04 /* BongsViewController.m */,
 				EAAC1A971A10A97F00242496 /* WLNavigationController.h */,
 				EAAC1A981A10A97F00242496 /* WLNavigationController.m */,
+				A926EF161A18165B00AB2F04 /* TrendTableViewController.h */,
+				A926EF171A18165B00AB2F04 /* TrendTableViewController.m */,
 			);
 			path = WeedaForiPhone;
 			sourceTree = "<group>";
@@ -840,8 +845,6 @@
 				A9B45DDD194EAC40007AFB06 /* WeedTableViewCell.xib */,
 				A9A4682E190E1E8E00461E90 /* WeedDetailTableViewCell.h */,
 				A9A4682F190E1E8E00461E90 /* WeedDetailTableViewCell.m */,
-				A9A46831190E210900461E90 /* WeedDetailControlTableViewCell.h */,
-				A9A46832190E210900461E90 /* WeedDetailControlTableViewCell.m */,
 				A91816C5195637B400E7DD02 /* WeedBasicTableViewCell.h */,
 				A91816C6195637B400E7DD02 /* WeedBasicTableViewCell.m */,
 				A91816C7195637B400E7DD02 /* WeedBasicTableViewCell.xib */,
@@ -875,6 +878,8 @@
 				A9C1BDE119F643D6003672DD /* UIViewHelper.m */,
 				EAFF8D6519ECDB9F006632A4 /* WLImageCollectionView.h */,
 				EAFF8D6619ECDB9F006632A4 /* WLImageCollectionView.m */,
+				A926EF091A16E37100AB2F04 /* WeedControlView.h */,
+				A926EF0A1A16E37100AB2F04 /* WeedControlView.m */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -1191,9 +1196,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				EACD1157197CA76F00E45475 /* WeedImageController.m in Sources */,
+				A926EF181A18165B00AB2F04 /* TrendTableViewController.m in Sources */,
 				A914CCC218CD756200B870D8 /* DetailViewController.m in Sources */,
 				0EB8C4E419C5C00900BD64E1 /* UIButton+JSMessagesView.m in Sources */,
-				A9A46833190E210900461E90 /* WeedDetailControlTableViewCell.m in Sources */,
 				A926EF061A1577DB00AB2F04 /* BongsViewController.m in Sources */,
 				0EB8C4C119C5C00800BD64E1 /* JSMessageSoundEffect.m in Sources */,
 				A9A46830190E1E8E00461E90 /* WeedDetailTableViewCell.m in Sources */,
@@ -1203,6 +1208,7 @@
 				0EB8C4E619C5C00900BD64E1 /* UIImage+JSMessagesView.m in Sources */,
 				EA76A50E1952833900B60F04 /* WeedAddingImageCell.m in Sources */,
 				0EB8C4BE19C5C00800BD64E1 /* JSBubbleView.m in Sources */,
+				A926EF0B1A16E37100AB2F04 /* WeedControlView.m in Sources */,
 				EA9B504E19E9EAF7008B2464 /* WLProgressView.m in Sources */,
 				EA76A507194E94AF00B60F04 /* WeedAddingImageView.m in Sources */,
 				A9CA8EA018F3E255004F095D /* WeedTableViewCell.m in Sources */,

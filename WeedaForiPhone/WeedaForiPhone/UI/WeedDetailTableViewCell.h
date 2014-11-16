@@ -27,15 +27,10 @@
 @property (strong, nonatomic) UIButton *userLabel;
 @property (strong, nonatomic) UILabel *timeLabel;
 @property (strong, nonatomic) WLImageView *userAvatar;
-@property (strong, nonatomic) UIButton *waterCount;
-@property (strong, nonatomic) UIButton *seedCount;
-@property (nonatomic, strong) UIButton *seed;
-@property (nonatomic, strong) UIButton *waterDrop;
-@property (nonatomic, strong) UIButton *light;
-@property (nonatomic, strong) UIButton *lightCount;
-@property (nonatomic, strong) UITableView *lights;
 
-- (void)decorateCellWithWeed:(Weed *)weed;
+@property (nonatomic, retain) Weed *weed;
+
+- (void)decorateCellWithWeed:(Weed *)weed parentViewController:(UIViewController *) parentViewController showHeader:(BOOL) showHeader;
 - (void)cellWillDisappear;
 
 @end

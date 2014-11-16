@@ -37,6 +37,25 @@ class WeedDAO extends BaseDAO
 		return $weeds;
 	}
 	
+	public function trends($currentUser_id) {
+
+		/* grab the users from the db */
+		$query = "SELECT weed.id as weed_id, (weed.light_count + weed.seed_count + weed.water_count) as score, user.id as user_id, weed.light_id as light_id, weed.root_id as root_id, currentUserWater.user_id as if_cur_user_water_it, currentUserWeed.user_id as if_cur_user_light_it, currentUserSeed.user_id as if_cur_user_seed_it, weed.water_count as water_count, weed.seed_count as seed_count, weed.light_count as light_count, weed.content as content, user.time as user_time, weed.time as weed_time, username, weed.deleted as weed_deleted, user.deleted as user_deleted, weed.image_count as image_count, weed.image_metadata as image_metadata FROM weed left join weed currentUserWeed on currentUserWeed.root_id=weed.id or currentUserWeed.light_id=weed.id and currentUserWeed.user_id=$currentUser_id left join water currentUserWater on currentUserWater.weed_id=weed.id and currentUserWater.user_id=$currentUser_id left join seed currentUserSeed on currentUserSeed.weed_id=weed.id and currentUserSeed.user_id=$currentUser_id left join user on user.id=weed.user_id GROUP BY weed.id order by score desc limit 10";
+
+		$result = $this->db_conn->query($query);
+
+		/* create one master array of the records */
+		$weeds = array();
+		if(mysql_num_rows($result)) {
+			while($weed = mysql_fetch_assoc($result)) {
+				$images = json_decode($weed['image_metadata']);
+				$weeds[] = array('id' => $weed['weed_id'], 'content' => $weed['content'], 'user_id' => $weed['user_id'], 'username' => $weed['username'], 'time' => $weed['weed_time'], 'light_id' => $weed['light_id'], 'root_id' => $weed['root_id'], 'deleted' => $weed['weed_deleted'], 'light_count' => $weed['light_count'], 'water_count' => $weed['water_count'], 'seed_count' => $weed['seed_count'], 'if_cur_user_water_it' => $weed['if_cur_user_water_it'] == $currentUser_id, 'if_cur_user_seed_it' => $weed['if_cur_user_seed_it'] == $currentUser_id, 'if_cur_user_light_it' => $weed['if_cur_user_light_it'] == $currentUser_id, 'image_count' => $weed['image_count'], 'images' => $images);
+			}
+		}
+
+		return $weeds;
+	}
+	
 	public function create($weed)
 	{
 		$query = 'INSERT INTO weed (content, user_id, time, deleted, light_id, root_id, water_count,seed_count,light_count,image_count, image_metadata) VALUES (\'' . mysql_real_escape_string($weed->get_content()) . '\',\'' . $weed->get_user_id() . '\',\'' . $weed->get_time() . '\',' . $weed->get_deleted() .','. ($weed->get_light_id() == NULL ? 'NULL' : $weed->get_light_id()) .','. ($weed->get_root_id() == NULL ?  'NULL' : $weed->get_root_id()) . ',0,0,0,' . $weed->get_image_count() . ',\'' . $weed->get_image_metadata() . '\')';

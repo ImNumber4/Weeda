@@ -9,7 +9,6 @@
 #import "DetailViewController.h"
 #import "UserViewController.h"
 #import "UserListViewController.h"
-#import "WeedDetailControlTableViewCell.h"
 #import "WeedDetailTableViewCell.h"
 #import "WeedBasicTableViewCell.h"
 #import "TabBarController.h"
@@ -31,14 +30,12 @@
 
 const NSInteger PARENT_WEEDS_SECTION_INDEX = 0;
 const NSInteger CURRENT_WEED_SECTION_INDEX = 1;
-const NSInteger CURRENT_WEED_CONTROL_SECTION_INDEX = 2;
-const NSInteger CHILD_WEEDS_SECTION_INDEX = 3;
-const NSInteger PLACEHOLDER_SECTION_INDEX = 4;
+const NSInteger CHILD_WEEDS_SECTION_INDEX = 2;
+const NSInteger PLACEHOLDER_SECTION_INDEX = 3;
 
-const NSInteger SECTION_COUNT = 5;
+const NSInteger SECTION_COUNT = 4;
 
 const NSInteger WEED_CELL_HEIGHT = 50;
-const NSInteger CURRENT_WEED_CONTROL_CELL_HEIGHT = 30;
 
 const NSInteger SHOW_SEED_USERS = 1;
 const NSInteger SHOW_WATER_USERS = 2;
@@ -81,7 +78,6 @@ static NSString * WEED_DETAIL_TABLE_CELL_REUSE_ID = @"WeedDetailCell";
     self.lights = [[NSMutableArray alloc] init];
     [self.tableView setSeparatorInset:UIEdgeInsetsZero];
     self.tableView.tableFooterView = [[UIView alloc] init];
-    self.tableView.delegate = self;
     
     [self.tableView registerClass:[WeedDetailTableViewCell class] forCellReuseIdentifier:WEED_DETAIL_TABLE_CELL_REUSE_ID];
     
@@ -142,8 +138,6 @@ static NSString * WEED_DETAIL_TABLE_CELL_REUSE_ID = @"WeedDetailCell";
         return self.parentWeeds.count;
     } else if (section == CURRENT_WEED_SECTION_INDEX) {
         return 1;
-    } else if (section == CURRENT_WEED_CONTROL_SECTION_INDEX) {
-        return 1;
     } else if (section == PLACEHOLDER_SECTION_INDEX){
         return 1;
     } else {
@@ -156,12 +150,6 @@ static NSString * WEED_DETAIL_TABLE_CELL_REUSE_ID = @"WeedDetailCell";
     if ([indexPath section] == CURRENT_WEED_SECTION_INDEX) {
         WeedDetailTableViewCell *cell = (WeedDetailTableViewCell *) [tableView dequeueReusableCellWithIdentifier:WEED_DETAIL_TABLE_CELL_REUSE_ID forIndexPath:indexPath];
         [self configureWeedDetailTableViewCell:cell];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        return cell;
-    } else if ([indexPath section] == CURRENT_WEED_CONTROL_SECTION_INDEX) {
-        static NSString *CellIdentifier = @"WeedDetailControlCell";
-        WeedDetailControlTableViewCell *cell = (WeedDetailControlTableViewCell *) [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-        [self configureWeedDetailControlTableViewCell:cell];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
     } else if ([indexPath section] == PLACEHOLDER_SECTION_INDEX) {
@@ -195,11 +183,9 @@ static NSString * WEED_DETAIL_TABLE_CELL_REUSE_ID = @"WeedDetailCell";
 {
     if (indexPath.section == CURRENT_WEED_SECTION_INDEX) {
         return _detailWeedCellHeight;
-    } else if ([indexPath section] == CURRENT_WEED_CONTROL_SECTION_INDEX) {
-        return CURRENT_WEED_CONTROL_CELL_HEIGHT;
     } else if ([indexPath section] == PLACEHOLDER_SECTION_INDEX) {
         CGFloat orginalOffset = self.tableView.contentOffset.y;
-        CGFloat contentHeight = self.tableView.bounds.size.height - _detailWeedCellHeight - (self.parentWeeds.count + self.lights.count) * WEED_CELL_HEIGHT + orginalOffset - self.tabBarController.tabBar.frame.size.height - CURRENT_WEED_CONTROL_CELL_HEIGHT + 1;
+        CGFloat contentHeight = self.tableView.bounds.size.height - _detailWeedCellHeight - (self.parentWeeds.count + self.lights.count) * WEED_CELL_HEIGHT + orginalOffset - self.tabBarController.tabBar.frame.size.height + 1;
         if (contentHeight > 0.0) {
             return contentHeight;
         }else{
@@ -239,7 +225,7 @@ static NSString * WEED_DETAIL_TABLE_CELL_REUSE_ID = @"WeedDetailCell";
 - (void)configureWeedDetailTableViewCell:(WeedDetailTableViewCell *)cell
 {
     cell.delegate = self;
-    [cell decorateCellWithWeed:self.currentWeed];
+    [cell decorateCellWithWeed:self.currentWeed parentViewController:self showHeader:true];
 }
 
 - (void)configureWeedTableViewCell:(WeedBasicTableViewCell *)cell weed:(Weed *)weed
@@ -248,127 +234,6 @@ static NSString * WEED_DETAIL_TABLE_CELL_REUSE_ID = @"WeedDetailCell";
     [cell.usernameLabel removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
     [cell.usernameLabel addTarget:self action:@selector(showUser:)forControlEvents:UIControlEventTouchDown];
     cell.backgroundColor = [UIColor colorWithRed:240.0/255.0 green:240.0/255.0 blue:240.0/255.0 alpha:1];
-}
-
-- (void)configureWeedDetailControlTableViewCell:(WeedDetailControlTableViewCell *)cell
-{
-    [cell.waterCount setTitle:[NSString stringWithFormat:@"%@ WATER DROPS", self.currentWeed.water_count] forState:UIControlStateNormal];
-    if([self.currentWeed.water_count intValue] <= 0)
-        [cell.waterCount setEnabled:NO];
-    else
-        [cell.waterCount setEnabled:YES];
-    cell.waterCount.tag = SHOW_WATER_USERS;
-    [cell.waterCount removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-    [cell.waterCount addTarget:self action:@selector(showUsers:)forControlEvents:UIControlEventTouchDown];
-    
-    [cell.seedCount setTitle:[NSString stringWithFormat:@"%@ SEEDS", self.currentWeed.seed_count] forState:UIControlStateNormal];
-    if([self.currentWeed.seed_count intValue] <= 0)
-        [cell.seedCount setEnabled:NO];
-    else
-        [cell.seedCount setEnabled:YES];
-    cell.seedCount.tag = SHOW_SEED_USERS;
-    [cell.seedCount removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-    [cell.seedCount addTarget:self action:@selector(showUsers:)forControlEvents:UIControlEventTouchDown];
-    
-    [cell.lightCount setTitle:[NSString stringWithFormat:@"%@ LIGHTS", self.currentWeed.light_count] forState:UIControlStateNormal];
-    [cell.lightCount setEnabled:NO];
-    
-    if ([self.currentWeed.if_cur_user_water_it intValue] == 1) {
-        [cell.waterDrop setImage:[self getImage:@"waterdrop.png" width:6 height:12] forState:UIControlStateNormal];
-    } else {
-        [cell.waterDrop setImage:[self getImage:@"waterdropgray.png" width:6 height:12] forState:UIControlStateNormal];
-    }
-    if ([self.currentWeed.if_cur_user_seed_it intValue] == 1) {
-        [cell.seed setImage:[self getImage:@"seed.png" width:18 height:9] forState:UIControlStateNormal];
-    } else {
-        [cell.seed setImage:[self getImage:@"seedgray.png" width:18 height:9] forState:UIControlStateNormal];
-    }
-    if ([self.currentWeed.if_cur_user_light_it intValue] == 1) {
-        [cell.light setImage:[self getImage:@"light.png" width:14 height:12] forState:UIControlStateNormal];
-    } else {
-        [cell.light setImage:[self getImage:@"lightgray.png" width:14 height:12] forState:UIControlStateNormal];
-    }
-    
-    [cell.waterDrop removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-    [cell.waterDrop addTarget:self action:@selector(waterIt:)forControlEvents:UIControlEventTouchDown];
-    
-    [cell.seed removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-    [cell.seed addTarget:self action:@selector(seedIt:)forControlEvents:UIControlEventTouchDown];
-    
-    [cell.light removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-    [cell.light addTarget:self action:@selector(lightIt:)forControlEvents:UIControlEventTouchDown];
-}
-
-- (void)waterIt:(id) sender {
-    Weed *weed = self.currentWeed;
-    if ([weed.if_cur_user_water_it intValue] == 1) {
-        [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/unwater/%@", weed.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-            weed.water_count = [NSNumber numberWithInt:[weed.water_count intValue] - 1];
-            weed.if_cur_user_water_it = [NSNumber numberWithInt:0];
-            [self reloadWeedControlCell];
-        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-            RKLogError(@"unwater failed with error: %@", error);
-        }];
-    } else {
-        [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/water/%@", weed.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-            weed.water_count = [NSNumber numberWithInt:[weed.water_count intValue] + 1];
-            weed.if_cur_user_water_it = [NSNumber numberWithInt:1];
-            [self reloadWeedControlCell];
-        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-            RKLogError(@"water failed with error: %@", error);
-        }];
-    }
-    
-}
-
-- (void)reloadWeedControlCell {
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:CURRENT_WEED_CONTROL_SECTION_INDEX];
-    NSArray *indexPaths = [[NSArray alloc] initWithObjects:indexPath, nil];
-    [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
-}
-
-- (void)seedIt:(id) sender {
-    Weed *weed = self.currentWeed;
-    if ([weed.if_cur_user_seed_it intValue] == 1) {
-        [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/unseed/%@", weed.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-            weed.seed_count = [NSNumber numberWithInt:[weed.seed_count intValue] - 1];
-            weed.if_cur_user_seed_it = [NSNumber numberWithInt:0];
-            [self reloadWeedControlCell];
-        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-            RKLogError(@"unseed failed with error: %@", error);
-        }];
-    } else {
-        [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/seed/%@", weed.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-            weed.seed_count = [NSNumber numberWithInt:[weed.seed_count intValue] + 1];
-            weed.if_cur_user_seed_it = [NSNumber numberWithInt:1];
-            [self reloadWeedControlCell];
-        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-            RKLogError(@"seed failed with error: %@", error);
-        }];
-    }
-}
-
--(void)lightIt:(id)sender {
-    [AddWeedViewController presentControllerFrom:self withWeed:self.currentWeed];
-}
-
--(void)showUsers:(id)sender {
-    NSString * feedUrl;
-    if ([sender tag] == SHOW_WATER_USERS) {
-        feedUrl = [NSString stringWithFormat:@"user/getUsersWaterWeed/%@", self.currentWeed.id];
-    } else {
-        feedUrl = [NSString stringWithFormat:@"user/getUsersSeedWeed/%@", self.currentWeed.id];
-    }
-    [[RKObjectManager sharedManager] getObjectsAtPath:feedUrl parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-        self.users = mappingResult.array;
-        [self performSegueWithIdentifier:@"showUsers" sender:sender];
-    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-        RKLogError(@"Load failed with error: %@", error);
-    }];
-}
-
--(void)showUser:(id)sender {
-    [self performSegueWithIdentifier:@"showUser" sender:sender];
 }
 
 - (void)showUserViewController:(id)sender

@@ -129,22 +129,14 @@
             </objects>
             <point key="canvasLocation" x="1123" y="-1229"/>
         </scene>
-        <!--Root View Controller-->
+        <!--Bongs View Controller-->
         <scene sceneID="bLs-5c-Knr">
             <objects>
-                <tableViewController id="gMv-qZ-2EB" sceneMemberID="viewController">
+                <tableViewController title="Bongs View Controller" id="gMv-qZ-2EB" customClass="TrendTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="4te-uo-jRm">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="fH4-Tq-C7V">
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="fH4-Tq-C7V" id="g5i-MR-Fqn">
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
                         <connections>
                             <outlet property="dataSource" destination="gMv-qZ-2EB" id="SCk-iA-EOe"/>
                             <outlet property="delegate" destination="gMv-qZ-2EB" id="W6d-cV-SMw"/>
@@ -377,72 +369,6 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="0.0" reuseIdentifier="WeedDetailControlCell" rowHeight="27" id="eRh-Kf-39R" customClass="WeedDetailControlTableViewCell">
-                                <rect key="frame" x="0.0" y="197" width="320" height="27"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="eRh-Kf-39R" id="xS8-0W-g50">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="26"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="PPu-cO-BXO">
-                                            <rect key="frame" x="206" y="0.0" width="88" height="30"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="9"/>
-                                            <state key="normal" title="0 WATER DROPS">
-                                                <color key="titleColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                            </state>
-                                        </button>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="KDf-j8-IOh">
-                                            <rect key="frame" x="120" y="0.0" width="68" height="30"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="9"/>
-                                            <state key="normal" title="0 SEEDS">
-                                                <color key="titleColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                            </state>
-                                        </button>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="F6f-2W-BFH">
-                                            <rect key="frame" x="112" y="10" width="18" height="9"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <state key="normal" image="seed.png">
-                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                            </state>
-                                        </button>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="2kk-k7-xcd">
-                                            <rect key="frame" x="200" y="7" width="6" height="12"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <state key="normal" image="waterdrop.png">
-                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                            </state>
-                                        </button>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="kat-Ml-eri">
-                                            <rect key="frame" x="20" y="9" width="14" height="12"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <state key="normal" image="light.png">
-                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                            </state>
-                                        </button>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="GsR-hh-tKn">
-                                            <rect key="frame" x="38" y="0.0" width="46" height="30"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="9"/>
-                                            <state key="normal" title="0 LIGHTS">
-                                                <color key="titleColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                            </state>
-                                        </button>
-                                    </subviews>
-                                </tableViewCellContentView>
-                                <connections>
-                                    <outlet property="light" destination="kat-Ml-eri" id="ENA-PY-sAg"/>
-                                    <outlet property="lightCount" destination="GsR-hh-tKn" id="pin-Mb-XlV"/>
-                                    <outlet property="seed" destination="F6f-2W-BFH" id="aDv-Xh-BeD"/>
-                                    <outlet property="seedCount" destination="KDf-j8-IOh" id="UFm-wf-aak"/>
-                                    <outlet property="waterCount" destination="PPu-cO-BXO" id="ov0-Sa-FkN"/>
-                                    <outlet property="waterDrop" destination="2kk-k7-xcd" id="QP4-Qa-z0X"/>
-                                </connections>
-                            </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="0.0" reuseIdentifier="WeedCell" rowHeight="55" id="T6F-GN-y42" customClass="WeedBasicTableViewCell">
                                 <rect key="frame" x="0.0" y="224" width="320" height="55"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -469,10 +395,6 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Weed" id="Ptm-OJ-FaH"/>
-                    <connections>
-                        <segue destination="UY4-39-rji" kind="push" identifier="showUser" id="JEh-w8-48C"/>
-                        <segue destination="kcP-Br-rTe" kind="push" identifier="showUsers" id="Cu1-Di-ade"/>
-                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dDf-2S-PCN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -482,15 +404,6 @@
         <scene sceneID="O5z-QD-a6U">
             <objects>
                 <tableViewController id="kcP-Br-rTe" customClass="UserListViewController" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" ambiguous="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="45" sectionHeaderHeight="22" sectionFooterHeight="22" id="LHR-x9-g5Y">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <connections>
-                            <outlet property="dataSource" destination="kcP-Br-rTe" id="Fzd-2L-N5d"/>
-                            <outlet property="delegate" destination="kcP-Br-rTe" id="ozH-0K-ixw"/>
-                        </connections>
-                    </tableView>
                     <navigationItem key="navigationItem" id="ceM-lJ-ZkV"/>
                     <connections>
                         <segue destination="UY4-39-rji" kind="push" identifier="showUser" id="hHZ-jg-Kly"/>
@@ -835,22 +748,16 @@
             <point key="canvasLocation" x="-739" y="175"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="light.png" width="60" height="58"/>
-        <image name="seed.png" width="512" height="307"/>
-        <image name="waterdrop.png" width="50" height="90"/>
-    </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
+        <segue reference="Z8M-XG-GdH"/>
+        <segue reference="hHZ-jg-Kly"/>
         <segue reference="aBn-FK-paW"/>
         <segue reference="6VO-gD-9Hh"/>
-        <segue reference="hHZ-jg-Kly"/>
-        <segue reference="gr4-Yl-zIz"/>
-        <segue reference="Z8M-XG-GdH"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="0.24313727021217346" green="0.64705884456634521" blue="0.24705883860588074" alpha="1" colorSpace="deviceRGB"/>
 </document>

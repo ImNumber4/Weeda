@@ -347,6 +347,12 @@ NSString * _deviceToken;
                                                                                        statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)]];
     
     [manager addResponseDescriptor:[RKResponseDescriptor responseDescriptorWithMapping:weedMapping
+                                                                                method:RKRequestMethodGET
+                                                                           pathPattern:@"weed/trends"
+                                                                               keyPath:@"weeds"
+                                                                           statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)]];
+    
+    [manager addResponseDescriptor:[RKResponseDescriptor responseDescriptorWithMapping:weedMapping
                                                                                                 method:RKRequestMethodGET
                                                                                            pathPattern:@"weed/queryById/:weed_id"
                                                                                                keyPath:@"weeds"

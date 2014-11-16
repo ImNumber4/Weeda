@@ -21,6 +21,12 @@ class WeedController extends Controller
 		return json_encode(array('weeds'=>$weeds));
 	}
 	
+	public function trends() {
+		$current_user_id = $this->getCurrentUser();
+		$weeds = $this->weed_dao->trends($current_user_id);
+		return json_encode(array('weeds'=>$weeds));
+	}
+	
 	public function queryById($weed_id) {
 		$current_user_id = $this->getCurrentUser();
 		$weeds = $this->weed_dao->query($current_user_id, null, $weed_id);

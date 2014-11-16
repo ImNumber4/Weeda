@@ -12,20 +12,9 @@
 #import "WLImageCollectionView.h"
 #import "YTPlayerView.h"
 #import "TFHpple.h"
+#import "WeedControlView.h"
 
 #import <SDWebImage/UIImageView+WebCache.h>
-
-#define DEFAULT_IMAGE_DISPLAY_BOARD_WIDTH 320.0
-#define DEFAULT_IMAGE_DISPLAY_BOARD_HEIGHT1 250.0
-#define DEFAULT_IMAGE_DISPLAY_BOARD_HEIGHT2 200.0
-#define DEFAULT_IMAGE_DISPLAY_BOARD_ACREAGE (DEFAULT_IMAGE_DISPLAY_BOARD_WIDTH * DEFAULT_IMAGE_DISPLAY_BOARD_HEIGHT)
-
-#define DEFAULT_VIDEO_WIDTH 300
-#define DEFAULT_VIDEO_HEIGHT 168.75f
-
-#define TEXTLABLE_WEED_CONTENT_ORIGIN_Y 59
-
-#define WEB_SERVER_GET_FAVICON_URL @"http://www.google.com/s2/favicons?domain="
 
 typedef NS_ENUM(NSInteger, EnumImageWidthType)
 {
@@ -58,6 +47,8 @@ typedef NS_ENUM(NSInteger, DetailCellShowingType)
 @property (nonatomic, retain) YTPlayerView *playerView;
 @property (nonatomic, retain) NSMutableData *responseData;
 
+@property (nonatomic, retain) WeedControlView *controlView;
+
 @property (nonatomic, retain) NSLayoutConstraint *titleHeightConstraint;
 @property (nonatomic, retain) NSLayoutConstraint *descHeightConstraint;
 @property (nonatomic, retain) NSLayoutConstraint *playerHeightConstraint;
@@ -72,12 +63,25 @@ typedef NS_ENUM(NSInteger, DetailCellShowingType)
 
 static const double PADDING = 10;
 
+static double DEFAULT_IMAGE_DISPLAY_BOARD_HEIGHT1 = 250.0;
+static double DEFAULT_IMAGE_DISPLAY_BOARD_HEIGHT2 = 200.0;
+
+static double DEFAULT_VIDEO_HEIGHT = 168.75f;
+
+static double CONTROL_VIEW_HEIGHT = 30;
+
+static NSString * WEB_SERVER_GET_FAVICON_URL = @"http://www.google.com/s2/favicons?domain=";
+
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         self.userAvatar = [[WLImageView alloc] initWithFrame:CGRectMake(PADDING, PADDING, 40, 40)];
         [self.userAvatar addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleAvatarTapped)]];
+        self.userAvatar.allowFullScreenDisplay = NO;
+        CALayer * l = [self.userAvatar layer];
+        [l setMasksToBounds:YES];
+        [l setCornerRadius:7.0];
         self.userAvatar.userInteractionEnabled = YES;
         [self addSubview:self.userAvatar];
         
@@ -127,28 +131,33 @@ static const double PADDING = 10;
     // Configure the view for the selected state
 }
 
-- (void)decorateCellWithWeed:(Weed *)weed
+- (void)decorateCellWithWeed:(Weed *)weed parentViewController:(UIViewController *) parentViewController showHeader:(BOOL) showHeader
 {
-    NSString *username = weed.username;
-    NSString *nameLabel = [NSString stringWithFormat:@"@%@", username];
-    [self.userLabel setTitle:nameLabel forState:UIControlStateNormal];
+    self.weed = weed;
     
     NSString *content = [self shortenURLInContent:weed.content];
+    
+    if (showHeader) {
+        NSString *username = weed.username;
+        NSString *nameLabel = [NSString stringWithFormat:@"@%@", username];
+        [self.userLabel setTitle:nameLabel forState:UIControlStateNormal];
+        
+        [self.userAvatar setImageURL:[WeedImageController imageURLOfAvatar:weed.user_id] isAvatar:YES];
+        
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"MMM. dd yyyy hh:mm"];
+        NSString *formattedDateString = [dateFormatter stringFromDate:weed.time];
+        self.timeLabel.text = [NSString stringWithFormat:@"%@", formattedDateString];
+        
+        [self.weedContentLabel setFrame:CGRectMake(self.weedContentLabel.frame.origin.x, self.weedContentLabel.frame.origin.y, self.weedContentLabel.frame.size.width, [self getTextLableHeight:content])];
+    } else {
+        [self.weedContentLabel setFrame:CGRectMake(self.weedContentLabel.frame.origin.x, PADDING, self.weedContentLabel.frame.size.width, [self getTextLableHeight:content])];
+    }
+    
     self.weedContentLabel.text = content;
     self.weedContentLabel.delegate = self;
     self.weedContentLabel.translatesAutoresizingMaskIntoConstraints = YES;
-    [self.weedContentLabel setFrame:CGRectMake(self.weedContentLabel.frame.origin.x, self.weedContentLabel.frame.origin.y, self.weedContentLabel.frame.size.width, [self getTextLableHeight:content])];
     
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"MMM. dd yyyy hh:mm"];
-    NSString *formattedDateString = [dateFormatter stringFromDate:weed.time];
-    self.timeLabel.text = [NSString stringWithFormat:@"%@", formattedDateString];
-    
-    [self.userAvatar setImageURL:[WeedImageController imageURLOfAvatar:weed.user_id] isAvatar:YES];
-    self.userAvatar.allowFullScreenDisplay = NO;
-    CALayer * l = [self.userAvatar layer];
-    [l setMasksToBounds:YES];
-    [l setCornerRadius:7.0];
 
     _type = [self getShowingTypewWithWeed:weed];
     switch (_type) {
@@ -178,12 +187,20 @@ static const double PADDING = 10;
             break;
     }
     
+    _controlView = [[WeedControlView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, CONTROL_VIEW_HEIGHT) weed:weed parentViewController:parentViewController];
+    [self addSubview:self.controlView];
+    
     CGFloat height = [self heightForCell];
     if (self.delegate) {
-        [self.delegate tableViewCell:self height:height needReload:NO];
+        [self callDelegateToUpdateCellHeight:height];
     }
     
     [self createWebSummaryView];
+    
+    
+//    self.controlView.translatesAutoresizingMaskIntoConstraints = NO;
+//    NSDictionary *vs = NSDictionaryOfVariableBindings(_controlView);
+//    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:[_controlView(%f)]|", CONTROL_VIEW_HEIGHT] options:0 metrics:nil views:vs]];
 }
 
 - (void)cellWillDisappear
@@ -336,31 +353,31 @@ static const double PADDING = 10;
     CGFloat textLableHeight = [self getTextLableHeight:self.weedContentLabel.text];
     switch (_type) {
         case DetailCellShowingTypeImages:
-            height = self.dataSource.count < 3 ? TEXTLABLE_WEED_CONTENT_ORIGIN_Y + textLableHeight + 200.0 + 10 : TEXTLABLE_WEED_CONTENT_ORIGIN_Y + textLableHeight + 250.0 + 10;
+            height = self.dataSource.count < 3 ? self.weedContentLabel.frame.origin.y + textLableHeight + DEFAULT_IMAGE_DISPLAY_BOARD_HEIGHT2 : self.weedContentLabel.frame.origin.y + textLableHeight + DEFAULT_IMAGE_DISPLAY_BOARD_HEIGHT1;
             break;
         case DetailCellShowingTypeVideo:
         case DetailCellShowingTypeUrl:
-            height = TEXTLABLE_WEED_CONTENT_ORIGIN_Y + textLableHeight + 10;
+            height = self.weedContentLabel.frame.origin.y + textLableHeight;
             break;
         default:
-            height = TEXTLABLE_WEED_CONTENT_ORIGIN_Y + textLableHeight + 10;
+            height = self.weedContentLabel.frame.origin.y + textLableHeight;
             break;
     }
-    
+    height += CONTROL_VIEW_HEIGHT;
     return height;
 }
 
 - (CGFloat)getTextLableHeight:(NSString *)text
 {
     UITextView *temp = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, 200, 44)]; //This initial size doesn't matter
-    temp.font = [UIFont systemFontOfSize:12.0];
+    temp.font = self.weedContentLabel.font;
     temp.text = text;
     
-    CGFloat textViewWidth = 200.0;
+    CGFloat textViewWidth = self.weedContentLabel.frame.size.width;
     CGRect tempFrame = CGRectMake(0, 0, textViewWidth, 40); //The height of this frame doesn't matter.
     CGSize tvsize = [temp sizeThatFits:CGSizeMake(tempFrame.size.width, tempFrame.size.height)]; //This calculates the necessary size so that all the text fits in the necessary width.
     
-    return MAX(tvsize.height, 40.0);
+    return tvsize.height;
 }
 
 - (CGFloat)heightOfTextView:(UITextView *)textView
@@ -372,7 +389,7 @@ static const double PADDING = 10;
 
 - (void)createWebSummaryView
 {
-    _webSummaryView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, DEFAULT_VIDEO_WIDTH, DEFAULT_VIDEO_HEIGHT + 20 + 10)];
+    _webSummaryView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.weedContentLabel.frame.size.width, DEFAULT_VIDEO_HEIGHT + 20 + 10)];
     
     _faviconView = [UIImageView new];
     _faviconView.contentMode = UIViewContentModeCenter;
@@ -381,13 +398,16 @@ static const double PADDING = 10;
     [_titleView addObserver:self forKeyPath:@"contentSize" options:(NSKeyValueObservingOptionNew) context:NULL];
     _titleView.editable = NO;
     _titleView.selectable = NO;
+    _titleView.scrollEnabled = NO;
     _titleView.textColor = [UIColor darkGrayColor];
+    _titleView.font = self.weedContentLabel.font;
     
     _descriptionView = [UITextView new];
     _descriptionView.editable = NO;
     _descriptionView.selectable = NO;
     _descriptionView.hidden = YES;
     _descriptionView.textColor = [UIColor darkGrayColor];
+    _descriptionView.font = self.weedContentLabel.font;
     [_webSummaryView addSubview:_descriptionView];
     
     _playerView = [YTPlayerView new];
@@ -456,6 +476,9 @@ static const double PADDING = 10;
 
 - (NSString *)shortenURLInContent:(NSString *)content
 {
+    if (!content) {
+        return content;
+    }
     NSError *error = nil;
     NSDataDetector *detector = [[NSDataDetector alloc]initWithTypes:NSTextCheckingTypeLink error:&error];
     NSArray *results = [detector matchesInString:content options:NSMatchingReportCompletion range:NSMakeRange(0, content.length)];
@@ -560,11 +583,10 @@ static const double PADDING = 10;
     if (_type == DetailCellShowingTypeVideo) {
         _playerHeightConstraint.constant = DEFAULT_VIDEO_HEIGHT;
         
-        CGFloat textLableHeight = [self getTextLableHeight:self.weedContentLabel.text];
         CGRect frame = _webSummaryView.frame;
         frame.size.height = [self heightOfTextView:_titleView] + DEFAULT_VIDEO_HEIGHT;
-        CGFloat height = TEXTLABLE_WEED_CONTENT_ORIGIN_Y + textLableHeight + CGRectGetHeight(_webSummaryView.frame) + 10;
-        [self.delegate tableViewCell:self height:height needReload:YES];
+        CGFloat height = [self heightForCell] + CGRectGetHeight(_webSummaryView.frame);
+        [self callDelegateToUpdateCellHeight:height];
         _webSummaryView.hidden = NO;
     }
     
@@ -583,13 +605,18 @@ static const double PADDING = 10;
             frame.size.height = [self heightOfTextView:_titleView] + [self heightOfTextView:_descriptionView];
             _webSummaryView.frame = frame;
             if (self.delegate) {
-                CGFloat textLableHeight = [self getTextLableHeight:self.weedContentLabel.text];
-                CGFloat height = TEXTLABLE_WEED_CONTENT_ORIGIN_Y + textLableHeight + CGRectGetHeight(_webSummaryView.frame) + 10;
-                [self.delegate tableViewCell:self height:height needReload:YES];
+                CGFloat height = [self heightForCell] + CGRectGetHeight(_webSummaryView.frame);
+                [self callDelegateToUpdateCellHeight:height];
                 _webSummaryView.hidden = NO;
             }
         }
     }
+}
+
+- (void) callDelegateToUpdateCellHeight:(CGFloat)height
+{
+    [self.controlView setFrame:CGRectMake(0, height - CONTROL_VIEW_HEIGHT, self.frame.size.width, CONTROL_VIEW_HEIGHT)];
+    [self.delegate tableViewCell:self height:height needReload:YES];
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
