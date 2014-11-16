@@ -75,64 +75,11 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
 
 - (void)decorateCellWithUser:(User *)user cell:(UserTableViewCell *)cell {
     [cell decorateCellWithUser:user];
-    cell.followButton.tintColor = [UIColor whiteColor];
-    if ([user.relationshipWithCurrentUser intValue] == 0) {
-        cell.followButton.hidden = TRUE;
-    } else if ([user.relationshipWithCurrentUser intValue] < 3){
-        [self makeFollowButton:cell.followButton];
-    } else {
-        [self makeFollowingButton:cell.followButton];
-    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return USER_TABLE_VIEW_CELL_HEIGHT;
-}
-
-- (void)makeFollowButton:(UIButton *)button
-{
-    [button setImage:[UIImage imageNamed:@"follow.png"] forState:UIControlStateNormal];
-    //blue
-    button.backgroundColor = [ColorDefinition blueColor];
-    [button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-    [button addTarget:self action:@selector(follow:) forControlEvents:UIControlEventTouchUpInside];
-}
-
-- (void)makeFollowingButton:(UIButton *)button
-{
-    [button setImage:[UIImage imageNamed:@"followed.png"] forState:UIControlStateNormal];
-    //green
-    button.backgroundColor = [ColorDefinition greenColor];
-    [button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-    [button addTarget:self action:@selector(unfollow:) forControlEvents:UIControlEventTouchUpInside];
-}
-
-
-- (void)follow:(id)sender
-{
-    CGPoint buttonPosition = [sender convertPoint:CGPointZero toView:self.tableView];
-    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:buttonPosition];
-    User *user = [self.users objectAtIndex:indexPath.row];
-    [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"user/follow/%@", user.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-        user.relationshipWithCurrentUser = ((User *)[mappingResult.array objectAtIndex:0]).relationshipWithCurrentUser;
-        [self.tableView reloadData];
-    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-        RKLogError(@"Follow failed with error: %@", error);
-    }];
-}
-
-- (void)unfollow:(id)sender
-{
-    CGPoint buttonPosition = [sender convertPoint:CGPointZero toView:self.tableView];
-    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:buttonPosition];
-    User *user = [self.users objectAtIndex:indexPath.row];
-    [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"user/unfollow/%@", user.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-        user.relationshipWithCurrentUser = ((User *)[mappingResult.array objectAtIndex:0]).relationshipWithCurrentUser;
-        [self.tableView reloadData];
-    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-        RKLogError(@"Follow failed with error: %@", error);
-    }];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender

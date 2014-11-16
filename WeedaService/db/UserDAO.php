@@ -235,7 +235,7 @@ class UserDAO extends BaseDAO
 		return $users;
 	}
 	
-	private function getRelationship($userA_id, $userB_id) {
+	public function getRelationship($userA_id, $userB_id) {
 		if($userA_id == $userB_id)
 			return 0;
 		$isAFollowingB = $this->isAFollowingB($userA_id, $userB_id);

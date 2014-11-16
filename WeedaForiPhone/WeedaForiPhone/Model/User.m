@@ -82,7 +82,7 @@
 }
 
 - (NSString *) getSimpleFormatedAddress {
-    return [NSString stringWithFormat:@"%@, %@", self.address_street,self.address_city];
+    return [NSString stringWithFormat:@"%@", self.address_city];
 }
 
 + (NSString *) _getFormatedAddress:(NSString *) street city:(NSString*) city state:(NSString *) state zip:(NSString *) zip country:(NSString *)country {

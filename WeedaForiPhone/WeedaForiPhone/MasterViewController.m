@@ -70,7 +70,7 @@ const NSInteger NON_GLOBAL_COMPOSE_TAG = 1;
     if (! fetchSuccessful) {
         NSLog(@"Error: %@",error);
     }
-    
+    [self.tableView reloadData];
     [self loadData];
 }
 
@@ -99,6 +99,13 @@ const NSInteger NON_GLOBAL_COMPOSE_TAG = 1;
     [[RKObjectManager sharedManager] getObjectsAtPath:@"weed/query" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
         [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:@"LastUpdatedAt"];
         [[NSUserDefaults standardUserDefaults] synchronize];
+        NSError *error = nil;
+        BOOL fetchSuccessful = [self.fetchedResultsController performFetch:&error];
+        if (! fetchSuccessful) {
+            NSLog(@"Error: %@",error);
+        } else {
+            [self.tableView reloadData];
+        }
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
         RKLogError(@"Load failed with error: %@", error);
     }];

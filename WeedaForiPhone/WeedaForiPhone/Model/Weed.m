@@ -18,6 +18,8 @@
 @dynamic seed_count;
 @dynamic user_id;
 @dynamic username;
+@dynamic user_type;
+@dynamic user_relationship_with_currentUser;
 @dynamic water_count;
 @dynamic if_cur_user_light_it;
 @dynamic light_count;
@@ -25,4 +27,6 @@
 @dynamic image_count;
 @dynamic images;
 @synthesize mentions;
+@dynamic score;
+
 @end

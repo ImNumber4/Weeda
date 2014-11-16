@@ -101,6 +101,7 @@ static NSString * WEB_SERVER_GET_FAVICON_URL = @"http://www.google.com/s2/favico
         self.weedContentLabel = [[UITextView alloc] initWithFrame:CGRectMake(self.userAvatar.frame.origin.x, self.userAvatar.frame.origin.y + self.userAvatar.frame.size.height, self.frame.size.width - PADDING * 2, 30)];
         self.weedContentLabel.editable = false;
         [self.weedContentLabel setFont:[UIFont systemFontOfSize:14.0]];
+        [self.weedContentLabel setBackgroundColor:[UIColor clearColor]];
         self.weedContentLabel.scrollEnabled = false;
         self.weedContentLabel.userInteractionEnabled = true;
         self.weedContentLabel.dataDetectorTypes = UIDataDetectorTypeAll;
@@ -151,7 +152,7 @@ static NSString * WEB_SERVER_GET_FAVICON_URL = @"http://www.google.com/s2/favico
         
         [self.weedContentLabel setFrame:CGRectMake(self.weedContentLabel.frame.origin.x, self.weedContentLabel.frame.origin.y, self.weedContentLabel.frame.size.width, [self getTextLableHeight:content])];
     } else {
-        [self.weedContentLabel setFrame:CGRectMake(self.weedContentLabel.frame.origin.x, PADDING, self.weedContentLabel.frame.size.width, [self getTextLableHeight:content])];
+        [self.weedContentLabel setFrame:CGRectMake(self.weedContentLabel.frame.origin.x, 0, self.weedContentLabel.frame.size.width, [self getTextLableHeight:content])];
     }
     
     self.weedContentLabel.text = content;
@@ -196,11 +197,6 @@ static NSString * WEB_SERVER_GET_FAVICON_URL = @"http://www.google.com/s2/favico
     }
     
     [self createWebSummaryView];
-    
-    
-//    self.controlView.translatesAutoresizingMaskIntoConstraints = NO;
-//    NSDictionary *vs = NSDictionaryOfVariableBindings(_controlView);
-//    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:[_controlView(%f)]|", CONTROL_VIEW_HEIGHT] options:0 metrics:nil views:vs]];
 }
 
 - (void)cellWillDisappear
@@ -401,11 +397,14 @@ static NSString * WEB_SERVER_GET_FAVICON_URL = @"http://www.google.com/s2/favico
     _titleView.scrollEnabled = NO;
     _titleView.textColor = [UIColor darkGrayColor];
     _titleView.font = self.weedContentLabel.font;
+    [_titleView setBackgroundColor:[UIColor clearColor]];
     
     _descriptionView = [UITextView new];
+    [_descriptionView setBackgroundColor:[UIColor clearColor]];
     _descriptionView.editable = NO;
     _descriptionView.selectable = NO;
     _descriptionView.hidden = YES;
+    _descriptionView.scrollEnabled = NO;
     _descriptionView.textColor = [UIColor darkGrayColor];
     _descriptionView.font = self.weedContentLabel.font;
     [_webSummaryView addSubview:_descriptionView];

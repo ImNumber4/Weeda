@@ -9,17 +9,20 @@
 #import "TrendTableViewController.h"
 #import "WeedDetailTableViewCell.h"
 #import "WLWebViewController.h"
+#import "UserTableViewCell.h"
 
 @interface TrendTableViewController () <WeedDetailTableViewCellDelegate>
 @property (nonatomic, retain) NSMutableArray *weeds;
 @property (nonatomic, retain) NSMutableDictionary *heights;
 @property (nonatomic) CGFloat detailWeedCellHeight;
+@property (nonatomic) NSArray *sortDescriptors;
 
 @end
 
 @implementation TrendTableViewController
 
 static NSString * WEED_DETAIL_TABLE_CELL_REUSE_ID_PREFIX = @"WeedDetailCell";
+static NSString * HEADER_CELL_REUSE_ID = @"HeaderCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -27,8 +30,16 @@ static NSString * WEED_DETAIL_TABLE_CELL_REUSE_ID_PREFIX = @"WeedDetailCell";
     UIRefreshControl *refresh = [[UIRefreshControl alloc] init];
     [refresh addTarget:self action:@selector(refreshView:) forControlEvents:UIControlEventValueChanged];
     self.refreshControl = refresh;
+    
     [self.tableView setSeparatorInset:UIEdgeInsetsZero];
     self.tableView.tableFooterView = [[UIView alloc] init];
+    [self.tableView registerClass:[UserTableViewCell class] forCellReuseIdentifier:HEADER_CELL_REUSE_ID];
+    
+    NSSortDescriptor *sortDescriptor;
+    sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"score"
+                                                 ascending:NO];
+    self.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+    
     self.weeds = [[NSMutableArray alloc] init];
     self.heights = [[NSMutableDictionary alloc] init];
     [self fetachData];
@@ -45,8 +56,13 @@ static NSString * WEED_DETAIL_TABLE_CELL_REUSE_ID_PREFIX = @"WeedDetailCell";
     [[RKObjectManager sharedManager] getObjectsAtPath:@"weed/trends" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
         [self.weeds removeAllObjects];
         for (Weed * weed in mappingResult.array) {
-            [self.weeds addObject:weed];
+            if (weed.shouldBeDeleted != nil && [weed.shouldBeDeleted intValue] == 0) {
+                [self.weeds addObject:weed];
+            }
         }
+        [self.weeds sortUsingComparator:^NSComparisonResult(Weed *obj1, Weed *obj2) {
+            return [obj1.score intValue] < [obj2.score intValue];
+        }];
         [self.tableView reloadData];
         [self.refreshControl endRefreshing];
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
@@ -54,6 +70,7 @@ static NSString * WEED_DETAIL_TABLE_CELL_REUSE_ID_PREFIX = @"WeedDetailCell";
         [self.refreshControl endRefreshing];
     }];
 }
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -81,16 +98,43 @@ static NSString * WEED_DETAIL_TABLE_CELL_REUSE_ID_PREFIX = @"WeedDetailCell";
     WeedDetailTableViewCell *cell = (WeedDetailTableViewCell *) [tableView dequeueReusableCellWithIdentifier:reuseId forIndexPath:indexPath];
     if (!cell.weed) {
         cell.delegate = self;
-        [cell decorateCellWithWeed:weed parentViewController:self showHeader:true];
+        [cell decorateCellWithWeed:weed parentViewController:self showHeader:false];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     return cell;
 }
 
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UserTableViewCell *cell = (UserTableViewCell *) [tableView dequeueReusableCellWithIdentifier:HEADER_CELL_REUSE_ID];
+    Weed * weed = [self.weeds objectAtIndex:section];
+    User *user = [[User alloc] init];
+    user.id = weed.user_id;
+    user.username = weed.username;
+    user.user_type = weed.user_type;
+    user.relationshipWithCurrentUser = weed.user_relationship_with_currentUser;
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"MMM. dd yyyy hh:mm"];
+    NSString *formattedDateString = [dateFormatter stringFromDate:weed.time];
+    [cell decorateCellWithUser:user subtitle:formattedDateString];
+    return cell;
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
+{
+    [view setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.9]];
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return USER_TABLE_VIEW_CELL_HEIGHT;
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
 {
     Weed * weed = [self.weeds objectAtIndex:indexPath.section];
-    return [[self.heights objectForKey:weed.id] floatValue];
+    NSNumber *height = [self.heights objectForKey:weed.id];
+    return height? [height floatValue] : 0.0;
 }
 
 
@@ -118,9 +162,7 @@ static NSString * WEED_DETAIL_TABLE_CELL_REUSE_ID_PREFIX = @"WeedDetailCell";
 
 - (void)tableViewCell:(WeedDetailTableViewCell *)cell height:(CGFloat)height needReload:(BOOL)needReload
 {
-    if (cell && cell.weed && cell.weed.id) {
-        [self.heights setObject:[NSNumber numberWithFloat:height] forKey:cell.weed.id];
-    }
+    [self.heights setObject:[NSNumber numberWithFloat:height] forKey:cell.weed.id];
     
     if (needReload && [self.tableView.visibleCells containsObject:cell]) {
         [self.tableView beginUpdates];

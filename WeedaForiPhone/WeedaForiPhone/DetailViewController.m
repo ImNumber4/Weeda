@@ -304,7 +304,7 @@ static NSString * WEED_DETAIL_TABLE_CELL_REUSE_ID = @"WeedDetailCell";
 - (void)tableViewCell:(WeedDetailTableViewCell *)cell height:(CGFloat)height needReload:(BOOL)needReload
 {
     _detailWeedCellHeight = height;
-    if (needReload) {
+    if (needReload && [self.tableView.visibleCells containsObject:cell]) {
         [self.tableView beginUpdates];
         [self.tableView endUpdates];
     }

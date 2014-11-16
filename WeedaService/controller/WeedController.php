@@ -24,6 +24,10 @@ class WeedController extends Controller
 	public function trends() {
 		$current_user_id = $this->getCurrentUser();
 		$weeds = $this->weed_dao->trends($current_user_id);
+		foreach ($weeds as &$weed) {
+			$relationship = $this->user_dao->getRelationship($current_user_id, $weed['user_id']);
+			$weed['relationshipWithCurrentUser'] = $relationship;
+		}
 		return json_encode(array('weeds'=>$weeds));
 	}
 	

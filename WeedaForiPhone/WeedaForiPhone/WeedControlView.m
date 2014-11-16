@@ -119,48 +119,59 @@ static NSInteger SHOW_WATER_USERS = 2;
 
 - (void)waterIt:(id) sender {
     Weed *weed = _weed;
+    [self.waterDrop setEnabled:false];
     if ([weed.if_cur_user_water_it intValue] == 1) {
         [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/unwater/%@", weed.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
             weed.water_count = [NSNumber numberWithInt:[weed.water_count intValue] - 1];
             weed.if_cur_user_water_it = [NSNumber numberWithInt:0];
             [self updateView];
+            [self.waterDrop setEnabled:true];
         } failure:^(RKObjectRequestOperation *operation, NSError *error) {
             RKLogError(@"unwater failed with error: %@", error);
+            [self.waterDrop setEnabled:true];
         }];
     } else {
         [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/water/%@", weed.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
             weed.water_count = [NSNumber numberWithInt:[weed.water_count intValue] + 1];
             weed.if_cur_user_water_it = [NSNumber numberWithInt:1];
             [self updateView];
+            [self.waterDrop setEnabled:true];
         } failure:^(RKObjectRequestOperation *operation, NSError *error) {
             RKLogError(@"water failed with error: %@", error);
+            [self.waterDrop setEnabled:true];
         }];
     }
 }
 
 - (void)seedIt:(id) sender {
     Weed *weed = _weed;
+    [self.seed setEnabled:false];
     if ([weed.if_cur_user_seed_it intValue] == 1) {
         [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/unseed/%@", weed.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
             weed.seed_count = [NSNumber numberWithInt:[weed.seed_count intValue] - 1];
             weed.if_cur_user_seed_it = [NSNumber numberWithInt:0];
             [self updateView];
+            [self.seed setEnabled:true];
         } failure:^(RKObjectRequestOperation *operation, NSError *error) {
             RKLogError(@"unseed failed with error: %@", error);
+            [self.seed setEnabled:true];
         }];
     } else {
         [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/seed/%@", weed.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
             weed.seed_count = [NSNumber numberWithInt:[weed.seed_count intValue] + 1];
             weed.if_cur_user_seed_it = [NSNumber numberWithInt:1];
             [self updateView];
+            [self.seed setEnabled:true];
         } failure:^(RKObjectRequestOperation *operation, NSError *error) {
             RKLogError(@"seed failed with error: %@", error);
+            [self.seed setEnabled:true];
         }];
     }
 }
 
 -(void)showUsers:(id)sender {
     NSString * feedUrl;
+    [sender setEnabled:false];
     if ([sender tag] == SHOW_WATER_USERS) {
         feedUrl = [NSString stringWithFormat:@"user/getUsersWaterWeed/%@", _weed.id];
     } else {
@@ -170,8 +181,10 @@ static NSInteger SHOW_WATER_USERS = 2;
         UserListViewController* viewController = [[UserListViewController alloc] initWithNibName:nil bundle:nil];
         [viewController setUsers:mappingResult.array];
         [self.parentViewController.navigationController pushViewController:viewController animated:YES];
+        [sender setEnabled:true];
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
         RKLogError(@"Load failed with error: %@", error);
+        [sender setEnabled:true];
     }];
 }
 

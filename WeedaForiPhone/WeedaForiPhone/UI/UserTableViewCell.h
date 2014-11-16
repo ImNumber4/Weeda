@@ -19,5 +19,6 @@
 @property (nonatomic, strong) UIImageView *storeTypeIcon;
 
 - (void)decorateCellWithUser:(User *)user;
+- (void)decorateCellWithUser:(User *)user subtitle:(NSString*) subtitle;
 
 @end
