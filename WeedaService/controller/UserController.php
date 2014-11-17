@@ -177,6 +177,64 @@ class UserController extends Controller
 		return json_encode(array('user' => $user));
 	}
 	
+	public function forgotPassword($token_id)
+	{
+		$error;
+		
+		$tokenDao = new TokenDAO();
+		$token = $tokenDao->find_by_token_id($token_id);
+		if (!$token) {
+			$error = "Reset password url has expired. Please apply again.";
+		}
+		if ($token['used']) {
+			$error = "Reset password url has expired. Please apply again.";
+		}
+		
+		header('Content-Type: text/html; charset=UTF-8');
+		if ($error) {
+			$title = "Reset password";
+			$message = $error;
+			
+			ob_start();
+			include('./page/notification.php');
+			echo ob_get_clean();
+		} else {
+			$user_id = $token['user_id'];
+		
+			ob_start();
+			include('./page/user/reset.php');
+			echo ob_get_clean();
+		}
+		return;
+	}
+	
+	public function reset($parameters)
+	{
+		if (!isset($_POST['password']) || !isset($_POST['user_id']) || !isset($_POST['token_id'])) {
+			throw new InvalidRequestException("Inputs are not valid");
+		}
+		
+		error_log("token: " . $_POST['token']);
+		error_log("user_id: " . $_POST['user_id']);
+		
+		$token_id = $_POST['token_id'];
+		$password = $_POST['password'];
+		$user_id = $_POST['user_id'];
+		
+		$this->user_dao->updatePassword($user_id, $password);
+		$token_dao = new TokenDAO();
+		$token_dao->update_used(1, $token_id);
+		
+		$title = "Reset password";
+		$message = "Password has been changed!";
+		
+		header('Content-Type: text/html; charset=UTF-8');
+		ob_start();
+		include('./page/notification.php');
+		echo ob_get_clean();
+		return;
+	}
+	
 	private function update_cookie($user){
 		error_log($user['id']);
 				error_log($user['username']);
@@ -195,6 +253,12 @@ class UserController extends Controller
 		$user['password'] = $password;
 		$user['username'] = $username;
 		$this->update_cookie($user);
+	}
+	
+	public function updatePassword($password)
+	{
+		$user_id = $this->getCurrentUser();
+		$this->user_dao->updatePassword($user_id, $password);
 	}
 	
 	public function update() {

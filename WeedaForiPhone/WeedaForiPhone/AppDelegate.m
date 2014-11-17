@@ -317,7 +317,7 @@ NSString * _deviceToken;
     
     [weedMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"images" toKeyPath:@"images" withMapping:weedImageMapping]];
     
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"shouldBeDeleted = TRUE || id < 0"];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"shouldBeDeleted == 1 || id < 0"];
     weedMapping.deletionPredicate = predicate;
     
     RKEntityMapping *messageMapping = [RKEntityMapping mappingForEntityForName:NSStringFromClass([Message class]) inManagedObjectStore:managedObjectStore];

@@ -50,10 +50,14 @@
 
 + (NSString *)validatePassword:(NSString *)password
 {
-    if (password.length >= 7) {
+    NSError *error = nil;
+    NSString *pwRegStr = @"((?=.*\\d)(?=.*[A-Z])(?=.*[a-z]).{6,16})";
+    NSRegularExpression *pwRegex = [[NSRegularExpression alloc] initWithPattern:pwRegStr options:NSRegularExpressionCaseInsensitive error:&error];
+    NSTextCheckingResult *result = [pwRegex firstMatchInString:password options:0 range:NSMakeRange(0, password.length)];
+    if (result) {
         return nil;
     } else {
-        return @"Password needs to have least 7 characters.";
+        return @"Password needs to have least 6 characters, include 1 uppercase and 1 lowercase and 1 Digital";
     }
 }
 

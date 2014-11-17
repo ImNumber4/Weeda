@@ -11,8 +11,9 @@
 #import "TabBarController.h"
 #import "MasterViewController.h"
 #import "UIViewHelper.h"
+#import "SignUpSubViewController.h"
 
-@interface WelcomeViewController () {
+@interface WelcomeViewController () <UITextFieldDelegate>{
     
 }
 
@@ -23,6 +24,11 @@
 @property (strong, nonatomic) UILabel *lbForgotPw;
 
 @property (nonatomic, strong) UIImageView *titleImage;
+
+@property (nonatomic, retain) UIView *forgotPwView;
+@property (nonatomic, retain) UITextField *inputField;
+@property (nonatomic, retain) UILabel *errorMessage;
+@property (nonatomic) BOOL isEmailValid;
 
 - (IBAction)backgroudTab:(id)sender;
 
@@ -100,6 +106,8 @@ static double SIGN_UP_SIZE = 100;
     [self.lbForgotPw setFont:[UIFont systemFontOfSize:12]];
     [self.lbForgotPw setTextColor:[UIColor whiteColor]];
     [self.view addSubview:self.lbForgotPw];
+    self.lbForgotPw.userInteractionEnabled = YES;
+    [self.lbForgotPw addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(forgorPassword:)]];
     
     self.btnSignIn = [[UIButton alloc] initWithFrame:CGRectMake(self.txtUsername.frame.origin.x, self.lbForgotPw.frame.origin.y + self.lbForgotPw.frame.size.height + 20, self.txtUsername.frame.size.width, self.txtUsername.frame.size.height)];
     [self.btnSignIn addTarget:self action:@selector(signIn:) forControlEvents:UIControlEventTouchDown];
@@ -125,8 +133,8 @@ static double SIGN_UP_SIZE = 100;
     [self.view addGestureRecognizer:singleFingerTap];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWasShown:)
-                                                 name:UIKeyboardDidShowNotification object:nil];
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillBeHidden:)
@@ -247,13 +255,118 @@ static double SIGN_UP_SIZE = 100;
     [self.view endEditing:YES];
 }
 
-// Called when the UIKeyboardDidShowNotification is sent.
-- (void)keyboardWasShown:(NSNotification*)aNotification
+- (void)forgorPassword:(UIGestureRecognizer *)recognizer
+{
+    if (self.txtUsername.text.length == 0) {
+        UIAlertView *av = [[UIAlertView alloc]initWithTitle:nil message:@"Please input your username" delegate:self cancelButtonTitle:@"ok" otherButtonTitles:nil];
+        [av show];
+        return;
+    }
+    
+    [self.view endEditing:YES];
+    
+    _forgotPwView = [[UIView alloc] initWithFrame:self.view.bounds];
+    _forgotPwView.backgroundColor = [UIColor whiteColor];
+    
+    UIView *statusBarBackground = [UIView new];
+    statusBarBackground.backgroundColor = [ColorDefinition greenColor];
+    
+    UILabel *titleLabel = [UILabel new];
+    titleLabel.textAlignment = NSTextAlignmentCenter;
+    titleLabel.font = [UIFont boldSystemFontOfSize:17];
+    titleLabel.textColor = [ColorDefinition greenColor];
+    titleLabel.text = @"Forgot your password?";
+    
+    UILabel *descView = [UILabel new];
+    descView.textColor = [UIColor grayColor];
+    descView.text = @"Please input the email which you used for signup the account.";
+    descView.numberOfLines = 0;
+    descView.font = [UIFont systemFontOfSize:12];
+    
+    _inputField = [UITextField new];
+    [_inputField setFont:[UIFont systemFontOfSize:14]];
+    _inputField.textColor = [ColorDefinition greenColor];
+    _inputField.layer.borderWidth = 1;
+    _inputField.layer.borderColor = [[ColorDefinition grayColor] CGColor];
+    [UIViewHelper insertLeftPaddingToTextField:_inputField width:10];
+    _inputField.backgroundColor = [UIColor whiteColor];
+    _inputField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    _inputField.autocorrectionType = UITextAutocorrectionTypeNo;
+    _inputField.returnKeyType = UIReturnKeyNext;
+    _inputField.keyboardType = UIKeyboardTypeEmailAddress;
+    _inputField.clearButtonMode = UITextFieldViewModeWhileEditing;
+    _inputField.layer.cornerRadius = 5;
+    _inputField.delegate = self;
+    [_inputField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+    
+    _errorMessage = [UILabel new];
+    _errorMessage.textColor = [UIColor redColor];
+    _errorMessage.numberOfLines = 0;
+    _errorMessage.font = [UIFont systemFontOfSize:12];
+    
+    UIButton *continueButton = [UIButton new];
+    [continueButton setTitle:@"Continue" forState:UIControlStateNormal];
+    [continueButton.titleLabel setFont:[UIFont systemFontOfSize:12]];
+    [continueButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [continueButton setBackgroundColor:[ColorDefinition greenColor]];
+    continueButton.layer.cornerRadius = 5;
+    [continueButton addTarget:self action:@selector(continueClicked:) forControlEvents:UIControlEventTouchDown];
+    
+    UIButton *cancelButton = [UIButton new];
+    [cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
+    [cancelButton.titleLabel setFont:[UIFont systemFontOfSize:12]];
+    [cancelButton setTitleColor:[ColorDefinition greenColor] forState:UIControlStateNormal];
+    [cancelButton addTarget:self action:@selector(cancelClicked:) forControlEvents:UIControlEventTouchDown];
+    
+    [_forgotPwView addSubview:statusBarBackground];
+    [_forgotPwView addSubview:titleLabel];
+    [_forgotPwView addSubview:descView];
+    [_forgotPwView addSubview:_inputField];
+    [_forgotPwView addSubview:_errorMessage];
+    [_forgotPwView addSubview:continueButton];
+    [_forgotPwView addSubview:cancelButton];
+    
+    statusBarBackground.translatesAutoresizingMaskIntoConstraints = NO;
+    titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    descView.translatesAutoresizingMaskIntoConstraints = NO;
+    _inputField.translatesAutoresizingMaskIntoConstraints = NO;
+    _errorMessage.translatesAutoresizingMaskIntoConstraints = NO;
+    continueButton.translatesAutoresizingMaskIntoConstraints = NO;
+    cancelButton.translatesAutoresizingMaskIntoConstraints = NO;
+    NSDictionary *vs = NSDictionaryOfVariableBindings(statusBarBackground, titleLabel, descView, _inputField, _errorMessage, continueButton, cancelButton);
+    [_forgotPwView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[statusBarBackground(20)]-80-[titleLabel(20)]-5-[descView(50)]-5-[_inputField(35)]-5-[_errorMessage(45)]-5-[continueButton(25)]-5-[cancelButton(25)]" options:0 metrics:nil views:vs]];
+    [_forgotPwView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[statusBarBackground]|" options:0 metrics:nil views:vs]];
+    [_forgotPwView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[titleLabel]|" options:0 metrics:nil views:vs]];
+    [_forgotPwView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-20-[descView]-20-|" options:0 metrics:nil views:vs]];
+    [_forgotPwView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-20-[_inputField]-20-|" options:0 metrics:nil views:vs]];
+    [_forgotPwView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-20-[_errorMessage]-20-|" options:0 metrics:nil views:vs]];
+    [_forgotPwView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-20-[continueButton]-20-|" options:0 metrics:nil views:vs]];
+    [_forgotPwView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-20-[cancelButton]-20-|" options:0 metrics:nil views:vs]];
+    
+    _forgotPwView.center = CGPointMake(CGRectGetWidth(self.view.frame) * 0.5f, CGRectGetHeight(self.view.frame) + CGRectGetHeight(_forgotPwView.frame) * 0.5f);
+    [self.view addSubview:_forgotPwView];
+    
+//    [UIView animateWithDuration:0.2 animations:^{
+//        _forgotPwView.center = CGPointMake(_forgotPwView.center.x, CGRectGetHeight(self.view.frame) - CGRectGetHeight(_forgotPwView.frame) * 0.5f);
+//    }];
+    
+    [UIView animateWithDuration:0.3 delay:0 usingSpringWithDamping:1.5 initialSpringVelocity:1 options:UIViewAnimationOptionLayoutSubviews animations:^{
+        _forgotPwView.center = CGPointMake(_forgotPwView.center.x, CGRectGetHeight(self.view.frame) - CGRectGetHeight(_forgotPwView.frame) * 0.5f);
+    } completion:^(BOOL finished) {
+        ;
+    }];
+}
+
+// Called when the UIKeyboardWillShowNotification is sent.
+- (void)keyboardWillShow:(NSNotification *)aNotification
 {
     [UIView animateWithDuration:0.2 animations:^{
-        [self.view setCenter:CGPointMake(self.view.center.x, self.view.frame.size.height/2.0 - 25)];
-    } completion:^(BOOL finished) {
-        
+        _txtUsername.center = CGPointMake(_txtUsername.center.x, _txtUsername.center.y - 25);
+        _txtPassword.center = CGPointMake(_txtPassword.center.x, _txtPassword.center.y - 25);
+        _btnSignIn.center = CGPointMake(_btnSignIn.center.x, _btnSignIn.center.y - 25);
+        _btnSignUp.center = CGPointMake(_btnSignUp.center.x, _btnSignUp.center.y - 25);
+        _lbForgotPw.center = CGPointMake(_lbForgotPw.center.x, _lbForgotPw.center.y - 25);
+        _titleImage.center = CGPointMake(_titleImage.center.x, _titleImage.center.y - 25);
     }];
 }
 
@@ -261,9 +374,12 @@ static double SIGN_UP_SIZE = 100;
 - (void)keyboardWillBeHidden:(NSNotification*)aNotification
 {
     [UIView animateWithDuration:0.2 animations:^{
-        [self.view setCenter:CGPointMake(self.view.center.x, self.view.frame.size.height/2.0)];
-    } completion:^(BOOL finished) {
-        
+        _txtUsername.center = CGPointMake(_txtUsername.center.x, _txtUsername.center.y + 25);
+        _txtPassword.center = CGPointMake(_txtPassword.center.x, _txtPassword.center.y + 25);
+        _btnSignIn.center = CGPointMake(_btnSignIn.center.x, _btnSignIn.center.y + 25);
+        _btnSignUp.center = CGPointMake(_btnSignUp.center.x, _btnSignUp.center.y + 25);
+        _lbForgotPw.center = CGPointMake(_lbForgotPw.center.x, _lbForgotPw.center.y + 25);
+        _titleImage.center = CGPointMake(_titleImage.center.x, _titleImage.center.y + 25);
     }];
 }
 
@@ -275,6 +391,65 @@ static double SIGN_UP_SIZE = 100;
 - (NSUInteger)supportedInterfaceOrientations
 {
     return UIInterfaceOrientationMaskPortrait;
+}
+
+- (void)textFieldDidChange:(UITextField *)textField
+{
+    if (![User isEmailValid:textField.text]) {
+        _isEmailValid = NO;
+        _errorMessage.text = @"Email address is not considered valid.";
+    } else {
+        _errorMessage.text = nil;
+        _isEmailValid = YES;
+    }
+}
+
+- (void)continueClicked:(id)sender
+{
+    if (!_isEmailValid) {
+        return;
+    }
+    
+    NSDictionary *postDictionary = @{@"email":_inputField.text, @"username":self.txtUsername.text};
+    NSError *error = nil;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:postDictionary options:0 error:&error];
+//    NSString *jsonRequest = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", ROOT_URL, @"mail/forgotPassword"]];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10.0];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [request setValue:[NSString stringWithFormat:@"%ld", jsonData.length] forHTTPHeaderField:@"Content-Length"];
+    [request setHTTPBody:jsonData];
+    
+    NSURLResponse *response = nil;
+    NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+    NSHTTPURLResponse *httpResponse;
+    if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
+        httpResponse = (NSHTTPURLResponse *)response;
+        if (httpResponse.statusCode >= 400) {
+            _errorMessage.text = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        } else {
+            UIAlertView *av = [[UIAlertView alloc] initWithTitle:nil message:@"Email has been sent. Please check you email and reset your password." delegate:self cancelButtonTitle:@"ok" otherButtonTitles:nil];
+            [self cancelClicked:self];
+            [av show];
+        }
+    } else {
+        _errorMessage.text = @"Sending email failed, please try it later.";
+    }
+}
+
+- (void)cancelClicked:(id)sender
+{
+    [UIView animateWithDuration:0.3 animations:^{
+        _forgotPwView.center = CGPointMake(_forgotPwView.center.x, CGRectGetHeight(self.view.frame) + CGRectGetHeight(_forgotPwView.frame) * 0.5f);
+    } completion:^(BOOL finished) {
+        if (finished) {
+            [_forgotPwView removeFromSuperview];
+            _forgotPwView = nil;
+        }
+    }];
+    
 }
 
 @end

@@ -11,6 +11,8 @@
 
 @interface SignUpSubViewController ()
 
+@property (nonatomic, retain) UIView *statusBarBackground;
+
 @end
 
 @implementation SignUpSubViewController
@@ -39,6 +41,10 @@ static double CANCEL_BUTTON_SIZE = 100;
     
     UITapGestureRecognizer *singleFingerTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
     [self.view addGestureRecognizer:singleFingerTap];
+    
+    self.statusBarBackground = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 20)];
+    self.statusBarBackground.backgroundColor = [ColorDefinition greenColor];
+    [self.view addSubview:self.statusBarBackground];
     
     self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 100, self.view.frame.size.width, 20)];
     self.titleLabel.textAlignment = NSTextAlignmentCenter;

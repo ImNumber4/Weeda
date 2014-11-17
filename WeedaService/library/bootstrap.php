@@ -17,7 +17,7 @@ define('DBDIR', @realpath(dirname(__FILE__).'/../'.DB).'/');
 define('EXCEPTIONDIR', @realpath(dirname(__FILE__).'/../'.EXCEPTION).'/');
 
 // function to autoload classes (getting rid of include() calls)
-function __autoload($class)
+function wl_autoload($class)
 {
 	// error_log('Init class '. $class, 3, "/var/log/apache2/weeda_warning_log");
 	
@@ -49,6 +49,7 @@ function __autoload($class)
 			require($exception_file);
 			return;
 		}
+		
 	} catch (Exception $e) {
 		error_log($e->getMessage());
 	}
@@ -56,6 +57,11 @@ function __autoload($class)
 	
 	error_log('Requested module \''.$class.'\' is missing. Execution stopped.');
 }
+
+spl_autoload_register('wl_autoload');
+require_once('./library/PHPMailer/PHPMailerAutoload.php');
+
+
 // the router code, breaks request uri to parts and retrieves the specific class, method and arguments
 // $route = '';
 // $class = '';

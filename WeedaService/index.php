@@ -23,9 +23,16 @@ function Hook($request) {
     if(!empty($request)){
         $controller = $request->controller;
         $action = $request->action;
+		
+		if (!isset($controller) || !isset($action)) {
+			error_log("Invailed request, there is no controller or action");
+			http_response_code(400);
+			echo "Invailed request, there is no controller or action";
+			return;
+		}
         
         //check the authentication
-        if ($action != 'login' && $action != 'signup' && $action != 'hasUsername' && $action != 'hasEmail') {
+        if ($request->need_cookie) {
         	$currentUser_id = $_COOKIE[Controller::$USER_ID_COOKIE_NAME];
         	if (!isset($currentUser_id)) {
 				error_log('Please log first. url: ' . $url);
@@ -53,6 +60,10 @@ function Hook($request) {
 			error_log($e->toString());
 			http_response_code(400);
 			echo $e->getMessage();
+		} catch	(NotFoundRequestException $e) {
+			error_log($e->toString());
+			http_response_code(404);
+			echo $e->getMessage();
 		} catch (Exception $e) {
 			error_log($e->toString());
 			http_response_code(500);
@@ -73,6 +84,7 @@ class Request
 	public $action;
 	public $method;
 	public $parameters;
+	public $need_cookie;
 	
 	function __construct()
 	{
@@ -81,6 +93,7 @@ class Request
 		$this->parameters = array();
 		$this->parseUrlParams();
 		$this->parseIncomingParams();
+		$this->need_cookie = $this->need_cookie();
 		$this->format = 'json';
 		if (isset($this->parameters['format'])) {
 			$this->format = $this->paramters['format'];
@@ -100,6 +113,21 @@ class Request
 		for ($i = 3; $i < $count; $i++) {
 			$this->parameters[] = $url_elements[$i];
 		}
+	}
+	
+	private function need_cookie()
+	{
+		if (!isset($this->controller) || !isset($this->action)) {
+			return 1;
+		}
+		
+		$action = $this->action;
+		if ($action != 'login' && $action != 'signup' && $action != 'hasUsername' 
+			&& $action != 'hasEmail' && $action != 'forgotPassword' && $action != 'reset') {
+			return 1;
+		}
+		
+		return 0;
 	}
 	
 	public function parseIncomingParams()

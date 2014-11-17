@@ -21,6 +21,11 @@ class UserDAO extends BaseDAO
 		    . ' WHERE id = ' . $user_id;
 		$this->db_conn->query($query);
 	}
+	
+	public function updatePassword($user_id, $password) {
+		$query = 'UPDATE user SET password=\'' . $password . '\' WHERE id=' . $user_id;
+		$this->db_conn->query($query); 
+	}
 		
 	
 	public function update($user) {
