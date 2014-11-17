@@ -35,19 +35,23 @@ class MailController extends Controller
 
 		$md5_password = md5(date_timestamp_get($date) . $user['password'] . $user['email']);
 		error_log("token: " . $md5_password);
-		//save token
-		$tokenDao = new TokenDAO();
-		$token['token_id'] = $md5_password;
-		$token['user_id'] = $user['id'];
-		$token['time'] = date_timestamp_get($date);
-		$tokenDao->create($token);
+		
 		
 		//Send email
 		$parameters['send_to'] = $user['email'];
 		$parameters['subject'] = 'Please renew your password';
 		$parameters['body'] = $this->generate_forgot_password_body($user, $md5_password);
 		
-		$this->send_mail($parameters);
+		if ($this->send_mail($parameters)) {
+			//save token
+			$tokenDao = new TokenDAO();
+			$token['token_id'] = $md5_password;
+			$token['user_id'] = $user['id'];
+			$token['time'] = date_timestamp_get($date);
+			$tokenDao->create($token);
+		} else {
+			throw new InternalException('Sending email failed, please try again later.');
+		}
 	}
 	
 	private function send_mail($parameters)
@@ -75,8 +79,10 @@ class MailController extends Controller
 		
 		if (!$mail->send()) {
 			error_log('Email sending failed, error ' . $mail->ErrorInfo);
+			return false;
 		} else {
 			error_log('Email has been sent');
+			return true;
 		}
 	}
 	
