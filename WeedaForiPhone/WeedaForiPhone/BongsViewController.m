@@ -28,7 +28,7 @@
 @property (nonatomic, retain) UITableView * tableView;
 @property (nonatomic, retain) UIRefreshControl *refreshControl;
 @property (nonatomic, retain) UISearchBar *searchBar;
-@property (nonatomic, retain) BlurView * blurView;
+@property (nonatomic, retain) UIView * blurView;
 @property (nonatomic, retain) UISegmentedControl * segmentedControl;
 @property (nonatomic, retain) UITableView *searchResultTableView;
 
@@ -87,16 +87,13 @@ static NSInteger MAX_ROWS_TO_SHOW_IN_ALL_SEARCH = 5;
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:FIND_MORE_CELL_ID];
     self.tableView.tag = BONGS_TABLE_VIEW;
     
-    self.blurView = [[BlurView alloc] initWithFrame:self.tableView.frame];
+    self.blurView = [[UIView alloc] initWithFrame:self.tableView.frame];
     CGSize statusBarSize = [[UIApplication sharedApplication] statusBarFrame].size;
-    self.segmentedControl = [[UISegmentedControl alloc] initWithItems:@[@"All", @"Weeds Only", @"User Only"]];
-    [self.segmentedControl setFrame:CGRectMake(PADDING, statusBarSize.height + self.navigationController.navigationBar.frame.size.height + PADDING, self.blurView.frame.size.width - PADDING * 2, 25)];
-    [self.segmentedControl setSelectedSegmentIndex:0];
-    [self.segmentedControl setTintColor:[UIColor grayColor]];
-    [self.segmentedControl addTarget:self action:@selector(segmentSwitched:) forControlEvents:UIControlEventValueChanged];
-    [self.blurView addSubview:self.segmentedControl];
     
-    double searchResultTableViewY = self.segmentedControl.frame.origin.y + self.segmentedControl.frame.size.height + PADDING;
+    double segmentedControlY = statusBarSize.height + self.navigationController.navigationBar.frame.size.height + PADDING;
+    double segmentedControlHeight = 25;
+    
+    double searchResultTableViewY = segmentedControlY + segmentedControlHeight + PADDING;
     self.searchResultTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, searchResultTableViewY, self.blurView.frame.size.width, self.blurView.frame.size.height - self.tabBarController.tabBar.frame.size.height - searchResultTableViewY)  style:UITableViewStyleGrouped];
     self.searchResultTableView.dataSource = self;
     self.searchResultTableView.delegate = self;
@@ -106,8 +103,16 @@ static NSInteger MAX_ROWS_TO_SHOW_IN_ALL_SEARCH = 5;
     [self.searchResultTableView registerClass:[UserTableViewCell class] forCellReuseIdentifier:USER_CELL_ID];
     [self.searchResultTableView registerClass:[WeedTableViewCell class] forCellReuseIdentifier:WEED_TABLE_CELL_REUSE_ID];
     [self.searchResultTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:FIND_MORE_CELL_ID];
-    [self.searchResultTableView setBackgroundColor:[UIColor clearColor]];
     [self.blurView addSubview:self.searchResultTableView];
+    [self.blurView setBackgroundColor:self.searchResultTableView.backgroundColor];
+    
+    self.segmentedControl = [[UISegmentedControl alloc] initWithItems:@[@"All", @"Weeds", @"User"]];
+    [self.segmentedControl setFrame:CGRectMake(PADDING, segmentedControlY, self.blurView.frame.size.width - PADDING * 2, segmentedControlHeight)];
+    [self.segmentedControl setSelectedSegmentIndex:0];
+    [self.segmentedControl setTintColor:[UIColor grayColor]];
+    [self.segmentedControl setBackgroundColor:[UIColor clearColor]];
+    [self.segmentedControl addTarget:self action:@selector(segmentSwitched:) forControlEvents:UIControlEventValueChanged];
+    [self.blurView addSubview:self.segmentedControl];
     
     UIRefreshControl *refresh = [[UIRefreshControl alloc] init];
     [refresh addTarget:self action:@selector(refreshView:) forControlEvents:UIControlEventValueChanged];
@@ -240,6 +245,17 @@ static NSInteger MAX_ROWS_TO_SHOW_IN_ALL_SEARCH = 5;
 }
 
 #pragma mark - Table view data source
+
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    if (tableView.tag == SEARCH_RESULT_TABLE_VIEW) {
+        if (section == 0)
+            return 1.0f;
+        return 20;
+    } else {
+        return 20;
+    }
+}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
