@@ -93,11 +93,11 @@ static NSInteger MAX_ROWS_TO_SHOW_IN_ALL_SEARCH = 5;
     [self.segmentedControl setFrame:CGRectMake(PADDING, statusBarSize.height + self.navigationController.navigationBar.frame.size.height + PADDING, self.blurView.frame.size.width - PADDING * 2, 25)];
     [self.segmentedControl setSelectedSegmentIndex:0];
     [self.segmentedControl setTintColor:[UIColor grayColor]];
-//    [self.segmentedControl addTarget:self action:@selector(segmentSwitched:) forControlEvents:UIControlEventValueChanged];
+    [self.segmentedControl addTarget:self action:@selector(segmentSwitched:) forControlEvents:UIControlEventValueChanged];
     [self.blurView addSubview:self.segmentedControl];
     
     double searchResultTableViewY = self.segmentedControl.frame.origin.y + self.segmentedControl.frame.size.height + PADDING;
-    self.searchResultTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, searchResultTableViewY, self.blurView.frame.size.width, self.blurView.frame.size.height - searchResultTableViewY)  style:UITableViewStyleGrouped];
+    self.searchResultTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, searchResultTableViewY, self.blurView.frame.size.width, self.blurView.frame.size.height - self.tabBarController.tabBar.frame.size.height - searchResultTableViewY)  style:UITableViewStyleGrouped];
     self.searchResultTableView.dataSource = self;
     self.searchResultTableView.delegate = self;
     self.searchResultTableView.tag = SEARCH_RESULT_TABLE_VIEW;
@@ -116,6 +116,16 @@ static NSInteger MAX_ROWS_TO_SHOW_IN_ALL_SEARCH = 5;
     [self.tableView sendSubviewToBack:self.refreshControl];
     
     [self fetachData];
+}
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    if (!self.searchBar.hidden) {
+        [self.searchBar endEditing:TRUE];
+    }
+}
+
+-(void)segmentSwitched:(UISegmentedControl *)seg{
+    [self.searchResultTableView reloadData];
 }
 
 - (void) setSearchBarTextColorToBeWhite
@@ -148,10 +158,16 @@ static NSInteger MAX_ROWS_TO_SHOW_IN_ALL_SEARCH = 5;
 
 - (void)selectWeedContent:(UIGestureRecognizer *)recognizer
 {
-    CGPoint selectPoint = [recognizer locationInView:self.tableView];
-    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:selectPoint];
-    [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
-    [self tableView:self.tableView didSelectRowAtIndexPath:indexPath];
+    UITableView *target;
+    if (self.searchBar.hidden) {
+        target = self.tableView;
+    } else {
+        target = self.searchResultTableView;
+    }
+    CGPoint selectPoint = [recognizer locationInView:target];
+    NSIndexPath *indexPath = [target indexPathForRowAtPoint:selectPoint];
+    [target selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+    [self tableView:target didSelectRowAtIndexPath:indexPath];
 }
 
 -(void)displaySearchBar:(id)sender {
@@ -269,6 +285,49 @@ static NSInteger MAX_ROWS_TO_SHOW_IN_ALL_SEARCH = 5;
                 }];
             }
         }
+    } else if (tableView.tag == SEARCH_RESULT_TABLE_VIEW) {
+        switch (self.segmentedControl.selectedSegmentIndex) {
+            case SEGMENTED_CONTROL_ALL:
+                if (indexPath.section == USERS_SECTION) {
+                    if (indexPath.row == MIN(MAX_ROWS_TO_SHOW_IN_ALL_SEARCH, [self.matchedUsers count])) {
+                        [self.segmentedControl setSelectedSegmentIndex:SEGMENTED_CONTROL_USERS_ONLY];
+                        [self.searchResultTableView reloadData];
+                    } else {
+                        User * user = [self.matchedUsers objectAtIndex:indexPath.row];
+                        UserViewController *controller = (UserViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"UserViewController"];
+                        [controller setUser_id:user.id];
+                        [self.navigationController pushViewController:controller animated:YES];
+                    }
+                } else if (indexPath.section == WEEDS_SECTION) {
+                    if (indexPath.row == MIN(MAX_ROWS_TO_SHOW_IN_ALL_SEARCH, [self.matchedWeeds count])) {
+                        [self.segmentedControl setSelectedSegmentIndex:SEGMENTED_CONTROL_WEEDS_ONLY];
+                        [self.searchResultTableView reloadData];
+                    } else {
+                        Weed *weed = [self.matchedWeeds objectAtIndex:indexPath.row];
+                        DetailViewController *controller = (DetailViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"DetailViewController"];
+                        [controller setCurrentWeed:weed];
+                        [self.navigationController pushViewController:controller animated:YES];
+                    }
+                }
+                break;
+            case SEGMENTED_CONTROL_USERS_ONLY:
+            {
+                User * user = [self.matchedUsers objectAtIndex:indexPath.row];
+                UserViewController *controller = (UserViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"UserViewController"];
+                [controller setUser_id:user.id];
+                [self.navigationController pushViewController:controller animated:YES];
+                break;
+            }
+            case SEGMENTED_CONTROL_WEEDS_ONLY:
+            {
+                Weed *weed = [self.matchedWeeds objectAtIndex:indexPath.row];
+                DetailViewController *controller = (DetailViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"DetailViewController"];
+                [controller setCurrentWeed:weed];
+                [self.navigationController pushViewController:controller animated:YES];
+            }
+            default:
+                break;
+        }
     }
 }
 
@@ -379,6 +438,7 @@ static NSInteger MAX_ROWS_TO_SHOW_IN_ALL_SEARCH = 5;
                         Weed *weed = [self.matchedWeeds objectAtIndex:indexPath.row];
                         [cell decorateCellWithWeed:weed parentViewController:self];
                         cell.delegate = self;
+                        cell.selectionStyle = UITableViewCellSelectionStyleNone;
                         return cell;
                     }
                 } else {
@@ -397,6 +457,7 @@ static NSInteger MAX_ROWS_TO_SHOW_IN_ALL_SEARCH = 5;
                 Weed *weed = [self.matchedWeeds objectAtIndex:indexPath.row];
                 [cell decorateCellWithWeed:weed parentViewController:self];
                 cell.delegate = self;
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
                 return cell;
             }
             default:
@@ -484,7 +545,7 @@ static NSInteger MAX_ROWS_TO_SHOW_IN_ALL_SEARCH = 5;
             }
         }
         [self.matchedWeeds sortUsingComparator:^NSComparisonResult(Weed *obj1, Weed *obj2) {
-            return [obj1.time compare: obj2.time] == NSOrderedDescending;
+            return [obj1.time compare: obj2.time] == NSOrderedAscending;
         }];
         switch (self.segmentedControl.selectedSegmentIndex) {
             case SEGMENTED_CONTROL_ALL:
