@@ -70,22 +70,38 @@ static double DEFAULT_VIDEO_HEIGHT = 168.75f;
 
 static double CONTROL_VIEW_HEIGHT = 30;
 
+static double AVATAR_SIZE = 40;
+
+static double ICON_SIZE = 15;
+
+static double CONTENT_FONT_SIZE = 14.0;
+
+static double FOLLOW_BUTTON_SIZE = 25;
+
 static NSString * WEB_SERVER_GET_FAVICON_URL = @"http://www.google.com/s2/favicons?domain=";
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        self.userAvatar = [[WLImageView alloc] initWithFrame:CGRectMake(PADDING, PADDING, 40, 40)];
+        self.userAvatar = [[WLImageView alloc] initWithFrame:CGRectMake(PADDING, PADDING, AVATAR_SIZE, AVATAR_SIZE)];
         [self.userAvatar addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleAvatarTapped)]];
         self.userAvatar.allowFullScreenDisplay = NO;
         CALayer * l = [self.userAvatar layer];
         [l setMasksToBounds:YES];
-        [l setCornerRadius:7.0];
+        [l setCornerRadius:AVATAR_SIZE/2.0];
         self.userAvatar.userInteractionEnabled = YES;
         [self addSubview:self.userAvatar];
         
-        self.userLabel = [[UIButton alloc] initWithFrame:CGRectMake(PADDING * 2 + self.userAvatar.frame.size.width, self.userAvatar.frame.origin.y, self.frame.size.width - PADDING * 3 - self.userAvatar.frame.size.width, self.userAvatar.frame.size.height/2.0)];
+        self.userIcon = [[UserIcon alloc] initWithFrame:CGRectMake(self.userAvatar.frame.origin.x + self.userAvatar.frame.size.width - ICON_SIZE/2.0, self.userAvatar.frame.origin.y + self.userAvatar.frame.size.height - ICON_SIZE, ICON_SIZE, ICON_SIZE)];
+        [self addSubview:self.userIcon];
+        
+        self.followButton = [[FollowButton alloc] initWithFrame:CGRectMake(self.frame.size.width - FOLLOW_BUTTON_SIZE - PADDING, self.userAvatar.center.y - FOLLOW_BUTTON_SIZE/2.0, FOLLOW_BUTTON_SIZE, FOLLOW_BUTTON_SIZE)];
+        self.followButton.tintColor = [UIColor whiteColor];
+        [self addSubview:self.followButton];
+        
+        double labelX = self.userAvatar.frame.origin.x + self.userAvatar.frame.size.width + PADDING * 2;
+        self.userLabel = [[UIButton alloc] initWithFrame:CGRectMake(self.userAvatar.frame.origin.x + self.userAvatar.frame.size.width + PADDING * 2, self.userAvatar.frame.origin.y, self.followButton.frame.origin.x - labelX, self.userAvatar.frame.size.height/2.0)];
         [self.userLabel.titleLabel setFont:[UIFont boldSystemFontOfSize:12]];
         [self.userLabel setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         self.userLabel.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
@@ -100,12 +116,14 @@ static NSString * WEB_SERVER_GET_FAVICON_URL = @"http://www.google.com/s2/favico
         
         self.weedContentLabel = [[UITextView alloc] initWithFrame:CGRectMake(self.userAvatar.frame.origin.x, self.userAvatar.frame.origin.y + self.userAvatar.frame.size.height, self.frame.size.width - PADDING * 2, 30)];
         self.weedContentLabel.editable = false;
-        [self.weedContentLabel setFont:[UIFont systemFontOfSize:14.0]];
+        [self.weedContentLabel setFont:[UIFont systemFontOfSize:CONTENT_FONT_SIZE]];
         [self.weedContentLabel setBackgroundColor:[UIColor clearColor]];
         self.weedContentLabel.scrollEnabled = false;
         self.weedContentLabel.userInteractionEnabled = true;
         self.weedContentLabel.dataDetectorTypes = UIDataDetectorTypeAll;
         [self addSubview:self.weedContentLabel];
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tappedContentView:)];
+        [self.weedContentLabel addGestureRecognizer:tap];
         
         _imageWidthDictionary = [[NSMutableDictionary alloc]initWithCapacity:3];
         [_imageWidthDictionary setObject:[NSNumber numberWithFloat:300.0] forKey:[NSNumber numberWithInteger:EnumImageWidthTypeFull]];
@@ -125,6 +143,13 @@ static NSString * WEB_SERVER_GET_FAVICON_URL = @"http://www.google.com/s2/favico
     return self;
 }
 
+- (void)tappedContentView:(UIGestureRecognizer *)recognizer
+{
+    if ([self.delegate respondsToSelector:@selector(selectWeedContent:)]) {
+        [self.delegate selectWeedContent:recognizer];
+    }
+}
+
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
     [super setSelected:selected animated:animated];
@@ -135,24 +160,36 @@ static NSString * WEB_SERVER_GET_FAVICON_URL = @"http://www.google.com/s2/favico
 - (void)decorateCellWithWeed:(Weed *)weed parentViewController:(UIViewController *) parentViewController showHeader:(BOOL) showHeader
 {
     self.weed = weed;
-    
-    NSString *content = [self shortenURLInContent:weed.content];
+    [self.urlDictionary removeAllObjects];
+    NSString *content = [WeedDetailTableViewCell shortenURLInContent:weed.content urlDictionary:self.urlDictionary];
     
     if (showHeader) {
+        self.userAvatar.hidden = FALSE;
+        self.userLabel.hidden = FALSE;
+        self.timeLabel.hidden = FALSE;
+        self.followButton.hidden = FALSE;
+        self.userIcon.hidden = FALSE;
+        [self.userIcon setUserType:weed.user_type];
+        
         NSString *username = weed.username;
         NSString *nameLabel = [NSString stringWithFormat:@"@%@", username];
         [self.userLabel setTitle:nameLabel forState:UIControlStateNormal];
         
         [self.userAvatar setImageURL:[WeedImageController imageURLOfAvatar:weed.user_id] isAvatar:YES];
-        
+        [self.followButton setUser_id:weed.user_id relationshipWithCurrentUser:weed.user_relationship_with_currentUser];
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"MMM. dd yyyy hh:mm"];
         NSString *formattedDateString = [dateFormatter stringFromDate:weed.time];
         self.timeLabel.text = [NSString stringWithFormat:@"%@", formattedDateString];
         
-        [self.weedContentLabel setFrame:CGRectMake(self.weedContentLabel.frame.origin.x, self.weedContentLabel.frame.origin.y, self.weedContentLabel.frame.size.width, [self getTextLableHeight:content])];
+        [self.weedContentLabel setFrame:CGRectMake(self.weedContentLabel.frame.origin.x, self.weedContentLabel.frame.origin.y, self.weedContentLabel.frame.size.width, [WeedDetailTableViewCell getTextLableHeight:content])];
     } else {
-        [self.weedContentLabel setFrame:CGRectMake(self.weedContentLabel.frame.origin.x, 0, self.weedContentLabel.frame.size.width, [self getTextLableHeight:content])];
+        self.userAvatar.hidden = TRUE;
+        self.userLabel.hidden = TRUE;
+        self.timeLabel.hidden = TRUE;
+        self.followButton.hidden = TRUE;
+        self.userIcon.hidden = TRUE;
+        [self.weedContentLabel setFrame:CGRectMake(self.weedContentLabel.frame.origin.x, 0, self.weedContentLabel.frame.size.width, [WeedDetailTableViewCell getTextLableHeight:content])];
     }
     
     self.weedContentLabel.text = content;
@@ -160,7 +197,7 @@ static NSString * WEB_SERVER_GET_FAVICON_URL = @"http://www.google.com/s2/favico
     self.weedContentLabel.translatesAutoresizingMaskIntoConstraints = YES;
     
 
-    _type = [self getShowingTypewWithWeed:weed];
+    _type = [WeedDetailTableViewCell getShowingTypewWithWeed:weed];
     switch (_type) {
         case DetailCellShowingTypeImages:
         {
@@ -172,7 +209,7 @@ static NSString * WEB_SERVER_GET_FAVICON_URL = @"http://www.google.com/s2/favico
         }
         case DetailCellShowingTypeVideo:
         {
-            NSString *videoUrl = [self stringURLFromYouTube];
+            NSString *videoUrl = [WeedDetailTableViewCell stringURLFromYouTube:self.urlDictionary];
             NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:videoUrl]];
             _connection = [NSURLConnection connectionWithRequest:request delegate:self];
             break;
@@ -187,15 +224,10 @@ static NSString * WEB_SERVER_GET_FAVICON_URL = @"http://www.google.com/s2/favico
         default:
             break;
     }
-    
-    _controlView = [[WeedControlView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, CONTROL_VIEW_HEIGHT) weed:weed parentViewController:parentViewController];
+    CGFloat height = [WeedDetailTableViewCell heightForCell:self.weed showHeader:showHeader];
+    _controlView = [[WeedControlView alloc] initWithFrame:CGRectMake(0, height - CONTROL_VIEW_HEIGHT, self.frame.size.width, CONTROL_VIEW_HEIGHT) weed:weed parentViewController:parentViewController];
     [self addSubview:self.controlView];
-    
-    CGFloat height = [self heightForCell];
-    if (self.delegate) {
-        [self callDelegateToUpdateCellHeight:height];
-    }
-    
+
     [self createWebSummaryView];
 }
 
@@ -342,34 +374,34 @@ static NSString * WEB_SERVER_GET_FAVICON_URL = @"http://www.google.com/s2/favico
 }
 
 #pragma mark - private
-- (CGFloat)heightForCell
++ (CGFloat)heightForCell:(Weed*) weed showHeader:(BOOL) showHeader
 {
     CGFloat height = 0;
-    
-    CGFloat textLableHeight = [self getTextLableHeight:self.weedContentLabel.text];
-    switch (_type) {
+    double weedContentLabelY = showHeader?PADDING + AVATAR_SIZE:0;
+    CGFloat textLableHeight = [self getTextLableHeight:weed.content];
+    switch ([WeedDetailTableViewCell getShowingTypewWithWeed:weed]) {
         case DetailCellShowingTypeImages:
-            height = self.dataSource.count < 3 ? self.weedContentLabel.frame.origin.y + textLableHeight + DEFAULT_IMAGE_DISPLAY_BOARD_HEIGHT2 : self.weedContentLabel.frame.origin.y + textLableHeight + DEFAULT_IMAGE_DISPLAY_BOARD_HEIGHT1;
+            height = [weed.image_count intValue] < 3 ? weedContentLabelY + textLableHeight + DEFAULT_IMAGE_DISPLAY_BOARD_HEIGHT2 : weedContentLabelY + textLableHeight + DEFAULT_IMAGE_DISPLAY_BOARD_HEIGHT1;
             break;
         case DetailCellShowingTypeVideo:
         case DetailCellShowingTypeUrl:
-            height = self.weedContentLabel.frame.origin.y + textLableHeight;
+            height = weedContentLabelY + textLableHeight;
             break;
         default:
-            height = self.weedContentLabel.frame.origin.y + textLableHeight;
+            height = weedContentLabelY + textLableHeight;
             break;
     }
     height += CONTROL_VIEW_HEIGHT;
     return height;
 }
 
-- (CGFloat)getTextLableHeight:(NSString *)text
++ (CGFloat)getTextLableHeight:(NSString *)text
 {
     UITextView *temp = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, 200, 44)]; //This initial size doesn't matter
-    temp.font = self.weedContentLabel.font;
+    temp.font = [UIFont systemFontOfSize:CONTENT_FONT_SIZE];
     temp.text = text;
     
-    CGFloat textViewWidth = self.weedContentLabel.frame.size.width;
+    CGFloat textViewWidth = [[UIScreen mainScreen] bounds].size.width - 2 * PADDING;
     CGRect tempFrame = CGRectMake(0, 0, textViewWidth, 40); //The height of this frame doesn't matter.
     CGSize tvsize = [temp sizeThatFits:CGSizeMake(tempFrame.size.width, tempFrame.size.height)]; //This calculates the necessary size so that all the text fits in the necessary width.
     
@@ -386,7 +418,8 @@ static NSString * WEB_SERVER_GET_FAVICON_URL = @"http://www.google.com/s2/favico
 - (void)createWebSummaryView
 {
     _webSummaryView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.weedContentLabel.frame.size.width, DEFAULT_VIDEO_HEIGHT + 20 + 10)];
-    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tappedContentView:)];
+    [_webSummaryView addGestureRecognizer:tap];
     _faviconView = [UIImageView new];
     _faviconView.contentMode = UIViewContentModeCenter;
     
@@ -444,28 +477,29 @@ static NSString * WEB_SERVER_GET_FAVICON_URL = @"http://www.google.com/s2/favico
     _webSummaryView.hidden = YES;
 }
 
-- (DetailCellShowingType)getShowingTypewWithWeed:(Weed *)weed
++ (DetailCellShowingType)getShowingTypewWithWeed:(Weed *)weed
 {
     //If weed has images display images
     if (weed.images.count > 0) {
         return DetailCellShowingTypeImages;
     }
-    
-    NSString *youtubeUrl = [self stringURLFromYouTube];
+    NSMutableDictionary * tempUrlDictionary = [NSMutableDictionary new];
+    [WeedDetailTableViewCell shortenURLInContent:weed.content urlDictionary:tempUrlDictionary];
+    NSString *youtubeUrl = [WeedDetailTableViewCell stringURLFromYouTube:tempUrlDictionary];
     if (youtubeUrl) {
         return DetailCellShowingTypeVideo;
     }
     
-    if (_urlDictionary.count > 0) {
+    if (tempUrlDictionary.count > 0) {
         return DetailCellShowingTypeUrl;
     }
     
     return DetailCellShowingTypeDefault;
 }
 
-- (NSString *)stringURLFromYouTube
++ (NSString *)stringURLFromYouTube:(NSMutableDictionary *) urlDictionary
 {
-    for (NSString *url in [_urlDictionary allValues]) {
+    for (NSString *url in [urlDictionary allValues]) {
         if  ([url rangeOfString:@"youtube"].location != NSNotFound) {
             return url;
         }
@@ -473,7 +507,7 @@ static NSString * WEB_SERVER_GET_FAVICON_URL = @"http://www.google.com/s2/favico
     return nil;
 }
 
-- (NSString *)shortenURLInContent:(NSString *)content
++ (NSString *)shortenURLInContent:(NSString *)content urlDictionary:(NSMutableDictionary *) urlDictionary
 {
     if (!content) {
         return content;
@@ -484,7 +518,7 @@ static NSString * WEB_SERVER_GET_FAVICON_URL = @"http://www.google.com/s2/favico
     for (NSTextCheckingResult *result in results) {
         if (result.URL) {
             NSString *url = result.URL.shortenString;
-            [_urlDictionary setObject:result.URL.absoluteString forKey:url];
+            [urlDictionary setObject:result.URL.absoluteString forKey:url];
             content = [content stringByReplacingCharactersInRange:result.range withString:url];
         }
     }
@@ -584,7 +618,7 @@ static NSString * WEB_SERVER_GET_FAVICON_URL = @"http://www.google.com/s2/favico
         
         CGRect frame = _webSummaryView.frame;
         frame.size.height = [self heightOfTextView:_titleView] + DEFAULT_VIDEO_HEIGHT;
-        CGFloat height = [self heightForCell] + CGRectGetHeight(_webSummaryView.frame);
+        CGFloat height = [WeedDetailTableViewCell heightForCell:self.weed showHeader:self.userAvatar.isHidden] + CGRectGetHeight(_webSummaryView.frame);
         [self callDelegateToUpdateCellHeight:height];
         _webSummaryView.hidden = NO;
     }
@@ -604,7 +638,7 @@ static NSString * WEB_SERVER_GET_FAVICON_URL = @"http://www.google.com/s2/favico
             frame.size.height = [self heightOfTextView:_titleView] + [self heightOfTextView:_descriptionView];
             _webSummaryView.frame = frame;
             if (self.delegate) {
-                CGFloat height = [self heightForCell] + CGRectGetHeight(_webSummaryView.frame);
+                CGFloat height = [WeedDetailTableViewCell heightForCell:self.weed showHeader:!self.userAvatar.isHidden] + CGRectGetHeight(_webSummaryView.frame);
                 [self callDelegateToUpdateCellHeight:height];
                 _webSummaryView.hidden = NO;
             }

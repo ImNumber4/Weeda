@@ -12,17 +12,9 @@
 
 + (UIImage *) renderImage:(UIImage *)image atSize:(const CGSize) size
 {
-    UIGraphicsBeginImageContext(size);
-    const CGContextRef context = UIGraphicsGetCurrentContext();
-    [image drawInRect:CGRectMake(0, 0, size.width, size.height) blendMode:kCGBlendModeNormal alpha:1.0];
-    
-    const CGImageRef cgImage = CGBitmapContextCreateImage(context);
-    UIImage *renderedImage = [UIImage imageWithCGImage:cgImage];
-    
-    CGImageRelease(cgImage);
-    UIGraphicsEndImageContext();
-    
-    return renderedImage;
+    UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
+    [image drawInRect:CGRectMake(0, 0, size.width, size.height)];
+    return UIGraphicsGetImageFromCurrentImageContext();
 }
 
 + (UIImage *) colorImage:(UIImage *)image color:(UIColor *)color

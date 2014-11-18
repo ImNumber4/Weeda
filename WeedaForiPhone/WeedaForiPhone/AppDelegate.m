@@ -351,6 +351,12 @@ NSString * _deviceToken;
     
     [manager addResponseDescriptor:[RKResponseDescriptor responseDescriptorWithMapping:weedMapping
                                                                                 method:RKRequestMethodGET
+                                                                           pathPattern:@"weed/queryByContent/:keyword"
+                                                                               keyPath:@"weeds"
+                                                                           statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)]];
+    
+    [manager addResponseDescriptor:[RKResponseDescriptor responseDescriptorWithMapping:weedMapping
+                                                                                method:RKRequestMethodGET
                                                                            pathPattern:@"weed/trends"
                                                                                keyPath:@"weeds"
                                                                            statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)]];
@@ -416,6 +422,12 @@ NSString * _deviceToken;
                                                                                                     pathPattern:@"user/getFollowingUsers/:user_id/:count"
                                                                                                         keyPath:@"users"
                                                                                                     statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)]];
+    
+    [manager addResponseDescriptor:[RKResponseDescriptor responseDescriptorWithMapping:userMapping
+                                                                                method:RKRequestMethodGET
+                                                                           pathPattern:@"user/getRecommendedUsers/:count"
+                                                                               keyPath:@"users"
+                                                                           statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)]];
     
     [manager addResponseDescriptor:[RKResponseDescriptor responseDescriptorWithMapping:userMapping
                                                                                                              method:RKRequestMethodGET

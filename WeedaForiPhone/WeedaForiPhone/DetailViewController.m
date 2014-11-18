@@ -127,6 +127,11 @@ static NSString * WEED_DETAIL_TABLE_CELL_REUSE_ID = @"WeedDetailCell";
     }
 }
 
+- (void)selectWeedContent:(UIGestureRecognizer *)recognizer
+{
+    //do not do anything
+}
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return SECTION_COUNT;
@@ -182,6 +187,11 @@ static NSString * WEED_DETAIL_TABLE_CELL_REUSE_ID = @"WeedDetailCell";
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == CURRENT_WEED_SECTION_INDEX) {
+        if (_detailWeedCellHeight) {
+            return _detailWeedCellHeight;
+        } else {
+            return [WeedDetailTableViewCell heightForCell:self.currentWeed showHeader:YES];
+        }
         return _detailWeedCellHeight;
     } else if ([indexPath section] == PLACEHOLDER_SECTION_INDEX) {
         CGFloat orginalOffset = self.tableView.contentOffset.y;
@@ -304,7 +314,7 @@ static NSString * WEED_DETAIL_TABLE_CELL_REUSE_ID = @"WeedDetailCell";
 - (void)tableViewCell:(WeedDetailTableViewCell *)cell height:(CGFloat)height needReload:(BOOL)needReload
 {
     _detailWeedCellHeight = height;
-    if (needReload && [self.tableView.visibleCells containsObject:cell]) {
+    if (needReload) {
         [self.tableView beginUpdates];
         [self.tableView endUpdates];
     }

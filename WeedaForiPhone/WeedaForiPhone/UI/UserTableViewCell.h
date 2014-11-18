@@ -7,16 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FollowButton.h"
+#import "UserIcon.h"
 
-#define USER_TABLE_VIEW_CELL_HEIGHT 50;
+#define USER_TABLE_VIEW_CELL_HEIGHT 50.0f;
 
 @interface UserTableViewCell : UITableViewCell
 
-@property (nonatomic, strong) UIButton *followButton;
+@property (nonatomic, strong) FollowButton *followButton;
 @property (nonatomic, strong) UILabel *usernameLabel;
 @property (nonatomic, strong) UILabel *addressLabel;
 @property (nonatomic, strong) UIImageView *userAvatar;
-@property (nonatomic, strong) UIImageView *storeTypeIcon;
+@property (nonatomic, strong) UserIcon *storeTypeIcon;
 
 - (void)decorateCellWithUser:(User *)user;
 - (void)decorateCellWithUser:(User *)user subtitle:(NSString*) subtitle;

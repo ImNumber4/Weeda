@@ -9,7 +9,7 @@
 #import "WeedTableViewCell.h"
 #import "WeedImageController.h"
 #import "WLImageCollectionView.h"
-
+#import "AddWeedViewController.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 
 #define MIN_HEIGHT_OF_TEXT_VIEW 40.0
@@ -29,7 +29,21 @@
 
 @implementation WeedTableViewCell
 
-- (void)awakeFromNib
+- (void) awakeFromNib
+{
+    [self setup];
+}
+
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+{
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if (self) {
+        [self setup];
+    }
+    return self;
+}
+
+- (void) setup
 {
     [[NSBundle mainBundle] loadNibNamed:@"WeedTableViewCell" owner:self options:nil];
     self.bounds = self.view.bounds;
@@ -41,7 +55,7 @@
     self.userAvatar.clipsToBounds = YES;
     CALayer * l = [self.userAvatar layer];
     [l setMasksToBounds:YES];
-    [l setCornerRadius:7.0];
+    [l setCornerRadius:self.userAvatar.frame.size.width/2.0];
     
     [self.userAvatar addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleAvatarTapped)]];
     self.userAvatar.userInteractionEnabled = YES;
@@ -78,9 +92,10 @@
     self.waterCount.hidden = true;
 }
 
-- (void)decorateCellWithWeed:(Weed *)weed
+- (void)decorateCellWithWeed:(Weed *)weed parentViewController:(UIViewController *)parentViewController
 {
     _weedTmp = weed;
+    _parentViewController = parentViewController;
     
     [self.view setFrame:CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.frame.size.width, self.frame.size.height)];
     
@@ -101,24 +116,7 @@
     NSString *formattedDateString = [dateFormatter stringFromDate:weed.time];
     self.timeLabel.text = [NSString stringWithFormat:@"%@", formattedDateString];
     
-    if ([weed.if_cur_user_water_it intValue] == 1) {
-        [self.waterDrop setImage:[UIImage imageNamed:@"waterdrop.png"] forState:UIControlStateNormal];
-    } else {
-        [self.waterDrop setImage:[UIImage imageNamed:@"waterdropgray.png"] forState:UIControlStateNormal];
-    }
-    if ([weed.if_cur_user_seed_it intValue] == 1) {
-        [self.seed setImage:[UIImage imageNamed:@"seed.png"] forState:UIControlStateNormal];
-    } else {
-        [self.seed setImage:[UIImage imageNamed:@"seedgray.png"] forState:UIControlStateNormal];
-    }
-    if ([weed.if_cur_user_light_it intValue] == 1) {
-        [self.light setImage:[UIImage imageNamed:@"light.png"] forState:UIControlStateNormal];
-    } else {
-        [self.light setImage:[UIImage imageNamed:@"lightgray.png"] forState:UIControlStateNormal];
-    }
-    self.lightCount.text = [NSString stringWithFormat:@"%@", weed.light_count];
-    self.seedCount.text = [NSString stringWithFormat:@"%@", weed.seed_count];
-    self.waterCount.text = [NSString stringWithFormat:@"%@", weed.water_count];
+    [self updateWeedControl];
     
     [self.userAvatar setImageURL:[WeedImageController imageURLOfAvatar:weed.user_id] isAvatar:YES];
     self.userAvatar.allowFullScreenDisplay = NO;
@@ -129,6 +127,88 @@
         _collectionView.hidden = NO;
         [_collectionView reloadData];
     }
+    
+    [self.waterDrop removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+    [self.waterDrop addTarget:self action:@selector(waterIt:)forControlEvents:UIControlEventTouchDown];
+    
+    [self.seed removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+    [self.seed addTarget:self action:@selector(seedIt:)forControlEvents:UIControlEventTouchDown];
+    
+    [self.light removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+    [self.light addTarget:self action:@selector(lightIt:)forControlEvents:UIControlEventTouchDown];
+}
+
+- (void) updateWeedControl
+{
+    if ([_weedTmp.if_cur_user_water_it intValue] == 1) {
+        [self.waterDrop setImage:[UIImage imageNamed:@"waterdrop.png"] forState:UIControlStateNormal];
+    } else {
+        [self.waterDrop setImage:[UIImage imageNamed:@"waterdropgray.png"] forState:UIControlStateNormal];
+    }
+    if ([_weedTmp.if_cur_user_seed_it intValue] == 1) {
+        [self.seed setImage:[UIImage imageNamed:@"seed.png"] forState:UIControlStateNormal];
+    } else {
+        [self.seed setImage:[UIImage imageNamed:@"seedgray.png"] forState:UIControlStateNormal];
+    }
+    if ([_weedTmp.if_cur_user_light_it intValue] == 1) {
+        [self.light setImage:[UIImage imageNamed:@"light.png"] forState:UIControlStateNormal];
+    } else {
+        [self.light setImage:[UIImage imageNamed:@"lightgray.png"] forState:UIControlStateNormal];
+    }
+    self.lightCount.text = [NSString stringWithFormat:@"%@", _weedTmp.light_count];
+    self.seedCount.text = [NSString stringWithFormat:@"%@", _weedTmp.seed_count];
+    self.waterCount.text = [NSString stringWithFormat:@"%@", _weedTmp.water_count];
+}
+
+-(void)lightIt:(id)sender {
+    [AddWeedViewController presentControllerFrom:_parentViewController withWeed:_weedTmp];
+}
+
+
+- (void)waterIt:(id) sender {
+    Weed *weed = _weedTmp;
+    if ([weed.if_cur_user_water_it intValue] == 1) {
+        [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/unwater/%@", weed.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+            weed.water_count = [NSNumber numberWithInt:[weed.water_count intValue] - 1];
+            weed.if_cur_user_water_it = [NSNumber numberWithInt:0];
+            [self updateWeedControl];
+        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+            RKLogError(@"Follow failed with error: %@", error);
+        }];
+    } else {
+        [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/water/%@", weed.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+            weed.water_count = [NSNumber numberWithInt:[weed.water_count intValue] + 1];
+            weed.if_cur_user_water_it = [NSNumber numberWithInt:1];
+            [self updateWeedControl];
+        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+            RKLogError(@"Follow failed with error: %@", error);
+        }];
+    }
+}
+
+- (void)seedIt:(id) sender {
+    [self.seed setEnabled:false];
+    if ([_weedTmp.if_cur_user_seed_it intValue] == 1) {
+        [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/unseed/%@", _weedTmp.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+            _weedTmp.seed_count = [NSNumber numberWithInt:[_weedTmp.seed_count intValue] - 1];
+            _weedTmp.if_cur_user_seed_it = [NSNumber numberWithInt:0];
+            [self updateWeedControl];
+            [self.seed setEnabled:true];
+        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+            RKLogError(@"unseed failed with error: %@", error);
+            [self.seed setEnabled:true];
+        }];
+    } else {
+        [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/seed/%@", _weedTmp.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+            _weedTmp.seed_count = [NSNumber numberWithInt:[_weedTmp.seed_count intValue] + 1];
+            _weedTmp.if_cur_user_seed_it = [NSNumber numberWithInt:1];
+            [self updateWeedControl];
+            [self.seed setEnabled:true];
+        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+            RKLogError(@"seed failed with error: %@", error);
+            [self.seed setEnabled:true];
+        }];
+    }
 }
 
 - (void)prepareForReuse
@@ -136,6 +216,7 @@
     _weedTmp = nil;
     _collectionView.hidden = YES;
     _dataSource = nil;
+    _parentViewController = nil;
 }
 
 - (NSArray *)adjustWeedImages

@@ -53,6 +53,15 @@ class UserController extends Controller
 		$result = $this->user_dao->unsetUserDevice($currentUser_id, $device_id);
 	}
 	
+	public function getRecommendedUsers($count) {
+		$currentUser_id = $this->getCurrentUser();
+		$users = $this->user_dao->recommend_users($currentUser_id, $count);
+		if ($users)
+			return json_encode(array('users' => $users));
+		else
+			return json_encode(array('users' => []));
+	}
+	
 	public function getUsernamesByPrefix($prefix){
 		$currentUser_id = $this->getCurrentUser();
 		$count = 10;

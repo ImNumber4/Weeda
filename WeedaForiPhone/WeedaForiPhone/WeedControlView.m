@@ -172,14 +172,18 @@ static NSInteger SHOW_WATER_USERS = 2;
 -(void)showUsers:(id)sender {
     NSString * feedUrl;
     [sender setEnabled:false];
+    NSString * title;
     if ([sender tag] == SHOW_WATER_USERS) {
         feedUrl = [NSString stringWithFormat:@"user/getUsersWaterWeed/%@", _weed.id];
+        title = @"Watered By";
     } else {
         feedUrl = [NSString stringWithFormat:@"user/getUsersSeedWeed/%@", _weed.id];
+        title = @"Seeded By";
     }
     [[RKObjectManager sharedManager] getObjectsAtPath:feedUrl parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
         UserListViewController* viewController = [[UserListViewController alloc] initWithNibName:nil bundle:nil];
         [viewController setUsers:mappingResult.array];
+        viewController.title = title;
         [self.parentViewController.navigationController pushViewController:viewController animated:YES];
         [sender setEnabled:true];
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {

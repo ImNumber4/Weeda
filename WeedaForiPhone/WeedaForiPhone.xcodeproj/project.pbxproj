@@ -74,7 +74,8 @@
 		A926EEFD1A14B8DF00AB2F04 /* selected_bong.png in Resources */ = {isa = PBXBuildFile; fileRef = A926EEFB1A14B8DF00AB2F04 /* selected_bong.png */; };
 		A926EF061A1577DB00AB2F04 /* BongsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A926EF051A1577DB00AB2F04 /* BongsViewController.m */; };
 		A926EF0B1A16E37100AB2F04 /* WeedControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = A926EF0A1A16E37100AB2F04 /* WeedControlView.m */; };
-		A926EF181A18165B00AB2F04 /* TrendTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A926EF171A18165B00AB2F04 /* TrendTableViewController.m */; };
+		A926EF211A196D4E00AB2F04 /* FollowButton.m in Sources */ = {isa = PBXBuildFile; fileRef = A926EF201A196D4E00AB2F04 /* FollowButton.m */; };
+		A926EF241A197FE700AB2F04 /* UserIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = A926EF231A197FE700AB2F04 /* UserIcon.m */; };
 		A92E513A19046E2A00FC518F /* UserTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A92E513919046E2A00FC518F /* UserTableViewCell.m */; };
 		A92E513D19047C6000FC518F /* follow.png in Resources */ = {isa = PBXBuildFile; fileRef = A92E513B19047C6000FC518F /* follow.png */; };
 		A92E514019048B0400FC518F /* followed.png in Resources */ = {isa = PBXBuildFile; fileRef = A92E513F19048B0400FC518F /* followed.png */; };
@@ -341,8 +342,10 @@
 		A926EF051A1577DB00AB2F04 /* BongsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BongsViewController.m; sourceTree = "<group>"; };
 		A926EF091A16E37100AB2F04 /* WeedControlView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WeedControlView.h; path = WeedaForiPhone/WeedControlView.h; sourceTree = "<group>"; };
 		A926EF0A1A16E37100AB2F04 /* WeedControlView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WeedControlView.m; path = WeedaForiPhone/WeedControlView.m; sourceTree = "<group>"; };
-		A926EF161A18165B00AB2F04 /* TrendTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrendTableViewController.h; sourceTree = "<group>"; };
-		A926EF171A18165B00AB2F04 /* TrendTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TrendTableViewController.m; sourceTree = "<group>"; };
+		A926EF1F1A196D4E00AB2F04 /* FollowButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FollowButton.h; path = WeedaForiPhone/UI/FollowButton.h; sourceTree = "<group>"; };
+		A926EF201A196D4E00AB2F04 /* FollowButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FollowButton.m; path = WeedaForiPhone/UI/FollowButton.m; sourceTree = "<group>"; };
+		A926EF221A197FE700AB2F04 /* UserIcon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserIcon.h; path = WeedaForiPhone/UI/UserIcon.h; sourceTree = "<group>"; };
+		A926EF231A197FE700AB2F04 /* UserIcon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserIcon.m; path = WeedaForiPhone/UI/UserIcon.m; sourceTree = "<group>"; };
 		A92E513819046E2A00FC518F /* UserTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserTableViewCell.h; path = WeedaForiPhone/UI/UserTableViewCell.h; sourceTree = "<group>"; };
 		A92E513919046E2A00FC518F /* UserTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserTableViewCell.m; path = WeedaForiPhone/UI/UserTableViewCell.m; sourceTree = "<group>"; };
 		A92E513B19047C6000FC518F /* follow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = follow.png; path = WeedaForiPhone/Images/follow.png; sourceTree = "<group>"; };
@@ -702,8 +705,6 @@
 				A926EF051A1577DB00AB2F04 /* BongsViewController.m */,
 				EAAC1A971A10A97F00242496 /* WLNavigationController.h */,
 				EAAC1A981A10A97F00242496 /* WLNavigationController.m */,
-				A926EF161A18165B00AB2F04 /* TrendTableViewController.h */,
-				A926EF171A18165B00AB2F04 /* TrendTableViewController.m */,
 			);
 			path = WeedaForiPhone;
 			sourceTree = "<group>";
@@ -880,6 +881,10 @@
 				EAFF8D6619ECDB9F006632A4 /* WLImageCollectionView.m */,
 				A926EF091A16E37100AB2F04 /* WeedControlView.h */,
 				A926EF0A1A16E37100AB2F04 /* WeedControlView.m */,
+				A926EF1F1A196D4E00AB2F04 /* FollowButton.h */,
+				A926EF201A196D4E00AB2F04 /* FollowButton.m */,
+				A926EF221A197FE700AB2F04 /* UserIcon.h */,
+				A926EF231A197FE700AB2F04 /* UserIcon.m */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -1196,7 +1201,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				EACD1157197CA76F00E45475 /* WeedImageController.m in Sources */,
-				A926EF181A18165B00AB2F04 /* TrendTableViewController.m in Sources */,
 				A914CCC218CD756200B870D8 /* DetailViewController.m in Sources */,
 				0EB8C4E419C5C00900BD64E1 /* UIButton+JSMessagesView.m in Sources */,
 				A926EF061A1577DB00AB2F04 /* BongsViewController.m in Sources */,
@@ -1210,6 +1214,7 @@
 				0EB8C4BE19C5C00800BD64E1 /* JSBubbleView.m in Sources */,
 				A926EF0B1A16E37100AB2F04 /* WeedControlView.m in Sources */,
 				EA9B504E19E9EAF7008B2464 /* WLProgressView.m in Sources */,
+				A926EF241A197FE700AB2F04 /* UserIcon.m in Sources */,
 				EA76A507194E94AF00B60F04 /* WeedAddingImageView.m in Sources */,
 				A9CA8EA018F3E255004F095D /* WeedTableViewCell.m in Sources */,
 				EA69A1D819E5D75E00532722 /* WLImageView.m in Sources */,
@@ -1255,6 +1260,7 @@
 				0EB8C4C319C5C00800BD64E1 /* NSString+JSMessagesView.m in Sources */,
 				EA38FC5F190C9A9D007D652B /* WeedImage.m in Sources */,
 				A914CCB218CD756200B870D8 /* main.m in Sources */,
+				A926EF211A196D4E00AB2F04 /* FollowButton.m in Sources */,
 				A92E513A19046E2A00FC518F /* UserTableViewCell.m in Sources */,
 				A99A0A3119173C9F00E2C50B /* Weed.m in Sources */,
 				0EB8C4E519C5C00900BD64E1 /* UIColor+JSMessagesView.m in Sources */,

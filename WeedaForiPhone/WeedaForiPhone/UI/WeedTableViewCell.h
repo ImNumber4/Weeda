@@ -23,6 +23,7 @@
 @interface WeedTableViewCell : UITableViewCell <UICollectionViewDelegate, UICollectionViewDataSource> {
     int _imageCount;
     Weed *_weedTmp;
+    UIViewController *_parentViewController;
 }
 @property (nonatomic, retain) id<WeedTableViewCellDelegate> delegate;
 
@@ -40,7 +41,7 @@
 @property (nonatomic, weak) IBOutlet UIView *view;
 
 - (void)hideControls;
-- (void)decorateCellWithWeed:(Weed *)weed;
+- (void)decorateCellWithWeed:(Weed *)weed parentViewController:(UIViewController *)parentViewController;
 
 + (CGFloat)heightOfWeedTableViewCell:(Weed *)weed;
 

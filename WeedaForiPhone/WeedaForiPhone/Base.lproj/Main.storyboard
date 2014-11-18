@@ -129,28 +129,10 @@
             </objects>
             <point key="canvasLocation" x="1123" y="-1229"/>
         </scene>
-        <!--Bongs View Controller-->
-        <scene sceneID="bLs-5c-Knr">
-            <objects>
-                <tableViewController title="Bongs View Controller" id="gMv-qZ-2EB" customClass="TrendTableViewController" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="4te-uo-jRm">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <connections>
-                            <outlet property="dataSource" destination="gMv-qZ-2EB" id="SCk-iA-EOe"/>
-                            <outlet property="delegate" destination="gMv-qZ-2EB" id="W6d-cV-SMw"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" title="Root View Controller" id="sQf-HC-aTl"/>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="875-qu-Zi8" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="821" y="-1866"/>
-        </scene>
         <!--Bongs View Navigation Controller-->
         <scene sceneID="mc4-P0-226">
             <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qUE-4H-6da" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <navigationController title="Bongs View Navigation Controller" id="3hh-Fe-aeX" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Item" id="wSD-8m-kS6"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="w6h-VE-LgQ">
@@ -158,12 +140,26 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="gMv-qZ-2EB" kind="relationship" relationship="rootViewController" id="Yrw-nL-T2g"/>
+                        <segue destination="JlU-Ao-7LC" kind="relationship" relationship="rootViewController" id="I0o-aK-dLO"/>
                     </connections>
                 </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="qUE-4H-6da" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="281" y="-1866"/>
+        </scene>
+        <!--Bongs View Controller-->
+        <scene sceneID="AV1-zL-FWe">
+            <objects>
+                <viewController id="JlU-Ao-7LC" customClass="BongsViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="GBx-G0-Ar1">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="Ypi-Bd-zee"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="aRu-qM-NbF" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="751" y="-1871"/>
         </scene>
         <!--Discover View Navigation Controller-->
         <scene sceneID="7Pg-Jr-QoB">
@@ -363,7 +359,7 @@
         <!--Weed-->
         <scene sceneID="7wn-T2-doA">
             <objects>
-                <tableViewController autoresizesArchivedViewToFullSize="NO" title="Weed" id="6ro-Wi-h5r" customClass="DetailViewController" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="DetailViewController" autoresizesArchivedViewToFullSize="NO" title="Weed" id="6ro-Wi-h5r" customClass="DetailViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" ambiguous="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="fNh-4V-hDx">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -405,9 +401,6 @@
             <objects>
                 <tableViewController id="kcP-Br-rTe" customClass="UserListViewController" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="ceM-lJ-ZkV"/>
-                    <connections>
-                        <segue destination="UY4-39-rji" kind="push" identifier="showUser" id="hHZ-jg-Kly"/>
-                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="e5B-cO-4xD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -416,7 +409,7 @@
         <!--Profile-->
         <scene sceneID="16z-tA-IpX">
             <objects>
-                <viewController id="UY4-39-rji" customClass="UserViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="UserViewController" id="UY4-39-rji" customClass="UserViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="9Ft-O4-8SJ">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -755,9 +748,9 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="Z8M-XG-GdH"/>
-        <segue reference="hHZ-jg-Kly"/>
+        <segue reference="fYj-PV-ClM"/>
         <segue reference="aBn-FK-paW"/>
-        <segue reference="6VO-gD-9Hh"/>
+        <segue reference="dSx-Us-Hdx"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="0.24313727021217346" green="0.64705884456634521" blue="0.24705883860588074" alpha="1" colorSpace="deviceRGB"/>
 </document>

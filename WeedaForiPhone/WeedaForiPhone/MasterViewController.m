@@ -30,9 +30,6 @@
 
 @implementation MasterViewController
 
-const NSInteger GLOBAL_COMPOSE_TAG = 0;
-const NSInteger NON_GLOBAL_COMPOSE_TAG = 1;
-
 - (void)awakeFromNib
 {
     [super awakeFromNib];
@@ -63,7 +60,6 @@ const NSInteger NON_GLOBAL_COMPOSE_TAG = 1;
                                                                                    cacheName:nil];
         
     UIBarButtonItem *composeButton = [[UIBarButtonItem alloc] initWithImage:[self getImage:@"compose.png" width:30 height:30] style:UIBarButtonItemStylePlain target:self action:@selector(lightIt:)];
-    composeButton.tag = GLOBAL_COMPOSE_TAG;
     [self.navigationItem setRightBarButtonItem:composeButton];
     
     BOOL fetchSuccessful = [self.fetchedResultsController performFetch:&error];
@@ -113,14 +109,7 @@ const NSInteger NON_GLOBAL_COMPOSE_TAG = 1;
 }
 
 -(void)lightIt:(id)sender {
-    if ([sender tag] != GLOBAL_COMPOSE_TAG) {
-        CGPoint buttonPosition = [sender convertPoint:CGPointZero toView:self.tableView];
-        NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:buttonPosition];
-        Weed *weed = [[self fetchedResultsController] objectAtIndexPath:indexPath];
-        [AddWeedViewController presentControllerFrom:self withWeed:weed];
-    } else {
-        [AddWeedViewController presentControllerFrom:self withWeed:nil];
-    }
+    [AddWeedViewController presentControllerFrom:self withWeed:nil];
 }
 
 -(void)refreshView:(UIRefreshControl *)refresh {
@@ -196,35 +185,9 @@ const NSInteger NON_GLOBAL_COMPOSE_TAG = 1;
 
 - (void)decorateCellWithWeed:(Weed *)weed cell:(WeedTableViewCell *)cell
 {
-    [cell decorateCellWithWeed:weed];
+    [cell decorateCellWithWeed:weed parentViewController:self];
     
     cell.delegate = self;
-    
-    [cell.waterDrop removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-    [cell.waterDrop addTarget:self action:@selector(waterIt:)forControlEvents:UIControlEventTouchDown];
-    
-    [cell.seed removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-    [cell.seed addTarget:self action:@selector(seedIt:)forControlEvents:UIControlEventTouchDown];
-    
-    [cell.light removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-    [cell.light addTarget:self action:@selector(lightIt:)forControlEvents:UIControlEventTouchDown];
-    
-    cell.light.tag = NON_GLOBAL_COMPOSE_TAG;
-}
-
-- (void)getImageFromServer:(UIImage *)image cell:(WeedTableViewCell *)cell
-{
-    cell.userAvatar.contentMode = UIViewContentModeScaleAspectFill;
-    cell.userAvatar.clipsToBounds = YES;
-    if (!image) {
-        cell.userAvatar.image = [self getImage:@"avatar.jpg" width:40 height:40];
-    } else {
-        cell.userAvatar.image = [self decorateImage:image width:40 height:40];
-    }
-    
-    CALayer * l = [cell.userAvatar layer];
-    [l setMasksToBounds:YES];
-    [l setCornerRadius:7.0];
 }
 
 - (UIImage *)getImage:(NSString *)imageName width:(int)width height:(int) height
@@ -236,59 +199,6 @@ const NSInteger NON_GLOBAL_COMPOSE_TAG = 1;
     return UIGraphicsGetImageFromCurrentImageContext();
 }
 
-- (UIImage *)decorateImage:(UIImage *)image width:(int)width height:(int) height
-{
-    CGSize sacleSize = CGSizeMake(width, height);
-    UIGraphicsBeginImageContextWithOptions(sacleSize, NO, 0.0);
-    [image drawInRect:CGRectMake(0, 0, sacleSize.width, sacleSize.height)];
-    return UIGraphicsGetImageFromCurrentImageContext();
-}
-
-- (void)waterIt:(id) sender {
-    CGPoint buttonPosition = [sender convertPoint:CGPointZero toView:self.tableView];
-    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:buttonPosition];
-    Weed *weed = [[self fetchedResultsController] objectAtIndexPath:indexPath];
-    if ([weed.if_cur_user_water_it intValue] == 1) {
-        [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/unwater/%@", weed.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-            weed.water_count = [NSNumber numberWithInt:[weed.water_count intValue] - 1];
-            weed.if_cur_user_water_it = [NSNumber numberWithInt:0];
-        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-            RKLogError(@"Follow failed with error: %@", error);
-        }];
-    } else {
-        [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/water/%@", weed.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-            weed.water_count = [NSNumber numberWithInt:[weed.water_count intValue] + 1];
-            weed.if_cur_user_water_it = [NSNumber numberWithInt:1];
-        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-            RKLogError(@"Follow failed with error: %@", error);
-        }];
-    }
-    WeedTableViewCell *cell = (WeedTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
-    [self decorateCellWithWeed:weed cell:cell];
-}
-
-- (void)seedIt:(id) sender {
-    CGPoint buttonPosition = [sender convertPoint:CGPointZero toView:self.tableView];
-    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:buttonPosition];
-    Weed *weed = [[self fetchedResultsController] objectAtIndexPath:indexPath];
-    if ([weed.if_cur_user_seed_it intValue] == 1) {
-        [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/unseed/%@", weed.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-            weed.seed_count = [NSNumber numberWithInt:[weed.seed_count intValue] - 1];
-            weed.if_cur_user_seed_it = [NSNumber numberWithInt:0];
-        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-            RKLogError(@"Follow failed with error: %@", error);
-        }];
-    } else {
-        [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/seed/%@", weed.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-            weed.seed_count = [NSNumber numberWithInt:[weed.seed_count intValue] + 1];
-            weed.if_cur_user_seed_it = [NSNumber numberWithInt:1];
-        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-            RKLogError(@"Follow failed with error: %@", error);
-        }];
-    }
-    WeedTableViewCell *cell = (WeedTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
-    [self decorateCellWithWeed:weed cell:cell];
-}
 
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
 {

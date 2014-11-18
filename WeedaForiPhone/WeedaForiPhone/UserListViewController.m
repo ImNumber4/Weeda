@@ -8,6 +8,7 @@
 
 #import "UserListViewController.h"
 #import "UserTableViewCell.h"
+#import "UserViewController.h"
 
 @interface UserListViewController ()
 @end
@@ -70,7 +71,10 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self performSegueWithIdentifier:@"showUser" sender:self];
+    User *user = [self.users objectAtIndex:indexPath.row];
+    UserViewController *controller = (UserViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"UserViewController"];
+    [controller setUser_id:user.id];
+    [self.navigationController pushViewController:controller animated:YES];
 }
 
 - (void)decorateCellWithUser:(User *)user cell:(UserTableViewCell *)cell {
@@ -80,15 +84,6 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return USER_TABLE_VIEW_CELL_HEIGHT;
-}
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    if ([[segue identifier] isEqualToString:@"showUser"]) {
-        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-        User *user = [self.users objectAtIndex:indexPath.row];
-        [[segue destinationViewController] setUser_id:user.id];
-    }
 }
 
 @end

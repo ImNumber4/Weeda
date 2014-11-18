@@ -58,6 +58,24 @@ class UserDAO extends BaseDAO
 		$this->db_conn->query($query);
 	}
 	
+	public function recommend_users($user_id, $count) {
+		$query = "SELECT user.id, user.username as username, user.description as description, user.storename as storename, user.address_street as address_street, user.address_city as address_city, user.address_state as address_state, user.address_country as address_country, user.address_zip as address_zip, user.user_type as user_type, COUNT(fl.follower_uid) AS ifollow, COUNT(flwer.follower_uid) AS follower_count FROM user LEFT JOIN follow AS flwer ON user.id = flwer.followee_uid LEFT JOIN follow AS fl ON user.id = fl.followee_uid AND fl.follower_uid = $user_id GROUP BY user.id HAVING ifollow = 0 AND user.id <> $user_id ORDER BY follower_count DESC";
+		if ($count) {
+			$query = $query . " LIMIT " . $count;
+		}
+		error_log($query);
+		$result = $this->db_conn->query($query);
+		$users = array();
+		if (mysql_num_rows($result)) {
+			while($user = mysql_fetch_assoc($result)) {
+				$relationship = $this->getRelationship($user_id, $user['id']);
+				$user['relationshipWithCurrentUser'] = $relationship;
+				$users[] = $user;
+			}
+		} 
+		return $users;
+	}
+	
 	public function username_exist($username) {
 		$query = 'SELECT COUNT(*) as number FROM user where username=\'' . $username . '\'';
 		$result = $this->db_conn->query($query);
@@ -112,7 +130,10 @@ class UserDAO extends BaseDAO
 	}
 	
 	public function get_following_usernames($user_id, $currentUser_id, $count_limit) {		
-		$query = 'SELECT user.id as id, user.username as username, user.storename as storename, user.address_street as address_street, user.address_city as address_city, user.address_state as address_state, user.address_country as address_country, user.address_zip as address_zip, user.user_type as user_type FROM follow join user on follow.followee_uid = user.id where follow.follower_uid = '. $user_id . ' LIMIT ' . $count_limit;
+		$query = 'SELECT user.id as id, user.username as username, user.description as description, user.storename as storename, user.address_street as address_street, user.address_city as address_city, user.address_state as address_state, user.address_country as address_country, user.address_zip as address_zip, user.user_type as user_type FROM follow join user on follow.followee_uid = user.id where follow.follower_uid = '. $user_id;
+		if ($count_limit) {
+			$query = $query . ' LIMIT ' . $count_limit;
+		} 
 		$result = $this->db_conn->query($query);
 		$users = array();
 		if (mysql_num_rows($result)) {
@@ -126,7 +147,10 @@ class UserDAO extends BaseDAO
 	}
 	
 	public function get_follower_usernames($user_id, $currentUser_id, $count_limit) {		
-		$query = 'SELECT user.id as id, user.username as username, user.storename as storename, user.address_street as address_street, user.address_city as address_city, user.address_state as address_state, user.address_country as address_country, user.address_zip as address_zip, user.user_type as user_type FROM follow join user on follow.follower_uid = user.id where follow.followee_uid = '. $user_id . ' LIMIT ' . $count_limit;
+		$query = 'SELECT user.id as id, user.username as username, user.description as description, user.storename as storename, user.address_street as address_street, user.address_city as address_city, user.address_state as address_state, user.address_country as address_country, user.address_zip as address_zip, user.user_type as user_type FROM follow join user on follow.follower_uid = user.id where follow.followee_uid = '. $user_id;
+		if ($count_limit) {
+			$query = $query . ' LIMIT ' . $count_limit;
+		} 
 		$result = $this->db_conn->query($query);
 		$users = array();
 		if (mysql_num_rows($result)) {
@@ -213,7 +237,7 @@ class UserDAO extends BaseDAO
 	}
 	
 	public function getUsersWaterWeed($currentUser_id, $weed_id) {
-		$query = "SELECT user.id as id, user.username as username, user.storename as storename, user.address_street as address_street, user.address_city as address_city, user.address_state as address_state, user.address_country as address_country, user.address_zip as address_zip, user.user_type as user_type FROM water, user WHERE water.user_id = user.id AND water.weed_id = $weed_id";
+		$query = "SELECT user.id as id, user.username as username, user.description as description, user.storename as storename, user.address_street as address_street, user.address_city as address_city, user.address_state as address_state, user.address_country as address_country, user.address_zip as address_zip, user.user_type as user_type FROM water, user WHERE water.user_id = user.id AND water.weed_id = $weed_id";
 		$result = $this->db_conn->query($query);
 		$users = array();
 		if (mysql_num_rows($result)) {
@@ -227,7 +251,7 @@ class UserDAO extends BaseDAO
 	}
 	
 	public function getUsersSeedWeed($currentUser_id, $weed_id) {
-		$query = "SELECT user.id as id, user.username as username, user.storename as storename, user.address_street as address_street, user.address_city as address_city, user.address_state as address_state, user.address_country as address_country, user.address_zip as address_zip, user.user_type as user_type FROM seed, user WHERE seed.user_id = user.id AND seed.weed_id = $weed_id";
+		$query = "SELECT user.id as id, user.username as username, user.description as description, user.storename as storename, user.address_street as address_street, user.address_city as address_city, user.address_state as address_state, user.address_country as address_country, user.address_zip as address_zip, user.user_type as user_type FROM seed, user WHERE seed.user_id = user.id AND seed.weed_id = $weed_id";
 		$result = $this->db_conn->query($query);
 		$users = array();
 		if (mysql_num_rows($result)) {

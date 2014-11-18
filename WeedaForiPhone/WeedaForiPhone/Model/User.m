@@ -86,7 +86,11 @@
 }
 
 - (NSString *) getSimpleFormatedAddress {
-    return [NSString stringWithFormat:@"%@", self.address_city];
+    if (self.address_city) {
+        return [NSString stringWithFormat:@"%@", self.address_city];
+    } else {
+        return nil;
+    }
 }
 
 + (NSString *) _getFormatedAddress:(NSString *) street city:(NSString*) city state:(NSString *) state zip:(NSString *) zip country:(NSString *)country {
@@ -105,19 +109,6 @@
     self.address_state = placeMark.administrativeArea;
     self.address_country = placeMark.country;
     self.address_zip = placeMark.postalCode;
-}
-
-- (UIImage *) getUserIcon
-{
-    if ([USER_TYPE_DISPENSARY isEqualToString:self.user_type]) {
-        return [UIImage imageNamed:@"dispensary_icon.png"];
-    } else if ([USER_TYPE_HYDRO isEqualToString:self.user_type]) {
-        return [UIImage imageNamed:@"hydro_icon.png"];
-    } else if ([USER_TYPE_I502 isEqualToString:self.user_type]) {
-        return [UIImage imageNamed:@"i502_icon.png"];
-    } else {
-        return nil;
-    }
 }
 
 @end
