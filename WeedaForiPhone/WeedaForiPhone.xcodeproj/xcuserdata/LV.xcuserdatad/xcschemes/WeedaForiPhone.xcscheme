@@ -24,7 +24,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "A914CC9F18CD756200B870D8"
-               BuildableName = "Weeda.app"
+               BuildableName = "Cannablaze.app"
                BlueprintName = "Weeda"
                ReferencedContainer = "container:WeedaForiPhone.xcodeproj">
             </BuildableReference>
@@ -52,7 +52,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "A914CC9F18CD756200B870D8"
-            BuildableName = "Weeda.app"
+            BuildableName = "Cannablaze.app"
             BlueprintName = "Weeda"
             ReferencedContainer = "container:WeedaForiPhone.xcodeproj">
          </BuildableReference>
@@ -71,7 +71,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "A914CC9F18CD756200B870D8"
-            BuildableName = "Weeda.app"
+            BuildableName = "Cannablaze.app"
             BlueprintName = "Weeda"
             ReferencedContainer = "container:WeedaForiPhone.xcodeproj">
          </BuildableReference>
@@ -89,7 +89,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "A914CC9F18CD756200B870D8"
-            BuildableName = "Weeda.app"
+            BuildableName = "Cannablaze.app"
             BlueprintName = "Weeda"
             ReferencedContainer = "container:WeedaForiPhone.xcodeproj">
          </BuildableReference>
@@ -100,6 +100,7 @@
    </AnalyzeAction>
    <ArchiveAction
       buildConfiguration = "Release"
+      customArchiveName = "Cannablaze"
       revealArchiveInOrganizer = "YES">
    </ArchiveAction>
 </Scheme>

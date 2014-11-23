@@ -42,6 +42,7 @@
 #define CHARACTER_COUNT_LABEL_WIDTH 28.0f
 #define CHARACTER_COUNT_LABEL_RIGHT_PAD 5.0f
 #define MAX_CHARACTER_COUNT 140
+#define TEXTVIEW_INSET 4
 #define ALPHA 0.85f
 
 @interface JSMessageInputView : UIImageView

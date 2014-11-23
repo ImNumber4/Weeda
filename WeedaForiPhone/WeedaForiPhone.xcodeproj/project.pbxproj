@@ -302,7 +302,7 @@
 		0ECB453C19C5C8E900690944 /* ConversationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConversationViewController.m; sourceTree = "<group>"; };
 		0EDDDB0119F08E7800337B59 /* list.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = list.png; path = WeedaForiPhone/Images/list.png; sourceTree = "<group>"; };
 		0EE8BFFA19AF2202007CE683 /* selected_message.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = selected_message.png; path = WeedaForiPhone/Images/selected_message.png; sourceTree = "<group>"; };
-		A914CCA018CD756200B870D8 /* Weeda.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Weeda.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A914CCA018CD756200B870D8 /* Cannablaze.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cannablaze.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A914CCA318CD756200B870D8 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		A914CCA518CD756200B870D8 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		A914CCA718CD756200B870D8 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -626,7 +626,7 @@
 		A914CCA118CD756200B870D8 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				A914CCA018CD756200B870D8 /* Weeda.app */,
+				A914CCA018CD756200B870D8 /* Cannablaze.app */,
 				A914CCC918CD756200B870D8 /* WeedaForiPhoneTests.xctest */,
 			);
 			name = Products;
@@ -979,7 +979,7 @@
 			);
 			name = Weeda;
 			productName = WeedaForiPhone;
-			productReference = A914CCA018CD756200B870D8 /* Weeda.app */;
+			productReference = A914CCA018CD756200B870D8 /* Cannablaze.app */;
 			productType = "com.apple.product-type.application";
 		};
 		A914CCC818CD756200B870D8 /* WeedaForiPhoneTests */ = {
@@ -1432,7 +1432,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Cannablaze;
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Weeda-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1457,7 +1457,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Cannablaze;
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Weeda-Bridging-Header.h";
 				WRAPPER_EXTENSION = app;

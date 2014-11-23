@@ -21,7 +21,7 @@
 		</dict>
 	</dict>
 	<key>CFBundleIdentifier</key>
-	<string>com.weeda.${PRODUCT_NAME}</string>
+	<string>com.weeda.$(PRODUCT_NAME)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -37,7 +37,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Weeda</string>
+	<string>Cannablaze</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Weeda</string>
 	<key>UIBackgroundModes</key>
