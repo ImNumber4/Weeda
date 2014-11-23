@@ -24,7 +24,7 @@
         <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="TestTableCell" rowHeight="67" id="7LN-DP-Y5H" userLabel="WeedTableCell">
             <rect key="frame" x="0.0" y="0.0" width="320" height="67"/>
             <autoresizingMask key="autoresizingMask"/>
-            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" contentMode="center" tableViewCell="7LN-DP-Y5H" id="zbb-la-cnz">
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" tableViewCell="7LN-DP-Y5H" id="zbb-la-cnz">
                 <rect key="frame" x="0.0" y="0.0" width="320" height="87"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
@@ -64,7 +64,7 @@
                             <constraint firstAttribute="width" relation="lessThanOrEqual" constant="6" id="k8z-TA-2YW"/>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="12" id="rfd-9H-mjS"/>
                         </constraints>
-                        <state key="normal" image="93FC0BF8-61B8-47A7-9F33-790BF913C20A">
+                        <state key="normal" image="3C48C5C2-68E1-40F3-ACFB-289E8A4C0C5F">
                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                         </state>
                     </button>
@@ -166,7 +166,7 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="93FC0BF8-61B8-47A7-9F33-790BF913C20A" width="591" height="980">
+        <image name="3C48C5C2-68E1-40F3-ACFB-289E8A4C0C5F" width="591" height="980">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPj9YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQsLzI4O1UkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw
