@@ -30,5 +30,5 @@
 - (void)signoutFrom:(UIViewController *) sender;
 
 + (UIStatusBarStyle) getUIStatusBarStyle;
-
++ (UIStoryboard *) getMainStoryboard;
 @end

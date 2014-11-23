@@ -21,4 +21,5 @@
 #import "ColorDefinition.h"
 #import "NSURL+ShortenURL.h"
 #import <RestKit/RestKit.h>
+#import "AppDelegate.h"
 #endif

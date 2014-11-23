@@ -278,13 +278,13 @@ static NSInteger MAX_ROWS_TO_SHOW_IN_ALL_SEARCH = 5;
     if (tableView.tag == BONGS_TABLE_VIEW) {
         if (indexPath.section == WEEDS_SECTION) {
             Weed * weed = [self.weeds objectAtIndex:indexPath.row];
-            DetailViewController *controller = (DetailViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"DetailViewController"];
+            DetailViewController *controller = (DetailViewController *)[[AppDelegate getMainStoryboard] instantiateViewControllerWithIdentifier:@"DetailViewController"];
             [controller setCurrentWeed:weed];
             [self.navigationController pushViewController:controller animated:YES];
         } else if (indexPath.section == USERS_SECTION) {
             if (indexPath.row < [self.users count]) {
                 User *user = [self.users objectAtIndex:indexPath.row];
-                UserViewController *controller = (UserViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"UserViewController"];
+                UserViewController *controller = (UserViewController *)[[AppDelegate getMainStoryboard] instantiateViewControllerWithIdentifier:@"UserViewController"];
                 [controller setUser_id:user.id];
                 [self.navigationController pushViewController:controller animated:YES];
             } else {
@@ -320,7 +320,7 @@ static NSInteger MAX_ROWS_TO_SHOW_IN_ALL_SEARCH = 5;
                         [self.searchResultTableView reloadData];
                     } else {
                         Weed *weed = [self.matchedWeeds objectAtIndex:indexPath.row];
-                        DetailViewController *controller = (DetailViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"DetailViewController"];
+                        DetailViewController *controller = (DetailViewController *)[[AppDelegate getMainStoryboard] instantiateViewControllerWithIdentifier:@"DetailViewController"];
                         [controller setCurrentWeed:weed];
                         [self.navigationController pushViewController:controller animated:YES];
                     }
@@ -329,7 +329,7 @@ static NSInteger MAX_ROWS_TO_SHOW_IN_ALL_SEARCH = 5;
             case SEGMENTED_CONTROL_USERS_ONLY:
             {
                 User * user = [self.matchedUsers objectAtIndex:indexPath.row];
-                UserViewController *controller = (UserViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"UserViewController"];
+                UserViewController *controller = (UserViewController *)[[AppDelegate getMainStoryboard] instantiateViewControllerWithIdentifier:@"UserViewController"];
                 [controller setUser_id:user.id];
                 [self.navigationController pushViewController:controller animated:YES];
                 break;
@@ -337,7 +337,7 @@ static NSInteger MAX_ROWS_TO_SHOW_IN_ALL_SEARCH = 5;
             case SEGMENTED_CONTROL_WEEDS_ONLY:
             {
                 Weed *weed = [self.matchedWeeds objectAtIndex:indexPath.row];
-                DetailViewController *controller = (DetailViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"DetailViewController"];
+                DetailViewController *controller = (DetailViewController *)[[AppDelegate getMainStoryboard] instantiateViewControllerWithIdentifier:@"DetailViewController"];
                 [controller setCurrentWeed:weed];
                 [self.navigationController pushViewController:controller animated:YES];
             }
@@ -615,7 +615,7 @@ static NSInteger MAX_ROWS_TO_SHOW_IN_ALL_SEARCH = 5;
     CGPoint buttonPosition = [sender convertPoint:CGPointZero toView:self.tableView];
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:buttonPosition];
     Weed *weed = [self.weeds objectAtIndex:indexPath.row];
-    UserViewController *controller = (UserViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"UserViewController"];
+    UserViewController *controller = (UserViewController *)[[AppDelegate getMainStoryboard] instantiateViewControllerWithIdentifier:@"UserViewController"];
     [controller setUser_id:weed.user_id];
     [self.navigationController pushViewController:controller animated:YES];
 }

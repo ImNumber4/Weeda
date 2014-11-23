@@ -100,7 +100,7 @@ NSString * _deviceToken;
 - (void) logoutLocally:(UIViewController *) sender {
     [self clearLoginCookies];
     _currentUser = nil;
-    UIViewController *controller = [sender.storyboard instantiateViewControllerWithIdentifier:@"WelcomeViewController"];
+    UIViewController *controller = [[AppDelegate getMainStoryboard] instantiateViewControllerWithIdentifier:@"WelcomeViewController"];
     [sender presentViewController:controller animated:YES completion:nil];
 }
 
@@ -560,6 +560,11 @@ NSString * _deviceToken;
 + (UIStatusBarStyle) getUIStatusBarStyle
 {
     return UIStatusBarStyleLightContent;
+}
+
++ (UIStoryboard *) getMainStoryboard
+{
+    return [UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]];
 }
 
 @end

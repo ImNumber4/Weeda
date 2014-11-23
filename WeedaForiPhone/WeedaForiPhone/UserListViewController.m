@@ -72,7 +72,7 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     User *user = [self.users objectAtIndex:indexPath.row];
-    UserViewController *controller = (UserViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"UserViewController"];
+    UserViewController *controller = (UserViewController *)[[AppDelegate getMainStoryboard] instantiateViewControllerWithIdentifier:@"UserViewController"];
     [controller setUser_id:user.id];
     [self.navigationController pushViewController:controller animated:YES];
 }
