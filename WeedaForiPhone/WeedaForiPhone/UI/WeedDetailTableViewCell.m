@@ -618,7 +618,8 @@ static NSString * WEB_SERVER_GET_FAVICON_URL = @"http://www.google.com/s2/favico
         
         CGRect frame = _webSummaryView.frame;
         frame.size.height = [self heightOfTextView:_titleView] + DEFAULT_VIDEO_HEIGHT;
-        CGFloat height = [WeedDetailTableViewCell heightForCell:self.weed showHeader:self.userAvatar.isHidden] + CGRectGetHeight(_webSummaryView.frame);
+        _webSummaryView.frame = frame;
+        CGFloat height = [WeedDetailTableViewCell heightForCell:self.weed showHeader:!self.userAvatar.isHidden] + CGRectGetHeight(_webSummaryView.frame);
         [self callDelegateToUpdateCellHeight:height];
         _webSummaryView.hidden = NO;
     }
