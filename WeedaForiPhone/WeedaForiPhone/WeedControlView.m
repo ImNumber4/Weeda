@@ -20,14 +20,15 @@
 
 static double PADDING = 5;
 static double LABEL_WIDTH = 50;
-static double LABEL_HEIGHT = 12;
+static double LABEL_HEIGHT = 14;
 
-static double LIGHT_ICON_HEIGHT = 12;
-static double LIGHT_ICON_WIDTH = 14;
-static double SEED_ICON_WIDTH = 18;
-static double SEED_ICON_HEIGHT = 9;
-static double WATER_ICON_WIDTH = 6;
-static double WATER_ICON_HEIGHT = 12;
+static double LIGHT_ICON_HEIGHT = 14;
+static double LIGHT_ICON_WIDTH = 16;
+static double SEED_ICON_WIDTH = 24;
+static double SEED_ICON_HEIGHT = 12;
+static double WATER_ICON_WIDTH = 7;
+static double WATER_ICON_HEIGHT = 14;
+static double FONT_SIZE = 10;
 
 static NSInteger SHOW_SEED_USERS = 1;
 static NSInteger SHOW_WATER_USERS = 2;
@@ -52,15 +53,15 @@ static NSInteger SHOW_WATER_USERS = 2;
         [self addSubview:self.waterDrop];
         self.lightCount = [[UIButton alloc] initWithFrame:CGRectMake(section1CenterX + (LIGHT_ICON_WIDTH + PADDING - LABEL_WIDTH)/2.0, centerY - LABEL_HEIGHT/2.0, LABEL_WIDTH, LABEL_HEIGHT)];
         [self.lightCount setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-        [self.lightCount.titleLabel setFont:[UIFont systemFontOfSize:9]];
+        [self.lightCount.titleLabel setFont:[UIFont systemFontOfSize:FONT_SIZE]];
         [self addSubview:self.lightCount];
         self.seedCount = [[UIButton alloc] initWithFrame:CGRectMake(section2CenterX + (SEED_ICON_WIDTH + PADDING - LABEL_WIDTH)/2.0, centerY - LABEL_HEIGHT/2.0, LABEL_WIDTH, LABEL_HEIGHT)];
         [self.seedCount setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-        [self.seedCount.titleLabel setFont:[UIFont systemFontOfSize:9]];
+        [self.seedCount.titleLabel setFont:[UIFont systemFontOfSize:FONT_SIZE]];
         [self addSubview:self.seedCount];
         self.waterCount = [[UIButton alloc] initWithFrame:CGRectMake(section3CenterX + (WATER_ICON_WIDTH + PADDING - LABEL_WIDTH)/2.0, centerY - LABEL_HEIGHT/2.0, LABEL_WIDTH, LABEL_HEIGHT)];
         [self.waterCount setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-        [self.waterCount.titleLabel setFont:[UIFont systemFontOfSize:9]];
+        [self.waterCount.titleLabel setFont:[UIFont systemFontOfSize:FONT_SIZE]];
         [self addSubview:self.waterCount];
         
         [self updateView];

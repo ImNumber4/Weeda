@@ -182,6 +182,17 @@ static NSString * WEED_PLACEHOLDER_CELL_REUSE_ID = @"PlaceHolderCell";
     return weed;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if ([indexPath section] != CURRENT_WEED_SECTION_INDEX) {
+        Weed *weed = [self getWeed:indexPath];
+        DetailViewController *controller = [[AppDelegate getMainStoryboard] instantiateViewControllerWithIdentifier:@"DetailViewController"];
+        [controller setCurrentWeed:weed];
+        [self.navigationController pushViewController:controller animated:YES];
+    }
+}
+
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == CURRENT_WEED_SECTION_INDEX) {
@@ -250,7 +261,6 @@ static NSString * WEED_PLACEHOLDER_CELL_REUSE_ID = @"PlaceHolderCell";
 
 - (void) showUser:(id) sender
 {
-    NSLog(@"show user");
     [self showUserViewController:sender];
 }
 
@@ -272,10 +282,6 @@ static NSString * WEED_PLACEHOLDER_CELL_REUSE_ID = @"PlaceHolderCell";
         NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:buttonPosition];
         Weed* weed = [self getWeed:indexPath];
         [[segue destinationViewController] setUser_id:weed.user_id];
-    } else if ([[segue identifier] isEqualToString:@"showLight"]) {
-        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-        Weed *weed = [self getWeed:indexPath];
-        [[segue destinationViewController] setCurrentWeed:weed];
     }
 }
 
