@@ -132,7 +132,6 @@
         <!--Bongs View Navigation Controller-->
         <scene sceneID="mc4-P0-226">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="qUE-4H-6da" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <navigationController title="Bongs View Navigation Controller" id="3hh-Fe-aeX" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Item" id="wSD-8m-kS6"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="w6h-VE-LgQ">
@@ -143,6 +142,7 @@
                         <segue destination="JlU-Ao-7LC" kind="relationship" relationship="rootViewController" id="I0o-aK-dLO"/>
                     </connections>
                 </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qUE-4H-6da" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="281" y="-1866"/>
         </scene>
@@ -218,26 +218,6 @@
                     <view key="view" contentMode="scaleToFill" id="8hB-ba-RA4">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="52" sectionHeaderHeight="22" sectionFooterHeight="22" id="j78-xc-5i5">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="MessageCell" rowHeight="52" id="wLJ-yz-cmN" customClass="WeedBasicTableViewCell">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="wLJ-yz-cmN" id="yPE-nm-7Ub">
-                                            <autoresizingMask key="autoresizingMask"/>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                </prototypes>
-                                <connections>
-                                    <outlet property="dataSource" destination="1YQ-lL-m36" id="e2z-tn-CCX"/>
-                                    <outlet property="delegate" destination="1YQ-lL-m36" id="QeT-iP-Hmp"/>
-                                </connections>
-                            </tableView>
-                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Item" id="0xB-gC-Fe9"/>
@@ -255,7 +235,6 @@
                     </navigationItem>
                     <connections>
                         <outlet property="segmentedControl" destination="61i-dg-13o" id="MLG-3q-tM7"/>
-                        <outlet property="tableView" destination="j78-xc-5i5" id="oZi-Hx-krL"/>
                         <segue destination="UY4-39-rji" kind="push" identifier="showUser" id="TQF-vn-XK1"/>
                         <segue destination="6ro-Wi-h5r" kind="push" identifier="showWeed" id="Jrw-vo-Y1B"/>
                         <segue destination="PuH-Xh-jza" kind="push" identifier="showMessage" id="kZJ-OJ-T24"/>
@@ -364,33 +343,15 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="0.0" reuseIdentifier="WeedCell" rowHeight="55" id="T6F-GN-y42" customClass="WeedBasicTableViewCell">
-                                <rect key="frame" x="0.0" y="224" width="320" height="55"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="T6F-GN-y42" id="fPs-Qe-hL2">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="54"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </tableViewCellContentView>
-                                <connections>
-                                    <segue destination="6ro-Wi-h5r" kind="push" identifier="showLight" id="SYS-Qc-gia"/>
-                                </connections>
-                            </tableViewCell>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="PlaceHolderCell" id="Oi9-VC-ppV">
-                                <rect key="frame" x="0.0" y="279" width="320" height="44"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Oi9-VC-ppV" id="Ubo-Mq-EwB">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
                         <connections>
                             <outlet property="dataSource" destination="6ro-Wi-h5r" id="Z3r-4w-3YV"/>
                             <outlet property="delegate" destination="6ro-Wi-h5r" id="xsL-9t-ELa"/>
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Weed" id="Ptm-OJ-FaH"/>
+                    <connections>
+                        <segue destination="UY4-39-rji" kind="push" identifier="showUser" id="6sd-rf-LCf"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dDf-2S-PCN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -510,18 +471,6 @@
                                 <rect key="frame" x="1" y="185" width="319" height="295"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="WeedTableCell" id="j7T-mM-wWp" customClass="WeedBasicTableViewCell">
-                                        <rect key="frame" x="0.0" y="0.0" width="319" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="j7T-mM-wWp" id="o5K-fQ-4Ic">
-                                            <autoresizingMask key="autoresizingMask"/>
-                                        </tableViewCellContentView>
-                                        <connections>
-                                            <segue destination="6ro-Wi-h5r" kind="push" identifier="showWeed" id="dSx-Us-Hdx"/>
-                                        </connections>
-                                    </tableViewCell>
-                                </prototypes>
                                 <connections>
                                     <outlet property="dataSource" destination="UY4-39-rji" id="Icc-Gq-rPM"/>
                                     <outlet property="delegate" destination="UY4-39-rji" id="HAT-6d-Te7"/>
@@ -747,10 +696,10 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="Z8M-XG-GdH"/>
-        <segue reference="fYj-PV-ClM"/>
+        <segue reference="6sd-rf-LCf"/>
+        <segue reference="Jrw-vo-Y1B"/>
         <segue reference="aBn-FK-paW"/>
-        <segue reference="dSx-Us-Hdx"/>
+        <segue reference="Z8M-XG-GdH"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="0.24313727021217346" green="0.64705884456634521" blue="0.24705883860588074" alpha="1" colorSpace="deviceRGB"/>
 </document>

@@ -45,6 +45,7 @@
 
 - (void) setup
 {
+    self.view.userInteractionEnabled = TRUE;
     [[NSBundle mainBundle] loadNibNamed:@"WeedTableViewCell" owner:self options:nil];
     self.bounds = self.view.bounds;
     [self addSubview:self.view];
@@ -363,7 +364,9 @@
 
 - (void)showUserViewController:(id)sender
 {
-    [self.delegate showUserViewController:sender];
+    if (self.delegate) {
+        [self.delegate showUserViewController:sender];
+    }
 }
 
 #pragma WLImageCollectionView Delegate

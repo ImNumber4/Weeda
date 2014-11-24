@@ -10,7 +10,7 @@
 
 @interface MessageViewController : UIViewController
 
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (retain, nonatomic) UITableView *tableView;
 @property (nonatomic,retain) UIRefreshControl *refreshControl;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentedControl;
 

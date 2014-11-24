@@ -42,7 +42,7 @@
 
 const NSInteger SHOW_FOLLOWERS = 1;
 const NSInteger SHOW_FOLLOWINGS = 2;
-
+static NSString *CELL_REUSE_ID = @"WeedTableCell";
 
 - (void)viewDidLoad
 {
@@ -79,7 +79,7 @@ const NSInteger SHOW_FOLLOWINGS = 2;
     [UIViewHelper roundCorners:self.messageButton byRoundingCorners:UIRectCornerBottomRight|UIRectCornerTopRight];
     
     [self.tableView setSeparatorInset:UIEdgeInsetsZero];
-    
+    [self.tableView registerClass:[WeedBasicTableViewCell class] forCellReuseIdentifier:CELL_REUSE_ID];
     self.tableView.tableFooterView = [[UIView alloc] init];
     self.weeds = [[NSMutableArray alloc] init];
     
@@ -152,10 +152,14 @@ const NSInteger SHOW_FOLLOWINGS = 2;
     return self.weeds.count;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return [WeedBasicTableViewCell getCellHeight];
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"WeedTableCell";
-    WeedBasicTableViewCell *cell = (WeedBasicTableViewCell *) [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    WeedBasicTableViewCell *cell = (WeedBasicTableViewCell *) [tableView dequeueReusableCellWithIdentifier:CELL_REUSE_ID forIndexPath:indexPath];
     Weed *weed = [self.weeds objectAtIndex:indexPath.row];
     
     [self decorateCellWithWeed:weed cell:cell];
@@ -164,7 +168,7 @@ const NSInteger SHOW_FOLLOWINGS = 2;
 
 - (void)decorateCellWithWeed:(Weed *)weed cell:(WeedBasicTableViewCell *)cell
 {
-    [cell decorateCellWithWeed:weed.content username:weed.username time:weed.time user_id:weed.user_id];
+    [cell decorateCellWithContent:weed.content username:weed.username time:weed.time user_id:weed.user_id];
 }
 
 - (void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info

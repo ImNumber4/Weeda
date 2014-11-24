@@ -28,9 +28,15 @@
 
 @implementation MessageViewController
 
+static NSString * TABLE_CELL_REUSE_ID = @"MessageCell";
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.conversations = [[NSMutableArray alloc] init];
+    self.tableView = [[UITableView alloc] initWithFrame:self.view.frame];
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    [self.view addSubview:self.tableView];
     [self.tableView setSeparatorInset:UIEdgeInsetsZero];
     self.tableView.tableFooterView = [[UIView alloc] init];
     
@@ -44,7 +50,7 @@
     [self.refreshControl addTarget:self action:@selector(refreshView:) forControlEvents:UIControlEventValueChanged];
     [self.tableView addSubview:self.refreshControl];
     [self.tableView sendSubviewToBack:self.refreshControl];
-
+    [self.tableView registerClass:[WeedBasicTableViewCell class] forCellReuseIdentifier:TABLE_CELL_REUSE_ID];
     
     self.notificationFetchedResultsController = [self createNSFetchedResultsController:NOTIFICATION_TYPE sectionNameKeyPath:nil];
     self.messageFetchedResultsController = [self createNSFetchedResultsController:MESSAGE_TYPE sectionNameKeyPath:@"participant_id"];
@@ -200,7 +206,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    WeedBasicTableViewCell *cell = (WeedBasicTableViewCell *) [tableView dequeueReusableCellWithIdentifier:@"MessageCell" forIndexPath:indexPath];
+    WeedBasicTableViewCell *cell = (WeedBasicTableViewCell *) [tableView dequeueReusableCellWithIdentifier:TABLE_CELL_REUSE_ID forIndexPath:indexPath];
     Message *message;
     if ([self isRetrievingConversations]) {
         message = [self.conversations objectAtIndex:indexPath.section];
@@ -220,10 +226,15 @@
         }
     }
     
-    [cell decorateCellWithWeed:(message.image ? @"[image]" : message.message) username:message.participant_username time:message.time user_id:message.participant_id];
+    [cell decorateCellWithContent:(message.image ? @"[image]" : message.message) username:message.participant_username time:message.time user_id:message.participant_id];
     cell.delegate = self;
     
     return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return [WeedBasicTableViewCell getCellHeight];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section

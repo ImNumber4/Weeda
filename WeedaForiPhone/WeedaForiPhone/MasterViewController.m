@@ -11,7 +11,6 @@
 #import "AddWeedViewController.h"
 #import "UserViewController.h"
 #import "WeedTableViewCell.h"
-#import "WeedBasicTableViewCell.h"
 #import "Weed.h"
 #import "User.h"
 #import "WeedImage.h"

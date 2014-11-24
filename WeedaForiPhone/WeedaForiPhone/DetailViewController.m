@@ -34,9 +34,6 @@ const NSInteger CHILD_WEEDS_SECTION_INDEX = 2;
 const NSInteger PLACEHOLDER_SECTION_INDEX = 3;
 
 const NSInteger SECTION_COUNT = 4;
-
-const NSInteger WEED_CELL_HEIGHT = 50;
-
 const NSInteger SHOW_SEED_USERS = 1;
 const NSInteger SHOW_WATER_USERS = 2;
 
@@ -44,7 +41,7 @@ const CGFloat COLLECTION_VIEW_PER_ROW_HEIGHT = 100.0;
 
 const CGFloat COLLECTION_VIEW_HEIGHT = 300.0;
 
-@interface DetailViewController () <UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, UITextViewDelegate, WeedDetailTableViewCellDelegate> {
+@interface DetailViewController () <UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, UITextViewDelegate, WeedBasicTableViewCellDelegate, WeedDetailTableViewCellDelegate> {
     NSInteger *_ratio;
 }
 
@@ -60,7 +57,8 @@ const CGFloat COLLECTION_VIEW_HEIGHT = 300.0;
 @implementation DetailViewController
 
 static NSString * WEED_DETAIL_TABLE_CELL_REUSE_ID = @"WeedDetailCell";
-
+static NSString * WEED_BASIC_TABLE_CELL_REUSE_ID = @"WeedBasicCell";
+static NSString * WEED_PLACEHOLDER_CELL_REUSE_ID = @"PlaceHolderCell";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -80,6 +78,8 @@ static NSString * WEED_DETAIL_TABLE_CELL_REUSE_ID = @"WeedDetailCell";
     self.tableView.tableFooterView = [[UIView alloc] init];
     
     [self.tableView registerClass:[WeedDetailTableViewCell class] forCellReuseIdentifier:WEED_DETAIL_TABLE_CELL_REUSE_ID];
+    [self.tableView registerClass:[WeedBasicTableViewCell class] forCellReuseIdentifier:WEED_BASIC_TABLE_CELL_REUSE_ID];
+    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:WEED_PLACEHOLDER_CELL_REUSE_ID];
     
     [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/getLights/%@", self.currentWeed.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
         NSSortDescriptor *descriptor=[[NSSortDescriptor alloc] initWithKey:@"id" ascending:YES];
@@ -101,7 +101,7 @@ static NSString * WEED_DETAIL_TABLE_CELL_REUSE_ID = @"WeedDetailCell";
             
             CGFloat orginalOffset = self.tableView.contentOffset.y;
             
-            [self.tableView setContentOffset:CGPointMake(0, orginalOffset + self.parentWeeds.count * WEED_CELL_HEIGHT)];
+            [self.tableView setContentOffset:CGPointMake(0, orginalOffset + self.parentWeeds.count * [WeedBasicTableViewCell getCellHeight])];
             NSIndexSet *section = [NSIndexSet indexSetWithIndex:PARENT_WEEDS_SECTION_INDEX];
             [UIView setAnimationsEnabled:NO];
             [self.tableView reloadSections:section withRowAnimation:UITableViewRowAnimationNone];
@@ -158,14 +158,12 @@ static NSString * WEED_DETAIL_TABLE_CELL_REUSE_ID = @"WeedDetailCell";
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
     } else if ([indexPath section] == PLACEHOLDER_SECTION_INDEX) {
-        static NSString *CellIdentifier = @"PlaceHolderCell";
-        UITableViewCell *cell = (UITableViewCell *) [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+        UITableViewCell *cell = (UITableViewCell *) [tableView dequeueReusableCellWithIdentifier:WEED_PLACEHOLDER_CELL_REUSE_ID forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
     } else {
         Weed *weed = [self getWeed:indexPath];
-        static NSString *CellIdentifier = @"WeedCell";
-        WeedBasicTableViewCell *cell = (WeedBasicTableViewCell *) [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+        WeedBasicTableViewCell *cell = (WeedBasicTableViewCell *) [tableView dequeueReusableCellWithIdentifier:WEED_BASIC_TABLE_CELL_REUSE_ID forIndexPath:indexPath];
         [self configureWeedTableViewCell:cell weed:weed];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
@@ -187,23 +185,28 @@ static NSString * WEED_DETAIL_TABLE_CELL_REUSE_ID = @"WeedDetailCell";
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == CURRENT_WEED_SECTION_INDEX) {
-        if (_detailWeedCellHeight) {
-            return _detailWeedCellHeight;
-        } else {
-            return [WeedDetailTableViewCell heightForCell:self.currentWeed showHeader:YES];
-        }
-        return _detailWeedCellHeight;
+        return [self getCurrentWeedCellHeight];
     } else if ([indexPath section] == PLACEHOLDER_SECTION_INDEX) {
         CGFloat orginalOffset = self.tableView.contentOffset.y;
-        CGFloat contentHeight = self.tableView.bounds.size.height - _detailWeedCellHeight - (self.parentWeeds.count + self.lights.count) * WEED_CELL_HEIGHT + orginalOffset - self.tabBarController.tabBar.frame.size.height + 1;
+        CGFloat contentHeight = self.tableView.bounds.size.height - [self getCurrentWeedCellHeight] - (self.parentWeeds.count + self.lights.count) * [WeedBasicTableViewCell getCellHeight] + orginalOffset - self.tabBarController.tabBar.frame.size.height + 1;
         if (contentHeight > 0.0) {
             return contentHeight;
         }else{
             return 0.0;
         }
     } else {
-        return WEED_CELL_HEIGHT;
+        return [WeedBasicTableViewCell getCellHeight];
     }
+}
+
+- (CGFloat) getHeightForCurrentWeed
+{
+    if (_detailWeedCellHeight) {
+        return _detailWeedCellHeight;
+    } else {
+        return [WeedDetailTableViewCell heightForCell:self.currentWeed showHeader:YES];
+    }
+    return _detailWeedCellHeight;
 }
 
 - (CGFloat)getCurrentWeedCellHeight {
@@ -240,10 +243,15 @@ static NSString * WEED_DETAIL_TABLE_CELL_REUSE_ID = @"WeedDetailCell";
 
 - (void)configureWeedTableViewCell:(WeedBasicTableViewCell *)cell weed:(Weed *)weed
 {
-    [cell decorateCellWithWeed:weed.content username:weed.username time:weed.time user_id:weed.user_id];
-    [cell.usernameLabel removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-    [cell.usernameLabel addTarget:self action:@selector(showUser:)forControlEvents:UIControlEventTouchDown];
+    [cell decorateCellWithContent:weed.content username:weed.username time:weed.time user_id:weed.user_id];
+    cell.delegate = self;
     cell.backgroundColor = [UIColor colorWithRed:240.0/255.0 green:240.0/255.0 blue:240.0/255.0 alpha:1];
+}
+
+- (void) showUser:(id) sender
+{
+    NSLog(@"show user");
+    [self showUserViewController:sender];
 }
 
 - (void)showUserViewController:(id)sender
@@ -264,13 +272,6 @@ static NSString * WEED_DETAIL_TABLE_CELL_REUSE_ID = @"WeedDetailCell";
         NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:buttonPosition];
         Weed* weed = [self getWeed:indexPath];
         [[segue destinationViewController] setUser_id:weed.user_id];
-    } else if ([[segue identifier] isEqualToString:@"showUsers"]) {
-        if ([sender tag] == SHOW_WATER_USERS) {
-            [[segue destinationViewController] setTitle:@"Watered by"];
-        } else {
-            [[segue destinationViewController] setTitle:@"Seeded by"];
-        }
-        [[segue destinationViewController] setUsers:self.users];
     } else if ([[segue identifier] isEqualToString:@"showLight"]) {
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         Weed *weed = [self getWeed:indexPath];

@@ -15,13 +15,14 @@
 
 @interface WeedBasicTableViewCell : UITableViewCell
 
-@property (nonatomic, weak) IBOutlet UIButton *usernameLabel;
-@property (nonatomic, weak) IBOutlet UILabel *weedContentLabel;
-@property (nonatomic, weak) IBOutlet UILabel *timeLabel;
-@property (nonatomic, weak) IBOutlet UIImageView *userAvatar;
-@property (nonatomic, weak) IBOutlet UIView *view;
+@property (nonatomic, retain) UILabel *usernameLabel;
+@property (nonatomic, retain) UILabel *weedContentLabel;
+@property (nonatomic, retain) UILabel *timeLabel;
+@property (nonatomic, retain) UIImageView *userAvatar;
 @property (nonatomic, weak)id<WeedBasicTableViewCellDelegate> delegate;
 
-- (void)decorateCellWithWeed:(NSString *)content username:(NSString *) username time:(NSDate *) time user_id:(id) user_id;
+- (void)decorateCellWithContent:(NSString *)content username:(NSString *) username time:(NSDate *) time user_id:(id) user_id;
+
++ (CGFloat)getCellHeight;
 
 @end
