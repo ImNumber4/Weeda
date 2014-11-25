@@ -238,21 +238,19 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
     if (self.userList.hidden == false) {
         if(hidden) {
             [self.weedContentView setContentOffset:CGPointMake(0.0 , self.weedContentView.contentInset.top) animated:NO];
-            UIEdgeInsets weedContentViewContentInsets = UIEdgeInsetsMake(self.weedContentView.contentInset.top, 0.0, 218, 0.0);
+            UIEdgeInsets weedContentViewContentInsets = UIEdgeInsetsMake(self.weedContentView.contentInset.top, 0.0, 0.0, 0.0);
             self.weedContentView.contentInset = weedContentViewContentInsets;
             self.weedContentView.scrollIndicatorInsets = weedContentViewContentInsets;
             self.userList.hidden = true;
         }
     } else {
         if(!hidden) {
-            UITextRange *range = self.weedContentView.selectedTextRange;
-            UITextPosition *position = range.start;
-            CGRect cursorRect = [self.weedContentView caretRectForPosition:position];
-            CGPoint cursorPoint = CGPointMake(self.weedContentView.frame.origin.x + cursorRect.origin.x, self.weedContentView.frame.origin.y + cursorRect.origin.y);
-            [self.weedContentView setContentOffset:CGPointMake((cursorPoint.x - 10) * self.weedContentView.zoomScale, (cursorPoint.y - 10) * self.weedContentView.zoomScale) animated:NO];
-            UIEdgeInsets weedContentViewContentInsets = UIEdgeInsetsMake(self.weedContentView.contentInset.top, 0.0, self.userList.bounds.size.height, 0.0);
+            UIEdgeInsets weedContentViewContentInsets = UIEdgeInsetsMake(self.weedContentView.contentInset.top, 0.0, self.weedContentView.frame.origin.y + self.weedContentView.frame.size.height - self.userList.frame.origin.y, 0.0);
             self.weedContentView.contentInset = weedContentViewContentInsets;
             self.weedContentView.scrollIndicatorInsets = weedContentViewContentInsets;
+            CGRect rect = [self.weedContentView caretRectForPosition:self.weedContentView.selectedTextRange.end];
+            rect.size.height += self.weedContentView.textContainerInset.bottom;
+            [self.weedContentView scrollRectToVisible:rect animated:true];
             self.userList.hidden = false;
         }
     }
@@ -260,10 +258,11 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
 
 - (void) adjustWeedContentViewContentInset
 {
-    [self.weedContentView setFrame:CGRectMake(self.weedContentView.frame.origin.x, self.weedContentView.frame.origin.y, self.weedContentView.frame.size.width, (self.imageCollectionView.hidden?self.toolbar.frame.origin.y:self.imageCollectionView.frame.origin.y) - self.weedContentView.frame.origin.y)];
+    [self.weedContentView setFrame:CGRectMake(self.weedContentView.frame.origin.x, self.weedContentView.frame.origin.y, self.weedContentView.frame.size.width, (self.imageCollectionView.hidden?self.toolbar.frame.origin.y:self.imageCollectionView.frame.origin.y) - self.weedContentView.frame.origin.y - 5/*padding*/)];
     CGPoint bottomOffset = CGPointMake(0, self.weedContentView.contentSize.height - self.weedContentView.bounds.size.height);
     if (bottomOffset.y > 0) {
         [self.weedContentView setContentOffset:bottomOffset animated:YES];
+        [self.weedContentView setSelectedRange:NSMakeRange(self.weedContentView.text.length, 0)];
     }
     
 }
