@@ -33,7 +33,7 @@ class MessageDAO extends BaseDAO
 	* return messages that 'invole' given user and are unread or less than one day old
 	*/
 	public function query($user_id, $message_id) {
-		$query = 'SELECT message.id as id, message.image_metadata as image_metadata, sender.username as sender_username, receiver.username as receiver_username, sender_id, receiver_id, message, message.time as time, message.deleted as deleted, type, related_weed_id, is_read FROM message LEFT JOIN user as sender on message.sender_id = sender.id LEFT JOIN user as receiver on message.receiver_id = receiver.id WHERE (is_read = false or message.time > timestampadd(hour, -24, now())) and (receiver_id = ' . $user_id . ' or sender_id = ' . $user_id . ')';
+		$query = 'SELECT message.id as id, message.image_metadata as image_metadata, sender.username as sender_username, receiver.username as receiver_username, sender.user_type as sender_user_type, receiver.user_type as receiver_user_type, sender_id, receiver_id, message, message.time as time, message.deleted as deleted, type, related_weed_id, is_read FROM message LEFT JOIN user as sender on message.sender_id = sender.id LEFT JOIN user as receiver on message.receiver_id = receiver.id WHERE (is_read = false or message.time > timestampadd(hour, -24, now())) and (receiver_id = ' . $user_id . ' or sender_id = ' . $user_id . ')';
 		if ($message_id) {
 			$query = $query . ' and message.id = ' . $message_id;
 		}
@@ -49,9 +49,11 @@ class MessageDAO extends BaseDAO
 					
 				if ($user_id == $message['receiver_id']) {
 					$participant_id = $message['sender_id'];
+					$participant_type = $message['sender_user_type'];
 					$participant_username = $message['sender_username'];
 				} else {
 					$participant_id = $message['receiver_id'];
+					$participant_type = $message['receiver_user_type'];
 					$participant_username = $message['receiver_username'];
 				}
 				$image_metadata = null;
@@ -59,7 +61,7 @@ class MessageDAO extends BaseDAO
 					$image_metadata = json_decode($message['image_metadata']);
 				}
 				$is_read = $user_id == $message['sender_id'] ? 1 : $message['is_read'];
-				$messageObj = array('id' => $message['id'], 'sender_id' => $message['sender_id'], 'image_metadata' => $image_metadata, 'message' => $message['message'], 'time' => $message['time'], 'deleted' => $message['deleted'], 'type' => $message['type'], 'related_weed_id' => $message['related_weed_id'], 'is_read' => $is_read, 'participant_id' => $participant_id, 'participant_username' => $participant_username);
+				$messageObj = array('id' => $message['id'], 'sender_id' => $message['sender_id'], 'image_metadata' => $image_metadata, 'message' => $message['message'], 'time' => $message['time'], 'deleted' => $message['deleted'], 'type' => $message['type'], 'related_weed_id' => $message['related_weed_id'], 'is_read' => $is_read, 'participant_id' => $participant_id, 'participant_type' => $participant_type, 'participant_username' => $participant_username);
 				$messages[] = $messageObj;
 			}
 		}

@@ -328,6 +328,7 @@ NSString * _deviceToken;
     NSDictionary *messageObjectMapping = @{
                                            @"sender_id" : @"sender_id",
                                            @"participant_id" : @"participant_id",
+                                           @"participant_type" : @"participant_type",
                                            @"participant_username" : @"participant_username",
                                            @"message" : @"message",
                                            @"type" : @"type",

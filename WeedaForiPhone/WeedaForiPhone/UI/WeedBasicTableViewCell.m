@@ -13,27 +13,31 @@
 
 @implementation WeedBasicTableViewCell
 
-static double PADDING = 5;
+static double PADDING = 10;
 static double AVATAR_SIZE = 40;
-static double TIME_LABEL_WIDTH = 60;
+static double TIME_LABEL_WIDTH = 70;
+static double STORE_TYPE_ICON_SIZE = 15;
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         
-        self.userAvatar = [[WLImageView alloc] initWithFrame:CGRectMake(PADDING, PADDING, AVATAR_SIZE, AVATAR_SIZE)];
+        self.userAvatar = [[WLImageView alloc] initWithFrame:CGRectMake(PADDING, PADDING/2.0, AVATAR_SIZE, AVATAR_SIZE)];
         self.userAvatar.contentMode = UIViewContentModeScaleAspectFill;
         self.userAvatar.userInteractionEnabled = true;
         self.userAvatar.clipsToBounds = YES;
         CALayer * l = [self.userAvatar layer];
         [l setMasksToBounds:YES];
-        [l setCornerRadius:7];
+        [l setCornerRadius:self.userAvatar.frame.size.width/2.0];
         self.userAvatar.userInteractionEnabled = YES;
         [self.userAvatar addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(userAvatarTapped)]];
         [self addSubview:self.userAvatar];
         
-        self.usernameLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.userAvatar.frame.origin.x + self.userAvatar.frame.size.width + PADDING, PADDING, 50, self.userAvatar.frame.size.height/2.0)];
+        self.storeTypeIcon = [[UserIcon alloc] initWithFrame:CGRectMake(self.userAvatar.frame.origin.x + self.userAvatar.frame.size.width - STORE_TYPE_ICON_SIZE/2.0, self.userAvatar.frame.origin.y + self.userAvatar.frame.size.height - STORE_TYPE_ICON_SIZE, STORE_TYPE_ICON_SIZE, STORE_TYPE_ICON_SIZE)];
+        [self addSubview:self.storeTypeIcon];
+        
+        self.usernameLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.userAvatar.frame.origin.x + self.userAvatar.frame.size.width + PADDING, self.userAvatar.frame.origin.y, 50, self.userAvatar.frame.size.height/2.0)];
         self.usernameLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
         [self.usernameLabel setTextColor:[UIColor blackColor]];
         [self.usernameLabel setFont:[UIFont systemFontOfSize:12]];
@@ -41,9 +45,9 @@ static double TIME_LABEL_WIDTH = 60;
         [self.usernameLabel addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(userAvatarTapped)]];
         [self addSubview:self.usernameLabel];
         
-        self.timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width - PADDING - TIME_LABEL_WIDTH, PADDING, TIME_LABEL_WIDTH, AVATAR_SIZE/2.0)];
+        self.timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width - PADDING - TIME_LABEL_WIDTH, self.userAvatar.frame.origin.y, TIME_LABEL_WIDTH, AVATAR_SIZE/2.0)];
         self.timeLabel.textAlignment = NSTextAlignmentRight;
-        [self.timeLabel setFont:[UIFont systemFontOfSize:9.0]];
+        [self.timeLabel setFont:[UIFont systemFontOfSize:10.0]];
         [self.timeLabel setTextColor:[UIColor grayColor]];
         [self addSubview:self.timeLabel];
         
@@ -56,7 +60,7 @@ static double TIME_LABEL_WIDTH = 60;
     return self;
 }
 
-- (void)decorateCellWithContent:(NSString *)content username:(NSString *) username time:(NSDate *) time user_id:(id) user_id
+- (void)decorateCellWithContent:(NSString *)content username:(NSString *) username time:(NSDate *) time user_id:(id) user_id user_type:(NSString *) user_type
 {
     self.weedContentLabel.text = [NSString stringWithFormat:@"%@", content];
     
@@ -69,6 +73,8 @@ static double TIME_LABEL_WIDTH = 60;
     self.timeLabel.text = self.timeLabel.text = [UIViewHelper formatTime:time];;
     
     [self.userAvatar sd_setImageWithURL:[WeedImageController imageURLOfAvatar:user_id] placeholderImage:[UIImage imageNamed:@"avatar.jpg"] options:SDWebImageHandleCookies];
+    
+    [self.storeTypeIcon setUserType:user_type];
 }
 
 + (CGFloat)getCellHeight

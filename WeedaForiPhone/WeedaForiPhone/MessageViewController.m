@@ -226,7 +226,7 @@ static NSString * TABLE_CELL_REUSE_ID = @"MessageCell";
         }
     }
     
-    [cell decorateCellWithContent:(message.image ? @"[image]" : message.message) username:message.participant_username time:message.time user_id:message.participant_id];
+    [cell decorateCellWithContent:(message.image ? @"[image]" : message.message) username:message.participant_username time:message.time user_id:message.participant_id user_type:message.participant_type];
     cell.delegate = self;
     
     return cell;

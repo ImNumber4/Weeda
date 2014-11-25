@@ -241,7 +241,7 @@ static NSString * WEED_PLACEHOLDER_CELL_REUSE_ID = @"PlaceHolderCell";
 
 - (void)configureWeedTableViewCell:(WeedBasicTableViewCell *)cell weed:(Weed *)weed
 {
-    [cell decorateCellWithContent:weed.content username:weed.username time:weed.time user_id:weed.user_id];
+    [cell decorateCellWithContent:weed.content username:weed.username time:weed.time user_id:weed.user_id user_type:weed.user_type];
     cell.delegate = self;
     cell.backgroundColor = [UIColor colorWithRed:240.0/255.0 green:240.0/255.0 blue:240.0/255.0 alpha:1];
 }

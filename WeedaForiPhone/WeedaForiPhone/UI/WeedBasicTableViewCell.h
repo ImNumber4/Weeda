@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "WLImageView.h"
+#import "UserIcon.h"
 
 @protocol WeedBasicTableViewCellDelegate <NSObject>
 @required
@@ -20,9 +21,11 @@
 @property (nonatomic, retain) UILabel *weedContentLabel;
 @property (nonatomic, retain) UILabel *timeLabel;
 @property (nonatomic, retain) WLImageView *userAvatar;
+@property (nonatomic, strong) UserIcon *storeTypeIcon;
+
 @property (nonatomic, weak)id<WeedBasicTableViewCellDelegate> delegate;
 
-- (void)decorateCellWithContent:(NSString *)content username:(NSString *) username time:(NSDate *) time user_id:(id) user_id;
+- (void)decorateCellWithContent:(NSString *)content username:(NSString *) username time:(NSDate *) time user_id:(id) user_id user_type:(NSString *) user_type;
 
 + (CGFloat)getCellHeight;
 

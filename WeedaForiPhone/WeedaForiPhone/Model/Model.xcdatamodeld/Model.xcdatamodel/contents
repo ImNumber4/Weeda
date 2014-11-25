@@ -4,6 +4,7 @@
         <attribute name="is_read" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="message" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="participant_id" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="participant_type" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="participant_username" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="related_weed_id" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="sender_id" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
@@ -41,7 +42,7 @@
         <relationship name="parent" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Weed" inverseName="images" inverseEntity="Weed" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Message" positionX="207" positionY="191" width="146" height="163"/>
+        <element name="Message" positionX="207" positionY="191" width="146" height="180"/>
         <element name="RemoteObject" positionX="-90" positionY="-61" width="128" height="90"/>
         <element name="Weed" positionX="18" positionY="212" width="144" height="285"/>
         <element name="WeedImage" positionX="72" positionY="90" width="128" height="118"/>

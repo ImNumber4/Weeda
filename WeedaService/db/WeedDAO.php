@@ -170,14 +170,14 @@ class WeedDAO extends BaseDAO
 	}
 	
 	private function getWeedsWithCondition($condition) {
-		$query = "SELECT weed.id as weed_id, user.id as user_id, weed.content as content, weed.light_id as light_id, user.time as user_time, weed.time as weed_time, username, weed.deleted as weed_deleted, user.deleted as user_deleted FROM weed, user WHERE user.id=weed.user_id AND $condition";
+		$query = "SELECT weed.id as weed_id, user.id as user_id, weed.content as content, user.user_type as user_type, weed.light_id as light_id, user.time as user_time, weed.time as weed_time, username, weed.deleted as weed_deleted, user.deleted as user_deleted FROM weed, user WHERE user.id=weed.user_id AND $condition";
 		$result = $this->db_conn->query($query);
 
 		/* create one master array of the records */
 		$weeds = array();
 		if(mysql_num_rows($result)) {
 			while($weed = mysql_fetch_assoc($result)) {
-				$weeds[] = array('id' => $weed['weed_id'], 'content' => $weed['content'], 'user_id' => $weed['user_id'], 'light_id' => $weed['light_id'], 'username' => $weed['username'], 'time' => $weed['weed_time'], 'deleted' => $weed['weed_deleted']);
+				$weeds[] = array('id' => $weed['weed_id'], 'content' => $weed['content'], 'user_id' => $weed['user_id'], 'user_type' => $weed['user_type'], 'light_id' => $weed['light_id'], 'username' => $weed['username'], 'time' => $weed['weed_time'], 'deleted' => $weed['weed_deleted']);
 			}
 		}
 		return $weeds;

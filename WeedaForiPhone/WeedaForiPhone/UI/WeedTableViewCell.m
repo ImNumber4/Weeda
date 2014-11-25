@@ -28,11 +28,12 @@
 
 @implementation WeedTableViewCell
 
-static double PADDING = 5;
+static double PADDING = 10;
 static double AVATAR_SIZE = 40;
-static double TIME_LABEL_WIDTH = 60;
+static double TIME_LABEL_WIDTH = 70;
 static double CONTROL_VIEW_HEIGHT = 25;
 static double CONTENT_TEXT_FONT = 12;
+static double STORE_TYPE_ICON_SIZE = 15;
 
 - (void) awakeFromNib
 {
@@ -54,24 +55,29 @@ static double CONTENT_TEXT_FONT = 12;
     self.userAvatar.contentMode = UIViewContentModeScaleAspectFill;
     self.userAvatar.userInteractionEnabled = true;
     self.userAvatar.clipsToBounds = YES;
+    
     CALayer * l = [self.userAvatar layer];
     [l setMasksToBounds:YES];
     [l setCornerRadius:self.userAvatar.frame.size.width/2.0];
+    
     self.userAvatar.userInteractionEnabled = YES;
     [self.userAvatar addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleAvatarTapped)]];
     [self addSubview:self.userAvatar];
     
+    self.storeTypeIcon = [[UserIcon alloc] initWithFrame:CGRectMake(self.userAvatar.frame.origin.x + self.userAvatar.frame.size.width - STORE_TYPE_ICON_SIZE/2.0, self.userAvatar.frame.origin.y + self.userAvatar.frame.size.height - STORE_TYPE_ICON_SIZE, STORE_TYPE_ICON_SIZE, STORE_TYPE_ICON_SIZE)];
+    [self addSubview:self.storeTypeIcon];
+    
     self.usernameLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.userAvatar.frame.origin.x + self.userAvatar.frame.size.width + PADDING, PADDING, 50, self.userAvatar.frame.size.height/2.0)];
     self.usernameLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
     [self.usernameLabel setTextColor:[UIColor blackColor]];
-    [self.usernameLabel setFont:[UIFont systemFontOfSize:CONTENT_TEXT_FONT]];
+    [self.usernameLabel setFont:[UIFont boldSystemFontOfSize:CONTENT_TEXT_FONT]];
     self.usernameLabel.userInteractionEnabled = true;
     [self.usernameLabel addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleAvatarTapped)]];
     [self addSubview:self.usernameLabel];
     
     self.timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width - PADDING - TIME_LABEL_WIDTH, PADDING, TIME_LABEL_WIDTH, AVATAR_SIZE/2.0)];
     self.timeLabel.textAlignment = NSTextAlignmentRight;
-    [self.timeLabel setFont:[UIFont systemFontOfSize:9]];
+    [self.timeLabel setFont:[UIFont systemFontOfSize:10]];
     [self.timeLabel setTextColor:[UIColor grayColor]];
     [self addSubview:self.timeLabel];
     
@@ -141,6 +147,8 @@ static double CONTENT_TEXT_FONT = 12;
     
     [self.userAvatar setImageURL:[WeedImageController imageURLOfAvatar:weed.user_id] isAvatar:YES];
     self.userAvatar.allowFullScreenDisplay = NO;
+    
+    [self.storeTypeIcon setUserType:weed.user_type];
     
     if (weed.images.count > 0) {
         [_collectionView setFrame:CGRectMake(0, self.weedContentLabel.frame.origin.y + self.weedContentLabel.frame.size.height, self.frame.size.width, MASTERVIEW_IMAGEVIEW_HEIGHT)];

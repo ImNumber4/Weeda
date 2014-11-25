@@ -16,6 +16,7 @@
 @dynamic sender_id;
 @dynamic participant_id;
 @dynamic participant_username;
+@dynamic participant_type;
 @dynamic is_read;
 @dynamic image;
 

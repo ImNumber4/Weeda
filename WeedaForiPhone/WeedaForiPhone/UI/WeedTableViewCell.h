@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "WLImageView.h"
+#import "UserIcon.h"
 
 #define MASTERVIEW_IMAGEVIEW_HEIGHT 200
 
@@ -31,6 +32,7 @@
 @property (nonatomic, retain) UITextView *weedContentLabel;
 @property (nonatomic, retain) UILabel *timeLabel;
 @property (nonatomic, retain) WLImageView *userAvatar;
+@property (nonatomic, strong) UserIcon *storeTypeIcon;
 
 - (void)decorateCellWithWeed:(Weed *)weed parentViewController:(UIViewController *)parentViewController;
 
