@@ -168,7 +168,7 @@ static NSString *CELL_REUSE_ID = @"WeedTableCell";
 
 - (void)decorateCellWithWeed:(Weed *)weed cell:(WeedBasicTableViewCell *)cell
 {
-    [cell decorateCellWithContent:weed.content username:weed.username time:weed.time user_id:weed.user_id user_type:weed.user_type];
+    [cell decorateCellWithContent:weed.content username:weed.username time:weed.time user_id:weed.user_id user_type:nil/*make it to be nil on purpose, this view already has icon*/];
 }
 
 - (void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
