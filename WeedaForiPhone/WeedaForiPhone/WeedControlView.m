@@ -10,6 +10,7 @@
 #import "ImageUtil.h"
 #import "AddWeedViewController.h"
 #import "UserListViewController.h"
+#import "UIViewHelper.h"
 
 @interface WeedControlView()
 @property (nonatomic, strong) Weed *weed;
@@ -19,8 +20,8 @@
 @implementation WeedControlView
 
 static double PADDING = 5;
-static double LABEL_WIDTH = 60;
-static double SIMPLE_MODE_LABEL_WIDTH = 20;
+static double LABEL_WIDTH = 70;
+static double SIMPLE_MODE_LABEL_WIDTH = 30;
 static double LABEL_HEIGHT = 14;
 
 static double LIGHT_ICON_HEIGHT = 14;
@@ -87,10 +88,9 @@ static NSInteger SHOW_WATER_USERS = 2;
     [self updateView];
 }
 
-
 - (void) updateView
 {
-    [self.waterCount setTitle:[NSString stringWithFormat:(self.isSimpleMode? @"%@" : @"%@ DROPS"), _weed.water_count] forState:UIControlStateNormal];
+    [self.waterCount setTitle:[NSString stringWithFormat:(self.isSimpleMode? @"%@" : @"%@ DROPS"), [UIViewHelper getCountString:_weed.water_count]] forState:UIControlStateNormal];
     if([_weed.water_count intValue] <= 0)
         [self.waterCount setEnabled:NO];
     else
@@ -101,7 +101,7 @@ static NSInteger SHOW_WATER_USERS = 2;
         [self.waterCount addTarget:self action:@selector(showUsers:)forControlEvents:UIControlEventTouchDown];
     }
     
-    [self.seedCount setTitle:[NSString stringWithFormat:(self.isSimpleMode? @"%@" : @"%@ SEEDS"), _weed.seed_count] forState:UIControlStateNormal];
+    [self.seedCount setTitle:[NSString stringWithFormat:(self.isSimpleMode? @"%@" : @"%@ SEEDS"), [UIViewHelper getCountString:_weed.seed_count]] forState:UIControlStateNormal];
     if([_weed.seed_count intValue] <= 0)
         [self.seedCount setEnabled:NO];
     else
@@ -112,7 +112,7 @@ static NSInteger SHOW_WATER_USERS = 2;
         [self.seedCount addTarget:self action:@selector(showUsers:)forControlEvents:UIControlEventTouchDown];
     }
     
-    [self.lightCount setTitle:[NSString stringWithFormat:(self.isSimpleMode? @"%@" : @"%@ LIGHTS"), _weed.light_count] forState:UIControlStateNormal];
+    [self.lightCount setTitle:[NSString stringWithFormat:(self.isSimpleMode? @"%@" : @"%@ LIGHTS"), [UIViewHelper getCountString:_weed.light_count]] forState:UIControlStateNormal];
     [self.lightCount setEnabled:NO];
     
     if ([_weed.if_cur_user_water_it intValue] == 1) {

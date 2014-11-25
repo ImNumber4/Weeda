@@ -33,4 +33,38 @@
     textField.leftViewMode = UITextFieldViewModeAlways;
 }
 
++ (NSString *) getCountString:(NSNumber*) count
+{
+    if ([count longValue] >= 1000000000) {
+        return [NSString stringWithFormat:@"%ldB", (long)([count longValue]/1000000000.0)];
+    } else if ([count longValue] >= 1000000) {
+        return [NSString stringWithFormat:@"%ldM", (long)([count longValue]/1000000.0)];
+    } else if ([count longValue] >= 1000) {
+        return [NSString stringWithFormat:@"%ldK", (long)([count longValue]/1000.0)];
+    } else {
+        return [NSString stringWithFormat:@"%@", count];
+    }
+}
+
++ (NSString *) formatTime:(NSDate *)time
+{
+    NSTimeInterval timeDifference = [[NSDate date] timeIntervalSinceDate:time];
+    NSString * timeString;
+    if (timeDifference < 60) {
+        timeString = [NSString stringWithFormat:@"%ds", (int)timeDifference];
+    } else if (timeDifference < 3600) {
+        timeString = [NSString stringWithFormat:@"%dm", (int)timeDifference/60];
+    } else if (timeDifference < 86400) {
+        timeString = [NSString stringWithFormat:@"%dh", (int)timeDifference/3600];
+    } else if (timeDifference < 2592000) {
+        timeString = [NSString stringWithFormat:@"%dd", (int)timeDifference/86400];
+    } else {
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"MMM. dd yyyy"];
+        timeString = [dateFormatter stringFromDate:time];
+    }
+    return timeString;
+}
+
+
 @end

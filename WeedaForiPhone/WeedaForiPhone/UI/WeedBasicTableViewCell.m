@@ -8,6 +8,7 @@
 
 #import "WeedBasicTableViewCell.h"
 #import "WeedImageController.h"
+#import "UIViewHelper.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 
 @implementation WeedBasicTableViewCell
@@ -42,7 +43,7 @@ static double TIME_LABEL_WIDTH = 60;
         
         self.timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width - PADDING - TIME_LABEL_WIDTH, PADDING, TIME_LABEL_WIDTH, AVATAR_SIZE/2.0)];
         self.timeLabel.textAlignment = NSTextAlignmentRight;
-        [self.timeLabel setFont:[UIFont systemFontOfSize:7.0]];
+        [self.timeLabel setFont:[UIFont systemFontOfSize:9.0]];
         [self.timeLabel setTextColor:[UIColor grayColor]];
         [self addSubview:self.timeLabel];
         
@@ -65,10 +66,7 @@ static double TIME_LABEL_WIDTH = 60;
     CGSize size = [self.usernameLabel sizeThatFits:CGSizeMake(maxWidth, AVATAR_SIZE/2.0)];
     [self.usernameLabel setFrame:CGRectMake(self.usernameLabel.frame.origin.x, self.usernameLabel.frame.origin.y, MIN(size.width, maxWidth), AVATAR_SIZE/2.0)];
     
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"MMM. dd yyyy"];
-    NSString *formattedDateString = [dateFormatter stringFromDate:time];
-    self.timeLabel.text = [NSString stringWithFormat:@"%@", formattedDateString];
+    self.timeLabel.text = self.timeLabel.text = [UIViewHelper formatTime:time];;
     
     [self.userAvatar sd_setImageWithURL:[WeedImageController imageURLOfAvatar:user_id] placeholderImage:[UIImage imageNamed:@"avatar.jpg"] options:SDWebImageHandleCookies];
 }

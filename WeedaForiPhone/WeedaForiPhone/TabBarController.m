@@ -9,6 +9,7 @@
 #import "TabBarController.h"
 #import "MasterViewController.h"
 #import "UserViewController.h"
+#import "UIViewHelper.h"
 
 const NSInteger WEEDS_TAB_BAR_ITEM_INDEX = 0;
 const NSInteger BONGS_TAB_BAR_ITEM_INDEX = 1;
@@ -78,15 +79,8 @@ const NSInteger ME_TAB_BAR_ITEM_INDEX = 4;
 {
     UITabBarItem *messageTabBarItem = [self.tabBar.items objectAtIndex:MESSAGES_TAB_BAR_ITEM_INDEX];
     if (badgeCount > 0) {
-        if (badgeCount >= 1000000000) {
-            [messageTabBarItem setBadgeValue:[NSString stringWithFormat:@"%ldB", (long)(badgeCount/1000000000.0)]];
-        } else if (badgeCount >= 1000000) {
-            [messageTabBarItem setBadgeValue:[NSString stringWithFormat:@"%ldM", (long)(badgeCount/1000000.0)]];
-        } else if (badgeCount >= 1000) {
-            [messageTabBarItem setBadgeValue:[NSString stringWithFormat:@"%ldK", (long)(badgeCount/1000.0)]];
-        } else {
-            [messageTabBarItem setBadgeValue:[NSString stringWithFormat:@"%ld", badgeCount]];
-        }
+        NSString  * badgeCountString = [UIViewHelper getCountString:[NSNumber numberWithInteger:badgeCount]];
+        [messageTabBarItem setBadgeValue:badgeCountString];
     } else {
         messageTabBarItem.badgeValue = nil;
     }
