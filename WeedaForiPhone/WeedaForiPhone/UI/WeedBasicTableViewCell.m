@@ -8,7 +8,6 @@
 
 #import "WeedBasicTableViewCell.h"
 #import "WeedImageController.h"
-#import "WLImageView.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 
 @implementation WeedBasicTableViewCell
@@ -22,7 +21,7 @@ static double TIME_LABEL_WIDTH = 60;
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         
-        self.userAvatar = [[UIImageView alloc] initWithFrame:CGRectMake(PADDING, PADDING, AVATAR_SIZE, AVATAR_SIZE)];
+        self.userAvatar = [[WLImageView alloc] initWithFrame:CGRectMake(PADDING, PADDING, AVATAR_SIZE, AVATAR_SIZE)];
         self.userAvatar.contentMode = UIViewContentModeScaleAspectFill;
         self.userAvatar.userInteractionEnabled = true;
         self.userAvatar.clipsToBounds = YES;
@@ -83,9 +82,10 @@ static double TIME_LABEL_WIDTH = 60;
     [self showUser:self];
 }
 
--(void)showUser:(id) sender {
-    if (self.delegate)
+-(void)showUser:(id) sender {        
+    if ([self.delegate respondsToSelector:@selector(showUser:)]) {
         [self.delegate showUser:self];
+    }
 }
 
 @end

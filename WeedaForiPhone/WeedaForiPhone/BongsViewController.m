@@ -516,7 +516,7 @@ static NSInteger MAX_ROWS_TO_SHOW_IN_ALL_SEARCH = 5;
                         return MORE_CELL_HEIGHT;
                     } else {
                         Weed * weed = [self.matchedWeeds objectAtIndex:indexPath.row];
-                        return [WeedTableViewCell heightOfWeedTableViewCell:weed];
+                        return [WeedTableViewCell heightOfWeedTableViewCell:weed width:tableView.frame.size.width];
                     }
                 } else {
                     return 0.0;
@@ -526,7 +526,7 @@ static NSInteger MAX_ROWS_TO_SHOW_IN_ALL_SEARCH = 5;
             case SEGMENTED_CONTROL_WEEDS_ONLY:
             {
                 Weed * weed = [self.matchedWeeds objectAtIndex:indexPath.row];
-                return [WeedTableViewCell heightOfWeedTableViewCell:weed];
+                return [WeedTableViewCell heightOfWeedTableViewCell:weed width:tableView.frame.size.width];
             }
             default:
                 return 0;

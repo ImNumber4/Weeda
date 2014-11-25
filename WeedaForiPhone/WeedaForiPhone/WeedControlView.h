@@ -17,7 +17,9 @@
 @property (nonatomic, strong) UIButton *light;
 @property (nonatomic, strong) UIButton *lightCount;
 @property (nonatomic, strong) UITableView *lights;
+@property (nonatomic) BOOL isSimpleMode;
 
-- (instancetype)initWithFrame:(CGRect)frame weed:(Weed*) weed parentViewController:(UIViewController *) parentViewController;
+- (instancetype)initWithFrame:(CGRect)frame isSimpleMode:(BOOL)isSimpleMode;
+- (void) decorateWithWeed:(Weed *) weed parentViewController:(UIViewController *) parentViewController;
 
 @end

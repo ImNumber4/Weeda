@@ -138,7 +138,7 @@ static NSString * WEB_SERVER_GET_FAVICON_URL = @"http://www.google.com/s2/favico
         _collectionView.scrollEnabled = false;
         [self addSubview:_collectionView];
         _collectionView.hidden = YES;
-        
+        _controlView = [[WeedControlView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, CONTROL_VIEW_HEIGHT) isSimpleMode:false];
     }
     return self;
 }
@@ -197,7 +197,7 @@ static NSString * WEB_SERVER_GET_FAVICON_URL = @"http://www.google.com/s2/favico
     self.weedContentLabel.translatesAutoresizingMaskIntoConstraints = YES;
     
 
-    _type = [WeedDetailTableViewCell getShowingTypewWithWeed:weed];
+    _type = [WeedDetailTableViewCell getShowingTypeWithWeed:weed];
     switch (_type) {
         case DetailCellShowingTypeImages:
         {
@@ -224,8 +224,8 @@ static NSString * WEB_SERVER_GET_FAVICON_URL = @"http://www.google.com/s2/favico
         default:
             break;
     }
-    CGFloat height = [WeedDetailTableViewCell heightForCell:self.weed showHeader:showHeader];
-    _controlView = [[WeedControlView alloc] initWithFrame:CGRectMake(0, height - CONTROL_VIEW_HEIGHT, self.frame.size.width, CONTROL_VIEW_HEIGHT) weed:weed parentViewController:parentViewController];
+    [_controlView setFrame:CGRectMake(0, self.frame.size.height - CONTROL_VIEW_HEIGHT, self.frame.size.width, CONTROL_VIEW_HEIGHT)];
+    [_controlView decorateWithWeed:weed parentViewController:parentViewController];
     [self addSubview:self.controlView];
 
     [self createWebSummaryView];
@@ -379,7 +379,7 @@ static NSString * WEB_SERVER_GET_FAVICON_URL = @"http://www.google.com/s2/favico
     CGFloat height = 0;
     double weedContentLabelY = showHeader?PADDING + AVATAR_SIZE:0;
     CGFloat textLableHeight = [self getTextLableHeight:weed.content];
-    switch ([WeedDetailTableViewCell getShowingTypewWithWeed:weed]) {
+    switch ([WeedDetailTableViewCell getShowingTypeWithWeed:weed]) {
         case DetailCellShowingTypeImages:
             height = [weed.image_count intValue] < 3 ? weedContentLabelY + textLableHeight + DEFAULT_IMAGE_DISPLAY_BOARD_HEIGHT2 : weedContentLabelY + textLableHeight + DEFAULT_IMAGE_DISPLAY_BOARD_HEIGHT1;
             break;
@@ -477,7 +477,7 @@ static NSString * WEB_SERVER_GET_FAVICON_URL = @"http://www.google.com/s2/favico
     _webSummaryView.hidden = YES;
 }
 
-+ (DetailCellShowingType)getShowingTypewWithWeed:(Weed *)weed
++ (DetailCellShowingType)getShowingTypeWithWeed:(Weed *)weed
 {
     //If weed has images display images
     if (weed.images.count > 0) {

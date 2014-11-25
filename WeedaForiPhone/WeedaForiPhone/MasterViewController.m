@@ -29,6 +29,8 @@
 
 @implementation MasterViewController
 
+static NSString *TABLE_CELL_REUSE_ID = @"WeedTableCell";
+
 - (void)awakeFromNib
 {
     [super awakeFromNib];
@@ -40,6 +42,7 @@
     
     self.previousScrollViewYOffset = 0.0;
     
+    [self.tableView registerClass:[WeedTableViewCell class] forCellReuseIdentifier:TABLE_CELL_REUSE_ID];
     [self.tableView setSeparatorInset:UIEdgeInsetsZero];
     self.tableView.tableFooterView = [[UIView alloc] init];
     UIRefreshControl *refresh = [[UIRefreshControl alloc] init];
@@ -167,8 +170,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"WeedTableCell";
-    WeedTableViewCell *cell = (WeedTableViewCell *) [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    WeedTableViewCell *cell = (WeedTableViewCell *) [tableView dequeueReusableCellWithIdentifier:TABLE_CELL_REUSE_ID forIndexPath:indexPath];
     Weed *weed = [self.fetchedResultsController objectAtIndexPath:indexPath];
     [self decorateCellWithWeed:weed cell:cell];
     return cell;
@@ -179,7 +181,7 @@
     
     Weed *weed = [self.fetchedResultsController objectAtIndexPath:indexPath];
     
-    return [WeedTableViewCell heightOfWeedTableViewCell:weed];
+    return [WeedTableViewCell heightOfWeedTableViewCell:weed width:tableView.frame.size.width];
 }
 
 - (void)decorateCellWithWeed:(Weed *)weed cell:(WeedTableViewCell *)cell

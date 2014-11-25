@@ -196,10 +196,10 @@ static NSString * WEED_PLACEHOLDER_CELL_REUSE_ID = @"PlaceHolderCell";
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == CURRENT_WEED_SECTION_INDEX) {
-        return [self getCurrentWeedCellHeight];
+        return [self getHeightForCurrentWeed];
     } else if ([indexPath section] == PLACEHOLDER_SECTION_INDEX) {
         CGFloat orginalOffset = self.tableView.contentOffset.y;
-        CGFloat contentHeight = self.tableView.bounds.size.height - [self getCurrentWeedCellHeight] - (self.parentWeeds.count + self.lights.count) * [WeedBasicTableViewCell getCellHeight] + orginalOffset - self.tabBarController.tabBar.frame.size.height + 1;
+        CGFloat contentHeight = self.tableView.bounds.size.height - [WeedDetailTableViewCell heightForCell:self.currentWeed showHeader:true] - (self.parentWeeds.count + self.lights.count) * [WeedBasicTableViewCell getCellHeight] + orginalOffset - self.tabBarController.tabBar.frame.size.height + 1;
         if (contentHeight > 0.0) {
             return contentHeight;
         }else{
@@ -220,19 +220,6 @@ static NSString * WEED_PLACEHOLDER_CELL_REUSE_ID = @"PlaceHolderCell";
     return _detailWeedCellHeight;
 }
 
-- (CGFloat)getCurrentWeedCellHeight {
-    CGFloat textLableHeight = [self getTextLableHeight];
-    
-    //Add the height of the other UI elements inside your cell
-    if (self.currentWeed.images.count > 0 && self.currentWeed.images.count < 3) {
-        return TEXTLABLE_WEED_CONTENT_ORIGIN_Y + textLableHeight + 200.0 + 10;
-    } else if (self.currentWeed.images.count >= 3) {
-        return TEXTLABLE_WEED_CONTENT_ORIGIN_Y + textLableHeight + 250.0 + 10;
-    } else {
-        return TEXTLABLE_WEED_CONTENT_ORIGIN_Y + textLableHeight + 10;
-    }
-}
-
 - (CGFloat)getTextLableHeight
 {
     UITextView *temp = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 44)]; //This initial size doesn't matter
@@ -248,8 +235,8 @@ static NSString * WEED_PLACEHOLDER_CELL_REUSE_ID = @"PlaceHolderCell";
 
 - (void)configureWeedDetailTableViewCell:(WeedDetailTableViewCell *)cell
 {
-    cell.delegate = self;
     [cell decorateCellWithWeed:self.currentWeed parentViewController:self showHeader:true];
+    cell.delegate = self;
 }
 
 - (void)configureWeedTableViewCell:(WeedBasicTableViewCell *)cell weed:(Weed *)weed

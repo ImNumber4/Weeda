@@ -11,9 +11,7 @@
 #import "WLImageCollectionView.h"
 #import "AddWeedViewController.h"
 #import <SDWebImage/UIImageView+WebCache.h>
-
-#define MIN_HEIGHT_OF_TEXT_VIEW 40.0
-#define DEFAULT_WEED_CONTENT_LABLE_WIDTH 256.0
+#import "WeedControlView.h"
 
 @interface WeedTableViewCell() <UITextViewDelegate, WLImageCollectionViewDelegate> {
     CGPoint _beginOffset;
@@ -22,12 +20,18 @@
 
 @property (nonatomic, retain) UICollectionView *collectionView;
 @property (nonatomic, retain) NSArray *dataSource;
-
+@property (nonatomic, retain) WeedControlView *controlView;
 @property (nonatomic, retain) NSMutableDictionary *urlDictionary;
 
 @end
 
 @implementation WeedTableViewCell
+
+static double PADDING = 5;
+static double AVATAR_SIZE = 40;
+static double TIME_LABEL_WIDTH = 60;
+static double CONTROL_VIEW_HEIGHT = 25;
+static double CONTENT_TEXT_FONT = 12;
 
 - (void) awakeFromNib
 {
@@ -45,24 +49,50 @@
 
 - (void) setup
 {
-    self.view.userInteractionEnabled = TRUE;
-    [[NSBundle mainBundle] loadNibNamed:@"WeedTableViewCell" owner:self options:nil];
-    self.bounds = self.view.bounds;
-    [self addSubview:self.view];
-    
-    _urlDictionary = [NSMutableDictionary new];
-    
+    self.userAvatar = [[WLImageView alloc] initWithFrame:CGRectMake(PADDING, PADDING, AVATAR_SIZE, AVATAR_SIZE)];
     self.userAvatar.contentMode = UIViewContentModeScaleAspectFill;
+    self.userAvatar.userInteractionEnabled = true;
     self.userAvatar.clipsToBounds = YES;
     CALayer * l = [self.userAvatar layer];
     [l setMasksToBounds:YES];
     [l setCornerRadius:self.userAvatar.frame.size.width/2.0];
+    self.userAvatar.userInteractionEnabled = YES;
+    [self.userAvatar addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleAvatarTapped)]];
+    [self addSubview:self.userAvatar];
+    
+    self.usernameLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.userAvatar.frame.origin.x + self.userAvatar.frame.size.width + PADDING, PADDING, 50, self.userAvatar.frame.size.height/2.0)];
+    self.usernameLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
+    [self.usernameLabel setTextColor:[UIColor blackColor]];
+    [self.usernameLabel setFont:[UIFont systemFontOfSize:CONTENT_TEXT_FONT]];
+    self.usernameLabel.userInteractionEnabled = true;
+    [self.usernameLabel addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleAvatarTapped)]];
+    [self addSubview:self.usernameLabel];
+    
+    self.timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width - PADDING - TIME_LABEL_WIDTH, PADDING, TIME_LABEL_WIDTH, AVATAR_SIZE/2.0)];
+    self.timeLabel.textAlignment = NSTextAlignmentRight;
+    [self.timeLabel setFont:[UIFont systemFontOfSize:7.0]];
+    [self.timeLabel setTextColor:[UIColor grayColor]];
+    [self addSubview:self.timeLabel];
+    
+    self.weedContentLabel = [[UITextView alloc] initWithFrame:CGRectMake(self.usernameLabel.frame.origin.x, self.usernameLabel.frame.origin.y + self.usernameLabel.frame.size.height, self.frame.size.width - PADDING - self.usernameLabel.frame.origin.x, self.userAvatar.frame.size.height/2.0)];
+    [self.weedContentLabel setFont:[UIFont systemFontOfSize:CONTENT_TEXT_FONT]];
+    self.weedContentLabel.delegate = self;
+    self.weedContentLabel.scrollEnabled = false;
+    self.weedContentLabel.userInteractionEnabled = true;
+    self.weedContentLabel.dataDetectorTypes = UIDataDetectorTypeLink;
+    self.weedContentLabel.editable = false;
+    self.weedContentLabel.translatesAutoresizingMaskIntoConstraints = YES;
+    [self addSubview:self.weedContentLabel];
+    self.selectionStyle = UITableViewCellSelectionStyleNone;
+    
+    _urlDictionary = [NSMutableDictionary new];
+
     
     [self.userAvatar addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleAvatarTapped)]];
     self.userAvatar.userInteractionEnabled = YES;
     
     self.usernameLabel.userInteractionEnabled = YES;
-    [self.usernameLabel addTarget:self action:@selector(showUserViewController:) forControlEvents:UIControlEventTouchDown];
+    [self.usernameLabel addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleAvatarTapped)]];
     
     if (_weedTmp) {
         _weedTmp = nil;
@@ -74,6 +104,9 @@
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tappedContentView:)];
     [self.weedContentLabel addGestureRecognizer:tap];
+    
+    _controlView = [[WeedControlView alloc] initWithFrame:CGRectMake(0, 0, 200, CONTROL_VIEW_HEIGHT) isSimpleMode:true];
+    [self addSubview:_controlView];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
@@ -83,41 +116,30 @@
     // Configure the view for the selected state
 }
 
-- (void)hideControls
-{
-    self.light.hidden = true;
-    self.lightCount.hidden = true;
-    self.seed.hidden = true;
-    self.seedCount.hidden = true;
-    self.waterDrop.hidden = true;
-    self.waterCount.hidden = true;
-}
-
 - (void)decorateCellWithWeed:(Weed *)weed parentViewController:(UIViewController *)parentViewController
 {
+    _collectionView.hidden = YES;
+    _dataSource = nil;
+    [_urlDictionary removeAllObjects];
     _weedTmp = weed;
     _parentViewController = parentViewController;
     
-    [self.view setFrame:CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.frame.size.width, self.frame.size.height)];
-    
-    
     NSString *content = [self shortenURLInContent:weed.content];
-    self.weedContentLabel.attributedText = [[NSAttributedString alloc]initWithString:content];
-    self.weedContentLabel.translatesAutoresizingMaskIntoConstraints = YES;
-    CGSize textLableSize = [self.weedContentLabel sizeThatFits:CGSizeMake(DEFAULT_WEED_CONTENT_LABLE_WIDTH, MIN_HEIGHT_OF_TEXT_VIEW)];
-    [self.weedContentLabel setFrame:CGRectMake(self.weedContentLabel.frame.origin.x, self.weedContentLabel.frame.origin.y, self.weedContentLabel.frame.size.width, MAX(MIN_HEIGHT_OF_TEXT_VIEW, textLableSize.height))];
-    self.weedContentLabel.delegate = self;
+    self.weedContentLabel.attributedText = [[NSAttributedString alloc]initWithString:content attributes:@{NSForegroundColorAttributeName:[UIColor darkGrayColor]}];
+
+    CGSize textLableSize = [self.weedContentLabel sizeThatFits:CGSizeMake(self.frame.size.width - PADDING * 3 - AVATAR_SIZE, AVATAR_SIZE/2.0)];
+    [self.weedContentLabel setFrame:CGRectMake(self.weedContentLabel.frame.origin.x, self.weedContentLabel.frame.origin.y, self.weedContentLabel.frame.size.width, MAX(AVATAR_SIZE/2.0, textLableSize.height))];
     
     NSString *nameLabel = [NSString stringWithFormat:@"@%@", weed.username];
-    [self.usernameLabel setTitle:nameLabel forState:UIControlStateNormal];
-    [self.usernameLabel sizeToFit];
+    [self.usernameLabel setText:nameLabel];
+    double maxWidth = self.frame.size.width - PADDING * 4 - AVATAR_SIZE - TIME_LABEL_WIDTH;
+    CGSize size = [self.usernameLabel sizeThatFits:CGSizeMake(maxWidth, AVATAR_SIZE/2.0)];
+    [self.usernameLabel setFrame:CGRectMake(self.usernameLabel.frame.origin.x, self.usernameLabel.frame.origin.y, MIN(size.width, maxWidth), AVATAR_SIZE/2.0)];
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"MMM. dd yyyy"];
     NSString *formattedDateString = [dateFormatter stringFromDate:weed.time];
     self.timeLabel.text = [NSString stringWithFormat:@"%@", formattedDateString];
-    
-    [self updateWeedControl];
     
     [self.userAvatar setImageURL:[WeedImageController imageURLOfAvatar:weed.user_id] isAvatar:YES];
     self.userAvatar.allowFullScreenDisplay = NO;
@@ -128,96 +150,8 @@
         _collectionView.hidden = NO;
         [_collectionView reloadData];
     }
-    
-    [self.waterDrop removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-    [self.waterDrop addTarget:self action:@selector(waterIt:)forControlEvents:UIControlEventTouchDown];
-    
-    [self.seed removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-    [self.seed addTarget:self action:@selector(seedIt:)forControlEvents:UIControlEventTouchDown];
-    
-    [self.light removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-    [self.light addTarget:self action:@selector(lightIt:)forControlEvents:UIControlEventTouchDown];
-}
-
-- (void) updateWeedControl
-{
-    if ([_weedTmp.if_cur_user_water_it intValue] == 1) {
-        [self.waterDrop setImage:[UIImage imageNamed:@"waterdrop.png"] forState:UIControlStateNormal];
-    } else {
-        [self.waterDrop setImage:[UIImage imageNamed:@"waterdropgray.png"] forState:UIControlStateNormal];
-    }
-    if ([_weedTmp.if_cur_user_seed_it intValue] == 1) {
-        [self.seed setImage:[UIImage imageNamed:@"seed.png"] forState:UIControlStateNormal];
-    } else {
-        [self.seed setImage:[UIImage imageNamed:@"seedgray.png"] forState:UIControlStateNormal];
-    }
-    if ([_weedTmp.if_cur_user_light_it intValue] == 1) {
-        [self.light setImage:[UIImage imageNamed:@"light.png"] forState:UIControlStateNormal];
-    } else {
-        [self.light setImage:[UIImage imageNamed:@"lightgray.png"] forState:UIControlStateNormal];
-    }
-    self.lightCount.text = [NSString stringWithFormat:@"%@", _weedTmp.light_count];
-    self.seedCount.text = [NSString stringWithFormat:@"%@", _weedTmp.seed_count];
-    self.waterCount.text = [NSString stringWithFormat:@"%@", _weedTmp.water_count];
-}
-
--(void)lightIt:(id)sender {
-    [AddWeedViewController presentControllerFrom:_parentViewController withWeed:_weedTmp];
-}
-
-
-- (void)waterIt:(id) sender {
-    Weed *weed = _weedTmp;
-    if ([weed.if_cur_user_water_it intValue] == 1) {
-        [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/unwater/%@", weed.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-            weed.water_count = [NSNumber numberWithInt:[weed.water_count intValue] - 1];
-            weed.if_cur_user_water_it = [NSNumber numberWithInt:0];
-            [self updateWeedControl];
-        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-            RKLogError(@"Follow failed with error: %@", error);
-        }];
-    } else {
-        [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/water/%@", weed.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-            weed.water_count = [NSNumber numberWithInt:[weed.water_count intValue] + 1];
-            weed.if_cur_user_water_it = [NSNumber numberWithInt:1];
-            [self updateWeedControl];
-        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-            RKLogError(@"Follow failed with error: %@", error);
-        }];
-    }
-}
-
-- (void)seedIt:(id) sender {
-    [self.seed setEnabled:false];
-    if ([_weedTmp.if_cur_user_seed_it intValue] == 1) {
-        [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/unseed/%@", _weedTmp.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-            _weedTmp.seed_count = [NSNumber numberWithInt:[_weedTmp.seed_count intValue] - 1];
-            _weedTmp.if_cur_user_seed_it = [NSNumber numberWithInt:0];
-            [self updateWeedControl];
-            [self.seed setEnabled:true];
-        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-            RKLogError(@"unseed failed with error: %@", error);
-            [self.seed setEnabled:true];
-        }];
-    } else {
-        [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/seed/%@", _weedTmp.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-            _weedTmp.seed_count = [NSNumber numberWithInt:[_weedTmp.seed_count intValue] + 1];
-            _weedTmp.if_cur_user_seed_it = [NSNumber numberWithInt:1];
-            [self updateWeedControl];
-            [self.seed setEnabled:true];
-        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-            RKLogError(@"seed failed with error: %@", error);
-            [self.seed setEnabled:true];
-        }];
-    }
-}
-
-- (void)prepareForReuse
-{
-    _weedTmp = nil;
-    _collectionView.hidden = YES;
-    _dataSource = nil;
-    _parentViewController = nil;
+    [_controlView setFrame:CGRectMake(self.frame.size.width - _controlView.frame.size.width, self.frame.size.height - CONTROL_VIEW_HEIGHT, _controlView.frame.size.width, CONTROL_VIEW_HEIGHT)];
+    [_controlView decorateWithWeed:weed parentViewController:parentViewController];
 }
 
 - (NSArray *)adjustWeedImages
@@ -340,32 +274,27 @@
     [self scrollViewDidEndDragging:scrollView willDecelerate:NO];
 }
 
-+ (CGFloat)heightOfWeedTableViewCell:(Weed *)weed
++ (CGFloat)heightOfWeedTableViewCell:(Weed *)weed width:(double)width
 {
-    UITextView *temp = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, DEFAULT_WEED_CONTENT_LABLE_WIDTH, 44)]; //This initial size doesn't matter
-    temp.font = [UIFont systemFontOfSize:11.0];
+    double widthForContent = width - PADDING * 3 - AVATAR_SIZE;
+    UITextView *temp = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, widthForContent, 44)]; //This initial size doesn't matter
+    temp.font = [UIFont systemFontOfSize:CONTROL_VIEW_HEIGHT];
     temp.attributedText = [[NSAttributedString alloc]initWithString:weed.content];
-    CGSize textLableSize = [temp sizeThatFits:CGSizeMake(DEFAULT_WEED_CONTENT_LABLE_WIDTH, MIN_HEIGHT_OF_TEXT_VIEW)];
+    CGSize textLableSize = [temp sizeThatFits:CGSizeMake(widthForContent, AVATAR_SIZE/2.0)];
     
     //Add the height of the other UI elements inside your cell
+    CGFloat height = PADDING + AVATAR_SIZE/2.0 + textLableSize.height;
+    
     if (weed.images.count > 0) {
-        CGFloat height = MAX(textLableSize.height, MIN_HEIGHT_OF_TEXT_VIEW) + 20.0 + MASTERVIEW_IMAGEVIEW_HEIGHT + 30.0; //For Image View
-        return height;
-    } else {
-        CGFloat height = MAX(textLableSize.height, MIN_HEIGHT_OF_TEXT_VIEW) + 35.0;
-        return height;
+        height = height + MASTERVIEW_IMAGEVIEW_HEIGHT + PADDING; //For Image View
     }
+    return height + CONTROL_VIEW_HEIGHT;
 }
 
 - (void)handleAvatarTapped
 {
-    [self showUserViewController:self];
-}
-
-- (void)showUserViewController:(id)sender
-{
-    if (self.delegate) {
-        [self.delegate showUserViewController:sender];
+    if ([self.delegate respondsToSelector:@selector(showUserViewController:)]) {
+        [self.delegate showUserViewController:self];
     }
 }
 

@@ -119,7 +119,6 @@
 		A9A4680F190DDF4100461E90 /* light.png in Resources */ = {isa = PBXBuildFile; fileRef = A9A4680E190DDF4100461E90 /* light.png */; };
 		A9A46824190DE2C600461E90 /* lightgray.png in Resources */ = {isa = PBXBuildFile; fileRef = A9A46823190DE2C600461E90 /* lightgray.png */; };
 		A9A46830190E1E8E00461E90 /* WeedDetailTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A9A4682F190E1E8E00461E90 /* WeedDetailTableViewCell.m */; };
-		A9B45DDE194EAC40007AFB06 /* WeedTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9B45DDD194EAC40007AFB06 /* WeedTableViewCell.xib */; };
 		A9C0879719F8B9B700B0622B /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C0879619F8B9B700B0622B /* SettingsViewController.m */; };
 		A9C087A119FB0C0300B0622B /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C087A019FB0C0300B0622B /* AboutViewController.m */; };
 		A9C087A419FB0C1800B0622B /* TermsAndPoliciesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C087A319FB0C1800B0622B /* TermsAndPoliciesViewController.m */; };
@@ -397,7 +396,6 @@
 		A9A46823190DE2C600461E90 /* lightgray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = lightgray.png; path = WeedaForiPhone/Images/lightgray.png; sourceTree = "<group>"; };
 		A9A4682E190E1E8E00461E90 /* WeedDetailTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WeedDetailTableViewCell.h; path = WeedaForiPhone/UI/WeedDetailTableViewCell.h; sourceTree = "<group>"; };
 		A9A4682F190E1E8E00461E90 /* WeedDetailTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WeedDetailTableViewCell.m; path = WeedaForiPhone/UI/WeedDetailTableViewCell.m; sourceTree = "<group>"; };
-		A9B45DDD194EAC40007AFB06 /* WeedTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = WeedTableViewCell.xib; path = WeedaForiPhone/UI/WeedTableViewCell.xib; sourceTree = "<group>"; };
 		A9C0879519F8B9B700B0622B /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		A9C0879619F8B9B700B0622B /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		A9C0879F19FB0C0300B0622B /* AboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutViewController.h; sourceTree = "<group>"; };
@@ -841,7 +839,6 @@
 				A92E513919046E2A00FC518F /* UserTableViewCell.m */,
 				A9CA8E9D18F3E255004F095D /* WeedTableViewCell.h */,
 				A9CA8E9E18F3E255004F095D /* WeedTableViewCell.m */,
-				A9B45DDD194EAC40007AFB06 /* WeedTableViewCell.xib */,
 				A9A4682E190E1E8E00461E90 /* WeedDetailTableViewCell.h */,
 				A9A4682F190E1E8E00461E90 /* WeedDetailTableViewCell.m */,
 				A91816C5195637B400E7DD02 /* WeedBasicTableViewCell.h */,
@@ -1107,7 +1104,6 @@
 			files = (
 				EAB381AC19FF0A4F00C4C3BA /* Oops.png in Resources */,
 				0EB8C4D719C5C00900BD64E1 /* bubble-square-outgoing@2x.png in Resources */,
-				A9B45DDE194EAC40007AFB06 /* WeedTableViewCell.xib in Resources */,
 				A93BB0B619F1B64F00514940 /* filter_on.png in Resources */,
 				A9D0B16819A043FF00BC2196 /* No.png in Resources */,
 				A97AF09C1A0AF22100BAD9E9 /* bubble-square-outgoing-image-mask@2x.png in Resources */,

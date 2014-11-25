@@ -27,22 +27,13 @@
 }
 @property (nonatomic, retain) id<WeedTableViewCellDelegate> delegate;
 
-@property (nonatomic, weak) IBOutlet UIButton *usernameLabel;
-@property (nonatomic, weak) IBOutlet UITextView *weedContentLabel;
-@property (nonatomic, weak) IBOutlet UILabel *timeLabel;
-@property (nonatomic, weak) IBOutlet WLImageView *userAvatar;
-@property (nonatomic, weak) IBOutlet UIButton *seed;
-@property (nonatomic, weak) IBOutlet UILabel *seedCount;
-@property (nonatomic, weak) IBOutlet UIButton *waterDrop;
-@property (nonatomic, weak) IBOutlet UILabel *waterCount;
-@property (nonatomic, weak) IBOutlet UIButton *light;
-@property (nonatomic, weak) IBOutlet UILabel *lightCount;
+@property (nonatomic, retain) UILabel *usernameLabel;
+@property (nonatomic, retain) UITextView *weedContentLabel;
+@property (nonatomic, retain) UILabel *timeLabel;
+@property (nonatomic, retain) WLImageView *userAvatar;
 
-@property (nonatomic, weak) IBOutlet UIView *view;
-
-- (void)hideControls;
 - (void)decorateCellWithWeed:(Weed *)weed parentViewController:(UIViewController *)parentViewController;
 
-+ (CGFloat)heightOfWeedTableViewCell:(Weed *)weed;
++ (CGFloat)heightOfWeedTableViewCell:(Weed *)weed width:(double)width;
 
 @end

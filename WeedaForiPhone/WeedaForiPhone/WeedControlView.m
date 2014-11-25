@@ -19,7 +19,8 @@
 @implementation WeedControlView
 
 static double PADDING = 5;
-static double LABEL_WIDTH = 50;
+static double LABEL_WIDTH = 60;
+static double SIMPLE_MODE_LABEL_WIDTH = 20;
 static double LABEL_HEIGHT = 14;
 
 static double LIGHT_ICON_HEIGHT = 14;
@@ -33,63 +34,85 @@ static double FONT_SIZE = 10;
 static NSInteger SHOW_SEED_USERS = 1;
 static NSInteger SHOW_WATER_USERS = 2;
 
-- (instancetype)initWithFrame:(CGRect)frame weed:(Weed*) weed parentViewController:(UIViewController *) parentViewController
+- (instancetype)initWithFrame:(CGRect)frame isSimpleMode:(BOOL)isSimpleMode
 {
     self = [super initWithFrame:frame];
     if (self) {
-        _weed = weed;
-        _parentViewController = parentViewController;
+        self.isSimpleMode = isSimpleMode;
         double frameWidth = frame.size.width;
         double frameHeight = frame.size.height;
         double section1CenterX = frameWidth / 6.0;
         double section2CenterX = frameWidth * 0.5;
         double section3CenterX = frameWidth * 5.0 / 6.0;
         double centerY = frameHeight/2.0;
-        self.light = [[UIButton alloc] initWithFrame:CGRectMake(section1CenterX - (LIGHT_ICON_WIDTH + PADDING + LABEL_WIDTH)/2.0, centerY - LIGHT_ICON_HEIGHT/2.0, LIGHT_ICON_WIDTH, LIGHT_ICON_HEIGHT)];
+        
+        double labelWidth = LABEL_WIDTH;
+        if (isSimpleMode) {
+            labelWidth = SIMPLE_MODE_LABEL_WIDTH;
+        }
+        
+        self.light = [[UIButton alloc] initWithFrame:CGRectMake(section1CenterX - (LIGHT_ICON_WIDTH + PADDING + labelWidth)/2.0, centerY - LIGHT_ICON_HEIGHT/2.0, LIGHT_ICON_WIDTH, LIGHT_ICON_HEIGHT)];
         [self addSubview:self.light];
-        self.seed = [[UIButton alloc] initWithFrame:CGRectMake(section2CenterX - (SEED_ICON_WIDTH + PADDING + LABEL_WIDTH)/2.0, centerY - SEED_ICON_HEIGHT/2.0, SEED_ICON_WIDTH, SEED_ICON_HEIGHT)];
+        self.seed = [[UIButton alloc] initWithFrame:CGRectMake(section2CenterX - (SEED_ICON_WIDTH + PADDING + labelWidth)/2.0, centerY - SEED_ICON_HEIGHT/2.0, SEED_ICON_WIDTH, SEED_ICON_HEIGHT)];
         [self addSubview:self.seed];
-        self.waterDrop = [[UIButton alloc] initWithFrame:CGRectMake(section3CenterX - (WATER_ICON_WIDTH + PADDING + LABEL_WIDTH)/2.0, centerY - WATER_ICON_HEIGHT/2.0 - 2, WATER_ICON_WIDTH, WATER_ICON_HEIGHT)];
+        self.waterDrop = [[UIButton alloc] initWithFrame:CGRectMake(section3CenterX - (WATER_ICON_WIDTH + PADDING + labelWidth)/2.0, centerY - WATER_ICON_HEIGHT/2.0 - 2, WATER_ICON_WIDTH, WATER_ICON_HEIGHT)];
         [self addSubview:self.waterDrop];
-        self.lightCount = [[UIButton alloc] initWithFrame:CGRectMake(section1CenterX + (LIGHT_ICON_WIDTH + PADDING - LABEL_WIDTH)/2.0, centerY - LABEL_HEIGHT/2.0, LABEL_WIDTH, LABEL_HEIGHT)];
+        
+        self.lightCount = [[UIButton alloc] initWithFrame:CGRectMake(section1CenterX + (LIGHT_ICON_WIDTH + PADDING - labelWidth)/2.0, centerY - LABEL_HEIGHT/2.0, labelWidth, LABEL_HEIGHT)];
         [self.lightCount setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
         [self.lightCount.titleLabel setFont:[UIFont systemFontOfSize:FONT_SIZE]];
         [self addSubview:self.lightCount];
-        self.seedCount = [[UIButton alloc] initWithFrame:CGRectMake(section2CenterX + (SEED_ICON_WIDTH + PADDING - LABEL_WIDTH)/2.0, centerY - LABEL_HEIGHT/2.0, LABEL_WIDTH, LABEL_HEIGHT)];
+        self.lightCount.enabled = !isSimpleMode;
+        
+        self.seedCount = [[UIButton alloc] initWithFrame:CGRectMake(section2CenterX + (SEED_ICON_WIDTH + PADDING - labelWidth)/2.0, centerY - LABEL_HEIGHT/2.0, labelWidth, LABEL_HEIGHT)];
         [self.seedCount setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
         [self.seedCount.titleLabel setFont:[UIFont systemFontOfSize:FONT_SIZE]];
         [self addSubview:self.seedCount];
-        self.waterCount = [[UIButton alloc] initWithFrame:CGRectMake(section3CenterX + (WATER_ICON_WIDTH + PADDING - LABEL_WIDTH)/2.0, centerY - LABEL_HEIGHT/2.0, LABEL_WIDTH, LABEL_HEIGHT)];
+        self.seedCount.enabled = !isSimpleMode;
+        
+        self.waterCount = [[UIButton alloc] initWithFrame:CGRectMake(section3CenterX + (WATER_ICON_WIDTH + PADDING - labelWidth)/2.0, centerY - LABEL_HEIGHT/2.0, labelWidth, LABEL_HEIGHT)];
         [self.waterCount setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
         [self.waterCount.titleLabel setFont:[UIFont systemFontOfSize:FONT_SIZE]];
         [self addSubview:self.waterCount];
+        self.waterCount.enabled = !isSimpleMode;
         
-        [self updateView];
     }
     return self;
 }
 
+- (void) decorateWithWeed:(Weed *) weed parentViewController:(UIViewController *) parentViewController
+{
+    _weed = weed;
+    _parentViewController = parentViewController;
+    [self updateView];
+}
+
+
 - (void) updateView
 {
-    [self.waterCount setTitle:[NSString stringWithFormat:@"%@ DROPS", _weed.water_count] forState:UIControlStateNormal];
+    [self.waterCount setTitle:[NSString stringWithFormat:(self.isSimpleMode? @"%@" : @"%@ DROPS"), _weed.water_count] forState:UIControlStateNormal];
     if([_weed.water_count intValue] <= 0)
         [self.waterCount setEnabled:NO];
     else
         [self.waterCount setEnabled:YES];
     self.waterCount.tag = SHOW_WATER_USERS;
-    [self.waterCount removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-    [self.waterCount addTarget:self action:@selector(showUsers:)forControlEvents:UIControlEventTouchDown];
+    if (!self.isSimpleMode) {
+        [self.waterCount removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+        [self.waterCount addTarget:self action:@selector(showUsers:)forControlEvents:UIControlEventTouchDown];
+    }
     
-    [self.seedCount setTitle:[NSString stringWithFormat:@"%@ SEEDS", _weed.seed_count] forState:UIControlStateNormal];
+    [self.seedCount setTitle:[NSString stringWithFormat:(self.isSimpleMode? @"%@" : @"%@ SEEDS"), _weed.seed_count] forState:UIControlStateNormal];
     if([_weed.seed_count intValue] <= 0)
         [self.seedCount setEnabled:NO];
     else
         [self.seedCount setEnabled:YES];
     self.seedCount.tag = SHOW_SEED_USERS;
-    [self.seedCount removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-    [self.seedCount addTarget:self action:@selector(showUsers:)forControlEvents:UIControlEventTouchDown];
+    if (!self.isSimpleMode) {
+        [self.seedCount removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+        [self.seedCount addTarget:self action:@selector(showUsers:)forControlEvents:UIControlEventTouchDown];
+    }
     
-    [self.lightCount setTitle:[NSString stringWithFormat:@"%@ LIGHTS", _weed.light_count] forState:UIControlStateNormal];
+    [self.lightCount setTitle:[NSString stringWithFormat:(self.isSimpleMode? @"%@" : @"%@ LIGHTS"), _weed.light_count] forState:UIControlStateNormal];
     [self.lightCount setEnabled:NO];
     
     if ([_weed.if_cur_user_water_it intValue] == 1) {
