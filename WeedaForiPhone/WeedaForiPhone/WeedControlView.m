@@ -175,9 +175,11 @@ static NSInteger SHOW_WATER_USERS = 2;
     
     AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
     if (_weed.user_id != appDelegate.currentUser.id) {
+        [self updateSubViewFrameWithWidth:(self.frame.size.width)];
         self.deleteWeed.hidden = YES;
     } else {
         [self updateSubViewFrameWithWidth:(self.frame.size.width - CGRectGetWidth(self.deleteWeed.frame) - PADDING)];
+        self.deleteWeed.hidden = NO;
     }
 }
 
