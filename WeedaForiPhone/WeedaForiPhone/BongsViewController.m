@@ -635,7 +635,9 @@ static NSInteger MAX_ROWS_TO_SHOW_IN_ALL_SEARCH = 5;
             NSUInteger row = [self.weeds indexOfObject:weed];
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:WEEDS_SECTION];
             [self.weeds removeObject:weed];
-            [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:YES];
+            if ([self.tableView cellForRowAtIndexPath:indexPath]) {
+                [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:YES];
+            }
         }
     }
 }

@@ -532,7 +532,9 @@ static NSString *CELL_REUSE_ID = @"WeedTableCell";
             NSUInteger row = [self.weeds indexOfObject:weed];
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:0];
             [self.weeds removeObject:weed];
-            [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:YES];
+            if ([self.tableView cellForRowAtIndexPath:indexPath]) {
+                [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:YES];
+            }
         }
     }
 }

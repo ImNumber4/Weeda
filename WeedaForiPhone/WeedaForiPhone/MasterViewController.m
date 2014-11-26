@@ -339,7 +339,9 @@ static NSString *TABLE_CELL_REUSE_ID = @"WeedTableCell";
         if (indexPath) {
             NSError *error = nil;
             [self.fetchedResultsController performFetch:&error];
-            [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:YES];
+            if ([self.tableView cellForRowAtIndexPath:indexPath]) {
+                [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:YES];
+            }
         }
     }
 }
