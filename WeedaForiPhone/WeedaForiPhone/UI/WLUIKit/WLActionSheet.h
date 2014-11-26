@@ -23,6 +23,7 @@
                 otherButtonTitles:(NSString *)otherButtonTitles, ...;
 
 - (void)showInView: (UIView *)view;
+- (void)showFromTabBar:(UITabBar *)view;
 
 - (NSString *)buttonTitleAtIndex:(NSInteger)buttonIndex;
 

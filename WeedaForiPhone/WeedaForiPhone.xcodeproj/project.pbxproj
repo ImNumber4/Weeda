@@ -142,6 +142,8 @@
 		EA38FC5F190C9A9D007D652B /* WeedImage.m in Sources */ = {isa = PBXBuildFile; fileRef = EA38FC5E190C9A9D007D652B /* WeedImage.m */; };
 		EA38FC68190D6D26007D652B /* CropImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA38FC67190D6D26007D652B /* CropImageViewController.m */; };
 		EA38FC851917067F007D652B /* welcome.png in Resources */ = {isa = PBXBuildFile; fileRef = EA38FC841917067F007D652B /* welcome.png */; };
+		EA3F1C641A25442C0057CF27 /* delete_weed.png in Resources */ = {isa = PBXBuildFile; fileRef = EA3F1C631A25442C0057CF27 /* delete_weed.png */; };
+		EA3F1C711A25A56E0057CF27 /* WLCoreDataHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = EA3F1C701A25A56E0057CF27 /* WLCoreDataHelper.m */; };
 		EA4DB14C196114D6005ED7F7 /* WeedShowImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4DB14A196114D6005ED7F7 /* WeedShowImageCell.m */; };
 		EA4DB14D196114D6005ED7F7 /* WeedShowImageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EA4DB14B196114D6005ED7F7 /* WeedShowImageCell.xib */; };
 		EA69A1D819E5D75E00532722 /* WLImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = EA69A1D719E5D75E00532722 /* WLImageView.m */; };
@@ -438,6 +440,9 @@
 		EA38FC66190D6D26007D652B /* CropImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CropImageViewController.h; sourceTree = "<group>"; };
 		EA38FC67190D6D26007D652B /* CropImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CropImageViewController.m; sourceTree = "<group>"; };
 		EA38FC841917067F007D652B /* welcome.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = welcome.png; path = WeedaForiPhone/Images/welcome.png; sourceTree = "<group>"; };
+		EA3F1C631A25442C0057CF27 /* delete_weed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = delete_weed.png; path = WeedaForiPhone/Images/delete_weed.png; sourceTree = "<group>"; };
+		EA3F1C6F1A25A56E0057CF27 /* WLCoreDataHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WLCoreDataHelper.h; path = WeedaForiPhone/Library/WLCoreDataHelper.h; sourceTree = "<group>"; };
+		EA3F1C701A25A56E0057CF27 /* WLCoreDataHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WLCoreDataHelper.m; path = WeedaForiPhone/Library/WLCoreDataHelper.m; sourceTree = "<group>"; };
 		EA4DB149196114D6005ED7F7 /* WeedShowImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WeedShowImageCell.h; path = WeedaForiPhone/UI/WeedShowImageCell.h; sourceTree = "<group>"; };
 		EA4DB14A196114D6005ED7F7 /* WeedShowImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WeedShowImageCell.m; path = WeedaForiPhone/UI/WeedShowImageCell.m; sourceTree = "<group>"; };
 		EA4DB14B196114D6005ED7F7 /* WeedShowImageCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = WeedShowImageCell.xib; path = WeedaForiPhone/UI/WeedShowImageCell.xib; sourceTree = "<group>"; };
@@ -777,6 +782,7 @@
 		A9CA8E9218F3DAC6004F095D /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				EA3F1C631A25442C0057CF27 /* delete_weed.png */,
 				A926EEFA1A14B8DF00AB2F04 /* bong.png */,
 				A926EEFB1A14B8DF00AB2F04 /* selected_bong.png */,
 				A94BFD501A05B48800757715 /* icon_white.png */,
@@ -950,6 +956,8 @@
 			children = (
 				EACD1155197CA76F00E45475 /* WeedImageController.h */,
 				EACD1156197CA76F00E45475 /* WeedImageController.m */,
+				EA3F1C6F1A25A56E0057CF27 /* WLCoreDataHelper.h */,
+				EA3F1C701A25A56E0057CF27 /* WLCoreDataHelper.m */,
 			);
 			name = Library;
 			sourceTree = "<group>";
@@ -1134,6 +1142,7 @@
 				A92E513D19047C6000FC518F /* follow.png in Resources */,
 				A93BB0BC19F3AB3A00514940 /* i502_icon.png in Resources */,
 				A92E514019048B0400FC518F /* followed.png in Resources */,
+				EA3F1C641A25442C0057CF27 /* delete_weed.png in Resources */,
 				A914CCB018CD756200B870D8 /* InfoPlist.strings in Resources */,
 				EA76A4FD194E77A100B60F04 /* picture.png in Resources */,
 				EAAFA4591A0309A3005AC429 /* open_by_others.png in Resources */,
@@ -1255,6 +1264,7 @@
 				A926EF211A196D4E00AB2F04 /* FollowButton.m in Sources */,
 				A92E513A19046E2A00FC518F /* UserTableViewCell.m in Sources */,
 				A99A0A3119173C9F00E2C50B /* Weed.m in Sources */,
+				EA3F1C711A25A56E0057CF27 /* WLCoreDataHelper.m in Sources */,
 				0EB8C4E519C5C00900BD64E1 /* UIColor+JSMessagesView.m in Sources */,
 				A98A89C51960C46D005A5871 /* VendorMKAnnotationView.m in Sources */,
 				A9DFADE019A055E900AB00BA /* ColorDefinition.m in Sources */,

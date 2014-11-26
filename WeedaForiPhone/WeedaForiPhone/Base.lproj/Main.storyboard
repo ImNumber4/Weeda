@@ -501,6 +501,7 @@
                         <segue destination="Yp8-Ok-QlB" kind="modal" identifier="editProfile" modalTransitionStyle="coverVertical" id="we0-76-yLy"/>
                         <segue destination="PuH-Xh-jza" kind="push" identifier="messageUser" id="Z8M-XG-GdH"/>
                         <segue destination="28O-4B-JEg" kind="push" identifier="editSettings" id="7bF-bp-S1O"/>
+                        <segue destination="6ro-Wi-h5r" kind="push" identifier="showWeed" id="quG-8d-10s"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eoY-9M-DDM" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -687,8 +688,8 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="aBn-FK-paW"/>
-        <segue reference="6VO-gD-9Hh"/>
-        <segue reference="drt-oA-QVo"/>
+        <segue reference="6sd-rf-LCf"/>
+        <segue reference="quG-8d-10s"/>
         <segue reference="Z8M-XG-GdH"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="0.24313727021217346" green="0.64705884456634521" blue="0.24705883860588074" alpha="1" colorSpace="deviceRGB"/>

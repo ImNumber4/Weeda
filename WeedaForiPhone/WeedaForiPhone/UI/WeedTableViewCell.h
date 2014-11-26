@@ -19,6 +19,7 @@
 - (void)selectWeedContent:(UIGestureRecognizer *)recognizer;
 @optional
 - (BOOL)pressURL:(NSURL *)url;
+- (void)didFinishDeleteCell;
 @end
 
 @interface WeedTableViewCell : UITableViewCell <UICollectionViewDelegate, UICollectionViewDataSource> {

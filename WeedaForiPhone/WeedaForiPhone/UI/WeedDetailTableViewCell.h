@@ -18,6 +18,8 @@
 - (BOOL)pressURL:(NSURL *)url;
 - (void)tableViewCell:(WeedDetailTableViewCell *)cell height:(CGFloat)height needReload:(BOOL)needReload;
 - (void)selectWeedContent:(UIGestureRecognizer *)recognizer;
+@optional
+- (void)didFinishDeleteCell;
 @end
 
 @interface WeedDetailTableViewCell : UITableViewCell {

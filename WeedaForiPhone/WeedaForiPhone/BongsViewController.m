@@ -17,6 +17,7 @@
 #import "ImageUtil.h"
 #import "BlurView.h"
 #import "WeedTableViewCell.h"
+#import "WLCoreDataHelper.h"
 
 @interface BongsViewController () <WeedDetailTableViewCellDelegate, UITableViewDataSource, UITableViewDelegate, WeedTableViewCellDelegate, UISearchBarDelegate>
 @property (nonatomic, retain) NSMutableArray *weeds;
@@ -119,6 +120,8 @@ static NSInteger MAX_ROWS_TO_SHOW_IN_ALL_SEARCH = 5;
     self.refreshControl = refresh;
     [self.tableView addSubview:self.refreshControl];
     [self.tableView sendSubviewToBack:self.refreshControl];
+    
+    [WLCoreDataHelper addCoreDataChangedNotificationTo:self selecter:@selector(objectChangedNotificationReceived:)];
     
     [self fetachData];
 }
@@ -630,5 +633,18 @@ static NSInteger MAX_ROWS_TO_SHOW_IN_ALL_SEARCH = 5;
  // Pass the selected object to the new view controller.
  }
  */
+
+- (void)objectChangedNotificationReceived:(NSNotification *)notification
+{
+    NSArray *deleteWeeds = [[notification userInfo] objectForKey:NSDeletedObjectsKey];
+    for (Weed *weed in deleteWeeds) {
+        if ([self.weeds containsObject:weed]) {
+            NSUInteger row = [self.weeds indexOfObject:weed];
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:WEEDS_SECTION];
+            [self.weeds removeObject:weed];
+            [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:YES];
+        }
+    }
+}
 
 @end

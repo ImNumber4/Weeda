@@ -8,7 +8,18 @@
 
 #import <UIKit/UIKit.h>
 
+@class WeedControlView;
+
+@protocol WeedControlViewDelegate <NSObject>
+
+@optional
+- (void)controlView:(WeedControlView *)controlView didDeletedWeed:(Weed *)weed;
+
+@end
+
 @interface WeedControlView : UIView
+
+@property (nonatomic, weak) id<WeedControlViewDelegate> delegate;
 
 @property (strong, nonatomic) UIButton *waterCount;
 @property (strong, nonatomic) UIButton *seedCount;
@@ -16,6 +27,7 @@
 @property (nonatomic, strong) UIButton *waterDrop;
 @property (nonatomic, strong) UIButton *light;
 @property (nonatomic, strong) UIButton *lightCount;
+@property (nonatomic, strong) UIButton *deleteWeed;
 @property (nonatomic, strong) UITableView *lights;
 @property (nonatomic) BOOL isSimpleMode;
 

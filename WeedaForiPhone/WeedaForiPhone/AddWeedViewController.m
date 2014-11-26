@@ -395,11 +395,11 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
 {
     for (int i = 0; i < self.dataArray.count; i++) {
         UIImage * image = (UIImage *)[self.dataArray objectAtIndex:i];
-        UIImage *thumbnails = [UIImage imageWithData:UIImageJPEGRepresentation(image, 25)];
+        UIImage *thumbnails = [UIImage imageWithData:UIImageJPEGRepresentation(image, 0.25)];
         [[SDImageCache sharedImageCache] storeImage:thumbnails forKey:[[WeedImageController imageURLOfWeedId:weed.id userId:weed.user_id count:i quality:25] absoluteString] toDisk:NO];
         
         NSMutableURLRequest *request = [[RKObjectManager sharedManager] multipartFormRequestWithObject:nil method:RKRequestMethodPOST path:[NSString stringWithFormat:@"image/upload/%@", weed.id] parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-            [formData appendPartWithFileData:UIImageJPEGRepresentation(image, 100)
+            [formData appendPartWithFileData:UIImageJPEGRepresentation(image, 1.0)
                                         name:@"image"
                                     fileName:[NSString stringWithFormat:@"%d.jpeg", i]
                                     mimeType:@"image/jpeg"];

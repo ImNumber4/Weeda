@@ -157,10 +157,10 @@
 - (void)openWith:(id)sender
 {
     WLActionSheet *as = [[WLActionSheet alloc]initWithTitle:nil
-                                                                            delegate:self
-                                                              cancelButtonTitle:@"Cancel"
-                                                       destructiveButtonTitle:nil
-                                                              otherButtonTitles:OPEN_WITH_MAIL, OPEN_WITH_SAFARI, nil];
+                                                   delegate:self
+                                          cancelButtonTitle:@"Cancel"
+                                     destructiveButtonTitle:nil
+                                          otherButtonTitles:OPEN_WITH_MAIL, OPEN_WITH_SAFARI, nil];
     [as showInView:_webView];
 }
 

@@ -14,6 +14,8 @@
 @property (nonatomic, retain) NSString *imageId;
 @property (nonatomic) NSInteger quality;
 
+@property (nonatomic) BOOL isLoadingSuccessed;
+
 @property (nonatomic, retain) NSIndexPath *indexPath;
 @property (nonatomic, retain) NSArray *dataSource;
 
