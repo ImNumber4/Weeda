@@ -32,7 +32,7 @@ typedef NS_ENUM(NSInteger, DetailCellShowingType)
     DetailCellShowingTypeUrl
 };
 
-@interface WeedDetailTableViewCell() <UITextViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource, NSURLConnectionDataDelegate, WLImageCollectionViewDelegate, YTPlayerViewDelegate>
+@interface WeedDetailTableViewCell() <UITextViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource, NSURLConnectionDataDelegate, WLImageCollectionViewDelegate, YTPlayerViewDelegate, WeedControlViewDelegate>
 
 @property (nonatomic, retain) NSArray *dataSource;
 @property (nonatomic, retain) NSMutableArray *adjustedCellSize;
@@ -227,6 +227,8 @@ static NSString * WEB_SERVER_GET_FAVICON_URL = @"http://www.google.com/s2/favico
     }
     [_controlView setFrame:CGRectMake(0, self.frame.size.height - CONTROL_VIEW_HEIGHT, self.frame.size.width, CONTROL_VIEW_HEIGHT)];
     [_controlView decorateWithWeed:weed parentViewController:parentViewController];
+    _controlView.delegate = self;
+
     [self addSubview:self.controlView];
 
     [self createWebSummaryView];
@@ -355,12 +357,16 @@ static NSString * WEB_SERVER_GET_FAVICON_URL = @"http://www.google.com/s2/favico
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    WLImageCollectionViewCell *cell = (WLImageCollectionViewCell *)[_collectionView cellForItemAtIndexPath:indexPath];
+    if (!cell.imageView.isLoadingSuccessed) {
+        return;
+    }
+    
     WLImageCollectionView *imageCollectionView = [[WLImageCollectionView alloc]initWithFrame:[UIScreen mainScreen].bounds];
     imageCollectionView.dataSource = _dataSource;
     imageCollectionView.delegate = self;
     [[UIApplication sharedApplication].windows.lastObject addSubview:imageCollectionView];
     
-    WLImageCollectionViewCell *cell = (WLImageCollectionViewCell *)[_collectionView cellForItemAtIndexPath:indexPath];
     [imageCollectionView displayWithSelectedImage:indexPath currentCell:cell];
 }
 
@@ -579,7 +585,7 @@ static NSString * WEB_SERVER_GET_FAVICON_URL = @"http://www.google.com/s2/favico
 {
     NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*)response;
     if (httpResponse.statusCode >= 400) {
-        NSLog(@"http request failed, code: %ld, reason: %@.", httpResponse.statusCode, [NSHTTPURLResponse localizedStringForStatusCode:httpResponse.statusCode]);
+        NSLog(@"http request failed, code: %ld, reason: %@.", (long)httpResponse.statusCode, [NSHTTPURLResponse localizedStringForStatusCode:httpResponse.statusCode]);
         return;
     }
     
@@ -658,6 +664,14 @@ static NSString * WEB_SERVER_GET_FAVICON_URL = @"http://www.google.com/s2/favico
 {
     NSLog(@"Http Request failed, url: %@, error: %@", connection.description, error.localizedDescription);
     [_playerView stopVideo];
+}
+
+#pragma mark - WeedControlView delegate
+- (void)controlView:(WeedControlView *)controlView didDeletedWeed:(Weed *)weed
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(didFinishDeleteCell)]) {
+        [self.delegate didFinishDeleteCell];
+    }
 }
 
 @end

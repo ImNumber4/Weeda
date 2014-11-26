@@ -238,12 +238,16 @@ static double STORE_TYPE_ICON_SIZE = 15;
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    WLImageCollectionViewCell *cell = (WLImageCollectionViewCell *)[_collectionView cellForItemAtIndexPath:indexPath];
+    if (!cell.imageView.isLoadingSuccessed) {
+        return;
+    }
+    
     WLImageCollectionView *imageCollectionView = [[WLImageCollectionView alloc]initWithFrame:[UIScreen mainScreen].bounds];
     imageCollectionView.dataSource = _dataSource;
     imageCollectionView.delegate = self;
     [[UIApplication sharedApplication].windows.lastObject addSubview:imageCollectionView];
     
-    WLImageCollectionViewCell *cell = (WLImageCollectionViewCell *)[_collectionView cellForItemAtIndexPath:indexPath];
     [imageCollectionView displayWithSelectedImage:indexPath currentCell:cell];
 }
 

@@ -70,6 +70,9 @@
             if (!image) {
                 NSLog(@"Loading image failed, url: %@, error: %@.", imageURL.absoluteString, error);
                 self.image = [UIImage imageNamed:@"Oops.png"];
+                self.isLoadingSuccessed = NO;
+            } else {
+                self.isLoadingSuccessed = YES;
             }
         }];
     }
@@ -109,8 +112,10 @@
     } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
         if (image && finished) {
             self.image = image;
+            self.isLoadingSuccessed = YES;
         } else {
             NSLog(@"Max Image View loading Image failed. image url: %@, error: %@", imageURL, error);
+            self.isLoadingSuccessed = NO;
         }
         [indicatorView stopAnimating];
         [indicatorView removeFromSuperview];
@@ -144,7 +149,7 @@
 
 - (void)handleTap:(UIGestureRecognizer *)gesture
 {
-    if (_allowFullScreenDisplay) {
+    if (_allowFullScreenDisplay && !self.isLoadingSuccessed) {
         [(UIView *)[UIApplication sharedApplication].windows.lastObject addSubview:_maxDisplayView];
         [_maxDisplayView display:self];
     }

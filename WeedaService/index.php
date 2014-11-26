@@ -12,6 +12,7 @@ $request = new Request();
 error_log('Url elements: ' . print_r($_SERVER['REQUEST_URI'], true));
 error_log('Method: ' . $request->verb);
 error_log('Incoming param: ' . print_r($request->parameters, true));
+error_log('Content Type: ' . $_SERVER['CONTENT_TYPE']);
 
 
 Hook($request);

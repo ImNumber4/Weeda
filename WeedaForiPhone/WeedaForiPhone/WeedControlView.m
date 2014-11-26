@@ -8,11 +8,13 @@
 
 #import "WeedControlView.h"
 #import "ImageUtil.h"
+#import "MasterViewController.h"
 #import "AddWeedViewController.h"
 #import "UserListViewController.h"
 #import "UIViewHelper.h"
+#import "WLActionSheet.h"
 
-@interface WeedControlView()
+@interface WeedControlView() <UIAlertViewDelegate>
 @property (nonatomic, strong) Weed *weed;
 @property (nonatomic, strong) UIViewController *parentViewController;
 @end
@@ -31,6 +33,9 @@ static double SEED_ICON_HEIGHT = 12;
 static double WATER_ICON_WIDTH = 7;
 static double WATER_ICON_HEIGHT = 14;
 static double FONT_SIZE = 10;
+
+static double DELETE_ICON_WIDTH = 15;
+static double DELETE_ICON_HEIGHT = 15;
 
 static NSInteger SHOW_SEED_USERS = 1;
 static NSInteger SHOW_WATER_USERS = 2;
@@ -77,8 +82,32 @@ static NSInteger SHOW_WATER_USERS = 2;
         [self addSubview:self.waterCount];
         self.waterCount.enabled = !isSimpleMode;
         
+        self.deleteWeed = [[UIButton alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.frame) - DELETE_ICON_WIDTH - PADDING * 2, centerY - DELETE_ICON_HEIGHT / 2.0, DELETE_ICON_WIDTH, DELETE_ICON_HEIGHT)];
+        [self addSubview:self.deleteWeed];
     }
     return self;
+}
+
+- (void)updateSubViewFrameWithWidth:(double)width
+{
+    double frameWidth = width;
+    double frameHeight = self.frame.size.height;
+    double section1CenterX = frameWidth / 6.0;
+    double section2CenterX = frameWidth * 0.5;
+    double section3CenterX = frameWidth * 5.0 / 6.0;
+    double centerY = frameHeight / 2.0;
+    
+    double labelWidth = LABEL_WIDTH;
+    if (_isSimpleMode) {
+        labelWidth = SIMPLE_MODE_LABEL_WIDTH;
+    }
+    
+    self.light.frame = CGRectMake(section1CenterX - (LIGHT_ICON_WIDTH + PADDING + labelWidth)/2.0, centerY - LIGHT_ICON_HEIGHT/2.0, LIGHT_ICON_WIDTH, LIGHT_ICON_HEIGHT);
+    self.seed.frame = CGRectMake(section2CenterX - (SEED_ICON_WIDTH + PADDING + labelWidth)/2.0, centerY - SEED_ICON_HEIGHT/2.0, SEED_ICON_WIDTH, SEED_ICON_HEIGHT);
+    self.waterDrop.frame = CGRectMake(section3CenterX - (WATER_ICON_WIDTH + PADDING + labelWidth)/2.0, centerY - WATER_ICON_HEIGHT/2.0 - 2, WATER_ICON_WIDTH, WATER_ICON_HEIGHT);
+    self.lightCount.frame = CGRectMake(section1CenterX + (LIGHT_ICON_WIDTH + PADDING - labelWidth)/2.0, centerY - LABEL_HEIGHT/2.0, labelWidth, LABEL_HEIGHT);
+    self.seedCount.frame = CGRectMake(section2CenterX + (SEED_ICON_WIDTH + PADDING - labelWidth)/2.0, centerY - LABEL_HEIGHT/2.0, labelWidth, LABEL_HEIGHT);
+    self.waterCount.frame = CGRectMake(section3CenterX + (WATER_ICON_WIDTH + PADDING - labelWidth)/2.0, centerY - LABEL_HEIGHT/2.0, labelWidth, LABEL_HEIGHT);
 }
 
 - (void) decorateWithWeed:(Weed *) weed parentViewController:(UIViewController *) parentViewController
@@ -130,6 +159,7 @@ static NSInteger SHOW_WATER_USERS = 2;
     } else {
         [self.light setBackgroundImage:[WeedControlView getGrayLightIcon] forState:UIControlStateNormal];
     }
+    [self.deleteWeed setBackgroundImage:[WeedControlView getGrayDeleteIcon] forState:UIControlStateNormal];
     
     [self.waterDrop removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
     [self.waterDrop addTarget:self action:@selector(waterIt:)forControlEvents:UIControlEventTouchDown];
@@ -139,6 +169,18 @@ static NSInteger SHOW_WATER_USERS = 2;
     
     [self.light removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
     [self.light addTarget:self action:@selector(lightIt:)forControlEvents:UIControlEventTouchDown];
+    
+    [self.deleteWeed removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+    [self.deleteWeed addTarget:self action:@selector(deleteIt:) forControlEvents:UIControlEventTouchDown];
+    
+    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    if (_weed.user_id != appDelegate.currentUser.id) {
+        [self updateSubViewFrameWithWidth:(self.frame.size.width)];
+        self.deleteWeed.hidden = YES;
+    } else {
+        [self updateSubViewFrameWithWidth:(self.frame.size.width - CGRectGetWidth(self.deleteWeed.frame) - PADDING)];
+        self.deleteWeed.hidden = NO;
+    }
 }
 
 - (void)waterIt:(id) sender {
@@ -227,6 +269,16 @@ static NSInteger SHOW_WATER_USERS = 2;
     [AddWeedViewController presentControllerFrom:_parentViewController withWeed:_weed];
 }
 
+- (void)deleteIt:(id)sender
+{
+    UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Delete Weed"
+                                                 message:@"Are you sure to delete this weed?"
+                                                delegate:self
+                                       cancelButtonTitle:@"cancel"
+                                       otherButtonTitles:@"delete", nil];
+    [av show];
+}
+
 + (UIImage *) getLightIcon
 {
     return [UIImage imageNamed:@"light.png"];
@@ -257,6 +309,11 @@ static NSInteger SHOW_WATER_USERS = 2;
     return [UIImage imageNamed:@"waterdropgray.png"];
 }
 
++ (UIImage *) getGrayDeleteIcon
+{
+    return [UIImage imageNamed:@"delete_weed.png"];
+}
+
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
@@ -264,5 +321,30 @@ static NSInteger SHOW_WATER_USERS = 2;
     // Drawing code
 }
 */
+
+#pragma mark - UIAlertView Delegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    NSString *clickButtonStr = [alertView buttonTitleAtIndex:buttonIndex];
+    if ([clickButtonStr isEqualToString:@"delete"]) {
+        [self deleteWeedEntity:_weed];
+    }
+}
+
+- (void)deleteWeedEntity:(Weed *)weed
+{
+    [[RKObjectManager sharedManager] deleteObject:weed path:[NSString stringWithFormat:@"weed/delete/%@", weed.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+        NSLog(@"Response: %@", mappingResult);
+    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        NSLog(@"Failure saving post: %@", error.localizedDescription);
+    }];
+    
+    RKManagedObjectStore *objectStore = [[RKObjectManager sharedManager] managedObjectStore];
+    [objectStore.mainQueueManagedObjectContext deleteObject:weed];
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(controlView:didDeletedWeed:)]) {
+        [self.delegate controlView:self didDeletedWeed:weed];
+    }
+}
 
 @end

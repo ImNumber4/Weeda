@@ -15,6 +15,7 @@
 #import "User.h"
 #import "WeedImage.h"
 #import "WLWebViewController.h"
+#import "WLCoreDataHelper.h"
 
 #import <RestKit/RestKit.h>
 
@@ -54,6 +55,9 @@ static NSString *TABLE_CELL_REUSE_ID = @"WeedTableCell";
     fetchRequest.sortDescriptors = @[descriptor];
     
     NSError *error = nil;
+    
+    //Add weed core data notification for change moniter
+    [WLCoreDataHelper addCoreDataChangedNotificationTo:self selecter:@selector(objectChangedNotificationReceived:)];
     
     // Setup fetched results
     self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
@@ -128,32 +132,7 @@ static NSString *TABLE_CELL_REUSE_ID = @"WeedTableCell";
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Return NO if you do not want the specified item to be editable.
-    Weed * weed = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    return [weed.user_id intValue] == [appDelegate.currentUser.id integerValue]?YES:NO;
-}
-
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        Weed * weed = [self.fetchedResultsController objectAtIndexPath:indexPath];
-        [[RKObjectManager sharedManager] deleteObject:weed path:[NSString stringWithFormat:@"weed/delete/%@", weed.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-            NSLog(@"Response: %@", mappingResult);
-        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-            NSLog(@"Failure saving post: %@", error.localizedDescription);
-        }];
-        
-        NSManagedObjectContext *context = [self.fetchedResultsController managedObjectContext];
-        [context deleteObject:[self.fetchedResultsController objectAtIndexPath:indexPath]];
-        NSError *error = nil;
-        if (![context save:&error]) {
-            // Replace this implementation with code to handle the error appropriately.
-            // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-            abort();
-        }
-    }
+    return NO;
 }
 
 - (void)didReceiveMemoryWarning
@@ -350,6 +329,19 @@ static NSString *TABLE_CELL_REUSE_ID = @"WeedTableCell";
 - (NSUInteger)supportedInterfaceOrientations
 {
     return UIInterfaceOrientationMaskPortrait;
+}
+
+- (void)objectChangedNotificationReceived:(NSNotification *)notification
+{
+    NSArray *deleteObjects = [[notification userInfo] objectForKey:NSDeletedObjectsKey];
+    for (Weed *weed in deleteObjects) {
+        NSIndexPath *indexPath = [self.fetchedResultsController indexPathForObject:weed];
+        if (indexPath) {
+            NSError *error = nil;
+            [self.fetchedResultsController performFetch:&error];
+            [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:YES];
+        }
+    }
 }
 
 @end

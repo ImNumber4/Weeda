@@ -23,6 +23,7 @@
 #import "BlurView.h"
 #import "UIViewHelper.h"
 #import "ImageUtil.h"
+#import "WLCoreDataHelper.h"
 
 @interface UserViewController () <CropImageDelegate>
 
@@ -92,6 +93,9 @@ static NSString *CELL_REUSE_ID = @"WeedTableCell";
     CALayer * l = [self.userAvatar layer];
     [l setMasksToBounds:YES];
     [l setCornerRadius:7.0];
+    
+    //Add data change notification
+    [WLCoreDataHelper addCoreDataChangedNotificationTo:self selecter:@selector(objectChangedNotificationReceived:)];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -167,6 +171,11 @@ static NSString *CELL_REUSE_ID = @"WeedTableCell";
     return cell;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [self performSegueWithIdentifier:@"showWeed" sender:self];
+}
+
 - (void)decorateCellWithWeed:(Weed *)weed cell:(WeedBasicTableViewCell *)cell
 {
     [cell decorateCellWithContent:weed.content username:weed.username time:weed.time user_id:weed.user_id user_type:nil/*make it to be nil on purpose, this view already has icon*/];
@@ -224,7 +233,7 @@ static NSString *CELL_REUSE_ID = @"WeedTableCell";
 {
     User *user = [User new];
     NSMutableURLRequest *request = [[RKObjectManager sharedManager] multipartFormRequestWithObject:user method:RKRequestMethodPOST path:@"user/upload" parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-        [formData appendPartWithFileData:UIImageJPEGRepresentation(image, 100)
+        [formData appendPartWithFileData:UIImageJPEGRepresentation(image, 1.0)
                                     name:@"avatar"
                                 fileName:@"avatar.jpeg"
                                 mimeType:@"image/jpeg"];
@@ -512,6 +521,20 @@ static NSString *CELL_REUSE_ID = @"WeedTableCell";
         _buttonContainerView.frame = CGRectMake(_buttonContainerView.frame.origin.x, _uploadAvatarView.frame.size.height - 135, _buttonContainerView.frame.size.width, _buttonContainerView.frame.size.height);
         _background.alpha = 0.8;
     }];
+}
+
+#pragma mark - Notification receiver
+- (void)objectChangedNotificationReceived:(NSNotification *)notification
+{
+    NSArray *deleteWeeds = [[notification userInfo] objectForKey:NSDeletedObjectsKey];
+    for (Weed *weed in deleteWeeds) {
+        if ([self.weeds containsObject:weed]) {
+            NSUInteger row = [self.weeds indexOfObject:weed];
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:0];
+            [self.weeds removeObject:weed];
+            [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:YES];
+        }
+    }
 }
 
 @end

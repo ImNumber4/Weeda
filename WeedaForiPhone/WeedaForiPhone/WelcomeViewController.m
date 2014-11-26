@@ -30,6 +30,8 @@
 @property (nonatomic, retain) UILabel *errorMessage;
 @property (nonatomic) BOOL isEmailValid;
 
+@property (nonatomic, retain) NSMutableDictionary *subViewCenterY;
+
 - (IBAction)backgroudTab:(id)sender;
 
 @end
@@ -57,10 +59,13 @@ static double SIGN_UP_SIZE = 100;
     // Do any additional setup after loading the view.
     self.view.backgroundColor = [ColorDefinition greenColor];
     
+    _subViewCenterY = [[NSMutableDictionary alloc] init];
+    
     self.titleImage = [[UIImageView alloc]initWithFrame:CGRectMake((self.view.frame.size.width - ICON_INITIAL_SIZE)/2.0, 190, ICON_INITIAL_SIZE, ICON_INITIAL_SIZE)];
     self.titleImage.image = [UIImage imageNamed:@"icon_white.png"];
     [self.view addSubview:self.titleImage];
     [self.view bringSubviewToFront:self.titleImage];
+    [_subViewCenterY setObject:[NSNumber numberWithDouble:110.0] forKey:@"titleImage"];
     
     double leftPadding = 20;
     
@@ -80,6 +85,7 @@ static double SIGN_UP_SIZE = 100;
     self.txtUsername.clearButtonMode = UITextFieldViewModeWhileEditing;
     self.txtUsername.delegate = self;
     [UIViewHelper roundCorners:self.txtUsername byRoundingCorners:UIRectCornerTopLeft|UIRectCornerTopRight radius:5];
+    [_subViewCenterY setObject:[NSNumber numberWithDouble:self.txtUsername.center.y] forKey:@"txtUsername"];
     
     self.txtPassword = [[UITextField alloc] initWithFrame:CGRectMake(self.txtUsername.frame.origin.x, self.txtUsername.frame.origin.y + self.txtUsername.frame.size.height + 1,  self.txtUsername.frame.size.width,  self.txtUsername.frame.size.height)];
     [self.view addSubview:self.txtPassword];
@@ -98,6 +104,7 @@ static double SIGN_UP_SIZE = 100;
     [UIViewHelper insertLeftPaddingToTextField:self.txtPassword width:10];
     self.txtPassword.backgroundColor = [UIColor whiteColor];
     [UIViewHelper roundCorners:self.txtPassword byRoundingCorners:UIRectCornerBottomLeft|UIRectCornerBottomRight radius:5];
+    [_subViewCenterY setObject:[NSNumber numberWithDouble:self.txtPassword.center.y] forKey:@"txtPassword"];
     
     double lbForgotPwWidth = 105;
     double lbForgotPwHeight = 21;
@@ -108,6 +115,7 @@ static double SIGN_UP_SIZE = 100;
     [self.view addSubview:self.lbForgotPw];
     self.lbForgotPw.userInteractionEnabled = YES;
     [self.lbForgotPw addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(forgorPassword:)]];
+    [_subViewCenterY setObject:[NSNumber numberWithDouble:self.lbForgotPw.center.y] forKey:@"lbForgotPw"];
     
     self.btnSignIn = [[UIButton alloc] initWithFrame:CGRectMake(self.txtUsername.frame.origin.x, self.lbForgotPw.frame.origin.y + self.lbForgotPw.frame.size.height + 20, self.txtUsername.frame.size.width, self.txtUsername.frame.size.height)];
     [self.btnSignIn addTarget:self action:@selector(signIn:) forControlEvents:UIControlEventTouchDown];
@@ -117,6 +125,7 @@ static double SIGN_UP_SIZE = 100;
     [self.btnSignIn.titleLabel setFont:[UIFont systemFontOfSize:15]];
     self.btnSignIn.layer.cornerRadius = 5;
     [self.view addSubview:self.btnSignIn];
+    [_subViewCenterY setObject:[NSNumber numberWithDouble:self.btnSignIn.center.y] forKey:@"btnSignIn"];
     
     self.btnSignUp = [[UIButton alloc] initWithFrame:CGRectMake((self.view.frame.size.width - SIGN_UP_SIZE) / 2.0, self.btnSignIn.frame.origin.y + self.btnSignIn.frame.size.height + 5, SIGN_UP_SIZE, self.txtUsername.frame.size.height)];
     [self.btnSignUp addTarget:self action:@selector(signUp:) forControlEvents:UIControlEventTouchDown];
@@ -124,6 +133,7 @@ static double SIGN_UP_SIZE = 100;
     [self.btnSignUp.titleLabel setTextColor:[UIColor whiteColor]];
     [self.btnSignUp.titleLabel setFont:self.lbForgotPw.font];
     [self.view addSubview:self.btnSignUp];
+    [_subViewCenterY setObject:[NSNumber numberWithDouble:self.btnSignUp.center.y] forKey:@"btnSignUp"];
     
     self.btnSignIn.alpha = 0;
     self.btnSignUp.alpha = 0;
@@ -361,12 +371,12 @@ static double SIGN_UP_SIZE = 100;
 - (void)keyboardWillShow:(NSNotification *)aNotification
 {
     [UIView animateWithDuration:0.2 animations:^{
-        _txtUsername.center = CGPointMake(_txtUsername.center.x, _txtUsername.center.y - 25);
-        _txtPassword.center = CGPointMake(_txtPassword.center.x, _txtPassword.center.y - 25);
-        _btnSignIn.center = CGPointMake(_btnSignIn.center.x, _btnSignIn.center.y - 25);
-        _btnSignUp.center = CGPointMake(_btnSignUp.center.x, _btnSignUp.center.y - 25);
-        _lbForgotPw.center = CGPointMake(_lbForgotPw.center.x, _lbForgotPw.center.y - 25);
-        _titleImage.center = CGPointMake(_titleImage.center.x, _titleImage.center.y - 25);
+        _txtUsername.center = CGPointMake(_txtUsername.center.x, ((NSNumber *)[_subViewCenterY objectForKey:@"txtUsername"]).doubleValue - 37);
+        _txtPassword.center = CGPointMake(_txtPassword.center.x, ((NSNumber *)[_subViewCenterY objectForKey:@"txtPassword"]).doubleValue - 37);
+        _btnSignIn.center = CGPointMake(_btnSignIn.center.x, ((NSNumber *)[_subViewCenterY objectForKey:@"btnSignIn"]).doubleValue - 37);
+        _btnSignUp.center = CGPointMake(_btnSignUp.center.x, ((NSNumber *)[_subViewCenterY objectForKey:@"btnSignUp"]).doubleValue - 37);
+        _lbForgotPw.center = CGPointMake(_lbForgotPw.center.x, ((NSNumber *)[_subViewCenterY objectForKey:@"lbForgotPw"]).doubleValue - 37);
+        _titleImage.center = CGPointMake(_titleImage.center.x, ((NSNumber *)[_subViewCenterY objectForKey:@"titleImage"]).doubleValue - 37);
     }];
 }
 
@@ -374,12 +384,12 @@ static double SIGN_UP_SIZE = 100;
 - (void)keyboardWillBeHidden:(NSNotification*)aNotification
 {
     [UIView animateWithDuration:0.2 animations:^{
-        _txtUsername.center = CGPointMake(_txtUsername.center.x, _txtUsername.center.y + 25);
-        _txtPassword.center = CGPointMake(_txtPassword.center.x, _txtPassword.center.y + 25);
-        _btnSignIn.center = CGPointMake(_btnSignIn.center.x, _btnSignIn.center.y + 25);
-        _btnSignUp.center = CGPointMake(_btnSignUp.center.x, _btnSignUp.center.y + 25);
-        _lbForgotPw.center = CGPointMake(_lbForgotPw.center.x, _lbForgotPw.center.y + 25);
-        _titleImage.center = CGPointMake(_titleImage.center.x, _titleImage.center.y + 25);
+        _txtUsername.center = CGPointMake(_txtUsername.center.x, ((NSNumber *)[_subViewCenterY objectForKey:@"txtUsername"]).doubleValue);
+        _txtPassword.center = CGPointMake(_txtPassword.center.x, ((NSNumber *)[_subViewCenterY objectForKey:@"txtPassword"]).doubleValue);
+        _btnSignIn.center = CGPointMake(_btnSignIn.center.x, ((NSNumber *)[_subViewCenterY objectForKey:@"btnSignIn"]).doubleValue);
+        _btnSignUp.center = CGPointMake(_btnSignUp.center.x, ((NSNumber *)[_subViewCenterY objectForKey:@"btnSignUp"]).doubleValue);
+        _lbForgotPw.center = CGPointMake(_lbForgotPw.center.x, ((NSNumber *)[_subViewCenterY objectForKey:@"lbForgotPw"]).doubleValue);
+        _titleImage.center = CGPointMake(_titleImage.center.x, ((NSNumber *)[_subViewCenterY objectForKey:@"titleImage"]).doubleValue);
     }];
 }
 

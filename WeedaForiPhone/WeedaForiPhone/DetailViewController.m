@@ -332,4 +332,9 @@ static NSString * WEED_PLACEHOLDER_CELL_REUSE_ID = @"PlaceHolderCell";
 //    [self setNeedsStatusBarAppearanceUpdate];
 }
 
+- (void)didFinishDeleteCell
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 @end

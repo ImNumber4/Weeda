@@ -162,9 +162,9 @@ class UserController extends Controller
 	public function signout() {		
 		try {
 			$currentUser_id = $this->getCurrentUser();
-			setcookie(Controller::$USER_ID_COOKIE_NAME, '', time() - 3600);
-			setcookie(Controller::$USERNAME_COOKIE_NAME, '', time() - 3600);
-			setcookie(Controller::$PASSWORD_COOKIE_NAME, '', time() - 3600);
+			setrawcookie(Controller::$USER_ID_COOKIE_NAME, '', time() - 3600);
+			setrawcookie(Controller::$USERNAME_COOKIE_NAME, '', time() - 3600);
+			setrawcookie(Controller::$PASSWORD_COOKIE_NAME, '', time() - 3600);
 		} catch (DependencyDataMissingException $e) {
 			//already log out.
 			return;
@@ -223,9 +223,6 @@ class UserController extends Controller
 			throw new InvalidRequestException("Inputs are not valid");
 		}
 		
-		error_log("token: " . $_POST['token']);
-		error_log("user_id: " . $_POST['user_id']);
-		
 		$token_id = $_POST['token_id'];
 		$password = $_POST['password'];
 		$user_id = $_POST['user_id'];
@@ -245,12 +242,9 @@ class UserController extends Controller
 	}
 	
 	private function update_cookie($user){
-		error_log($user['id']);
-				error_log($user['username']);
-				error_log($user['password']);
-		setcookie(Controller::$USER_ID_COOKIE_NAME, $user['id'], time() + (86400 * 7), '/');
-		setcookie(Controller::$USERNAME_COOKIE_NAME, $user['username'], time() + (86400 * 7), '/');
-		setcookie(Controller::$PASSWORD_COOKIE_NAME, $user['password'], time() + (86400 * 7), '/');
+		setrawcookie(Controller::$USER_ID_COOKIE_NAME, $user['id'], time() + (86400 * 7), '/');
+		setrawcookie(Controller::$USERNAME_COOKIE_NAME, $user['username'], time() + (86400 * 7), '/');
+		setrawcookie(Controller::$PASSWORD_COOKIE_NAME, $user['password'], time() + (86400 * 7), '/');
 	}
 	
 	public function updateUsername($username) {

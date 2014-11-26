@@ -161,6 +161,20 @@
     }];
 }
 
+- (void)showFromTabBar:(UITabBar *)view
+{
+    [view.superview addSubview:self];
+    [view.superview insertSubview:_backgroud belowSubview:self];
+    
+    self.center = CGPointMake(CGRectGetWidth(view.superview.frame) * 0.5, CGRectGetHeight(view.superview.frame) + CGRectGetHeight(self.frame) * 0.5);
+    [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+        self.center = CGPointMake(self.center.x, CGRectGetHeight(view.superview.frame) - CGRectGetHeight(self.frame) * 0.5);
+        _backgroud.alpha = 0.4;
+    } completion:^(BOOL finished) {
+        ;
+    }];
+}
+
 - (NSString *)buttonTitleAtIndex:(NSInteger)buttonIndex
 {
     return [[_buttons objectAtIndex:buttonIndex] titleLabel].text;
