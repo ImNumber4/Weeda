@@ -47,7 +47,7 @@ static double STORE_TYPE_ICON_SIZE = 15;
         
         self.timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width - PADDING - TIME_LABEL_WIDTH, self.userAvatar.frame.origin.y, TIME_LABEL_WIDTH, AVATAR_SIZE/2.0)];
         self.timeLabel.textAlignment = NSTextAlignmentRight;
-        [self.timeLabel setFont:[UIFont systemFontOfSize:10.0]];
+        [self.timeLabel setFont:[UIFont boldSystemFontOfSize:10.0]];
         [self.timeLabel setTextColor:[UIColor grayColor]];
         [self addSubview:self.timeLabel];
         

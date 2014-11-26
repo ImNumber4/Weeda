@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface UserListViewController : UITableViewController  <NSFetchedResultsControllerDelegate>
-@property (strong) NSArray *users;
+@property (nonatomic, assign) NSArray *users;
+@property (nonatomic, copy) RKObjectRequestOperation *operation;
 @end

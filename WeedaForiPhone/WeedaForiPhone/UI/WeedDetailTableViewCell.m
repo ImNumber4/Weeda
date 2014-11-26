@@ -91,6 +91,7 @@ static NSString * WEB_SERVER_GET_FAVICON_URL = @"http://www.google.com/s2/favico
         [l setMasksToBounds:YES];
         [l setCornerRadius:AVATAR_SIZE/2.0];
         self.userAvatar.userInteractionEnabled = YES;
+        
         [self addSubview:self.userAvatar];
         
         self.userIcon = [[UserIcon alloc] initWithFrame:CGRectMake(self.userAvatar.frame.origin.x + self.userAvatar.frame.size.width - ICON_SIZE/2.0, self.userAvatar.frame.origin.y + self.userAvatar.frame.size.height - ICON_SIZE, ICON_SIZE, ICON_SIZE)];
@@ -110,8 +111,8 @@ static NSString * WEB_SERVER_GET_FAVICON_URL = @"http://www.google.com/s2/favico
         [self addSubview:self.userLabel];
         
         self.timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.userLabel.frame.origin.x, self.userLabel.frame.origin.y + self.userLabel.frame.size.height, self.userLabel.frame.size.width, self.userAvatar.frame.size.height/2.0)];
-        self.timeLabel.font = [UIFont systemFontOfSize:9.0];
-        [self.timeLabel setTextColor:[UIColor darkGrayColor]];
+        self.timeLabel.font = [UIFont boldSystemFontOfSize:10.0];
+        [self.timeLabel setTextColor:[UIColor grayColor]];
         [self addSubview:self.timeLabel];
         
         self.weedContentLabel = [[UITextView alloc] initWithFrame:CGRectMake(self.userAvatar.frame.origin.x, self.userAvatar.frame.origin.y + self.userAvatar.frame.size.height, self.frame.size.width - PADDING * 2, 30)];
