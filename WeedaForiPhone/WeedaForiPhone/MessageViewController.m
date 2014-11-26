@@ -27,7 +27,6 @@
 @implementation MessageViewController
 
 static NSString * TABLE_CELL_REUSE_ID = @"MessageCell";
-static NSInteger UNREAD_DOT_TAG = 121;
 
 static double DOT_RADIUS = 4;
 static double DOT_PAD = 10.0;
@@ -235,22 +234,11 @@ static double DOT_PAD = 10.0;
 - (void) decorateUnreadCell:(WeedBasicTableViewCell *)cell
 {
     [cell setBackgroundColor:[ColorDefinition lightGreenColor]];
-    UIView *unread = [cell viewWithTag:UNREAD_DOT_TAG];
-    if (!unread) {
-        UIView *unread = [[UIView alloc] initWithFrame:CGRectMake(0, 5, 5, cell.frame.size.height - 10)];
-        unread.tag = UNREAD_DOT_TAG;
-        unread.backgroundColor = [ColorDefinition greenColor];
-        [cell addSubview:unread];
-    }
 }
 
 - (void) decorateReadCell:(WeedBasicTableViewCell *)cell
 {
     [cell setBackgroundColor:[UIColor clearColor]];
-    UIView *unread = [cell viewWithTag:UNREAD_DOT_TAG];
-    if (unread) {
-        [unread removeFromSuperview];
-    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

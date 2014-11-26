@@ -22,7 +22,7 @@
 @implementation WeedControlView
 
 static double PADDING = 5;
-static double LABEL_WIDTH = 70;
+static double LABEL_WIDTH = 65;
 static double SIMPLE_MODE_LABEL_WIDTH = 30;
 static double LABEL_HEIGHT = 14;
 
