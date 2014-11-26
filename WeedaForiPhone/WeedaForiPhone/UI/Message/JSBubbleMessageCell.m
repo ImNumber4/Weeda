@@ -60,7 +60,6 @@
 @end
 
 
-
 @implementation JSBubbleMessageCell
 
 #pragma mark - Setup
@@ -123,6 +122,9 @@
                                                                              self.contentView.frame.size.height - kJSAvatarSize,
                                                                              kJSAvatarSize,
                                                                              kJSAvatarSize)];
+        self.avatarImageView.userInteractionEnabled = true;
+        [self.avatarImageView addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleTap:)]];
+        
         self.avatarImageView.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin
                                                  | UIViewAutoresizingFlexibleLeftMargin
                                                  | UIViewAutoresizingFlexibleRightMargin
@@ -140,6 +142,13 @@
                                               bubbleStyle:bubbleStyle];
     [self.contentView addSubview:self.bubbleView];
     [self.contentView sendSubviewToBack:self.bubbleView];
+}
+
+- (void)handleTap:(UIGestureRecognizer *)gesture
+{
+    if ([self.delegate respondsToSelector:@selector(avatarTapped:)]) {
+        [self.delegate avatarTapped:self];
+    }
 }
 
 #pragma mark - Initialization

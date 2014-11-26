@@ -8,7 +8,6 @@
 
 #import "DetailViewController.h"
 #import "UserViewController.h"
-#import "UserListViewController.h"
 #import "WeedDetailTableViewCell.h"
 #import "WeedBasicTableViewCell.h"
 #import "TabBarController.h"

@@ -288,17 +288,10 @@ static NSInteger MAX_ROWS_TO_SHOW_IN_ALL_SEARCH = 5;
                 [controller setUser_id:user.id];
                 [self.navigationController pushViewController:controller animated:YES];
             } else {
-                self.tableView.userInteractionEnabled = false;
-                [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"user/getRecommendedUsers/%d", 20] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-                    UserListViewController* viewController = [[UserListViewController alloc] initWithNibName:nil bundle:nil];
-                    [viewController setUsers:mappingResult.array];
-                    viewController.title = @"Recommended Users";
-                    [self.navigationController pushViewController:viewController animated:YES];
-                    self.tableView.userInteractionEnabled = true;
-                } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-                    RKLogError(@"Load failed with error: %@", error);
-                    self.tableView.userInteractionEnabled = true;
-                }];
+                UserListViewController* viewController = [[UserListViewController alloc] initWithNibName:nil bundle:nil];
+                [viewController setUrlPathToPullUsers:[NSString stringWithFormat:@"user/getRecommendedUsers/%d", 20]];
+                viewController.title = @"Recommended Users";
+                [self.navigationController pushViewController:viewController animated:YES];
             }
         }
     } else if (tableView.tag == SEARCH_RESULT_TABLE_VIEW) {

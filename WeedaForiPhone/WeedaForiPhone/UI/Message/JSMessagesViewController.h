@@ -67,6 +67,7 @@ typedef enum {
 
 @optional
 - (BOOL)hasTimestampForRowAtIndexPath:(NSIndexPath *)indexPath;
+- (void)avatarTappedForIndexPath:(NSIndexPath *)indexPath;
 
 @end
 

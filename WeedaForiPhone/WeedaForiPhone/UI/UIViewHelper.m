@@ -27,6 +27,14 @@
     view.layer.mask = maskLayer;
 }
 
++ (UIView *)circleWithColor:(UIColor *)color radius:(int)radius {
+    UIView *circle = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 2 * radius, 2 * radius)];
+    circle.backgroundColor = color;
+    circle.layer.cornerRadius = radius;
+    circle.layer.masksToBounds = YES;
+    return circle;
+}
+
 + (void) insertLeftPaddingToTextField:(UITextField *) textField width:(double)width
 {
     textField.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, width, textField.frame.size.height)];

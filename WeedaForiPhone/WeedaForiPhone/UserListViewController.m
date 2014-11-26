@@ -32,7 +32,33 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
     [self.tableView setSeparatorInset:UIEdgeInsetsZero];
     self.tableView.tableFooterView = [[UIView alloc] init];
     [self.tableView registerClass:[UserTableViewCell class] forCellReuseIdentifier:USER_TABLE_CELL_REUSE_ID];
-    [self loadData];
+    if (self.users && [self.users count] > 0) {
+        [self loadData];
+    } else if (self.urlPathToPullUsers) {
+        UIRefreshControl *refresh = [[UIRefreshControl alloc] init];
+        [refresh addTarget:self action:@selector(refreshView:) forControlEvents:UIControlEventValueChanged];
+        self.refreshControl = refresh;
+        [self refreshView:self.refreshControl];
+    }
+}
+
+-(void)refreshView:(UIRefreshControl *)refresh {
+    refresh.attributedTitle = [[NSAttributedString alloc] initWithString:@"Loading data..."];
+    [self fetachData];
+}
+
+- (void)fetachData
+{
+    [[RKObjectManager sharedManager] getObjectsAtPath:self.urlPathToPullUsers parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+        [self setUsers:mappingResult.array];
+        [self loadData];
+        [self.refreshControl endRefreshing];
+    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        RKLogError(@"Load %@ failed with error: %@", self.urlPathToPullUsers, error);
+        [self.refreshControl endRefreshing];
+        UIAlertView *av = [[UIAlertView alloc] initWithTitle:nil message:@"Failed to get users. Please pull to try again." delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
+        [av show];
+    }];
 }
 
 - (void)loadData

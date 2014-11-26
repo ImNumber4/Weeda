@@ -46,7 +46,7 @@
 
 #define INPUT_HEIGHT 35.0f
 
-@interface JSMessagesViewController () <JSDismissiveTextViewDelegate, WLActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CropImageDelegate>
+@interface JSMessagesViewController () <JSDismissiveTextViewDelegate, WLActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CropImageDelegate, JSBubbleMessageCellDelegate>
 
 - (void)setup;
 
@@ -261,6 +261,8 @@ static NSString * TAKE_PHOTO = @"Take Photo";
     
     [cell setMessage:[self.dataSource textForRowAtIndexPath:indexPath]];
     [cell setBackgroundColor:tableView.backgroundColor];
+    cell.delegate = self;
+    
     return cell;
 }
 
@@ -311,6 +313,15 @@ static NSString * TAKE_PHOTO = @"Take Photo";
         case JSMessagesViewAvatarPolicyNone:
         default:
             return NO;
+    }
+}
+
+- (void)avatarTapped:(id)sender
+{
+    CGPoint senderPosition = [sender convertPoint:CGPointZero toView:self.tableView];
+    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:senderPosition];
+    if ([self.delegate respondsToSelector:@selector(avatarTappedForIndexPath:)]) {
+        [self.delegate avatarTappedForIndexPath:indexPath];
     }
 }
 

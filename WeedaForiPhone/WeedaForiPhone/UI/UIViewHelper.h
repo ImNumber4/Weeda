@@ -11,6 +11,7 @@
 @interface UIViewHelper : NSObject
 + (void) roundCorners:(UIView *) view byRoundingCorners:(UIRectCorner)corners;
 + (void) roundCorners:(UIView *) view byRoundingCorners:(UIRectCorner)corners radius:(double) radius;
++ (UIView *)circleWithColor:(UIColor *)color radius:(int)radius;
 + (void) insertLeftPaddingToTextField:(UITextField *) textField width:(double)width;
 + (NSString *) getCountString:(NSNumber*) count;
 + (NSString *) formatTime:(NSDate *)time;

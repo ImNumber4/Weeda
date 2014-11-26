@@ -11,9 +11,7 @@
 #import "WeedBasicTableViewCell.h"
 #import "DetailViewController.h"
 #import "ConversationViewController.h"
-
-#define RED_DOT_RADIUS 4
-#define RED_DOT_PAD 10.0
+#import "UIViewHelper.h"
 
 @interface MessageViewController () <UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, WeedBasicTableViewCellDelegate>
 
@@ -29,6 +27,10 @@
 @implementation MessageViewController
 
 static NSString * TABLE_CELL_REUSE_ID = @"MessageCell";
+static NSInteger UNREAD_DOT_TAG = 121;
+
+static double DOT_RADIUS = 4;
+static double DOT_PAD = 10.0;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -80,25 +82,17 @@ static NSString * TABLE_CELL_REUSE_ID = @"MessageCell";
 
 - (void) initRedDotViews
 {
-    self.redDotForMessages = [self circleWithColor:self.segmentedControl.tintColor radius:RED_DOT_RADIUS];
+    self.redDotForMessages = [UIViewHelper circleWithColor:self.segmentedControl.tintColor radius:DOT_RADIUS];
     [self.segmentedControl addSubview:self.redDotForMessages];
     [self.segmentedControl bringSubviewToFront:self.redDotForMessages];
-    [self.redDotForMessages setFrame:CGRectMake(self.segmentedControl.frame.size.width - RED_DOT_PAD  - RED_DOT_RADIUS * 2.0, self.segmentedControl.frame.size.height/2.0 - RED_DOT_RADIUS, self.redDotForMessages.frame.size.width, self.redDotForMessages.frame.size.height)];
+    [self.redDotForMessages setFrame:CGRectMake(self.segmentedControl.frame.size.width - DOT_PAD  - DOT_RADIUS * 2.0, self.segmentedControl.frame.size.height/2.0 - DOT_RADIUS, self.redDotForMessages.frame.size.width, self.redDotForMessages.frame.size.height)];
     self.redDotForMessages.hidden = true;
     
-    self.redDotForNotifications = [self circleWithColor:self.segmentedControl.tintColor radius:RED_DOT_RADIUS];
+    self.redDotForNotifications = [UIViewHelper circleWithColor:self.segmentedControl.tintColor radius:DOT_RADIUS];
     [self.segmentedControl addSubview:self.redDotForNotifications];
     [self.segmentedControl bringSubviewToFront:self.redDotForNotifications];
-    [self.redDotForNotifications setFrame:CGRectMake(self.segmentedControl.frame.size.width/2.0 - RED_DOT_PAD - RED_DOT_RADIUS * 2.0, self.segmentedControl.frame.size.height/2.0 - RED_DOT_RADIUS, self.redDotForNotifications.frame.size.width, self.redDotForNotifications.frame.size.height)];
+    [self.redDotForNotifications setFrame:CGRectMake(self.segmentedControl.frame.size.width/2.0 - DOT_PAD - DOT_RADIUS * 2.0, self.segmentedControl.frame.size.height/2.0 - DOT_RADIUS, self.redDotForNotifications.frame.size.width, self.redDotForNotifications.frame.size.height)];
     self.redDotForNotifications.hidden = true;
-}
-
-- (UIView *)circleWithColor:(UIColor *)color radius:(int)radius {
-    UIView *circle = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 2 * radius, 2 * radius)];
-    circle.backgroundColor = color;
-    circle.layer.cornerRadius = radius;
-    circle.layer.masksToBounds = YES;
-    return circle;
 }
 
 - (NSFetchedResultsController *) createNSFetchedResultsController:(NSString *) type sectionNameKeyPath:(NSString *)sectionNameKeyPath
@@ -212,17 +206,23 @@ static NSString * TABLE_CELL_REUSE_ID = @"MessageCell";
         message = [self.conversations objectAtIndex:indexPath.section];
         [cell setBackgroundColor:[UIColor clearColor]];
         NSIndexPath *originalIndexPathForMessage = [[self getNSFetchedResultsController] indexPathForObject:message];
+        BOOL hasUnread = false;
         for(Message * message_in_section in [[[[self getNSFetchedResultsController] sections] objectAtIndex:originalIndexPathForMessage.section] objects]) {
             if ([message_in_section.is_read intValue] == 0) {
-                [cell setBackgroundColor:[ColorDefinition lightGreenColor]];
+                hasUnread = true;
             }
+        }
+        if (hasUnread) {
+            [self decorateUnreadCell:cell];
+        } else {
+            [self decorateReadCell:cell];
         }
     } else {
         message = [[self getNSFetchedResultsController] objectAtIndexPath:indexPath];
         if ([message.is_read intValue] == 0) {
-            [cell setBackgroundColor:[ColorDefinition lightGreenColor]];
+            [self decorateUnreadCell:cell];
         } else {
-            [cell setBackgroundColor:[UIColor clearColor]];
+            [self decorateReadCell:cell];
         }
     }
     
@@ -230,6 +230,27 @@ static NSString * TABLE_CELL_REUSE_ID = @"MessageCell";
     cell.delegate = self;
     
     return cell;
+}
+
+- (void) decorateUnreadCell:(WeedBasicTableViewCell *)cell
+{
+    [cell setBackgroundColor:[ColorDefinition lightGreenColor]];
+    UIView *unread = [cell viewWithTag:UNREAD_DOT_TAG];
+    if (!unread) {
+        UIView *unread = [[UIView alloc] initWithFrame:CGRectMake(0, 5, 5, cell.frame.size.height - 10)];
+        unread.tag = UNREAD_DOT_TAG;
+        unread.backgroundColor = [ColorDefinition greenColor];
+        [cell addSubview:unread];
+    }
+}
+
+- (void) decorateReadCell:(WeedBasicTableViewCell *)cell
+{
+    [cell setBackgroundColor:[UIColor clearColor]];
+    UIView *unread = [cell viewWithTag:UNREAD_DOT_TAG];
+    if (unread) {
+        [unread removeFromSuperview];
+    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

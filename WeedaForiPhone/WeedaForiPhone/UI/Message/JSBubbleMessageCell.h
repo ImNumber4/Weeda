@@ -42,8 +42,16 @@ typedef enum {
     JSAvatarStyleNone
 } JSAvatarStyle;
 
+@protocol JSBubbleMessageCellDelegate <NSObject>
+
+@optional
+- (void)avatarTapped:(id)sender;
+
+@end
 
 @interface JSBubbleMessageCell : UITableViewCell
+
+@property (weak, nonatomic) id<JSBubbleMessageCellDelegate> delegate;
 
 #pragma mark - Initialization
 - (id)initWithBubbleType:(JSBubbleMessageType)type

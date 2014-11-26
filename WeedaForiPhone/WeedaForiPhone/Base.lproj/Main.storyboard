@@ -248,7 +248,7 @@
         <!--Conversation View Controller-->
         <scene sceneID="Crr-zE-VjZ">
             <objects>
-                <viewController hidesBottomBarWhenPushed="YES" id="PuH-Xh-jza" customClass="ConversationViewController" sceneMemberID="viewController">
+                <viewController id="PuH-Xh-jza" customClass="ConversationViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="66I-yo-Fll">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -686,9 +686,9 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
+        <segue reference="TQF-vn-XK1"/>
         <segue reference="aBn-FK-paW"/>
         <segue reference="6VO-gD-9Hh"/>
-        <segue reference="drt-oA-QVo"/>
         <segue reference="Z8M-XG-GdH"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="0.24313727021217346" green="0.64705884456634521" blue="0.24705883860588074" alpha="1" colorSpace="deviceRGB"/>

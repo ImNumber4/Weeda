@@ -13,6 +13,7 @@
 #import "NSString+JSMessagesView.h"
 #import "UserTableViewCell.h"
 #import "WeedImageController.h"
+#import "UserViewController.h"
 
 @interface ConversationViewController ()
 
@@ -46,6 +47,20 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
     self.dataSource = self;
     
     [self reloadView];
+}
+
+- (void) viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self tabBarController].tabBar.hidden = true;
+}
+
+- (void) viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [self.view sendSubviewToBack:self.usernameTextField];
+    [self.view sendSubviewToBack:self.usernameList];
+    [self tabBarController].tabBar.hidden = false;
 }
 
 - (void) reloadView {
@@ -97,13 +112,6 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
         [self showConversation];
         [self.inputToolBarView becomeFirstResponder];
     }
-}
-
-- (void) viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    [self.view sendSubviewToBack:self.usernameTextField];
-    [self.view sendSubviewToBack:self.usernameList];
 }
 
 - (BOOL) isNewConversation
@@ -233,6 +241,14 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
     message.is_read = [NSNumber numberWithInt:1];//to make it marked as read locally
     message.message = [text trimWhitespace];
     [self createMessageOnServer:message];
+}
+
+- (void)avatarTappedForIndexPath:(NSIndexPath *)indexPath
+{
+    Message *message = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    UserViewController *controller = (UserViewController *)[[AppDelegate getMainStoryboard] instantiateViewControllerWithIdentifier:@"UserViewController"];
+    [controller setUser_id:message.sender_id];
+    [self.navigationController pushViewController:controller animated:YES];
 }
 
 - (void) createMessageOnServer:(Message *) message {

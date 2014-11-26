@@ -27,6 +27,4 @@
 @property (weak, nonatomic) IBOutlet UITextView *userDescription;
 @property (weak, nonatomic) IBOutlet MKMapView *location;
 
-@property (strong) NSArray *users;
-
 @end

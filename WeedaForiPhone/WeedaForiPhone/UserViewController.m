@@ -19,6 +19,7 @@
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "EditProfileViewController.h"
 #import "ConversationViewController.h"
+#import "UserListViewController.h"
 #import "BlurView.h"
 #import "UIViewHelper.h"
 #import "ImageUtil.h"
@@ -193,12 +194,16 @@ static NSString *CELL_REUSE_ID = @"WeedTableCell";
 - (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if([[segue identifier] isEqualToString:@"showUsers"]) {
+        UserListViewController *controller = (UserListViewController *)[segue destinationViewController];
+        NSString * feedUrl;
         if ([sender tag] == SHOW_FOLLOWERS) {
-            [[segue destinationViewController] setTitle:@"Followed by"];
+            feedUrl = [NSString stringWithFormat:@"user/getFollowers/%@/%d", self.user.id, 10];
+            [controller setTitle:@"Followed by"];
         } else {
-            [[segue destinationViewController] setTitle:@"Following"];
+            feedUrl = [NSString stringWithFormat:@"user/getFollowingUsers/%@/%d", self.user.id, 10];
+            [controller setTitle:@"Following"];
         }
-        [[segue destinationViewController] setUsers:self.users];
+        [controller setUrlPathToPullUsers:feedUrl];
     } else if ([[segue identifier] isEqualToString:@"showWeed"]) {
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         Weed *weed = [self.weeds objectAtIndex:indexPath.row];
@@ -333,18 +338,7 @@ static NSString *CELL_REUSE_ID = @"WeedTableCell";
 
 -(void) showUsers:(id)sender {
     if (self.user) {
-        NSString * feedUrl;
-        if ([sender tag] == SHOW_FOLLOWERS) {
-            feedUrl = [NSString stringWithFormat:@"user/getFollowers/%@/%d", self.user.id, 10];
-        } else {
-            feedUrl = [NSString stringWithFormat:@"user/getFollowingUsers/%@/%d", self.user.id, 10];
-        }
-        [[RKObjectManager sharedManager] getObjectsAtPath:feedUrl parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-            self.users = mappingResult.array;
-            [self performSegueWithIdentifier:@"showUsers" sender:sender];
-        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-            RKLogError(@"Load failed with error: %@", error);
-        }];
+        [self performSegueWithIdentifier:@"showUsers" sender:sender];
     }
 }
 
