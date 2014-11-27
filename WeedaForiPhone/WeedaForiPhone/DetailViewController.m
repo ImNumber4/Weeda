@@ -80,6 +80,36 @@ static NSString * WEED_PLACEHOLDER_CELL_REUSE_ID = @"PlaceHolderCell";
     [self.tableView registerClass:[WeedBasicTableViewCell class] forCellReuseIdentifier:WEED_BASIC_TABLE_CELL_REUSE_ID];
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:WEED_PLACEHOLDER_CELL_REUSE_ID];
     
+    if (self.currentWeed) {
+        [self loadLights];
+    } else {
+        [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/queryById/%@", self.currentWeedId]  parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+            if ([mappingResult.array count]) {
+                Weed * weed = mappingResult.array[0];
+                if (weed.shouldBeDeleted != nil && [weed.shouldBeDeleted intValue] == 0) {
+                    self.currentWeed = weed;
+                    NSIndexSet *section = [NSIndexSet indexSetWithIndex:CURRENT_WEED_SECTION_INDEX];
+                    [self.tableView reloadSections:section withRowAnimation:UITableViewRowAnimationAutomatic];
+                    [self loadLights];
+                } else {
+                    UIAlertView *av = [[UIAlertView alloc] initWithTitle:nil message:@"Sorry, weed has been deleted." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                    [av show];
+                    [self.navigationController popToRootViewControllerAnimated:YES];
+                }
+            }
+        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+            RKLogError(@"Failed to query weed by id due to error: %@", error);
+            UIAlertView *av = [[UIAlertView alloc] initWithTitle:nil message:@"Failed to get weed. Please try again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [av show];
+            [self.navigationController popToRootViewControllerAnimated:YES];
+        }];
+    }
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(exitFullScreen:) name:UIWindowDidBecomeHiddenNotification object:self.view.window];
+}
+
+- (void) loadLights
+{
     [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/getLights/%@", self.currentWeed.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
         NSSortDescriptor *descriptor=[[NSSortDescriptor alloc] initWithKey:@"id" ascending:YES];
         NSArray *descriptors=[NSArray arrayWithObject: descriptor];
@@ -111,8 +141,6 @@ static NSString * WEED_PLACEHOLDER_CELL_REUSE_ID = @"PlaceHolderCell";
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
         RKLogError(@"getLights failed with error: %@", error);
     }];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(exitFullScreen:) name:UIWindowDidBecomeHiddenNotification object:self.view.window];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -141,7 +169,7 @@ static NSString * WEED_PLACEHOLDER_CELL_REUSE_ID = @"PlaceHolderCell";
     if (section == PARENT_WEEDS_SECTION_INDEX) {
         return self.parentWeeds.count;
     } else if (section == CURRENT_WEED_SECTION_INDEX) {
-        return 1;
+        return self.currentWeed ? 1 : 0;
     } else if (section == PLACEHOLDER_SECTION_INDEX){
         return 1;
     } else {
@@ -198,7 +226,7 @@ static NSString * WEED_PLACEHOLDER_CELL_REUSE_ID = @"PlaceHolderCell";
         return [self getHeightForCurrentWeed];
     } else if ([indexPath section] == PLACEHOLDER_SECTION_INDEX) {
         CGFloat orginalOffset = self.tableView.contentOffset.y;
-        CGFloat contentHeight = self.tableView.bounds.size.height - [WeedDetailTableViewCell heightForCell:self.currentWeed showHeader:true] - (self.parentWeeds.count + self.lights.count) * [WeedBasicTableViewCell getCellHeight] + orginalOffset - self.tabBarController.tabBar.frame.size.height + 1;
+        CGFloat contentHeight = self.tableView.bounds.size.height - (self.currentWeed?[self getHeightForCurrentWeed]:0) - (self.parentWeeds.count + self.lights.count) * [WeedBasicTableViewCell getCellHeight] + orginalOffset - self.tabBarController.tabBar.frame.size.height + 1;
         if (contentHeight > 0.0) {
             return contentHeight;
         }else{

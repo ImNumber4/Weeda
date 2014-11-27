@@ -10,6 +10,7 @@
 
 @interface DetailViewController : UITableViewController
 
+@property (strong, nonatomic) id currentWeedId;
 @property (strong, nonatomic) Weed *currentWeed;
 @property (nonatomic, retain) NSMutableArray *parentWeeds;
 @property (nonatomic, retain) NSMutableArray *lights;

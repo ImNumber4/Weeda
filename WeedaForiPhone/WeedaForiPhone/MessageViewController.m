@@ -17,7 +17,6 @@
 
 @property (nonatomic, strong) NSFetchedResultsController *notificationFetchedResultsController;
 @property (nonatomic, strong) NSFetchedResultsController *messageFetchedResultsController;
-@property (nonatomic, retain) Weed *relatedWeedToShow; //use this to cache the weed user want to see before segue
 @property (nonatomic, retain) NSMutableArray* conversations;
 @property (nonatomic, retain) UIView* redDotForNotifications;
 @property (nonatomic, retain) UIView* redDotForMessages;
@@ -275,27 +274,22 @@ static double DOT_PAD = 10.0;
     Message *message = [[self getNSFetchedResultsController] objectAtIndexPath:indexPath];
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     if (([message.type isEqualToString:NOTIFICATION_TYPE]) && message.related_weed_id) {
-        [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/queryById/%@", message.related_weed_id]  parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-            if ([mappingResult.array count]) {
-                self.relatedWeedToShow = mappingResult.array[0];
-                //now mark this notification as read on server side
-                [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"message/read/%@", message.id]  parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-                    message.is_read = [NSNumber numberWithInt:1];
-                    [[[RKObjectManager sharedManager] managedObjectStore].mainQueueManagedObjectContext refreshObject:message mergeChanges:YES];
-                    NSError *error = nil;
-                    BOOL successful = [message.managedObjectContext save:&error];
-                    if (! successful) {
-                        NSLog(@"Save Error: %@",error);
-                    }
-                    [appDelegate decreaseBadgeCount:1];
-                    [self performSegueWithIdentifier:@"showWeed" sender:self];
-                } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-                    RKLogError(@"Failed to call message/read due to error: %@", error);
-                }];
-            }
-        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-            RKLogError(@"Failed to query weed by id due to error: %@", error);
-        }];
+        if ([message.is_read intValue] == 0) {
+            [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"message/read/%@", message.id]  parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                message.is_read = [NSNumber numberWithInt:1];
+                [[[RKObjectManager sharedManager] managedObjectStore].mainQueueManagedObjectContext refreshObject:message mergeChanges:YES];
+                NSError *error = nil;
+                BOOL successful = [message.managedObjectContext save:&error];
+                if (! successful) {
+                    NSLog(@"Save Error: %@",error);
+                }
+                [appDelegate decreaseBadgeCount:1];
+                
+            } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                RKLogError(@"Failed to call message/read due to error: %@", error);
+            }];
+        }
+        [self performSegueWithIdentifier:@"showWeed" sender:message.related_weed_id];
     } else if ([message.type isEqualToString:MESSAGE_TYPE]) {
         [self performSegueWithIdentifier:@"showMessage" sender:[self.tableView cellForRowAtIndexPath:indexPath]];
     }
@@ -304,7 +298,7 @@ static double DOT_PAD = 10.0;
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([[segue identifier] isEqualToString:@"showWeed"]) {
-        [[segue destinationViewController] setCurrentWeed:self.relatedWeedToShow];
+        [[segue destinationViewController] setCurrentWeedId:sender];
     } else if ([[segue identifier] isEqualToString:@"showMessage"]) {
         NSIndexPath *selectedIndexPath = [self.tableView indexPathForSelectedRow];
         Message * message = [self.conversations objectAtIndex:selectedIndexPath.section];
