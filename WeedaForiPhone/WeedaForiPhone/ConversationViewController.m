@@ -95,22 +95,47 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
         
         [self.fetchedResultsController setDelegate:self];
         
+        [[SDWebImageManager sharedManager] downloadImageWithURL:[WeedImageController imageURLOfAvatar:self.participant_id]
+                                                        options:(SDWebImageHandleCookies | SDWebImageRefreshCached)
+                                                       progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+                                                           
+                                                       } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+                                                           if (finished) {
+                                                               if (image) {
+                                                                   self.participant_avatar = image;
+                                                               } else {
+                                                                   self.participant_avatar = [UIImage imageNamed:@"avatar.jpg"];
+                                                               }
+                                                               if (self.current_user_avatar) {
+                                                                   [self loadData];
+                                                                   [self showConversation];
+                                                               }
+                                                           }
+                                                       }];
         
-        UIImageView *participantAvatar =  [[UIImageView alloc] init];
-        [participantAvatar sd_setImageWithURL:[WeedImageController imageURLOfAvatar:self.participant_id] placeholderImage:[UIImage imageNamed:@"avatar.jpg"] options:SDWebImageHandleCookies];
-        self.participant_avatar = participantAvatar.image;
         AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-        UIImageView *avatar =  [[UIImageView alloc] init];
-        [avatar sd_setImageWithURL:[WeedImageController imageURLOfAvatar:appDelegate.currentUser.id] placeholderImage:[UIImage imageNamed:@"avatar.jpg"] options:SDWebImageHandleCookies];
-        self.current_user_avatar = avatar.image;
+        [[SDWebImageManager sharedManager] downloadImageWithURL:[WeedImageController imageURLOfAvatar:appDelegate.currentUser.id]
+                                                        options:(SDWebImageHandleCookies | SDWebImageRefreshCached)
+                                                       progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+                                                           
+                                                       } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+                                                           if (finished) {
+                                                               if (image) {
+                                                                   self.current_user_avatar = image;
+                                                               } else {
+                                                                   self.current_user_avatar = [UIImage imageNamed:@"avatar.jpg"];
+                                                               }
+                                                               if (self.participant_avatar) {
+                                                                   [self loadData];
+                                                                   [self showConversation];
+                                                               }
+                                                           }
+                                                       }];
         
         self.inputToolBarView.hidden = false;
         self.title = self.participant_username;
         self.usernameTextField.hidden = true;
         self.usernameList.hidden = true;
-        [self loadData];
-        [self showConversation];
-        [self.inputToolBarView becomeFirstResponder];
     }
 }
 

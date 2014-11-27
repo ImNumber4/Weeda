@@ -113,7 +113,7 @@ static NSInteger UPDATE_FREQUENCY = 120; //120 seconds
             self.userProfileUpdateTime = [NSDate date];
         } failure:^(RKObjectRequestOperation *operation, NSError *error) {
             RKLogError(@"Load failed with error: %@", error);
-            UIAlertView *av = [[UIAlertView alloc] initWithTitle:nil message:@"Failed to load user profile. Please try again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            UIAlertView *av = [[UIAlertView alloc] initWithTitle:nil message:@"Failed to load user profile. Please try again later." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
             [av show];
         }];
     }
@@ -131,7 +131,7 @@ static NSInteger UPDATE_FREQUENCY = 120; //120 seconds
             self.userWeedUpdateTime = [NSDate date];
         } failure:^(RKObjectRequestOperation *operation, NSError *error) {
             RKLogError(@"Load failed with error: %@", error);
-            UIAlertView *av = [[UIAlertView alloc] initWithTitle:nil message:@"Failed to load weeds. Please try again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            UIAlertView *av = [[UIAlertView alloc] initWithTitle:nil message:@"Failed to load weeds. Please try again later." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
             [av show];
         }];
     }
