@@ -84,6 +84,7 @@
 		A93BB0BC19F3AB3A00514940 /* i502_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A93BB0BA19F3AB3A00514940 /* i502_icon.png */; };
 		A94BFD511A05B48800757715 /* icon_white.png in Resources */ = {isa = PBXBuildFile; fileRef = A94BFD501A05B48800757715 /* icon_white.png */; };
 		A94E6D9C1A0DF82D00641E1E /* ImageUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = A94E6D9B1A0DF82D00641E1E /* ImageUtil.m */; };
+		A950B31B1A2725FC0009EEF8 /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A950B31A1A2725FC0009EEF8 /* SearchViewController.m */; };
 		A953B6EE18D6D7B5001CDD4C /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A953B6ED18D6D7B5001CDD4C /* CFNetwork.framework */; };
 		A953B6F018D6D7BC001CDD4C /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A953B6EF18D6D7BC001CDD4C /* libxml2.dylib */; };
 		A953B6F218D6D7C3001CDD4C /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A953B6F118D6D7C3001CDD4C /* MobileCoreServices.framework */; };
@@ -356,6 +357,8 @@
 		A94BFD501A05B48800757715 /* icon_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon_white.png; path = WeedaForiPhone/Images/icon_white.png; sourceTree = "<group>"; };
 		A94E6D9A1A0DF82D00641E1E /* ImageUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ImageUtil.h; path = WeedaForiPhone/ImageUtils/ImageUtil.h; sourceTree = "<group>"; };
 		A94E6D9B1A0DF82D00641E1E /* ImageUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ImageUtil.m; path = WeedaForiPhone/ImageUtils/ImageUtil.m; sourceTree = "<group>"; };
+		A950B3191A2725FC0009EEF8 /* SearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchViewController.h; sourceTree = "<group>"; };
+		A950B31A1A2725FC0009EEF8 /* SearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchViewController.m; sourceTree = "<group>"; };
 		A953B6DC18D6D794001CDD4C /* RestKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RestKit.xcodeproj; path = RestKit/RestKit.xcodeproj; sourceTree = "<group>"; };
 		A953B6ED18D6D7B5001CDD4C /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		A953B6EF18D6D7BC001CDD4C /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
@@ -706,6 +709,8 @@
 				A926EF051A1577DB00AB2F04 /* BongsViewController.m */,
 				EAAC1A971A10A97F00242496 /* WLNavigationController.h */,
 				EAAC1A981A10A97F00242496 /* WLNavigationController.m */,
+				A950B3191A2725FC0009EEF8 /* SearchViewController.h */,
+				A950B31A1A2725FC0009EEF8 /* SearchViewController.m */,
 			);
 			path = WeedaForiPhone;
 			sourceTree = "<group>";
@@ -1238,6 +1243,7 @@
 				EA76C3541A0AF32300C11467 /* YTPlayerView.m in Sources */,
 				EA38FC68190D6D26007D652B /* CropImageViewController.m in Sources */,
 				A914CCB618CD756200B870D8 /* AppDelegate.m in Sources */,
+				A950B31B1A2725FC0009EEF8 /* SearchViewController.m in Sources */,
 				EAF6762C18FB62E4003BB138 /* SignupViewController.m in Sources */,
 				A9C087A419FB0C1800B0622B /* TermsAndPoliciesViewController.m in Sources */,
 				0EB8C4C219C5C00800BD64E1 /* JSMessagesViewController.m in Sources */,

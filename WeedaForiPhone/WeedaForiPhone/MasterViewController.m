@@ -16,8 +16,9 @@
 #import "WeedImage.h"
 #import "WLWebViewController.h"
 #import "WLCoreDataHelper.h"
-
+#import "ImageUtil.h"
 #import <RestKit/RestKit.h>
+#import "SearchViewController.h"
 
 @interface MasterViewController () <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, WeedTableViewCellDelegate>
 
@@ -50,6 +51,8 @@ static NSString *TABLE_CELL_REUSE_ID = @"WeedTableCell";
     [refresh addTarget:self action:@selector(refreshView:) forControlEvents:UIControlEventValueChanged];
     self.refreshControl = refresh;
     
+    [self.navigationItem setRightBarButtonItem:[self getSearchButton]];
+    
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Weed"];
     NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"time" ascending:NO];
     fetchRequest.sortDescriptors = @[descriptor];
@@ -66,7 +69,7 @@ static NSString *TABLE_CELL_REUSE_ID = @"WeedTableCell";
                                                                                    cacheName:nil];
         
     UIBarButtonItem *composeButton = [[UIBarButtonItem alloc] initWithImage:[self getImage:@"compose.png" width:30 height:30] style:UIBarButtonItemStylePlain target:self action:@selector(lightIt:)];
-    [self.navigationItem setRightBarButtonItem:composeButton];
+    [self.navigationItem setLeftBarButtonItem:composeButton];
     
     BOOL fetchSuccessful = [self.fetchedResultsController performFetch:&error];
     if (! fetchSuccessful) {
@@ -74,6 +77,16 @@ static NSString *TABLE_CELL_REUSE_ID = @"WeedTableCell";
     }
     [self.tableView reloadData];
     [self loadData];
+}
+
+- (UIBarButtonItem *) getSearchButton
+{
+    return [[UIBarButtonItem alloc] initWithImage:[ImageUtil renderImage:[ImageUtil colorImage:[UIImage imageNamed:@"search_icon.png"] color:[UIColor whiteColor]] atSize:CGSizeMake(20, 20)] style:UIBarButtonItemStylePlain target:self action:@selector(displaySearchBar:)];
+}
+
+-(void)displaySearchBar:(id)sender {
+    SearchViewController *controller = [[SearchViewController alloc] initWithNibName:nil bundle:nil];
+    [self.navigationController pushViewController:controller animated:NO];
 }
 
 - (void) viewDidAppear:(BOOL)animated
