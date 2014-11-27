@@ -72,13 +72,14 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
         [self.usernameTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
         [self.usernameTextField becomeFirstResponder];
         self.usernameList.tag = USER_LIST_TAG;
-        self.usernameList.hidden = true;
+        self.usernameList.hidden = false;
         [self.usernameList setSeparatorInset:UIEdgeInsetsZero];
         self.usernameList.tableFooterView = [[UIView alloc] init];
         self.usernameList.delegate = self;
         [self.usernameList registerClass:[UserTableViewCell class] forCellReuseIdentifier:USER_TABLE_CELL_REUSE_ID];
         [self.usernameList setFrame:CGRectMake(self.usernameList.frame.origin.x, self.usernameList.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height - self.usernameList.frame.origin.y)];
         self.inputToolBarView.hidden = true;
+        [self loadFollowingUsers];
     } else {
         //init fetch controller
         NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Message"];
@@ -138,12 +139,7 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
     self.usernameList.hidden = false;
     NSString *usernamePrefix = textField.text;
     if ([usernamePrefix isEqualToString:@""]) {
-        AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-        [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"user/getFollowingUsers/%@/%d",appDelegate.currentUser.id, 10] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-            [self updateUsernameListWithMappingResult:mappingResult];
-        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-            RKLogError(@"Load getFollowingUsers failed with error: %@", error);
-        }];
+        [self loadFollowingUsers];
     } else {
         [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"user/getUsernamesByPrefix/%@", usernamePrefix] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
             [self updateUsernameListWithMappingResult:mappingResult];
@@ -151,6 +147,16 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
             RKLogError(@"Load getUsernamesByPrefix failed with error: %@", error);
         }];
     }
+}
+
+- (void) loadFollowingUsers
+{
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"user/getFollowingUsers/%@/%d",appDelegate.currentUser.id, 10] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+        [self updateUsernameListWithMappingResult:mappingResult];
+    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        RKLogError(@"Load getFollowingUsers failed with error: %@", error);
+    }];
 }
 
 - (void) updateUsernameListWithMappingResult:(RKMappingResult *)mappingResult
@@ -234,6 +240,7 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
         User *user = [self.users objectAtIndex:indexPath.row];
         self.participant_username = user.username;
         self.participant_id = user.id;
+        [self.usernameTextField resignFirstResponder];
         [self reloadView];
     }
 }
