@@ -37,7 +37,8 @@
 @property (nonatomic, retain) UIButton *btnTakePhoto;
 @property (nonatomic, retain) UIButton *btnSelectFromLocal;
 @property (nonatomic, retain) UIView *buttonContainerView;
-
+@property (nonatomic, retain) NSDate *userProfileUpdateTime;
+@property (nonatomic, retain) NSDate *userWeedUpdateTime;
 @end
 
 @implementation UserViewController
@@ -45,7 +46,7 @@
 const NSInteger SHOW_FOLLOWERS = 1;
 const NSInteger SHOW_FOLLOWINGS = 2;
 static NSString *CELL_REUSE_ID = @"WeedTableCell";
-
+static NSInteger UPDATE_FREQUENCY = 120; //120 seconds
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -104,28 +105,36 @@ static NSString *CELL_REUSE_ID = @"WeedTableCell";
     // Do any additional setup after loading the view.
     
     //Get User Profile
-    [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"user/query/%@", self.user_id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-        self.user = [mappingResult.array objectAtIndex:0];
-        [self updateUserAvatar];
-        [self updateView];
-    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-        RKLogError(@"Load failed with error: %@", error);
-    }];
-    
-    
-    [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/query/%@", self.user_id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-        NSSortDescriptor *descriptor=[[NSSortDescriptor alloc] initWithKey:@"time" ascending:NO];
-        NSArray *descriptors=[NSArray arrayWithObject: descriptor];
-        [self.weeds removeAllObjects];
-        for(Weed* weed in [mappingResult.array sortedArrayUsingDescriptors:descriptors]) {
-            if (weed.shouldBeDeleted != nil && [weed.shouldBeDeleted intValue] == 0) {
-                [self.weeds addObject:weed];
+    if ((!self.user && !self.userProfileUpdateTime /*first time update*/) || [[NSDate date] timeIntervalSinceDate:self.userProfileUpdateTime] > UPDATE_FREQUENCY) {
+        [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"user/query/%@", self.user_id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+            self.user = [mappingResult.array objectAtIndex:0];
+            [self updateUserAvatar];
+            [self updateView];
+            self.userProfileUpdateTime = [NSDate date];
+        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+            RKLogError(@"Load failed with error: %@", error);
+            UIAlertView *av = [[UIAlertView alloc] initWithTitle:nil message:@"Failed to load user profile. Please try again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [av show];
+        }];
+    }
+    if (([self.weeds count] == 0 && !self.userWeedUpdateTime /*first time update*/) || [[NSDate date] timeIntervalSinceDate:self.userWeedUpdateTime] > UPDATE_FREQUENCY) {
+        [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/query/%@", self.user_id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+            NSSortDescriptor *descriptor=[[NSSortDescriptor alloc] initWithKey:@"time" ascending:NO];
+            NSArray *descriptors=[NSArray arrayWithObject: descriptor];
+            [self.weeds removeAllObjects];
+            for(Weed* weed in [mappingResult.array sortedArrayUsingDescriptors:descriptors]) {
+                if (weed.shouldBeDeleted != nil && [weed.shouldBeDeleted intValue] == 0) {
+                    [self.weeds addObject:weed];
+                }
             }
-        }
-        [self.tableView reloadData];
-    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-        RKLogError(@"Load failed with error: %@", error);
-    }];
+            [self.tableView reloadData];
+            self.userWeedUpdateTime = [NSDate date];
+        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+            RKLogError(@"Load failed with error: %@", error);
+            UIAlertView *av = [[UIAlertView alloc] initWithTitle:nil message:@"Failed to load weeds. Please try again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [av show];
+        }];
+    }
 }
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation {
@@ -206,10 +215,10 @@ static NSString *CELL_REUSE_ID = @"WeedTableCell";
         UserListViewController *controller = (UserListViewController *)[segue destinationViewController];
         NSString * feedUrl;
         if ([sender tag] == SHOW_FOLLOWERS) {
-            feedUrl = [NSString stringWithFormat:@"user/getFollowers/%@/%d", self.user.id, 10];
+            feedUrl = [NSString stringWithFormat:@"user/getFollowers/%@/%d", self.user_id, 10];
             [controller setTitle:@"Followed by"];
         } else {
-            feedUrl = [NSString stringWithFormat:@"user/getFollowingUsers/%@/%d", self.user.id, 10];
+            feedUrl = [NSString stringWithFormat:@"user/getFollowingUsers/%@/%d", self.user_id, 10];
             [controller setTitle:@"Following"];
         }
         [controller setUrlPathToPullUsers:feedUrl];
@@ -327,7 +336,7 @@ static NSString *CELL_REUSE_ID = @"WeedTableCell";
     [self.tableView setFrame:CGRectMake(self.tableView.frame.origin.x, tableViewYCoordinate, self.tableView.frame.size.width, self.view.frame.size.height  -  self.tabBarController.tabBar.frame.size.height - tableViewYCoordinate)];
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"MMM. yyyy"];
+    [dateFormatter setDateFormat:@"MMM. dd yyyy"];
     NSString *formattedDateString = [dateFormatter stringFromDate:self.user.time];
     self.timeLabel.text = [NSString stringWithFormat:@"Memeber since: %@", formattedDateString];
     [self.weedCountLabel setTitle:[NSString stringWithFormat:@"%@", self.user.weedCount] forState:UIControlStateNormal];
