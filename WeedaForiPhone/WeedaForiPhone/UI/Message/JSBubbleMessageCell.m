@@ -100,7 +100,7 @@
         self.timestampLabel.backgroundColor = [UIColor clearColor];
         self.timestampLabel.textAlignment = NSTextAlignmentCenter;
         self.timestampLabel.textColor = [UIColor messagesTimestampColor];
-        self.timestampLabel.font = [UIFont systemFontOfSize:10.0f];
+        self.timestampLabel.font = [UIFont boldSystemFontOfSize:10.0f];
         
         [self.contentView addSubview:self.timestampLabel];
         [self.contentView bringSubviewToFront:self.timestampLabel];

@@ -183,7 +183,7 @@ static NSString * WEED_PLACEHOLDER_CELL_REUSE_ID = @"PlaceHolderCell";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ([indexPath section] != CURRENT_WEED_SECTION_INDEX) {
+    if ([indexPath section] != CURRENT_WEED_SECTION_INDEX && [indexPath section] != PLACEHOLDER_SECTION_INDEX) {
         Weed *weed = [self getWeed:indexPath];
         DetailViewController *controller = [[AppDelegate getMainStoryboard] instantiateViewControllerWithIdentifier:@"DetailViewController"];
         [controller setCurrentWeed:weed];

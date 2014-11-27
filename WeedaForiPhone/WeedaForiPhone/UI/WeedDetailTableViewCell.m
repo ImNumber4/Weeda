@@ -179,7 +179,7 @@ static NSString * WEB_SERVER_GET_FAVICON_URL = @"http://www.google.com/s2/favico
         [self.userAvatar setImageURL:[WeedImageController imageURLOfAvatar:weed.user_id] isAvatar:YES];
         [self.followButton setUser_id:weed.user_id relationshipWithCurrentUser:weed.user_relationship_with_currentUser];
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setDateFormat:@"MMM. dd yyyy hh:mm"];
+        [dateFormatter setDateFormat:@"MMM. dd yyyy h:mm a"];
         NSString *formattedDateString = [dateFormatter stringFromDate:weed.time];
         self.timeLabel.text = [NSString stringWithFormat:@"%@", formattedDateString];
         

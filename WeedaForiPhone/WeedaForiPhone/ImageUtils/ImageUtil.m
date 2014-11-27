@@ -11,10 +11,12 @@
 @implementation ImageUtil
 
 + (UIImage *) renderImage:(UIImage *)image atSize:(const CGSize) size
-{
+{    
     UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
     [image drawInRect:CGRectMake(0, 0, size.width, size.height)];
-    return UIGraphicsGetImageFromCurrentImageContext();
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage;
 }
 
 + (UIImage *) colorImage:(UIImage *)image color:(UIColor *)color
