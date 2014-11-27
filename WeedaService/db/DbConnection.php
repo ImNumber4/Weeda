@@ -2,7 +2,7 @@
 
 class DbConnection 
 {
-	public $host = 'localhost';
+	public $host = '54.86.238.86';
     
     public $username = 'weeda';
 
