@@ -192,7 +192,7 @@ static const double FILTER_TAB_HEIGHT = 150;
     [filterViewArrow setTextAlignment:NSTextAlignmentCenter];
     [filterViewArrow setTextColor:[UIColor whiteColor]];
     [filterViewArrow setFont:[UIFont systemFontOfSize:12]];
-    [filterViewArrow setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];
+    [filterViewArrow setBackgroundColor:[UIColor lightGrayColor]];
     [self.filterView addSubview:filterViewArrow];
     UITapGestureRecognizer *singleFingerTapOnFilterViewArrow = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(filterIconClicked:)];
     [self.filterView addGestureRecognizer:singleFingerTapOnFilterViewArrow];
@@ -230,7 +230,7 @@ static const double FILTER_TAB_HEIGHT = 150;
 {
     NSNumber *tagValue = [self.userTypeToTagValueMapping objectForKey:type];
     button.tag = [tagValue integerValue];
-    UIColor *color = [ColorDefinition grayColor];
+    UIColor *color = [UIColor grayColor];
     [button setTitle:type forState:UIControlStateNormal];
     [button.titleLabel setFont:[UIFont boldSystemFontOfSize:12]];
     button.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.9];
@@ -691,7 +691,7 @@ static const double FILTER_TAB_HEIGHT = 150;
         color = [self.userTypeToColorMapping objectForKey:userType];
         [self.userTypeFilters addObject:userType];
     } else {
-        color = [ColorDefinition grayColor];
+        color = [UIColor grayColor];
         [self.userTypeFilters removeObject:userType];
     }
     [button setTitleColor:color forState:UIControlStateNormal];
