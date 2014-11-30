@@ -16,6 +16,8 @@
 @property (nonatomic, copy) NSArray *filteredUsers;
 @property (nonatomic, copy) NSMutableDictionary *sortedUsers;
 @property (nonatomic, copy) NSMutableDictionary *sortedAndFilteredUsers;
+@property (nonatomic, retain) UIBarButtonItem * searchButton;
+@property (nonatomic, retain) UIBarButtonItem * cancelButton;
 @end
 
 @implementation UserListViewController 
@@ -35,6 +37,7 @@ static double SECTION_HEADER_HEIGHT = 20;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     [self.tableView setSeparatorInset:UIEdgeInsetsZero];
     self.tableView.tableFooterView = [[UIView alloc] init];
     [self.tableView registerClass:[UserTableViewCell class] forCellReuseIdentifier:USER_TABLE_CELL_REUSE_ID];
@@ -54,18 +57,9 @@ static double SECTION_HEADER_HEIGHT = 20;
     self.searchBar.delegate = self;
     [self.searchBar setImage:[ImageUtil renderImage:[ImageUtil colorImage:[UIImage imageNamed:@"search_icon.png"] color:[UIColor whiteColor]] atSize:CGSizeMake(10, 10)] forSearchBarIcon:UISearchBarIconSearch state:UIControlStateNormal];
     [self setSearchBarTextColorToBeWhite];
-    
-    [self.navigationItem setRightBarButtonItem:[self getSearchButton]];
-}
-
-- (UIBarButtonItem *) getSearchButton
-{
-    return [[UIBarButtonItem alloc] initWithImage:[ImageUtil renderImage:[ImageUtil colorImage:[UIImage imageNamed:@"search_icon.png"] color:[UIColor whiteColor]] atSize:CGSizeMake(20, 20)] style:UIBarButtonItemStylePlain target:self action:@selector(displaySearchBar:)];
-}
-
-- (UIBarButtonItem *) getCancelButton
-{
-    return [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(displaySearchBar:)];
+    self.searchButton = [[UIBarButtonItem alloc] initWithImage:[ImageUtil renderImage:[ImageUtil colorImage:[UIImage imageNamed:@"search_icon.png"] color:[UIColor whiteColor]] atSize:CGSizeMake(20, 20)] style:UIBarButtonItemStylePlain target:self action:@selector(displaySearchBar:)];
+    self.cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(displaySearchBar:)];
+    [self.navigationItem setRightBarButtonItem:self.searchButton];
 }
 
 -(void)displaySearchBar:(id)sender {
@@ -74,7 +68,7 @@ static double SECTION_HEADER_HEIGHT = 20;
         self.searchBar.hidden = false;
         [self.searchBar setAlpha:0.0];
         [self.navigationItem setHidesBackButton:YES animated:NO];
-        [self.navigationItem setRightBarButtonItem:[self getCancelButton]];
+        [self.navigationItem setRightBarButtonItem:self.cancelButton];
         [UIView animateWithDuration:0.3 animations:^{
             [self.searchBar setAlpha:1.0];
         } completion:^(BOOL finished) {
@@ -82,7 +76,7 @@ static double SECTION_HEADER_HEIGHT = 20;
         }];
     } else {
         [self.navigationItem setHidesBackButton:NO animated:NO];
-        [self.navigationItem setRightBarButtonItem:[self getCancelButton]];
+        [self.navigationItem setRightBarButtonItem:self.cancelButton];
         [self.searchBar resignFirstResponder];
         [UIView animateWithDuration:0.3 animations:^{
             [self.searchBar setAlpha:0.0];
@@ -91,7 +85,7 @@ static double SECTION_HEADER_HEIGHT = 20;
             self.searchBar.hidden = true;
             self.searchBar.text = @"";
             [self.tableView reloadData];
-            [self.navigationItem setRightBarButtonItem:[self getSearchButton]];
+            [self.navigationItem setRightBarButtonItem:self.searchButton];
         }];
     }
 }
