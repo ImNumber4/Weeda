@@ -198,7 +198,7 @@ class WeedDAO extends BaseDAO
 	public function setUserSeedWeed($user_id, $weed_id) {
 		$query = "UPDATE weed SET seed_count =  seed_count + 1 WHERE id = $weed_id";
 		$this->db_conn->query($query);	
-		$query = "INSERT INTO seed VALUES($weed_id,$user_id)";	
+		$query = "INSERT INTO seed (weed_id, user_id) VALUES($weed_id,$user_id)";	
 		$this->db_conn->query($query);
 	}
 	
@@ -212,7 +212,7 @@ class WeedDAO extends BaseDAO
 	public function setUserWaterWeed($user_id, $weed_id) {
 		$query = "UPDATE weed SET water_count =  water_count + 1 WHERE id = $weed_id";
 		$this->db_conn->query($query);	
-		$query = "INSERT INTO water VALUES($weed_id,$user_id)";	
+		$query = "INSERT INTO water (weed_id, user_id) VALUES($weed_id,$user_id)";	
 		$this->db_conn->query($query);
 	}
 	
