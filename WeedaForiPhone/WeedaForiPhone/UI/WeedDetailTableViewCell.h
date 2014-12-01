@@ -15,7 +15,6 @@
 @protocol WeedDetailTableViewCellDelegate <NSObject>
 @required
 - (void)showUserViewController:(id)sender;
-- (BOOL)pressURL:(NSURL *)url;
 - (void)tableViewCell:(WeedDetailTableViewCell *)cell height:(CGFloat)height needReload:(BOOL)needReload;
 - (void)selectWeedContent:(UIGestureRecognizer *)recognizer;
 @optional

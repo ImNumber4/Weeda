@@ -57,6 +57,11 @@ class WeedController extends Controller
 		return json_encode(array('weeds'=>$weeds));
 	}
 	
+	public function getMentions($weed_id) {
+		$mentions = $this->weed_dao->getMentions($weed_id);
+		return json_encode(array('mentions'=>$mentions));
+	}
+	
 	public function create() 
 	{
 		//parse request body

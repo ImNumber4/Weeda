@@ -13,8 +13,9 @@
 #import "YTPlayerView.h"
 #import "TFHpple.h"
 #import "WeedControlView.h"
-
+#import "UserViewController.h"
 #import <SDWebImage/UIImageView+WebCache.h>
+#import "WLWebViewController.h"
 
 typedef NS_ENUM(NSInteger, EnumImageWidthType)
 {
@@ -57,6 +58,8 @@ typedef NS_ENUM(NSInteger, DetailCellShowingType)
 
 @property (nonatomic, retain) NSURLConnection *connection;
 
+@property (nonatomic, strong) UIViewController *parentViewController;
+
 @end
 
 @implementation WeedDetailTableViewCell
@@ -77,6 +80,8 @@ static double ICON_SIZE = 15;
 static double CONTENT_FONT_SIZE = 14.0;
 
 static double FOLLOW_BUTTON_SIZE = 25;
+
+static NSString * USER_ID_TAG = @"user_id";
 
 static NSString * WEB_SERVER_GET_FAVICON_URL = @"http://www.google.com/s2/favicons?domain=";
 
@@ -122,6 +127,8 @@ static NSString * WEB_SERVER_GET_FAVICON_URL = @"http://www.google.com/s2/favico
         self.weedContentLabel.scrollEnabled = false;
         self.weedContentLabel.userInteractionEnabled = true;
         self.weedContentLabel.dataDetectorTypes = UIDataDetectorTypeLink;
+        self.weedContentLabel.delegate = self;
+        self.weedContentLabel.translatesAutoresizingMaskIntoConstraints = YES;
         [self addSubview:self.weedContentLabel];
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tappedContentView:)];
         [self.weedContentLabel addGestureRecognizer:tap];
@@ -146,8 +153,33 @@ static NSString * WEB_SERVER_GET_FAVICON_URL = @"http://www.google.com/s2/favico
 
 - (void)tappedContentView:(UIGestureRecognizer *)recognizer
 {
-    if ([self.delegate respondsToSelector:@selector(selectWeedContent:)]) {
-        [self.delegate selectWeedContent:recognizer];
+    UITextView *textView = (UITextView *)recognizer.view;
+    
+    // Location of the tap in text-container coordinates
+    
+    NSLayoutManager *layoutManager = textView.layoutManager;
+    CGPoint location = [recognizer locationInView:textView];
+    location.x -= textView.textContainerInset.left;
+    location.y -= textView.textContainerInset.top;
+    
+    // Find the character that's been tapped on
+    
+    NSUInteger characterIndex;
+    characterIndex = [layoutManager characterIndexForPoint:location
+                                           inTextContainer:textView.textContainer
+                  fractionOfDistanceBetweenInsertionPoints:NULL];
+    
+    if (characterIndex < textView.textStorage.length) {
+        
+        NSRange range;
+        NSDictionary *attributes = [textView.textStorage attributesAtIndex:characterIndex effectiveRange:&range];
+        if ([attributes objectForKey:NSLinkAttributeName]) {
+            [self pressURL:[attributes objectForKey:NSLinkAttributeName]];
+        } else if ([attributes objectForKey:USER_ID_TAG]) {
+            UserViewController *controller = (UserViewController *)[[AppDelegate getMainStoryboard] instantiateViewControllerWithIdentifier:@"UserViewController"];
+            [controller setUser_id:[attributes objectForKey:USER_ID_TAG]];
+            [self.parentViewController.navigationController pushViewController:controller animated:YES];
+        }
     }
 }
 
@@ -161,6 +193,7 @@ static NSString * WEB_SERVER_GET_FAVICON_URL = @"http://www.google.com/s2/favico
 - (void)decorateCellWithWeed:(Weed *)weed parentViewController:(UIViewController *) parentViewController showHeader:(BOOL) showHeader
 {
     self.weed = weed;
+    self.parentViewController = parentViewController;
     [self.urlDictionary removeAllObjects];
     NSString *content = [WeedDetailTableViewCell shortenURLInContent:weed.content urlDictionary:self.urlDictionary];
     
@@ -192,12 +225,11 @@ static NSString * WEB_SERVER_GET_FAVICON_URL = @"http://www.google.com/s2/favico
         self.userIcon.hidden = TRUE;
         [self.weedContentLabel setFrame:CGRectMake(self.weedContentLabel.frame.origin.x, 0, self.weedContentLabel.frame.size.width, [WeedDetailTableViewCell getTextLableHeight:content])];
     }
-    
-    self.weedContentLabel.text = content;
-    self.weedContentLabel.delegate = self;
-    self.weedContentLabel.translatesAutoresizingMaskIntoConstraints = YES;
-    
 
+    self.weedContentLabel.text = content;
+    self.weedContentLabel.textColor = [UIColor darkGrayColor];
+    [self decorateWeedContent];
+    
     _type = [WeedDetailTableViewCell getShowingTypeWithWeed:weed];
     switch (_type) {
         case DetailCellShowingTypeImages:
@@ -230,7 +262,6 @@ static NSString * WEB_SERVER_GET_FAVICON_URL = @"http://www.google.com/s2/favico
     _controlView.delegate = self;
 
     [self addSubview:self.controlView];
-
     [self createWebSummaryView];
 }
 
@@ -484,6 +515,45 @@ static NSString * WEB_SERVER_GET_FAVICON_URL = @"http://www.google.com/s2/favico
     _webSummaryView.hidden = YES;
 }
 
+- (void) decorateWeedContent
+{
+    if (self.weed.mentions) {
+        [self decorateWeedContentWithMentions];
+    } else {
+        NSString *url = [NSString stringWithFormat:@"weed/getMentions/%@", self.weed.id];
+        [[RKObjectManager sharedManager] getObjectsAtPath:url parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+            self.weed.mentions = [[NSMutableSet alloc] initWithArray:mappingResult.array];
+            [self decorateWeedContentWithMentions];
+        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+            RKLogError(@"%@ failed with error: %@", url, error);
+        }];
+    }
+}
+
+- (void) decorateWeedContentWithMentions
+{
+    if (!self.weed.mentions) {
+        return;
+    }
+    NSMutableAttributedString * content = [[NSMutableAttributedString alloc] initWithString:self.weedContentLabel.text attributes:@{NSForegroundColorAttributeName:self.weedContentLabel.textColor, NSFontAttributeName:[UIFont systemFontOfSize:CONTENT_FONT_SIZE]}];
+    NSUInteger length = [self.weed.content length];
+    for (User * user in self.weed.mentions) {
+        NSString *matchedString = [NSString stringWithFormat:@"@%@", user.username];
+        NSRange range = NSMakeRange(0, length);
+        while(range.location != NSNotFound)
+        {
+            range = [self.weed.content rangeOfString:matchedString options:0 range:range];
+            if(range.location != NSNotFound)
+            {
+                [content addAttributes:@{USER_ID_TAG:user.id, NSForegroundColorAttributeName:[ColorDefinition greenColor], NSFontAttributeName:[UIFont boldSystemFontOfSize:CONTENT_FONT_SIZE]} range:range];
+                range = NSMakeRange(range.location + range.length, length - (range.location + range.length));
+                
+            }
+        }
+    }
+    self.weedContentLabel.attributedText = content;
+}
+
 + (DetailCellShowingType)getShowingTypeWithWeed:(Weed *)weed
 {
     //If weed has images display images
@@ -566,11 +636,29 @@ static NSString * WEB_SERVER_GET_FAVICON_URL = @"http://www.google.com/s2/favico
 #pragma mark - UITextViewDelegate
 - (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange
 {
-    if ([self.delegate respondsToSelector:@selector(pressURL:)]) {
-        NSString *url = [_urlDictionary objectForKey:[self cutHttpOrHttpsWithURL:URL]];
-        return [self.delegate pressURL:[NSURL URLWithString:url]];
+    [self pressURL:URL];
+    return NO;
+}
+
+- (void) pressURL:(NSURL *)URL
+{
+    NSString *url = [_urlDictionary objectForKey:[self cutHttpOrHttpsWithURL:URL]];
+    if (url) {
+        WLWebViewController *webViewController = [[WLWebViewController alloc]init];
+        webViewController.url = [NSURL URLWithString:url];
+        CATransition *transition = [CATransition animation];
+        transition.duration = 0.5f;
+        transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+        transition.type = kCATransitionMoveIn;
+        transition.subtype = kCATransitionFromTop;
+        [self.parentViewController.navigationController.view.layer addAnimation:transition forKey:nil];
+        [self.parentViewController.navigationController pushViewController:webViewController animated:NO];
+        
+        
+        [UIView animateWithDuration:0.5 animations:^{
+            self.parentViewController.tabBarController.tabBar.alpha = 0.0;
+        }];
     }
-    return YES;
 }
 
 #pragma delegate WLImageCollectionView

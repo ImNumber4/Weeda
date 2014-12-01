@@ -62,6 +62,18 @@ class WeedDAO extends BaseDAO
 		return $weeds;
 	}
 	
+	public function getMentions($weed_id) {
+		$query = "SELECT id, username FROM mention JOIN user ON user_id = id AND weed_id = $weed_id";
+		$result = $this->db_conn->query($query);
+		$mentions = array();
+		if(mysql_num_rows($result)) {
+			while($mention = mysql_fetch_assoc($result)) {
+				$mentions[] = $mention;
+			}
+		}
+		return $mentions;
+	}
+	
 	public function trends($currentUser_id) {
 
 		/* grab the users from the db */

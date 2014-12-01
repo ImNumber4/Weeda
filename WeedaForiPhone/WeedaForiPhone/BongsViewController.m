@@ -219,26 +219,6 @@ static double MORE_CELL_HEIGHT = 35;
 }
 
 #pragma tablecell Delegate
-- (BOOL)pressURL:(NSURL *)url
-{
-    WLWebViewController *webViewController = [[WLWebViewController alloc]init];
-    webViewController.url = url;
-    
-    CATransition *transition = [CATransition animation];
-    transition.duration = 0.5f;
-    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-    transition.type = kCATransitionMoveIn;
-    transition.subtype = kCATransitionFromTop;
-    [self.navigationController.view.layer addAnimation:transition forKey:nil];
-    [self.navigationController pushViewController:webViewController animated:NO];
-    
-    
-    [UIView animateWithDuration:0.5 animations:^{
-        self.tabBarController.tabBar.alpha = 0.0;
-    }];
-    
-    return NO;
-}
 
 - (void)tableViewCell:(WeedDetailTableViewCell *)cell height:(CGFloat)height needReload:(BOOL)needReload
 {
