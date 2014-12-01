@@ -298,6 +298,9 @@ NSString * _deviceToken;
     
     [weedMapping addAttributeMappingsFromDictionary:@{@"user_id" : @"user_id",
                                                       @"username" : @"username",
+                                                      @"is_feed" : @"is_feed",
+                                                      @"seeded_by" : @"seeded_by",
+                                                      @"sort_time" : @"sort_time",
                                                       @"user_type" : @"user_type",
                                                       @"relationshipWithCurrentUser": @"user_relationship_with_currentUser",
                                                       @"score" : @"score",

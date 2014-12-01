@@ -54,9 +54,10 @@ static NSString *TABLE_CELL_REUSE_ID = @"WeedTableCell";
     [self.navigationItem setRightBarButtonItem:[self getSearchButton]];
     
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Weed"];
-    NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"time" ascending:NO];
+    NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"sort_time" ascending:NO];
     fetchRequest.sortDescriptors = @[descriptor];
-    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"is_feed = 1"]];
+    fetchRequest.predicate = predicate;
     NSError *error = nil;
     
     //Add weed core data notification for change moniter

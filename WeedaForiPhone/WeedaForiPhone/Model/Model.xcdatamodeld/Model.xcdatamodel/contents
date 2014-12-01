@@ -22,11 +22,14 @@
         <attribute name="if_cur_user_seed_it" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="if_cur_user_water_it" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="image_count" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="is_feed" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="light_count" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="light_id" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="root_id" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="score" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="seed_count" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="seeded_by" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sort_time" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="user_id" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="user_relationship_with_currentUser" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="user_type" optional="YES" attributeType="String" syncable="YES"/>
@@ -44,7 +47,7 @@
     <elements>
         <element name="Message" positionX="207" positionY="191" width="146" height="180"/>
         <element name="RemoteObject" positionX="-90" positionY="-61" width="128" height="90"/>
-        <element name="Weed" positionX="18" positionY="212" width="144" height="285"/>
+        <element name="Weed" positionX="18" positionY="212" width="144" height="328"/>
         <element name="WeedImage" positionX="72" positionY="90" width="128" height="118"/>
     </elements>
 </model>

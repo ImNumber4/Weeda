@@ -34,6 +34,7 @@ static double TIME_LABEL_WIDTH = 70;
 static double CONTROL_VIEW_HEIGHT = 25;
 static double CONTENT_TEXT_FONT = 12;
 static double STORE_TYPE_ICON_SIZE = 15;
+static double SEEDED_BY_LABEL_HEIGHT = 25;
 
 - (void) awakeFromNib
 {
@@ -51,6 +52,11 @@ static double STORE_TYPE_ICON_SIZE = 15;
 
 - (void) setup
 {
+    self.seededByLabel = [[UILabel alloc] initWithFrame:CGRectMake(PADDING * 2 + AVATAR_SIZE, -SEEDED_BY_LABEL_HEIGHT, self.frame.size.width - (PADDING * 2 + AVATAR_SIZE), SEEDED_BY_LABEL_HEIGHT)];
+    [self.seededByLabel setFont:[UIFont systemFontOfSize:12]];
+    [self.seededByLabel setTextColor:[UIColor darkGrayColor]];
+    [self addSubview:self.seededByLabel];
+    
     self.userAvatar = [[WLImageView alloc] initWithFrame:CGRectMake(PADDING, PADDING, AVATAR_SIZE, AVATAR_SIZE)];
     self.userAvatar.contentMode = UIViewContentModeScaleAspectFill;
     self.userAvatar.userInteractionEnabled = true;
@@ -155,6 +161,23 @@ static double STORE_TYPE_ICON_SIZE = 15;
         _dataSource = [self adjustWeedImages];
         _collectionView.hidden = NO;
         [_collectionView reloadData];
+    }
+    
+    if (weed.seeded_by) {
+        self.seededByLabel.hidden = false;
+        self.seededByLabel.text = [NSString stringWithFormat:@"Seeded by @%@", weed.seeded_by];
+        if (self.seededByLabel.frame.origin.y < 0) {
+            for (UIView *subview in self.subviews) {
+                [subview setCenter:CGPointMake(subview.center.x, subview.center.y + SEEDED_BY_LABEL_HEIGHT)];
+            }
+        }
+    } else {
+        self.seededByLabel.hidden = true;
+        if (self.seededByLabel.frame.origin.y >= 0) {
+            for (UIView *subview in self.subviews) {
+                [subview setCenter:CGPointMake(subview.center.x, subview.center.y - SEEDED_BY_LABEL_HEIGHT)];
+            }
+        }
     }
     [_controlView setFrame:CGRectMake(self.frame.size.width - _controlView.frame.size.width, self.frame.size.height - CONTROL_VIEW_HEIGHT, _controlView.frame.size.width, CONTROL_VIEW_HEIGHT)];
     [_controlView decorateWithWeed:weed parentViewController:parentViewController];
@@ -298,6 +321,11 @@ static double STORE_TYPE_ICON_SIZE = 15;
     if (weed.images.count > 0) {
         height = height + MASTERVIEW_IMAGEVIEW_HEIGHT + PADDING; //For Image View
     }
+    
+    if (weed.seeded_by) {
+        height = height + SEEDED_BY_LABEL_HEIGHT;
+    }
+    
     return height + CONTROL_VIEW_HEIGHT;
 }
 

@@ -32,6 +32,7 @@
 @property (nonatomic, retain) UILabel *usernameLabel;
 @property (nonatomic, retain) UITextView *weedContentLabel;
 @property (nonatomic, retain) UILabel *timeLabel;
+@property (nonatomic, retain) UILabel *seededByLabel;
 @property (nonatomic, retain) WLImageView *userAvatar;
 @property (nonatomic, strong) UserIcon *storeTypeIcon;
 

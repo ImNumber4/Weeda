@@ -121,7 +121,7 @@ static NSString * WEB_SERVER_GET_FAVICON_URL = @"http://www.google.com/s2/favico
         [self.weedContentLabel setBackgroundColor:[UIColor clearColor]];
         self.weedContentLabel.scrollEnabled = false;
         self.weedContentLabel.userInteractionEnabled = true;
-        self.weedContentLabel.dataDetectorTypes = UIDataDetectorTypeAll;
+        self.weedContentLabel.dataDetectorTypes = UIDataDetectorTypeLink;
         [self addSubview:self.weedContentLabel];
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tappedContentView:)];
         [self.weedContentLabel addGestureRecognizer:tap];

@@ -24,6 +24,8 @@
 @property (nonatomic, retain) NSNumber * user_relationship_with_currentUser;
 @property (nonatomic, retain) NSNumber * water_count;
 @property (nonatomic, retain) NSNumber * if_cur_user_light_it;
+@property (nonatomic, retain) NSNumber * is_feed;
+@property (nonatomic, retain) NSString * seeded_by;
 @property (nonatomic, retain) NSNumber * light_count;
 @property (nonatomic, retain) NSNumber * root_id;
 @property (nonatomic, retain) NSNumber * image_count;
@@ -32,5 +34,6 @@
 //therefore, if you use NSFetchController to get weeds, you will have this value as nil
 @property (nonatomic, retain) NSSet * mentions;
 @property (nonatomic, retain) NSNumber * score;
+@property (nonatomic, retain) NSDate * sort_time;
 
 @end

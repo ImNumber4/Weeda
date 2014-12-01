@@ -28,5 +28,8 @@
 @dynamic images;
 @synthesize mentions;
 @dynamic score;
+@dynamic is_feed;
+@dynamic seeded_by;
+@dynamic sort_time;
 
 @end
