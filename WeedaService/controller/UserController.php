@@ -7,10 +7,11 @@ include './library/ImageHandler.php';
 
 class UserController extends Controller
 {
-	
+	protected $message_dao;
     function __construct($model, $controller, $action) 
     {
 		parent::__construct($model, $controller, $action);
+		$this->message_dao = new MessageDAO();
     }
 	
 	public function query($id) {
@@ -119,8 +120,17 @@ class UserController extends Controller
 		if (!isset($id)) {
 			throw new InvalidRequestException('Input error, id is null.');
 		}
+		$currentUsername = $this->getCurrentUsername();
 		$currentUser_id = $this->getCurrentUser();
 		$this->user_dao->setAFollowB($currentUser_id, $id);
+		$message = new Message();
+		$message->set_message('@' . $currentUsername . ' started following you.');
+		$message->set_sender_id($currentUser_id);
+		$message->set_receiver_id($id);
+		$message->set_time(date('Y-m-d H:i:s'));
+		$message->set_type(Message::$MESSAGE_TYPE_NOTIFICATION);
+		$notification_message = $message->get_message();
+		$this->message_dao->create($message, $notification_message);
 		return $this->query($id);
 	}
 	

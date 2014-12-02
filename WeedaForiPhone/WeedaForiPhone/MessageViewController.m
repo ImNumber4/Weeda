@@ -273,7 +273,7 @@ static double DOT_PAD = 10.0;
 {
     Message *message = [[self getNSFetchedResultsController] objectAtIndexPath:indexPath];
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    if (([message.type isEqualToString:NOTIFICATION_TYPE]) && message.related_weed_id) {
+    if (([message.type isEqualToString:NOTIFICATION_TYPE])) {
         if ([message.is_read intValue] == 0) {
             [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"message/read/%@", message.id]  parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                 message.is_read = [NSNumber numberWithInt:1];
@@ -289,7 +289,11 @@ static double DOT_PAD = 10.0;
                 RKLogError(@"Failed to call message/read due to error: %@", error);
             }];
         }
-        [self performSegueWithIdentifier:@"showWeed" sender:message.related_weed_id];
+        if (message.related_weed_id) {
+            [self performSegueWithIdentifier:@"showWeed" sender:message.related_weed_id];
+        } else {
+            [self showUser:[tableView cellForRowAtIndexPath:indexPath]];
+        }
     } else if ([message.type isEqualToString:MESSAGE_TYPE]) {
         [self performSegueWithIdentifier:@"showMessage" sender:[self.tableView cellForRowAtIndexPath:indexPath]];
     }
