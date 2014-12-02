@@ -20,7 +20,7 @@
 #import <RestKit/RestKit.h>
 #import "SearchViewController.h"
 
-@interface MasterViewController () <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, WeedTableViewCellDelegate>
+@interface MasterViewController () <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, NSFetchedResultsControllerDelegate, WeedTableViewCellDelegate>
 
 @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
 
@@ -68,6 +68,7 @@ static NSString *TABLE_CELL_REUSE_ID = @"WeedTableCell";
                                                                         managedObjectContext:[RKManagedObjectStore defaultStore].mainQueueManagedObjectContext
                                                                           sectionNameKeyPath:nil
                                                                                    cacheName:nil];
+    self.fetchedResultsController.delegate = self;
         
     UIBarButtonItem *composeButton = [[UIBarButtonItem alloc] initWithImage:[self getImage:@"compose.png" width:30 height:30] style:UIBarButtonItemStylePlain target:self action:@selector(lightIt:)];
     [self.navigationItem setLeftBarButtonItem:composeButton];
@@ -351,12 +352,29 @@ static NSString *TABLE_CELL_REUSE_ID = @"WeedTableCell";
     for (Weed *weed in deleteObjects) {
         NSIndexPath *indexPath = [self.fetchedResultsController indexPathForObject:weed];
         if (indexPath) {
-            NSError *error = nil;
-            [self.fetchedResultsController performFetch:&error];
+            [self.fetchedResultsController.managedObjectContext deleteObject:weed];
+//            [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:YES];
+        }
+    }
+}
+
+#pragma mark - NSFetchedResultsController Delegate
+- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath
+{
+    switch (type) {
+        case NSFetchedResultsChangeDelete:
+        {
             if ([self.tableView cellForRowAtIndexPath:indexPath]) {
                 [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:YES];
             }
+            break;
         }
+        case NSFetchedResultsChangeInsert:
+        case NSFetchedResultsChangeMove:
+        case NSFetchedResultsChangeUpdate:
+            break;
+        default:
+            break;
     }
 }
 

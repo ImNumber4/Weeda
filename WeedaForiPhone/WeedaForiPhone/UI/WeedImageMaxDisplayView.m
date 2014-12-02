@@ -85,8 +85,10 @@
         [_imageView setAlpha:1.0];
     } completion:^(BOOL finished) {
         if (finished && _shouldDownloadForFullScreenDisplay) {
-            NSURL *imageURL = [WeedImageController imageURLOfImageId:imageView.imageId quality:[NSNumber numberWithInteger:100]];
-            [_imageView setImageURL:imageURL animate:YES];
+            if (imageView.imageId) {
+                NSURL *imageURL = [WeedImageController imageURLOfImageId:imageView.imageId quality:[NSNumber numberWithInteger:100]];
+                [_imageView setImageURL:imageURL animate:YES];
+            }
         }
     }];
 }

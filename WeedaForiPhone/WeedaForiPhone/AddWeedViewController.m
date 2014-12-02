@@ -72,7 +72,7 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
     CGSize statusBarSize = [[UIApplication sharedApplication] statusBarFrame].size;
     self.weedContentView = [[UITextView alloc] initWithFrame:CGRectMake(0, statusBarSize.height + self.navigationController.navigationBar.frame.size.height, self.view.frame.size.width, self.view.frame.size.height)];
     [self.weedContentView setFont:[UIFont systemFontOfSize:14.0]];
-    double lineHeight = self.weedContentView.font.lineHeight + 10;
+    double lineHeight = self.weedContentView.font.lineHeight + 14;
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     paragraphStyle.lineHeightMultiple = lineHeight;
     paragraphStyle.maximumLineHeight = lineHeight;
@@ -186,30 +186,12 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
     return true;
 }
 
-//- (void)textViewDidBeginEditing:(UITextView *)textView
-//{
-//    if (!_hasEdited)  {
-//        self.weedContentView.text = @"";
-//        self.weedContentView.textColor = [UIColor blackColor];
-//        _hasEdited = YES;
-//        
-//    }
-//    [self.weedContentView becomeFirstResponder];
-//}
-
 - (void)textViewDidEndEditing:(UITextView *)textView
 {
     if (self.weedContentView.text.length == 0) {
         _hasEdited = NO;
         _placeHolder.hidden = NO;
     }
-    
-    NSError *error = nil;
-    NSDataDetector *detector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeLink error: &error];
-    [detector enumerateMatchesInString:textView.text options:NSMatchingReportCompletion range:NSMakeRange(0, textView.text.length)
-    usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
-        NSLog(@"NSTextChecking Result: %@", result.URL);
-    }];
 }
 
 - (void)textViewDidChange:(UITextView *)textView
@@ -342,7 +324,6 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
     
     RKManagedObjectStore *objectStore = [[RKObjectManager sharedManager] managedObjectStore];
     Weed *weed = [NSEntityDescription insertNewObjectForEntityForName:@"Weed" inManagedObjectContext:objectStore.mainQueueManagedObjectContext];
-    weed.id = [NSNumber numberWithInt:-1];
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     weed.username = appDelegate.currentUser.username;
     weed.user_id = appDelegate.currentUser.id;
@@ -376,44 +357,35 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
     weed.images = [[NSSet alloc] initWithArray:[images allObjects]];
     
     //Sending Request to Server
-    [[RKObjectManager sharedManager] postObject:weed path:@"weed/create" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-        NSLog(@"Response: %@", mappingResult);
-        Weed *newWeed = mappingResult.firstObject;
-        weed.id = newWeed.id;
-        
-        if (self.dataArray.count > 0) {
-            [self uploadImageToServer:weed];
+    NSMutableURLRequest *request = [[RKObjectManager sharedManager] multipartFormRequestWithObject:weed method:RKRequestMethodPOST path:@"weed/create" parameters:nil  constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        for (int i = 0; i < self.dataArray.count; i++) {
+            UIImage *image = [self.dataArray objectAtIndex:i];
+            [formData appendPartWithFileData:UIImageJPEGRepresentation(image, 1.0)
+                                        name:[NSString stringWithFormat:@"%d", i]
+                                    fileName:[NSString stringWithFormat:@"%d.jpeg", i]
+                                    mimeType:@"image/jpeg"];
+        }
+    }];
+    
+    RKManagedObjectRequestOperation *operation = [[RKObjectManager sharedManager] managedObjectRequestOperationWithRequest:request managedObjectContext:weed.managedObjectContext
+    success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+        NSLog(@"Create weed successed, Response: %@", mappingResult);
+        weed.is_feed = [NSNumber numberWithInt:1];
+        weed.sort_time = weed.time;
+        NSError *error = nil;
+        BOOL successful = [weed.managedObjectContext save:&error];
+        if (!successful) {
+            NSLog(@"Save Weed Error: %@", error.localizedDescription);
         }
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
         NSLog(@"Failure saving post: %@", error.localizedDescription);
+        UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Weed Posting failed" message:nil delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [av show];
     }];
+    operation.targetObject = weed;
+    [[RKObjectManager sharedManager] enqueueObjectRequestOperation:operation];
     
     [self dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void)uploadImageToServer:(Weed *)weed
-{
-    for (int i = 0; i < self.dataArray.count; i++) {
-        UIImage * image = (UIImage *)[self.dataArray objectAtIndex:i];
-        UIImage *thumbnails = [UIImage imageWithData:UIImageJPEGRepresentation(image, 0.25)];
-        [[SDImageCache sharedImageCache] storeImage:thumbnails forKey:[[WeedImageController imageURLOfWeedId:weed.id userId:weed.user_id count:i quality:25] absoluteString] toDisk:NO];
-        
-        NSMutableURLRequest *request = [[RKObjectManager sharedManager] multipartFormRequestWithObject:nil method:RKRequestMethodPOST path:[NSString stringWithFormat:@"image/upload/%@", weed.id] parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-            [formData appendPartWithFileData:UIImageJPEGRepresentation(image, 1.0)
-                                        name:@"image"
-                                    fileName:[NSString stringWithFormat:@"%d.jpeg", i]
-                                    mimeType:@"image/jpeg"];
-        }];
-        
-        RKObjectRequestOperation *operation = [[RKObjectManager sharedManager] objectRequestOperationWithRequest:request
-        success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-            
-        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-            NSLog(@"Uploading image failed. url:%@, error: %@", weed.id, error);
-        }];
-        
-        [[RKObjectManager sharedManager] enqueueObjectRequestOperation:operation];
-    }
 }
 
 - (void) cancel: (id) sender {
@@ -432,6 +404,10 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
 
 - (void)pressPickingPicture:(WeedAddingToolbar *)view
 {
+    if ([self isPhotosOverLimit]) {
+        return;
+    }
+    
     UIImagePickerController *pickerController = [[UIImagePickerController alloc] init];
     pickerController.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
     pickerController.mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeSavedPhotosAlbum];
@@ -443,11 +419,26 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
 
 - (void)pressTakingPicture:(WeedAddingToolbar *)view
 {
+    if ([self isPhotosOverLimit]) {
+        return;
+    }
+    
     UIImagePickerController *imagePicker = [[UIImagePickerController alloc]init];
     imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
     imagePicker.delegate = self;
     
     [self presentViewController:imagePicker animated:YES completion:nil];
+}
+
+- (BOOL)isPhotosOverLimit
+{
+    if (self.dataArray.count >= 9) {
+        UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Hey, Easy My friend, That's enough." message:nil delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [av show];
+        return YES;
+    }
+    
+    return NO;
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
@@ -458,10 +449,15 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
     if (self.imageCollectionView.hidden) {
         self.imageCollectionView.hidden = NO;
     }
-    [self.dataArray addObject: [ImageUtil generatePhotoThumbnail:pickImage]];
-    
-    [self.imageCollectionView reloadData];
-    [self.weedContentView becomeFirstResponder];
+    UIImage *compressedImage = [ImageUtil imageWithCompress:pickImage];
+    if (!compressedImage) {
+        UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Photo is too large!" message:nil delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [av show];
+    } else {
+        [self.dataArray addObject: [ImageUtil generatePhotoThumbnail:compressedImage]];
+        [self.imageCollectionView reloadData];
+        [self.weedContentView becomeFirstResponder];
+    }
 }
 
 - (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
@@ -493,6 +489,8 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
     WeedAddingImageCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"imageCell" forIndexPath:indexPath];
     if (cell) {
         cell.pickImageView.image = [self.dataArray objectAtIndex:indexPath.item];
+        cell.pickImageView.allowFullScreenDisplay = YES;
+        cell.pickImageView.contentMode = UIViewContentModeScaleAspectFill;
         cell.pickImageView.delegate = self;
     }
     return cell;

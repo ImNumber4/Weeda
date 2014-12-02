@@ -2,8 +2,8 @@
 
  	const UPLOAD_BASE_PATH = './upload/';
 	
-	//ini_set('display_errors',1);
-	//error_reporting(E_ALL);
+	// ini_set('display_errors',1);
+	// error_reporting(E_ALL);
 
 	/**
 	 * Save Avatar file to server.
@@ -109,6 +109,13 @@
 		}
 	}
 	
+	function delete_weed_image_dir($user_id, $weed_id)
+	{
+		$deletePath = get_weed_image_filepath($user_id, $weed_id);
+		remove_dir($deletePath);
+		error_log('Deleting path: ' . $deletePath . ' successful.');
+	}
+	
 	function get_user_profile_filepath($user_id) {
 		return UPLOAD_BASE_PATH . $user_id . '/avatar/';
 	}
@@ -117,12 +124,24 @@
 		return UPLOAD_BASE_PATH . $user_id . '/avatar/avatar.jpeg';
 	}
 	
-	function get_weed_image_filepath($user_id, $weed_id, $filename) {
+	function get_weed_image_filepath($user_id, $weed_id) {
 		return UPLOAD_BASE_PATH . $user_id . '/weed/' . $weed_id . '/';
 	}
 	
 	function get_message_image_filepath($user_id, $message_id) {
 		return UPLOAD_BASE_PATH . $user_id . '/message/';
+	}
+	
+	function remove_dir($path)
+	{
+		foreach(glob("{$path}/*") as $file) {
+		    if(is_dir($file)) { 
+		        remove_dir($file);
+		    } else {
+		        unlink($file);
+		    }
+		}
+		rmdir($path);
 	}
 
 ?>

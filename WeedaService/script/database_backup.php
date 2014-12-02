@@ -2,7 +2,7 @@
 /**
 * run mysql database backup shell script
 */
-require_once('./library/PHPMailer/PHPMailerAutoload.php');
+require_once('/var/www/html/Weeda/WeedaService/library/PHPMailer/PHPMailerAutoload.php');
 
 $username = 'weeda';
 $password = 'weeda';
@@ -10,7 +10,7 @@ $database = 'weeda';
 
 $now = date("YmdHis");
 $file_name = "db_backup_" . $now . ".sql";
-$backup_folder = "./backup/mysql_backup";
+$backup_folder = "/backup/mysql_backup";
 $full_path_backup_file = $backup_folder . '/' . $file_name;
 
 if (!file_exists($backup_folder)) {

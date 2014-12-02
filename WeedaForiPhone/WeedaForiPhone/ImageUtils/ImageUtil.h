@@ -17,4 +17,8 @@
 
 + (UIImage *)generatePhotoThumbnail:(UIImage *)image;
 
++ (UIImage *)imageWithCompress:(UIImage *)image;
+
++ (UIImage *)imageWithImage:(UIImage *)image aspectScaleFitSize:(CGSize)size;
+
 @end

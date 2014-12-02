@@ -2,38 +2,59 @@
 
 //decodeJson();
 // base64test();
+$content_type_1 = "multipart/form-data; boundary=Boundary+0xAbCdEfGbOuNdArY";
+$content_type_2 = "application/json; charset=utf-8";
+$content_type_3 = "application/json";
 
-$size = getimagesize("upload/2/103/0.jpeg");
-echo 'image width: ' . $size[0] . ', image height: ' . $size[1] . "\n";
 
-// $image_path = './upload/2/136/';
+echo "#####1: " . get_content_type($content_type_1);
+echo "\n";
+echo "#####2: " . get_content_type($content_type_2);
+echo "\n";
+echo "#####3: " . get_content_type($content_type_3);
 
-$dir_path = scandir('./upload/2/');
-foreach($dir_path as $dir) {
-	$image_path = './upload/2/' . $dir . '/';
-	if (!is_dir($image_path)) {
-		continue;
-	}
-	
-	$images = scandir($image_path);
-	$array_image_metadata = array();
-	for ($i=0; $i < count($images); $i++) { 
-		$image = $image_path . $images[$i];
-		if (is_dir($image)) {
-			continue;
-		}
-		$size = getimagesize($image);
-		$imageId = strstr($images[$i], '.', true);
-		$url = 'weed_2_' . $dir . '_' . $imageId;
-		$array_image_metadata[] = array('id'=>(int)$imageId, 'width'=>$size[0], 'height'=>$size[1]);
-	}
-	// var_dump(json_encode($array_image_metadata));
-	
-	echo 'UPDATE weed SET image_metadata = \'' . json_encode($array_image_metadata) . '\' WHERE id=' . $dir . ';';
-	echo "\n";
-}
+
+// $size = getimagesize("upload/2/103/0.jpeg");
+// echo 'image width: ' . $size[0] . ', image height: ' . $size[1] . "\n";
+//
+// // $image_path = './upload/2/136/';
+//
+// $dir_path = scandir('./upload/2/');
+// foreach($dir_path as $dir) {
+// 	$image_path = './upload/2/' . $dir . '/';
+// 	if (!is_dir($image_path)) {
+// 		continue;
+// 	}
+//
+// 	$images = scandir($image_path);
+// 	$array_image_metadata = array();
+// 	for ($i=0; $i < count($images); $i++) {
+// 		$image = $image_path . $images[$i];
+// 		if (is_dir($image)) {
+// 			continue;
+// 		}
+// 		$size = getimagesize($image);
+// 		$imageId = strstr($images[$i], '.', true);
+// 		$url = 'weed_2_' . $dir . '_' . $imageId;
+// 		$array_image_metadata[] = array('id'=>(int)$imageId, 'width'=>$size[0], 'height'=>$size[1]);
+// 	}
+// 	// var_dump(json_encode($array_image_metadata));
+//
+// 	echo 'UPDATE weed SET image_metadata = \'' . json_encode($array_image_metadata) . '\' WHERE id=' . $dir . ';';
+// 	echo "\n";
+// }
 
 echo "\n";
+
+function get_content_type($content_type)
+{
+	$pos = strpos($content_type, ';');
+	if (!$pos) {
+		return $content_type;
+	} else {
+		return strstr($content_type, ';', true);
+	}
+}
 
 function base64test()
 {

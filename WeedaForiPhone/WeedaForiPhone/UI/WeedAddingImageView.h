@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "WeedImageView.h"
+#import "WLImageView.h"
 
 @class WeedAddingImageView;
 @protocol WeedAddingImageViewDelegate <NSObject>
@@ -15,6 +15,6 @@
 - (void)pressDelete:(WeedAddingImageView *)view;
 @end
 
-@interface WeedAddingImageView : WeedImageView
+@interface WeedAddingImageView : WLImageView
 @property (nonatomic, weak) id<WeedAddingImageViewDelegate> delegate;
 @end

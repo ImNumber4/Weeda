@@ -14,6 +14,7 @@
 #import "UserTableViewCell.h"
 #import "WeedImageController.h"
 #import "UserViewController.h"
+#import "ImageUtil.h"
 
 @interface ConversationViewController ()
 
@@ -288,10 +289,11 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
 
 - (void)selectedImage:(UIImage *)image
 {
+    UIImage *compressedImage = [ImageUtil imageWithCompress:image];
     RKManagedObjectStore *objectStore = [[RKObjectManager sharedManager] managedObjectStore];
     NSString *url = [NSString stringWithFormat:@"message/upload/%@", self.participant_id];
     NSMutableURLRequest *request = [[RKObjectManager sharedManager] multipartFormRequestWithObject:nil method:RKRequestMethodPOST path:url parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-        [formData appendPartWithFileData:UIImageJPEGRepresentation(image, 100)
+        [formData appendPartWithFileData:UIImageJPEGRepresentation(compressedImage, 1.0f)
                                     name:@"image"
                                 fileName:@"image.jpeg"
                                 mimeType:@"image/jpeg"];

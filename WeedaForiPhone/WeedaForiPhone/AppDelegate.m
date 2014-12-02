@@ -320,7 +320,8 @@ NSString * _deviceToken;
     
     [weedMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"images" toKeyPath:@"images" withMapping:weedImageMapping]];
     
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"shouldBeDeleted == 1 || id < 0"];
+//    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"shouldBeDeleted == 1 || id < 0"];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"shouldBeDeleted == 1"];
     weedMapping.deletionPredicate = predicate;
     
     RKEntityMapping *messageMapping = [RKEntityMapping mappingForEntityForName:NSStringFromClass([Message class]) inManagedObjectStore:managedObjectStore];
@@ -472,8 +473,9 @@ NSString * _deviceToken;
     //weed creation mapping
     RKObjectMapping * weedRequestMapping = [RKObjectMapping requestMapping];
     [weedRequestMapping addAttributeMappingsFromArray:@[ @"id", @"content",@"time",@"user_id", @"light_id", @"root_id", @"image_count", @"mentions"]];
-    
-    [weedRequestMapping addRelationshipMappingWithSourceKeyPath:@"images" mapping:[weedImageMapping inverseMapping]];
+    RKObjectMapping *weedImageRequestMapping = [RKObjectMapping requestMapping];
+    [weedImageRequestMapping addAttributeMappingsFromDictionary:@{@"imageId" : @"id"}];
+    [weedRequestMapping addRelationshipMappingWithSourceKeyPath:@"images" mapping:weedImageRequestMapping];
     
     
     [manager addRequestDescriptor:[RKRequestDescriptor requestDescriptorWithMapping:weedRequestMapping

@@ -135,13 +135,13 @@
     }
     
     CGSize newSize = CGSizeMake(originalImage.size.width * ratio, originalImage.size.height * ratio);
-    return [self imageWithImage:newSize originalImage:originalImage];
+    return [self imageWithImage:originalImage toSize:newSize];
 }
 
-+ (UIImage *)imageWithImage:(CGSize)size originalImage:(UIImage *)originalImage
++ (UIImage *)imageWithImage:(UIImage *)image toSize:(CGSize)size
 {
     UIGraphicsBeginImageContext(size);
-    [originalImage drawInRect:CGRectMake(0, 0, size.width, size.height)];
+    [image drawInRect:CGRectMake(0, 0, size.width, size.height)];
     UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     

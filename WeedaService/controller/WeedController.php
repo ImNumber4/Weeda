@@ -3,6 +3,8 @@
 // ini_set('display_errors',1);
 // error_reporting(E_ALL);
 
+include './library/ImageHandler.php';
+
 class WeedController extends Controller
 {
 	protected $weed_dao;
@@ -62,16 +64,29 @@ class WeedController extends Controller
 		return json_encode(array('mentions'=>$mentions));
 	}
 	
-	public function create() 
+	public function create($parameters) 
 	{
 		//parse request body
-		$weed = $this->parse_request_body();
+		$weed = $this->parse_request_body($parameters);
 		
+		//Save weed to db
 		$result = $this->weed_dao->create($weed);
-
+		
+		//Save images
+		try {
+			$files = $parameters["files"];
+			if (isset($files)) {
+				foreach($files as $id => $file) {
+					$this->upload_weed_image($file, $weed->get_user_id(), $result);
+				}
+			}
+		} catch (Exception $e) {
+			$this->weed_dao->delete($result);
+			delete_weed_image_dir($weed->get_user_id(), $result);
+		}
+		
 		$currentUsername = $this->getCurrentUsername();
 		$currentUser_id = $this->getCurrentUser();
-
 		$mentions = $weed->get_mentions();
 		foreach ($mentions as &$mention) {
 			if ($mention != $currentUser_id) {
@@ -96,6 +111,8 @@ class WeedController extends Controller
 	public function delete($id)
 	{
 		$this->weed_dao->delete($id);
+		$user_id = $this->getCurrentUser();
+		delete_weed_image_dir($user_id, $id);
 	}
 	
 	public function seed($weed_id) 
@@ -148,30 +165,41 @@ class WeedController extends Controller
 		$this->weed_dao->setUserUnwaterWeed($currentUser_id, $weed_id);
 	}
 	
-	private function parse_request_body() {
+	private function parse_request_body($parameters) {
 		if ($_SERVER['REQUEST_METHOD'] != 'POST' && $_SERVER['REQUEST_METHOD'] != 'PUT') {
 			throw new InvalidRequestException('request has to be either POST or PUT.');
 		}
-		$data = json_decode(file_get_contents('php://input'));
-		$invalidReason = $this->check_para($data);
+		// $data = json_decode(file_get_contents('php://input'));
+		$invalidReason = $this->check_para($parameters);
 		if ($invalidReason) {
 			throw new InvalidRequestException("Inputs are not valid due to $invalidReason");
 		}
 		
 		$weed = new Weed();
-		$weed->set_content($data->content);
-		$weed->set_user_id($data->user_id);
-		$weed->set_time($data->time);
-		$weed->set_id($data->id);
+		$weed->set_content($parameters["content"]);
+		$weed->set_user_id($parameters["user_id"]);
+		$weed->set_time($parameters["time"]);
+		$weed->set_id($parameters["id"]);
 		$weed->set_deleted(0);
-		$weed->set_light_id($data->light_id);
-		$weed->set_root_id($data->root_id);
-		$weed->set_image_count($data->image_count);
-		$weed->set_mentions($data->mentions);
+		$weed->set_light_id($parameters["light_id"]);
+		$weed->set_root_id($parameters["root_id"]);
+		$weed->set_image_count($parameters["image_count"]);
+		
+		if (!isset($parameters["mentions"])) {
+			$parameters["mentions"] = array();
+		}
+		$weed->set_mentions($parameters["mentions"]);
 		
 		$metadata = array();
-		foreach($data->images as $image) {
-			$metadata[] = array('id'=>$image->id, 'width'=>$image->width, 'height'=>$image->height);
+		$files = $parameters["files"];
+		foreach($parameters["images"] as $image) {
+			$id = $image["id"];
+			$file = $files[$id];
+			if (!$file) {
+				continue;
+			}
+			list($width, $height) = getimagesize($file['tmp_name']);
+			$metadata[] = array('id'=>$image["id"], 'width'=>$width, 'height'=>$height);
 		}
 		$weed->set_image_metadata(json_encode($metadata));
 		
@@ -179,26 +207,35 @@ class WeedController extends Controller
 	}
 	
 	private function check_para($data)
-	{	
-		$content = trim($data->content);
+	{
+		$content = trim($data['content']);
 		if ($content == '') {
 			return 'Input error, content is null';
 		}
 			
-		$time = trim($data->time);
+		$time = trim($data['time']);
 		if ($time == '') {
 			return 'Input error, time is null';
 		}
 		
-		$user_id = trim($data->user_id);
+		$user_id = trim($data['user_id']);
 		if ($user_id == '') {
 			return 'Input error, userid is null';
 		}
 		
-		if ($data->mentions == '') {
-			return 'Input error, $mentions is null';
-		}
 		return null;		
+	}
+	
+	private function upload_weed_image($file, $user_id, $weed_id)
+	{
+		error_log('Image name: ' . $file['name']);
+		error_log('Image type: ' . $file['type']);
+		error_log('Image size: ' . $file['size']);
+		error_log('Image tmp name: ' . $file['tmp_name']);
+
+		if (!saveImageForWeedsToServer($file, $user_id, $weed_id)) {
+			throw new DependencyFailureException('Failed to upload image for weed ' . $weed_id);
+		}
 	}
 }
 ?>

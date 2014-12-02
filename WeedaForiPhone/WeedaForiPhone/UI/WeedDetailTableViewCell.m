@@ -310,10 +310,7 @@ static NSString * WEB_SERVER_GET_FAVICON_URL = @"http://www.google.com/s2/favico
         WeedImage *image1 = (WeedImage *)obj1;
         WeedImage *image2 = (WeedImage *)obj2;
         
-        CGFloat ratio1 = [image1.width floatValue] / [image1.height floatValue];
-        CGFloat ratio2 = [image2.width floatValue] / [image2.height floatValue];
-        
-        if (ratio1 >= ratio2) {
+        if (image1.imageId < image2.imageId) {
             return NSOrderedAscending;
         } else {
             return NSOrderedDescending;

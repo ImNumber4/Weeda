@@ -139,7 +139,7 @@
     if (!_imageURL && _shouldDownloadForFullScreenDisplay) {
         return;
     }
-    _maxDisplayView = [[WeedImageMaxDisplayView alloc]initWithImageView:self];
+    _maxDisplayView = [[WeedImageMaxDisplayView alloc] initWithImageView:self];
     _maxDisplayView.changeAlphaValueDuringAnimation = _changeAlphaValueDuringAnimation;
     _maxDisplayView.shouldDownloadForFullScreenDisplay = _shouldDownloadForFullScreenDisplay;
     self.userInteractionEnabled = YES;
