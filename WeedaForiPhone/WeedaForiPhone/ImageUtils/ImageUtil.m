@@ -9,8 +9,8 @@
 #import "ImageUtil.h"
 
 #define MAX_UPLOAD_IMAGE_SIZE 2 * 1024 * 1024
-#define MAX_IMAGE_WIDTH 1000
-#define MAX_IMAGE_HEIGHT 1000
+#define MAX_IMAGE_WIDTH 1500
+#define MAX_IMAGE_HEIGHT 1500
 
 @implementation ImageUtil
 
