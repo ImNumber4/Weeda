@@ -41,7 +41,7 @@
 
 @property (nonatomic, weak) UIPanGestureRecognizer *pan;
 
-@property (nonatomic, strong) NSMutableDictionary * mentionedUsernameToUserId;
+@property (nonatomic, strong) NSMutableDictionary * mentionedUsernameToUser;
 
 @property (nonatomic, retain) UILabel *placeHolder;
 
@@ -151,7 +151,7 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
     [self.view addGestureRecognizer:pan];
     self.pan = pan;
     
-    self.mentionedUsernameToUserId = [[NSMutableDictionary alloc] init];
+    self.mentionedUsernameToUser = [[NSMutableDictionary alloc] init];
 }
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
@@ -209,9 +209,9 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
             [validMentions addObject:token];
         }
     }
-    for(NSString *key in self.mentionedUsernameToUserId.allKeys) {
-        if (![validMentions containsObject:key]) {
-            [self.mentionedUsernameToUserId removeObjectForKey:key];
+    for(User *user in self.mentionedUsernameToUser.allKeys) {
+        if (![validMentions containsObject:[NSString stringWithFormat:@"%@", user.id]]) {
+            [self.mentionedUsernameToUser removeObjectForKey:user];
         }
     }
 }
@@ -315,7 +315,7 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
     self.weedContentView.text = [NSString stringWithFormat:@"%@%@ %@", [textBeforeInsertionPoint substringToIndex:lastAtCharacter.location + 1], user.username, textAfterInsertionPoint];
     [self.weedContentView setSelectedRange:NSMakeRange(self.weedContentView.text.length - textAfterInsertionPoint.length, 0)];
     [self adjustWeedContentView:true];
-    [self.mentionedUsernameToUserId setObject:user.id forKey:[NSString stringWithFormat:@"@%@", user.username]];
+    [self.mentionedUsernameToUser setObject:user forKey:[NSString stringWithFormat:@"@%@", user.username]];
 }
 
 #pragma mark -
@@ -334,9 +334,12 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
         } else {
             weed.root_id = weed.light_id;
         }
-        [self.mentionedUsernameToUserId setObject:self.lightWeed.user_id forKey:self.lightWeed.username];
+        User *lightWeedUser = [User new];
+        lightWeedUser.id = self.lightWeed.user_id;
+        lightWeedUser.username = self.lightWeed.username;
+        [self.mentionedUsernameToUser setObject:lightWeedUser forKey:self.lightWeed.username];
     }
-    weed.mentions = [[NSSet alloc] initWithArray:self.mentionedUsernameToUserId.allValues];
+    weed.mentions = [[NSSet alloc] initWithArray:self.mentionedUsernameToUser.allValues];
     
     // If appropriate, configure the new managed object.
     // Normally you should use accessor methods, but using KVC here avoids the need to add a custom class to the template.

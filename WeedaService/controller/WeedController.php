@@ -185,10 +185,13 @@ class WeedController extends Controller
 		$weed->set_root_id($parameters["root_id"]);
 		$weed->set_image_count($parameters["image_count"]);
 		
-		if (!isset($parameters["mentions"])) {
-			$parameters["mentions"] = array();
-		}
-		$weed->set_mentions($parameters["mentions"]);
+		$mentions = array();
+		if (isset($parameters["mentions"])) {
+			foreach ($parameters["mentions"] as $mention) {
+				$mentions[] = $mention["id"];
+			}
+		} 
+		$weed->set_mentions($mentions);
 		
 		$metadata = array();
 		$files = $parameters["files"];

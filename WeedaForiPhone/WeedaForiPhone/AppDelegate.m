@@ -471,11 +471,15 @@ NSString * _deviceToken;
                                                                             statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)]];
     
     //weed creation mapping
-    RKObjectMapping * weedRequestMapping = [RKObjectMapping requestMapping];
-    [weedRequestMapping addAttributeMappingsFromArray:@[ @"id", @"content",@"time",@"user_id", @"light_id", @"root_id", @"image_count", @"mentions"]];
+    RKObjectMapping *weedRequestMapping = [RKObjectMapping requestMapping];
+    [weedRequestMapping addAttributeMappingsFromArray:@[ @"id", @"content",@"time",@"user_id", @"light_id", @"root_id", @"image_count"]];
     RKObjectMapping *weedImageRequestMapping = [RKObjectMapping requestMapping];
     [weedImageRequestMapping addAttributeMappingsFromDictionary:@{@"imageId" : @"id"}];
+    RKObjectMapping *weedMentionMapping = [RKObjectMapping requestMapping];
+    [weedMentionMapping addAttributeMappingsFromDictionary:@{@"id":@"id"}];
+    
     [weedRequestMapping addRelationshipMappingWithSourceKeyPath:@"images" mapping:weedImageRequestMapping];
+    [weedRequestMapping addRelationshipMappingWithSourceKeyPath:@"mentions" mapping:weedMentionMapping];
     
     
     [manager addRequestDescriptor:[RKRequestDescriptor requestDescriptorWithMapping:weedRequestMapping
