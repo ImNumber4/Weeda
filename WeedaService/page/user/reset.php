@@ -162,9 +162,7 @@
 					return false;
 			    }
 				
-				var pwRegStr = new RegExp("((?=.*\\d)(?=.*[A-Z])(?=.*[a-z]).{6,16})");
-				var match = pwRegStr.test(pass1.value);
-				if (!match) {
+				if (!preg_match("((?=.*\\d)(?=.*[A-Z])(?=.*[a-z]).{6,16})",$pass1.value)) {
 					message.style.color = badColor;
 					message.innerHTML = "Password needs to have least 6 characters, include 1 uppercase and 1 lowercase and 1 Digital.";
 					return false;

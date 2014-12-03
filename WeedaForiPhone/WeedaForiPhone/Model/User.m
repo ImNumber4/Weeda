@@ -48,16 +48,35 @@
     return coordinate;
 }
 
-+ (NSString *)validatePassword:(NSString *)password
++ (NSString *)validateUsername:(NSString *)username
 {
-    NSError *error = nil;
-    NSString *pwRegStr = @"((?=.*\\d)(?=.*[A-Z])(?=.*[a-z]).{6,16})";
-    NSRegularExpression *pwRegex = [[NSRegularExpression alloc] initWithPattern:pwRegStr options:NSRegularExpressionCaseInsensitive error:&error];
-    NSTextCheckingResult *result = [pwRegex firstMatchInString:password options:0 range:NSMakeRange(0, password.length)];
-    if (result) {
+    if (!username) {
+        return @"Username can not be empty.";
+    }
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    if ([username isEqualToString:appDelegate.currentUser.username]) {
+        return @"New username should be non-empty and different from previous username.";
+    }
+    NSString *regex = @"[A-Za-z0-9]{1,16}";
+    NSPredicate *usernameTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
+    if ([usernameTest evaluateWithObject:username]) {
         return nil;
     } else {
-        return @"Password needs to have least 6 characters, include 1 uppercase and 1 lowercase and 1 Digital";
+        return @"Username should have 6-16 characters, and only numbers and letters are allowed.";
+    }
+}
+
++ (NSString *)validatePassword:(NSString *)password
+{
+    if (!password) {
+        return @"Password can not be empty.";
+    }
+    NSString *pwRegStr = @"((?=.*\\d)(?=.*[A-Z])(?=.*[a-z]).{6,16})";
+    NSPredicate *pwTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", pwRegStr];
+    if ([pwTest evaluateWithObject:password]) {
+        return nil;
+    } else {
+        return @"Password should have 1-16 characters, including at least 1 uppercase and 1 lowercase and 1 digit.";
     }
 }
 

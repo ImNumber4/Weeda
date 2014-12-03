@@ -117,6 +117,12 @@ static const NSInteger UPDATE_USERNAME_INDEX = 0;
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:cellPosition];
     if (indexPath.row == UPDATE_USERNAME_INDEX) {
         self.updatedUsername = text;
+        NSString * usernameInvalidReason = [User validateUsername:self.updatedUsername];
+        if (usernameInvalidReason) {
+            self.noticeLabel.text = usernameInvalidReason;
+        } else {
+            self.noticeLabel.text = nil;
+        }
     }
 }
 
@@ -129,6 +135,11 @@ static const NSInteger UPDATE_USERNAME_INDEX = 0;
 
 - (void)submit:(id) sender
 {
+    NSString * usernameInvalidReason = [User validateUsername:self.updatedUsername];
+    if (usernameInvalidReason) {
+        self.noticeLabel.text = usernameInvalidReason;
+        return;
+    }
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     if (!self.updatedUsername || [self.updatedUsername isEqualToString:appDelegate.currentUser.username]) {
         self.noticeLabel.text = @"New username should be non-empty and different from previous username.";

@@ -271,7 +271,13 @@ class UserController extends Controller
 	public function updatePassword($password)
 	{
 		$user_id = $this->getCurrentUser();
+		$username = $this->getCurrentUserPassword();
 		$this->user_dao->updatePassword($user_id, $password);
+		$user = array();
+		$user['id'] = $user_id;
+		$user['password'] = $password;
+		$user['username'] = $username;
+		$this->update_cookie($user);
 	}
 	
 	public function update() {

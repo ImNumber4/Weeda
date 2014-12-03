@@ -223,6 +223,8 @@ bool availableUsername = false;
             }
         case PASSWORD_INDEX:
             return [User validatePassword:inputValue];
+        case USERNAME_INDEX:
+            return [User validateUsername:inputValue];
         default:
             break;
     }
@@ -255,8 +257,9 @@ bool availableUsername = false;
 
 - (NSString *)validateUsername:(NSString *)username
 {
-    if (!username || [username length] == 0) {
-        return @"Username can not be empty.";
+    NSString * usernameInvalidReason = [User validateUsername:username];
+    if (!usernameInvalidReason) {
+        return usernameInvalidReason;
     }
     
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@user/hasUsername/%@", ROOT_URL, username]];

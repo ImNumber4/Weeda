@@ -55,6 +55,7 @@ static const NSInteger VERIFY_NEW_PASSWORD_INDEX = 2;
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0.0, tableY, self.view.frame.size.width, TABLE_CELL_HEIGHT * TABLE_CELL_COUNT)];
     [self.view addSubview:self.tableView];
     [self.tableView registerClass:[UserInfoEditableCell class] forCellReuseIdentifier:TABLE_CELL_REUSE_ID];
+    self.tableView.scrollEnabled = false;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [SettingsViewController decorateSettingViewStyleTable:self.tableView];
@@ -131,11 +132,26 @@ static const NSInteger VERIFY_NEW_PASSWORD_INDEX = 2;
             self.currentPassword = text;
             break;
         case NEW_PASSWORD_INDEX:
+        {
             self.updatedPassword = text;
+            NSString * invalidReason = [User validatePassword:self.updatedPassword];
+            if (invalidReason) {
+                self.noticeLabel.text = invalidReason;
+            } else {
+                self.noticeLabel.text = nil;
+            }
             break;
+        }
         case VERIFY_NEW_PASSWORD_INDEX:
+        {
             self.verifyPassword = text;
+            if (!(self.updatedPassword && self.verifyPassword && [self.updatedPassword isEqualToString:self.verifyPassword])) {
+                self.noticeLabel.text = @"New password and verify password should be identical and non empty.";
+            } else {
+                self.noticeLabel.text = nil;
+            }
             break;
+        }
         default:
             break;
     }
@@ -150,22 +166,18 @@ static const NSInteger VERIFY_NEW_PASSWORD_INDEX = 2;
 
 - (void)submit:(id) sender
 {
-    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    if (!(self.currentPassword && [self.currentPassword isEqualToString:appDelegate.currentUser.password])) {
-        self.noticeLabel.text = @"Current password is not correct.";
+    NSString * passwordInvalidReason = [User validatePassword:self.updatedPassword];
+    if (passwordInvalidReason != nil) {
+        self.noticeLabel.text = passwordInvalidReason;
         return;
     }
     if (!(self.updatedPassword && self.verifyPassword && [self.updatedPassword isEqualToString:self.verifyPassword])) {
         self.noticeLabel.text = @"New password and verify password should be identical and non empty.";
         return;
     }
-    if ([self.updatedPassword isEqualToString:self.currentPassword]) {
-        self.noticeLabel.text = @"New password is the same as current password.";
-        return;
-    }
-    NSString * passwordInvalidReason = [User validatePassword:self.updatedPassword];
-    if (passwordInvalidReason != nil) {
-        self.noticeLabel.text = passwordInvalidReason;
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    if (!(self.currentPassword && [self.currentPassword isEqualToString:appDelegate.currentUser.password])) {
+        self.noticeLabel.text = @"Current password is not correct.";
         return;
     }
     self.noticeLabel.text = @"";

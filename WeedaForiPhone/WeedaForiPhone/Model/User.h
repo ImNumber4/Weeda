@@ -50,6 +50,10 @@
 /*
  * return invalid reason otherwise return nil
  */
++ (NSString *)validateUsername:(NSString *)username;
+/*
+ * return invalid reason otherwise return nil
+ */
 + (NSString *)validatePassword:(NSString *)password;
 + (BOOL)isEmailValid:(NSString*)email;
 @end
