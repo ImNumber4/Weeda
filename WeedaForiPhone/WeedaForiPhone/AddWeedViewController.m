@@ -209,9 +209,9 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
             [validMentions addObject:token];
         }
     }
-    for(User *user in self.mentionedUsernameToUser.allKeys) {
-        if (![validMentions containsObject:[NSString stringWithFormat:@"%@", user.id]]) {
-            [self.mentionedUsernameToUser removeObjectForKey:user];
+    for(NSString *username in self.mentionedUsernameToUser.allKeys) {
+        if (![validMentions containsObject:[NSString stringWithFormat:@"%@", username]]) {
+            [self.mentionedUsernameToUser removeObjectForKey:username];
         }
     }
 }
