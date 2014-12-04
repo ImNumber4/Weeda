@@ -190,7 +190,11 @@ static NSInteger SHOW_WATER_USERS = 2;
         weed.if_cur_user_water_it = [NSNumber numberWithInt:0];
         [self updateView];
         [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/unwater/%@", weed.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-            
+            NSError *error = nil;
+            BOOL successful = [weed.managedObjectContext save:&error];
+            if (!successful) {
+                NSLog(@"Save Weed Error: %@", error.localizedDescription);
+            }
         } failure:^(RKObjectRequestOperation *operation, NSError *error) {
             RKLogError(@"unwater failed with error: %@", error);
             weed.water_count = [NSNumber numberWithInt:[weed.water_count intValue] + 1];
@@ -203,8 +207,13 @@ static NSInteger SHOW_WATER_USERS = 2;
         weed.water_count = [NSNumber numberWithInt:[weed.water_count intValue] + 1];
         weed.if_cur_user_water_it = [NSNumber numberWithInt:1];
         [self updateView];
-        [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/water/%@", weed.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-            
+        [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/water/%@", weed.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult)
+        {
+            NSError *error = nil;
+            BOOL successful = [weed.managedObjectContext save:&error];
+            if (!successful) {
+                NSLog(@"Save Weed Error: %@", error.localizedDescription);
+            }
         } failure:^(RKObjectRequestOperation *operation, NSError *error) {
             RKLogError(@"water failed with error: %@", error);
             weed.water_count = [NSNumber numberWithInt:[weed.water_count intValue] - 1];
@@ -222,8 +231,13 @@ static NSInteger SHOW_WATER_USERS = 2;
         weed.seed_count = [NSNumber numberWithInt:[weed.seed_count intValue] - 1];
         weed.if_cur_user_seed_it = [NSNumber numberWithInt:0];
         [self updateView];
-        [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/unseed/%@", weed.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-            
+        [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/unseed/%@", weed.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult)
+        {
+            NSError *error = nil;
+            BOOL successful = [weed.managedObjectContext save:&error];
+            if (!successful) {
+                NSLog(@"Save Weed Error: %@", error.localizedDescription);
+            }
         } failure:^(RKObjectRequestOperation *operation, NSError *error) {
             RKLogError(@"unseed failed with error: %@", error);
             weed.seed_count = [NSNumber numberWithInt:[weed.seed_count intValue] + 1];
@@ -236,8 +250,13 @@ static NSInteger SHOW_WATER_USERS = 2;
         weed.seed_count = [NSNumber numberWithInt:[weed.seed_count intValue] + 1];
         weed.if_cur_user_seed_it = [NSNumber numberWithInt:1];
         [self updateView];
-        [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/seed/%@", weed.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-            
+        [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/seed/%@", weed.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult)
+        {
+            NSError *error = nil;
+            BOOL successful = [weed.managedObjectContext save:&error];
+            if (!successful) {
+                NSLog(@"Save Weed Error: %@", error.localizedDescription);
+            }
         } failure:^(RKObjectRequestOperation *operation, NSError *error) {
             RKLogError(@"seed failed with error: %@", error);
             weed.seed_count = [NSNumber numberWithInt:[weed.seed_count intValue] - 1];
@@ -272,10 +291,10 @@ static NSInteger SHOW_WATER_USERS = 2;
 - (void)deleteIt:(id)sender
 {
     UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Delete Weed"
-                                                 message:@"Are you sure to delete this weed?"
+                                                 message:@"Are you sure you want to delete this weed?"
                                                 delegate:self
-                                       cancelButtonTitle:@"cancel"
-                                       otherButtonTitles:@"delete", nil];
+                                       cancelButtonTitle:@"Cancel"
+                                       otherButtonTitles:@"Delete", nil];
     [av show];
 }
 
@@ -326,7 +345,7 @@ static NSInteger SHOW_WATER_USERS = 2;
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     NSString *clickButtonStr = [alertView buttonTitleAtIndex:buttonIndex];
-    if ([clickButtonStr isEqualToString:@"delete"]) {
+    if ([clickButtonStr isEqualToString:@"Delete"]) {
         [self deleteWeedEntity:_weed];
     }
 }

@@ -179,6 +179,8 @@ static double MORE_CELL_HEIGHT = 35;
             weedDetailTableViewCell.delegate = self;
             [weedDetailTableViewCell decorateCellWithWeed:weed parentViewController:self showHeader:true];
             weedDetailTableViewCell.selectionStyle = UITableViewCellSelectionStyleNone;
+        } else {
+            [weedDetailTableViewCell refreshControlDataWithWeed:weed];
         }
         return weedDetailTableViewCell;
     } else if (indexPath.section == USERS_SECTION) {

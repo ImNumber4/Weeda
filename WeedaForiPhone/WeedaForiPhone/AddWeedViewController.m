@@ -380,6 +380,14 @@ static NSString * USER_TABLE_CELL_REUSE_ID = @"UserTableCell";
         if (!successful) {
             NSLog(@"Save Weed Error: %@", error.localizedDescription);
         }
+        if (self.lightWeed) {
+            self.lightWeed.if_cur_user_light_it = [NSNumber numberWithInt:1];
+            self.lightWeed.light_count = [NSNumber numberWithInt:[self.lightWeed.light_count intValue] + 1];
+            successful = [self.lightWeed.managedObjectContext save:&error];
+            if (!successful) {
+                NSLog(@"Save Light Weed Error: %@", error.localizedDescription);
+            }
+        }
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
         NSLog(@"Failure saving post: %@", error.localizedDescription);
         UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Weed Posting failed" message:nil delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];

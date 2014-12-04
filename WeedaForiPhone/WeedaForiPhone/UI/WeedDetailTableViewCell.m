@@ -153,6 +153,12 @@ static NSString * WEB_SERVER_GET_FAVICON_URL = @"http://www.google.com/s2/favico
 
 - (void)tappedContentView:(UIGestureRecognizer *)recognizer
 {
+    if (![recognizer.view isKindOfClass:[UITextView class]]) {
+        if ([self.delegate respondsToSelector:@selector(selectWeedContent:)]) {
+            [self.delegate selectWeedContent:recognizer];
+        }
+        return;
+    }
     UITextView *textView = (UITextView *)recognizer.view;
     
     // Location of the tap in text-container coordinates
@@ -179,6 +185,10 @@ static NSString * WEB_SERVER_GET_FAVICON_URL = @"http://www.google.com/s2/favico
             UserViewController *controller = (UserViewController *)[[AppDelegate getMainStoryboard] instantiateViewControllerWithIdentifier:@"UserViewController"];
             [controller setUser_id:[attributes objectForKey:USER_ID_TAG]];
             [self.parentViewController.navigationController pushViewController:controller animated:YES];
+        } else {
+            if ([self.delegate respondsToSelector:@selector(selectWeedContent:)]) {
+                [self.delegate selectWeedContent:recognizer];
+            }
         }
     }
 }
@@ -188,6 +198,12 @@ static NSString * WEB_SERVER_GET_FAVICON_URL = @"http://www.google.com/s2/favico
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
+}
+
+- (void) refreshControlDataWithWeed:(Weed *) weed
+{
+    self.weed = weed;
+    [_controlView decorateWithWeed:weed parentViewController:self.parentViewController];
 }
 
 - (void)decorateCellWithWeed:(Weed *)weed parentViewController:(UIViewController *) parentViewController showHeader:(BOOL) showHeader
@@ -452,64 +468,79 @@ static NSString * WEB_SERVER_GET_FAVICON_URL = @"http://www.google.com/s2/favico
 
 - (void)createWebSummaryView
 {
-    _webSummaryView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.weedContentLabel.frame.size.width, DEFAULT_VIDEO_HEIGHT + 20 + 10)];
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tappedContentView:)];
-    [_webSummaryView addGestureRecognizer:tap];
-    _faviconView = [UIImageView new];
-    _faviconView.contentMode = UIViewContentModeCenter;
-    
-    _titleView = [UITextView new];
-    [_titleView addObserver:self forKeyPath:@"contentSize" options:(NSKeyValueObservingOptionNew) context:NULL];
-    _titleView.editable = NO;
-    _titleView.selectable = NO;
-    _titleView.scrollEnabled = NO;
-    _titleView.textColor = [UIColor darkGrayColor];
-    _titleView.font = self.weedContentLabel.font;
-    [_titleView setBackgroundColor:[UIColor clearColor]];
-    
-    _descriptionView = [UITextView new];
-    [_descriptionView setBackgroundColor:[UIColor clearColor]];
-    _descriptionView.editable = NO;
-    _descriptionView.selectable = NO;
-    _descriptionView.hidden = YES;
-    _descriptionView.scrollEnabled = NO;
-    _descriptionView.textColor = [UIColor darkGrayColor];
-    _descriptionView.font = self.weedContentLabel.font;
-    [_webSummaryView addSubview:_descriptionView];
-    
-    _playerView = [YTPlayerView new];
-    _playerView.delegate = self;
-    _playerView.hidden = YES;
-    [_webSummaryView addSubview:_playerView];
-    
-    [_webSummaryView addSubview:_faviconView];
-    [_webSummaryView addSubview:_titleView];
-    
-    _faviconView.translatesAutoresizingMaskIntoConstraints = NO;
-    _titleView.translatesAutoresizingMaskIntoConstraints = NO;
-    _descriptionView.translatesAutoresizingMaskIntoConstraints = NO;
-    _playerView.translatesAutoresizingMaskIntoConstraints = NO;
-    NSDictionary *vs = NSDictionaryOfVariableBindings(_faviconView, _titleView, _playerView, _descriptionView);
-    [_webSummaryView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_faviconView(20)][_titleView]|" options:0 metrics:nil views:vs]];
-    [_webSummaryView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_faviconView(30)]" options:0 metrics:nil views:vs]];
-    _titleHeightConstraint = [NSLayoutConstraint constraintWithItem:_titleView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:30];
-    [_titleView addConstraint:_titleHeightConstraint];
-    
-    if (_type == DetailCellShowingTypeVideo) {
-        [_webSummaryView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_titleView][_playerView]|" options:0 metrics:nil views:vs]];
-        [_webSummaryView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_playerView]|" options:0 metrics:nil views:vs]];
-        _playerHeightConstraint = [NSLayoutConstraint constraintWithItem:_playerView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:0];
-        [_playerView addConstraint:_playerHeightConstraint];
+    BOOL recreatingView = false;
+    if (!_webSummaryView) {
+        recreatingView = true;
+        _webSummaryView = [UIView new];
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tappedContentView:)];
+        [_webSummaryView addGestureRecognizer:tap];
     }
-    if (_type == DetailCellShowingTypeUrl) {
-        [_webSummaryView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_titleView][_descriptionView]|" options:0 metrics:nil views:vs]];
-        [_webSummaryView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_descriptionView]|" options:0 metrics:nil views:vs]];
-        _descHeightConstraint = [NSLayoutConstraint constraintWithItem:_descriptionView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:0];
-        [_descriptionView addConstraint:_descHeightConstraint];
+    [_webSummaryView setFrame:CGRectMake(0, 0, self.weedContentLabel.frame.size.width, DEFAULT_VIDEO_HEIGHT + 20 + 10)];
+    
+    if (!_faviconView) {
+        _faviconView = [UIImageView new];
+        _faviconView.contentMode = UIViewContentModeCenter;
+        [_webSummaryView addSubview:_faviconView];
+        _faviconView.translatesAutoresizingMaskIntoConstraints = NO;
     }
     
-    [self addSubview:_webSummaryView];
-    _webSummaryView.hidden = YES;
+    if (!_titleView) {
+        _titleView = [UITextView new];
+        [_titleView addObserver:self forKeyPath:@"contentSize" options:(NSKeyValueObservingOptionNew) context:NULL];
+        _titleView.editable = NO;
+        _titleView.selectable = NO;
+        _titleView.scrollEnabled = NO;
+        _titleView.textColor = [UIColor darkGrayColor];
+        _titleView.font = self.weedContentLabel.font;
+        [_titleView setBackgroundColor:[UIColor clearColor]];
+        [_webSummaryView addSubview:_titleView];
+        _titleView.translatesAutoresizingMaskIntoConstraints = NO;
+    }
+    
+    if (!_descriptionView) {
+        _descriptionView = [UITextView new];
+        [_descriptionView setBackgroundColor:[UIColor clearColor]];
+        _descriptionView.editable = NO;
+        _descriptionView.selectable = NO;
+        _descriptionView.hidden = YES;
+        _descriptionView.scrollEnabled = NO;
+        _descriptionView.textColor = [UIColor darkGrayColor];
+        _descriptionView.font = self.weedContentLabel.font;
+        [_webSummaryView addSubview:_descriptionView];
+        _descriptionView.translatesAutoresizingMaskIntoConstraints = NO;
+    }
+    
+    if (!_playerView) {
+        _playerView = [YTPlayerView new];
+        _playerView.delegate = self;
+        _playerView.hidden = YES;
+        [_webSummaryView addSubview:_playerView];
+        _playerView.translatesAutoresizingMaskIntoConstraints = NO;
+    }
+    
+    if (recreatingView) {
+        NSDictionary *vs = NSDictionaryOfVariableBindings(_faviconView, _titleView, _playerView, _descriptionView);
+        [_webSummaryView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_faviconView(20)][_titleView]|" options:0 metrics:nil views:vs]];
+        [_webSummaryView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_faviconView(30)]" options:0 metrics:nil views:vs]];
+        _titleHeightConstraint = [NSLayoutConstraint constraintWithItem:_titleView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:30];
+        [_titleView addConstraint:_titleHeightConstraint];
+        
+        if (_type == DetailCellShowingTypeVideo) {
+            [_webSummaryView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_titleView][_playerView]|" options:0 metrics:nil views:vs]];
+            [_webSummaryView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_playerView]|" options:0 metrics:nil views:vs]];
+            _playerHeightConstraint = [NSLayoutConstraint constraintWithItem:_playerView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:0];
+            [_playerView addConstraint:_playerHeightConstraint];
+        }
+        if (_type == DetailCellShowingTypeUrl) {
+            [_webSummaryView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_titleView][_descriptionView]|" options:0 metrics:nil views:vs]];
+            [_webSummaryView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_descriptionView]|" options:0 metrics:nil views:vs]];
+            _descHeightConstraint = [NSLayoutConstraint constraintWithItem:_descriptionView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:0];
+            [_descriptionView addConstraint:_descHeightConstraint];
+        }
+        
+        [self addSubview:_webSummaryView];
+        _webSummaryView.hidden = YES;
+    }
 }
 
 - (void) decorateWeedContent

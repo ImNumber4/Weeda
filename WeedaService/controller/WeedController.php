@@ -25,7 +25,7 @@ class WeedController extends Controller
 	
 	public function queryByContent($keyword) {
 		$current_user_id = $this->getCurrentUser();
-		$weeds = $this->weed_dao->queryByContent($keyword, $current_user_id);
+		$weeds = $this->weed_dao->query($current_user_id, null, $keyword);
 		return json_encode(array('weeds'=>$weeds));
 	}
 	
@@ -41,8 +41,8 @@ class WeedController extends Controller
 	
 	public function queryById($weed_id) {
 		$current_user_id = $this->getCurrentUser();
-		$weeds = $this->weed_dao->query($current_user_id, null, $weed_id);
-		return json_encode(array('weeds'=>$weeds));
+		$weed = $this->weed_dao->queryById($current_user_id, $weed_id);
+		return json_encode(array('weeds'=>$weed));
 	}
 	
 	public function getLights($id) {
@@ -191,7 +191,7 @@ class WeedController extends Controller
 				$mentions[] = $mention["id"];
 			}
 		} 
-		$weed->set_mentions($mentions);
+		$weed->set_mentions($mentions);		
 		
 		$metadata = array();
 		$files = $parameters["files"];

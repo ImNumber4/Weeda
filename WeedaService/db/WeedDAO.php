@@ -5,60 +5,55 @@
 class WeedDAO extends BaseDAO
 {
 	
-	public function query($currentUser_id, $user_id, $weed_id) {
+	public function queryById($currentUser_id, $weed_id) {
+		$query = "SELECT weed.id as weed_id, user.id as user_id, (weed.light_count + weed.seed_count + weed.water_count) as score, user.user_type as user_type, weed.light_id as light_id, weed.root_id as root_id, currentUserWater.user_id as if_cur_user_water_it, currentUserWeed.user_id as if_cur_user_light_it, currentUserSeed.user_id as if_cur_user_seed_it, weed.water_count as water_count, weed.seed_count as seed_count, weed.light_count as light_count, weed.content as content, weed.time as time, username, weed.deleted as weed_deleted, user.deleted as user_deleted, weed.image_count as image_count, weed.image_metadata as image_metadata FROM weed left join weed currentUserWeed on currentUserWeed.root_id=weed.id or currentUserWeed.light_id=weed.id and currentUserWeed.user_id=$currentUser_id and weed.id = $weed_id left join water currentUserWater on currentUserWater.weed_id=weed.id and currentUserWater.user_id=$currentUser_id and weed.id = $weed_id left join seed currentUserSeed on currentUserSeed.weed_id=weed.id and currentUserSeed.user_id=$currentUser_id and weed.id = $weed_id left join user on user.id=weed.user_id where weed.id = $weed_id GROUP BY weed.id";
 		
-		$filter = null;
-		if(!is_null($user_id))
-			$filter = "where weed.user_id=$user_id";
-		
-		if(!is_null($weed_id)) {
-			if (!is_null($filter))
-				$filter = $filter . " and weed.id = $weed_id";
-			else
-				$filter = "where weed.id = $weed_id";
-		}
-		$isFeed = true;
-		if (is_null($filter)) {
-			$filter = "left join follow on follow.followee_uid = weed.user_id left join (select seed.weed_id as seed_id, seeduser.username as seedusername, seed.time as seedtime from seed left join user as seeduser on seed.user_id = seeduser.id left join follow as seedfollow on seedfollow.followee_uid = seed.user_id where seedfollow.follower_uid = $currentUser_id) as seeddata on seed_id=weed.id where (follower_uid = $currentUser_id and datediff(now(), weed.time) < 7) or datediff(now(), seedtime) < 7";
-			$additionalSelect = "seeddata.seedusername as seeded_by, seeddata.seedtime as seedtime,";
-		} else {
-			$additionalSelect = "";
-			$isFeed = false;
-		}
-		
-		/* grab the users from the db */
-		$query = "SELECT weed.id as weed_id, $additionalSelect user.id as user_id, (weed.light_count + weed.seed_count + weed.water_count) as score, user.user_type as user_type, weed.light_id as light_id, weed.root_id as root_id, currentUserWater.user_id as if_cur_user_water_it, currentUserWeed.user_id as if_cur_user_light_it, currentUserSeed.user_id as if_cur_user_seed_it, weed.water_count as water_count, weed.seed_count as seed_count, weed.light_count as light_count, weed.content as content, weed.time as weed_time, username, weed.deleted as weed_deleted, user.deleted as user_deleted, weed.image_count as image_count, weed.image_metadata as image_metadata FROM weed left join weed currentUserWeed on currentUserWeed.root_id=weed.id or currentUserWeed.light_id=weed.id and currentUserWeed.user_id=$currentUser_id left join water currentUserWater on currentUserWater.weed_id=weed.id and currentUserWater.user_id=$currentUser_id left join seed currentUserSeed on currentUserSeed.weed_id=weed.id and currentUserSeed.user_id=$currentUser_id left join user on user.id=weed.user_id $filter GROUP BY weed.id";
-
 		$result = $this->db_conn->query($query);
-
-		/* create one master array of the records */
-		$weeds = array();
 		if(mysql_num_rows($result)) {
 			while($weed = mysql_fetch_assoc($result)) {
 				$images = json_decode($weed['image_metadata']);
-				if ($isFeed)
-					$weeds[] = array('id' => $weed['weed_id'], 'content' => $weed['content'], 'seeded_by' => $weed['seeded_by'], 'watered_by' => $weed['watered_by'], 'is_feed' => $isFeed, 'content' => $weed['content'], 'content' => $weed['content'], 'user_id' => $weed['user_id'], 'user_type' => $weed['user_type'], 'score' => $weed['score'], 'username' => $weed['username'], 'time' => $weed['weed_time'], 'light_id' => $weed['light_id'], 'root_id' => $weed['root_id'], 'deleted' => $weed['weed_deleted'], 'light_count' => $weed['light_count'], 'water_count' => $weed['water_count'], 'seed_count' => $weed['seed_count'], 'if_cur_user_water_it' => $weed['if_cur_user_water_it'] == $currentUser_id, 'if_cur_user_seed_it' => $weed['if_cur_user_seed_it'] == $currentUser_id, 'if_cur_user_light_it' => $weed['if_cur_user_light_it'] == $currentUser_id, 'image_count' => $weed['image_count'], 'images' => $images, 'sort_time' => ($weed['seedtime']?$weed['seedtime']: $weed['weed_time']));
-				else 
-					$weeds[] = array('id' => $weed['weed_id'], 'content' => $weed['content'], 'seeded_by' => $weed['seeded_by'], 'watered_by' => $weed['watered_by'], 'content' => $weed['content'], 'content' => $weed['content'], 'user_id' => $weed['user_id'], 'user_type' => $weed['user_type'], 'score' => $weed['score'], 'username' => $weed['username'], 'time' => $weed['weed_time'], 'light_id' => $weed['light_id'], 'root_id' => $weed['root_id'], 'deleted' => $weed['weed_deleted'], 'light_count' => $weed['light_count'], 'water_count' => $weed['water_count'], 'seed_count' => $weed['seed_count'], 'if_cur_user_water_it' => $weed['if_cur_user_water_it'] == $currentUser_id, 'if_cur_user_seed_it' => $weed['if_cur_user_seed_it'] == $currentUser_id, 'if_cur_user_light_it' => $weed['if_cur_user_light_it'] == $currentUser_id, 'image_count' => $weed['image_count'], 'images' => $images, 'sort_time' => ($weed['seedtime']?$weed['seedtime']: $weed['weed_time']));
+				return array('id' => $weed['weed_id'], 'content' => $weed['content'], 'content' => $weed['content'], 'content' => $weed['content'], 'user_id' => $weed['user_id'], 'user_type' => $weed['user_type'], 'score' => $weed['score'], 'username' => $weed['username'], 'time' => $weed['time'], 'light_id' => $weed['light_id'], 'root_id' => $weed['root_id'], 'deleted' => $weed['weed_deleted'], 'light_count' => $weed['light_count'], 'water_count' => $weed['water_count'], 'seed_count' => $weed['seed_count'], 'if_cur_user_water_it' => $weed['if_cur_user_water_it'] == $currentUser_id, 'if_cur_user_seed_it' => $weed['if_cur_user_seed_it'] == $currentUser_id, 'if_cur_user_light_it' => $weed['if_cur_user_light_it'] == $currentUser_id, 'image_count' => $weed['image_count'], 'images' => $images);	
 			}
 		}
-
-		return $weeds;
+		return null;
 	}
 	
-	public function queryByContent($keyword, $currentUser_id) {
-
-		/* grab the users from the db */
-		$query = "SELECT weed.id as weed_id, user.id as user_id, (weed.light_count + weed.seed_count + weed.water_count) as score, user.user_type as user_type, weed.light_id as light_id, weed.root_id as root_id, currentUserWater.user_id as if_cur_user_water_it, currentUserWeed.user_id as if_cur_user_light_it, currentUserSeed.user_id as if_cur_user_seed_it, weed.water_count as water_count, weed.seed_count as seed_count, weed.light_count as light_count, weed.content as content, weed.time as weed_time, username, weed.deleted as weed_deleted, user.deleted as user_deleted, weed.image_count as image_count, weed.image_metadata as image_metadata FROM weed left join weed currentUserWeed on currentUserWeed.root_id=weed.id or currentUserWeed.light_id=weed.id and currentUserWeed.user_id=$currentUser_id left join water currentUserWater on currentUserWater.weed_id=weed.id and currentUserWater.user_id=$currentUser_id left join seed currentUserSeed on currentUserSeed.weed_id=weed.id and currentUserSeed.user_id=$currentUser_id left join user on user.id=weed.user_id WHERE weed.content like '%$keyword%' GROUP BY weed.id";
+	public function query($currentUser_id, $user_id, $keyword) {
+		
+		$filter = null;
+		$additionalSelect = "";
+		$isFeed = false;
+		if(!is_null($user_id)) {
+			$filter = "where weed.user_id=$user_id";
+		}
+		if(!is_null($keyword)) {
+			if (is_null($filter)) {
+				$filter = "where weed.content like '%$keyword%'";
+			} else {
+				$filter = $filter . " and weed.content like '%$keyword%'";
+			}
+		} 
+		if(is_null($filter)) {
+			$isFeed = true;
+			$filter = "left join follow on follow.followee_uid = weed.user_id left join (select seed.weed_id as seed_id, seeduser.username as seedusername, seed.time as seedtime from seed left join user as seeduser on seed.user_id = seeduser.id left join follow as seedfollow on seedfollow.followee_uid = seed.user_id where seedfollow.follower_uid = $currentUser_id) as seeddata on seed_id=weed.id where (follower_uid = $currentUser_id and datediff(now(), weed.time) < 7) or datediff(now(), seedtime) < 7";
+			$additionalSelect = "seeddata.seedusername as seeded_by, seeddata.seedtime as seedtime,";
+		} 
+		
+		$query = "SELECT weed.id as weed_id, $additionalSelect user.id as user_id, (weed.light_count + weed.seed_count + weed.water_count) as score, user.user_type as user_type, weed.light_id as light_id, weed.root_id as root_id, weed.water_count as water_count, weed.seed_count as seed_count, weed.light_count as light_count, weed.content as content, weed.time as time, username, weed.deleted as weed_deleted, weed.image_count as image_count, weed.image_metadata as image_metadata FROM weed left join user on user.id=weed.user_id $filter";
 
 		$result = $this->db_conn->query($query);
 
-		/* create one master array of the records */
 		$weeds = array();
 		if(mysql_num_rows($result)) {
 			while($weed = mysql_fetch_assoc($result)) {
 				$images = json_decode($weed['image_metadata']);
-				$weeds[] = array('id' => $weed['weed_id'], 'content' => $weed['content'], 'user_id' => $weed['user_id'], 'user_type' => $weed['user_type'], 'score' => $weed['score'], 'username' => $weed['username'], 'time' => $weed['weed_time'], 'light_id' => $weed['light_id'], 'root_id' => $weed['root_id'], 'deleted' => $weed['weed_deleted'], 'light_count' => $weed['light_count'], 'water_count' => $weed['water_count'], 'seed_count' => $weed['seed_count'], 'if_cur_user_water_it' => $weed['if_cur_user_water_it'] == $currentUser_id, 'if_cur_user_seed_it' => $weed['if_cur_user_seed_it'] == $currentUser_id, 'if_cur_user_light_it' => $weed['if_cur_user_light_it'] == $currentUser_id, 'image_count' => $weed['image_count'], 'images' => $images);
+				$weedObj = array('id' => $weed['weed_id'], 'content' => $weed['content'], 'content' => $weed['content'], 'content' => $weed['content'], 'user_id' => $weed['user_id'], 'user_type' => $weed['user_type'], 'score' => $weed['score'], 'username' => $weed['username'], 'time' => $weed['time'], 'light_id' => $weed['light_id'], 'root_id' => $weed['root_id'], 'deleted' => $weed['weed_deleted'], 'light_count' => $weed['light_count'], 'water_count' => $weed['water_count'], 'seed_count' => $weed['seed_count'], 'image_count' => $weed['image_count'], 'images' => $images);
+				if ($isFeed) {
+					$weedObj['is_feed'] = true;
+					$weedObj['seeded_by'] = $weed['seeded_by'];
+					$weedObj['sort_time'] = ($weed['seedtime']?$weed['seedtime']: $weed['time']);
+				}
+				$weeds[] = $weedObj;
 			}
 		}
 

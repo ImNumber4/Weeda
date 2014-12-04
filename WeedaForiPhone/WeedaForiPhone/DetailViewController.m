@@ -26,7 +26,6 @@
 
 #define TEXTLABLE_WEED_CONTENT_ORIGIN_Y 59
 
-
 const NSInteger PARENT_WEEDS_SECTION_INDEX = 0;
 const NSInteger CURRENT_WEED_SECTION_INDEX = 1;
 const NSInteger CHILD_WEEDS_SECTION_INDEX = 2;
@@ -46,7 +45,7 @@ const CGFloat COLLECTION_VIEW_HEIGHT = 300.0;
 
 @property (nonatomic, retain) UICollectionView *imageCollectionView;
 @property (nonatomic, strong) NSFetchedResultsController *fetchMetadataResultController;
-
+@property (nonatomic, weak) WeedDetailTableViewCell *detailCell;
 @property (nonatomic) CGFloat detailWeedCellHeight;
 
 //@property (nonatomic, retain) UIView *statusBarBackground;
@@ -81,38 +80,38 @@ static NSString * WEED_PLACEHOLDER_CELL_REUSE_ID = @"PlaceHolderCell";
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:WEED_PLACEHOLDER_CELL_REUSE_ID];
     
     if (self.currentWeed) {
-        [self loadLights];
-    } else {
-        [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/queryById/%@", self.currentWeedId]  parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-            if ([mappingResult.array count]) {
-                Weed * weed = mappingResult.array[0];
-                if (weed.shouldBeDeleted != nil && [weed.shouldBeDeleted intValue] == 0) {
-                    self.currentWeed = weed;
-                    NSIndexSet *section = [NSIndexSet indexSetWithIndex:CURRENT_WEED_SECTION_INDEX];
-                    [self.tableView reloadSections:section withRowAnimation:UITableViewRowAnimationAutomatic];
-                    [self loadLights];
-                } else {
-                    UIAlertView *av = [[UIAlertView alloc] initWithTitle:nil message:@"Sorry, weed has been deleted." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                    [av show];
-                    [self.navigationController popToRootViewControllerAnimated:YES];
-                }
-            }
-        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-            RKLogError(@"Failed to query weed by id due to error: %@", error);
-            UIAlertView *av = [[UIAlertView alloc] initWithTitle:nil message:@"Failed to get weed. Please try again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            [av show];
-            [self.navigationController popToRootViewControllerAnimated:YES];
-        }];
+        self.currentWeedId = self.currentWeed.id;
     }
-    
+    //always try to pull for the lastest content
+    [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/queryById/%@", self.currentWeedId]  parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+        if ([mappingResult.array count]) {
+            Weed * weed = mappingResult.array[0];
+            if (weed.shouldBeDeleted != nil && [weed.shouldBeDeleted intValue] == 0) {
+                self.currentWeed = weed;
+                NSIndexSet *section = [NSIndexSet indexSetWithIndex:CURRENT_WEED_SECTION_INDEX];
+                [self.tableView reloadSections:section withRowAnimation:UITableViewRowAnimationNone];
+            } else {
+                UIAlertView *av = [[UIAlertView alloc] initWithTitle:nil message:@"Sorry, weed has been deleted." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                [av show];
+                [self.navigationController popToRootViewControllerAnimated:YES];
+            }
+        }
+    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        RKLogError(@"Failed to query weed by id due to error: %@", error);
+        UIAlertView *av = [[UIAlertView alloc] initWithTitle:nil message:@"Failed to get weed. Please try again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [av show];
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    }];
+    [self loadLights];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(exitFullScreen:) name:UIWindowDidBecomeHiddenNotification object:self.view.window];
 }
 
 - (void) loadLights
 {
-    [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/getLights/%@", self.currentWeed.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+    [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/getLights/%@", self.currentWeedId] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
         NSSortDescriptor *descriptor=[[NSSortDescriptor alloc] initWithKey:@"id" ascending:YES];
         NSArray *descriptors=[NSArray arrayWithObject: descriptor];
+        [self.lights removeAllObjects];
         for(Weed* weed in [mappingResult.array sortedArrayUsingDescriptors:descriptors]) {
             if (weed.shouldBeDeleted != nil && [weed.shouldBeDeleted intValue] == 0) {
                 [self.lights addObject:weed];
@@ -121,7 +120,8 @@ static NSString * WEED_PLACEHOLDER_CELL_REUSE_ID = @"PlaceHolderCell";
         
         NSIndexSet *section = [NSIndexSet indexSetWithIndex:CHILD_WEEDS_SECTION_INDEX];
         [self.tableView reloadSections:section withRowAnimation:UITableViewRowAnimationAutomatic];
-        [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/getAncestorWeeds/%@", self.currentWeed.id] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+        [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"weed/getAncestorWeeds/%@", self.currentWeedId] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+            [self.parentWeeds removeAllObjects];
             for(Weed* weed in [mappingResult.array sortedArrayUsingDescriptors:descriptors]) {
                 if (weed.shouldBeDeleted != nil && [weed.shouldBeDeleted intValue] == 0) {
                     [self.parentWeeds addObject:weed];
@@ -180,10 +180,14 @@ static NSString * WEED_PLACEHOLDER_CELL_REUSE_ID = @"PlaceHolderCell";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if ([indexPath section] == CURRENT_WEED_SECTION_INDEX) {
-        WeedDetailTableViewCell *cell = (WeedDetailTableViewCell *) [tableView dequeueReusableCellWithIdentifier:WEED_DETAIL_TABLE_CELL_REUSE_ID forIndexPath:indexPath];
-        [self configureWeedDetailTableViewCell:cell];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        return cell;
+        if (!self.detailCell) {
+            self.detailCell = (WeedDetailTableViewCell *) [tableView dequeueReusableCellWithIdentifier:WEED_DETAIL_TABLE_CELL_REUSE_ID forIndexPath:indexPath];
+            [self configureWeedDetailTableViewCell:self.detailCell];
+            self.detailCell.selectionStyle = UITableViewCellSelectionStyleNone;
+        } else {
+            [self.detailCell refreshControlDataWithWeed:self.currentWeed];
+        }
+        return self.detailCell;
     } else if ([indexPath section] == PLACEHOLDER_SECTION_INDEX) {
         UITableViewCell *cell = (UITableViewCell *) [tableView dequeueReusableCellWithIdentifier:WEED_PLACEHOLDER_CELL_REUSE_ID forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;

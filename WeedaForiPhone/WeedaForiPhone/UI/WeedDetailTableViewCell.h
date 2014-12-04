@@ -38,6 +38,10 @@
 
 - (void)decorateCellWithWeed:(Weed *)weed parentViewController:(UIViewController *) parentViewController showHeader:(BOOL) showHeader;
 - (void)cellWillDisappear;
+/*
+ * this method should only be used when you already displayed the cell once, and you just want refresh control data to avoid additional refresh for other subviews
+ */
+- (void) refreshControlDataWithWeed:(Weed *) weed;
 + (CGFloat)heightForCell:(Weed*) weed showHeader:(BOOL) showHeader;
 
 @end
