@@ -23,7 +23,7 @@
 
 + (NSURL *)imageURLOfMessage:(Message *)message
 {
-    return [NSURL URLWithString:[NSString stringWithFormat:@"%@/message_%@_%@", [WeedImageController getBaseUrl], message.sender_id, message.id]];
+    return [NSURL URLWithString:[NSString stringWithFormat:@"%@/message_%@_%@?quality=100", [WeedImageController getBaseUrl], message.sender_id, message.id]];
 }
 
 + (NSString *)imageRelatedURLWithWeed:(Weed *)weed count:(NSNumber *)count
