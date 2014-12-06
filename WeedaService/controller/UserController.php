@@ -172,9 +172,7 @@ class UserController extends Controller
 				throw new InvalidRequestException('user/password do not match record.');
 			}
 		} else {
-			if (!password_verify($password, $user['password'])) {
-				error_log("Password: " . $password);
-				error_log("Db Password: " . $user['password']);
+			if (crypt($password, $user['password']) != $user['password']) {
 				throw new InvalidRequestException('user/password do not match record.');
 			}
 		}
@@ -209,7 +207,7 @@ class UserController extends Controller
 		
 		//Hash password
 		$password = $user->get_password();
-		$pasword_hash = password_hash($password, PASSWORD_DEFAULT);
+		$pasword_hash = crypt($password, PASSWORD_DEFAULT);
 		$user->set_password($password_hash);
 		
 		$result = $this->user_dao->create($user);
@@ -264,7 +262,7 @@ class UserController extends Controller
 		$token = $token_dao->find_by_token_id($token_id);
 		$user_id = $token['user_id'];
 		
-		$password_hash = password_hash($password, PASSWORD_DEFAULT);
+		$password_hash = crypt($password);
 		$this->user_dao->updatePassword($user_id, $password_hash);
 
 		$token_dao->update_used(1, $token_id);
@@ -328,7 +326,7 @@ class UserController extends Controller
 			throw new InvalidRequestException("password stored is not match.");
 		}
 		
-		$password_hash = password_hash($password, PASSWORD_DEFAULT);
+		$password_hash = crypt($password, PASSWORD_DEFAULT);
 		$this->user_dao->updatePassword($user_id, $password_hash);
 		$user = array();
 		$user['id'] = $cookie_user_id;
