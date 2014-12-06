@@ -207,7 +207,7 @@ class UserController extends Controller
 		
 		//Hash password
 		$password = $user->get_password();
-		$pasword_hash = crypt($password, PASSWORD_DEFAULT);
+		$pasword_hash = crypt($password);
 		$user->set_password($password_hash);
 		
 		$result = $this->user_dao->create($user);
@@ -309,7 +309,8 @@ class UserController extends Controller
 		}
 		
 		$password = $parameters['password'];
-		if (!isset($user_id) || !isset($password)) {
+		$current_password = $parameters['current_password'];
+		if (!isset($user_id) || !isset($password) || !isset($current_password)) {
 			throw new InvalidRequestException("Inputs are not valid.");
 		}
 		
@@ -322,11 +323,15 @@ class UserController extends Controller
 			throw new InvalidRequestException("User is empty.");
 		}
 		
+		if (crypt($current_password, $user->get_password()) != $user->get_password()) {
+			throw new InvalidRequestException('Current password is not correct.');
+		}
+		
 		if (strcmp($cookie_password, $user->get_password()) !== 0) {
 			throw new InvalidRequestException("password stored is not match.");
 		}
 		
-		$password_hash = crypt($password, PASSWORD_DEFAULT);
+		$password_hash = crypt($password);
 		$this->user_dao->updatePassword($user_id, $password_hash);
 		$user = array();
 		$user['id'] = $cookie_user_id;

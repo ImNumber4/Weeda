@@ -176,10 +176,10 @@ static const NSInteger VERIFY_NEW_PASSWORD_INDEX = 2;
         return;
     }
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    if (!(self.currentPassword && [self.currentPassword isEqualToString:appDelegate.currentUser.password])) {
-        self.noticeLabel.text = @"Current password is not correct.";
-        return;
-    }
+//    if (!(self.currentPassword && [self.currentPassword isEqualToString:appDelegate.currentUser.password])) {
+//        self.noticeLabel.text = @"Current password is not correct.";
+//        return;
+//    }
     self.noticeLabel.text = @"";
     self.submitButton.enabled = NO;
     
@@ -187,7 +187,9 @@ static const NSInteger VERIFY_NEW_PASSWORD_INDEX = 2;
     user.id = appDelegate.currentUser.id;
     user.username = appDelegate.currentUser.username;
     user.password = self.updatedPassword;
-    [[RKObjectManager sharedManager] putObject:user path:[NSString stringWithFormat:@"user/updatePassword/%@", user.id] parameters:nil
+    
+    NSDictionary *param = @{@"current_password":self.currentPassword};
+    [[RKObjectManager sharedManager] putObject:user path:[NSString stringWithFormat:@"user/updatePassword/%@", user.id] parameters:param
     success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
         self.submitButton.enabled = YES;
         AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
