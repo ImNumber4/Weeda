@@ -39,7 +39,7 @@ static double MORE_CELL_HEIGHT = 35;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = @"Bongs";
+    self.title = @"Water Pipes";
     
     self.weeds = [[NSMutableArray alloc] init];
     self.users = [[NSMutableArray alloc] init];

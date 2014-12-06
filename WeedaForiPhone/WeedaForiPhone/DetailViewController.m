@@ -71,6 +71,7 @@ static NSString * WEED_PLACEHOLDER_CELL_REUSE_ID = @"PlaceHolderCell";
 //    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_statusBarBackground]|" options:0 metrics:nil views:vs]];
     
     self.parentWeeds = [[NSMutableArray alloc] init];
+    self.title = @"Cannabis";
     self.lights = [[NSMutableArray alloc] init];
     [self.tableView setSeparatorInset:UIEdgeInsetsZero];
     self.tableView.tableFooterView = [[UIView alloc] init];

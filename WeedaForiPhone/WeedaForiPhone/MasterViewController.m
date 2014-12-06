@@ -43,7 +43,7 @@ static NSString *TABLE_CELL_REUSE_ID = @"WeedTableCell";
     [super viewDidLoad];
     
     self.previousScrollViewYOffset = 0.0;
-    
+    self.title = @"Cannabis";
     [self.tableView registerClass:[WeedTableViewCell class] forCellReuseIdentifier:TABLE_CELL_REUSE_ID];
     [self.tableView setSeparatorInset:UIEdgeInsetsZero];
     self.tableView.tableFooterView = [[UIView alloc] init];

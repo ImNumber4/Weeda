@@ -51,8 +51,8 @@ const NSInteger ME_TAB_BAR_ITEM_INDEX = 4;
     UserViewController *userView = (UserViewController *)userViewNav.topViewController;
     [userView setUser_id:appDelegate.currentUser.id];
     
-    weedsTabBarItem.title = @"Weeds";
-    bongsTabBarItem.title = @"Bongs";
+    weedsTabBarItem.title = @"Cannabis";
+    bongsTabBarItem.title = @"Water Pipes";
     messagesTabBarItem.title = @"Messages";
     discoverTabBarItem.title = @"Discover";
     meTabBarItem.title = @"Me";

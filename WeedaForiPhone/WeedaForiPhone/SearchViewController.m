@@ -83,7 +83,7 @@ static NSInteger MAX_ROWS_TO_SHOW_IN_ALL_SEARCH = 5;
     [self.view addSubview:self.searchResultTableView];
     [self.view setBackgroundColor:self.searchResultTableView.backgroundColor];
 
-    self.segmentedControl = [[UISegmentedControl alloc] initWithItems:@[@"All", @"Weeds", @"User"]];
+    self.segmentedControl = [[UISegmentedControl alloc] initWithItems:@[@"All", @"Cannabis", @"User"]];
     [self.segmentedControl setFrame:CGRectMake(PADDING, segmentedControlY, self.view.frame.size.width - PADDING * 2, segmentedControlHeight)];
     [self.segmentedControl setSelectedSegmentIndex:0];
     [self.segmentedControl setTintColor:[UIColor grayColor]];
