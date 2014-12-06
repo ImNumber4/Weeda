@@ -102,59 +102,59 @@
     return CGSizeMake(width, heigth);
 }
 
-- (CGFloat)findMaxHeight
-{
-    if (!_dataSource || _dataSource.count == 0) {
-        return 0;
-    }
-    
-    NSArray *weedImages = [_dataSource sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-        WeedImage *image1 = obj1;
-        WeedImage *image2 = obj2;
-        
-        CGSize size1 = [self imageSizeImageSize:CGSizeMake(image1.width.floatValue, image1.height.floatValue) orientation:UIDeviceOrientationPortrait];
-        CGSize size2 = [self imageSizeImageSize:CGSizeMake(image2.width.floatValue, image2.height.floatValue) orientation:UIDeviceOrientationPortrait];
-        
-        if (size1.height > size2.height) {
-            return NSOrderedAscending;
-        } else if (size1.height == size2.height) {
-            return NSOrderedSame;
-        } else {
-            return NSOrderedDescending;
-        }
-    }];
-    
-    WeedImage *maxImage = (WeedImage *)[weedImages objectAtIndex:0];
-    CGSize maxSize = [self imageSizeImageSize:CGSizeMake(maxImage.width.floatValue, maxImage.height.floatValue) orientation:UIDeviceOrientationPortrait];
-    return maxSize.height;
-}
-
-- (CGFloat)findMaxWidth
-{
-    if (!_dataSource || _dataSource.count == 0) {
-        return 0;
-    }
-    
-    NSArray *weedImages = [_dataSource sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-        WeedImage *image1 = obj1;
-        WeedImage *image2 = obj2;
-        
-        CGSize size1 = [self imageSizeImageSize:CGSizeMake(image1.width.floatValue, image1.height.floatValue) orientation:UIDeviceOrientationLandscapeLeft];
-        CGSize size2 = [self imageSizeImageSize:CGSizeMake(image2.width.floatValue, image2.height.floatValue) orientation:UIDeviceOrientationLandscapeLeft];
-        
-        if (size1.width > size2.width) {
-            return NSOrderedAscending;
-        } else if (size1.width == size2.width) {
-            return NSOrderedSame;
-        } else {
-            return NSOrderedDescending;
-        }
-    }];
-    
-    WeedImage *maxImage = (WeedImage *)[weedImages objectAtIndex:0];
-    CGSize maxSize = [self imageSizeImageSize:CGSizeMake(maxImage.width.floatValue, maxImage.height.floatValue) orientation:UIDeviceOrientationLandscapeLeft];
-    return maxSize.width;
-}
+//- (CGFloat)findMaxHeight
+//{
+//    if (!_dataSource || _dataSource.count == 0) {
+//        return 0;
+//    }
+//    
+//    NSArray *weedImages = [_dataSource sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+//        WeedImage *image1 = obj1;
+//        WeedImage *image2 = obj2;
+//        
+//        CGSize size1 = [self imageSizeImageSize:CGSizeMake(image1.width.floatValue, image1.height.floatValue) orientation:UIDeviceOrientationPortrait];
+//        CGSize size2 = [self imageSizeImageSize:CGSizeMake(image2.width.floatValue, image2.height.floatValue) orientation:UIDeviceOrientationPortrait];
+//        
+//        if (size1.height > size2.height) {
+//            return NSOrderedAscending;
+//        } else if (size1.height == size2.height) {
+//            return NSOrderedSame;
+//        } else {
+//            return NSOrderedDescending;
+//        }
+//    }];
+//    
+//    WeedImage *maxImage = (WeedImage *)[weedImages objectAtIndex:0];
+//    CGSize maxSize = [self imageSizeImageSize:CGSizeMake(maxImage.width.floatValue, maxImage.height.floatValue) orientation:UIDeviceOrientationPortrait];
+//    return maxSize.height;
+//}
+//
+//- (CGFloat)findMaxWidth
+//{
+//    if (!_dataSource || _dataSource.count == 0) {
+//        return 0;
+//    }
+//    
+//    NSArray *weedImages = [_dataSource sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+//        WeedImage *image1 = obj1;
+//        WeedImage *image2 = obj2;
+//        
+//        CGSize size1 = [self imageSizeImageSize:CGSizeMake(image1.width.floatValue, image1.height.floatValue) orientation:UIDeviceOrientationLandscapeLeft];
+//        CGSize size2 = [self imageSizeImageSize:CGSizeMake(image2.width.floatValue, image2.height.floatValue) orientation:UIDeviceOrientationLandscapeLeft];
+//        
+//        if (size1.width > size2.width) {
+//            return NSOrderedAscending;
+//        } else if (size1.width == size2.width) {
+//            return NSOrderedSame;
+//        } else {
+//            return NSOrderedDescending;
+//        }
+//    }];
+//    
+//    WeedImage *maxImage = (WeedImage *)[weedImages objectAtIndex:0];
+//    CGSize maxSize = [self imageSizeImageSize:CGSizeMake(maxImage.width.floatValue, maxImage.height.floatValue) orientation:UIDeviceOrientationLandscapeLeft];
+//    return maxSize.width;
+//}
 
 - (void)displayWithSelectedImage:(NSIndexPath *)indexPath currentCell:(WLImageCollectionViewCell *)cell
 {
@@ -232,17 +232,6 @@
     }
     return cell;
 }
-
-//- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    CGSize size = CGSizeZero;
-//    if ([self isVerticalLayout]) {
-//        size = CGSizeMake(self.frame.size.height, self.frame.size.width);
-//    } else {
-//        size = self.frame.size;
-//    }
-//    return size;
-//}
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {

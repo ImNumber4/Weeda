@@ -502,6 +502,11 @@ NSString * _deviceToken;
     
     [manager addResponseDescriptor:[RKResponseDescriptor responseDescriptorWithMapping:userMapping method:RKRequestMethodPOST pathPattern:@"user/signup" keyPath:@"user" statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)]];
     
+    //user updating password
+    RKObjectMapping *updatePwMapping = [RKObjectMapping requestMapping];
+    [updatePwMapping addAttributeMappingsFromDictionary:@{@"password" : @"password"}];
+    [manager addRequestDescriptor:[RKRequestDescriptor requestDescriptorWithMapping:updatePwMapping objectClass:[User class] rootKeyPath:nil method:RKRequestMethodPUT]];
+    
     [manager addResponseDescriptor:[RKResponseDescriptor responseDescriptorWithMapping:userMapping method:RKRequestMethodGET pathPattern:@"weed/getMentions/:weed_id" keyPath:@"mentions" statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)]];
     
     //message creation mapping

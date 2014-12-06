@@ -183,7 +183,6 @@
 				<input class="input_password_up" type="password" id="password" name="password" placeholder="new password">
 				<input class="input_password_down" type="password" id="comfirm_password" placeholder="confirm password">
 				<input type="hidden" name="token_id" value="<?php echo $token_id ?>" >
-				<input type="hidden" name="user_id" value="<?php echo $user_id ?>" >
 				<p>
 					<span id="confirmMessage" class="confirmMessage"></span>
 				</p>

@@ -181,20 +181,23 @@ static const NSInteger VERIFY_NEW_PASSWORD_INDEX = 2;
         return;
     }
     self.noticeLabel.text = @"";
-//    self.submitButton.enabled = false;
-//    [[RKObjectManager sharedManager] getObjectsAtPath:[NSString stringWithFormat:@"user/updateUsername/%@",self.updatedUsername] parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-//        self.submitButton.enabled = true;
-//        AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-//        [appDelegate populateCurrentUserFromCookie];
-//        [self.tableView reloadData];
-//        UIAlertView *errorAlert = [[UIAlertView alloc]initWithTitle:@"Success" message:[NSString stringWithFormat:@"Your username has successfully been updated to be %@.",self.updatedUsername] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
-//        [errorAlert show];
-//    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-//        RKLogError(@"Failed to update username with error: %@", error);
-//        self.submitButton.enabled = true;
-//        UIAlertView *errorAlert = [[UIAlertView alloc]initWithTitle:@"" message:[NSString stringWithFormat:@"We can not change your username to be %@ since it has already been taken. Please use a different name or try again later. ",self.updatedUsername] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
-//        [errorAlert show];
-//    }];
+    self.submitButton.enabled = NO;
+    
+    User *user = [User new];
+    user.id = appDelegate.currentUser.id;
+    user.username = appDelegate.currentUser.username;
+    user.password = self.updatedPassword;
+    [[RKObjectManager sharedManager] putObject:user path:[NSString stringWithFormat:@"user/updatePassword/%@", user.id] parameters:nil
+    success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+        self.submitButton.enabled = YES;
+        AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+        [appDelegate populateCurrentUserFromCookie];
+        self.noticeLabel.text = [NSString stringWithFormat:@"Your password has successfully been updated"];
+    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        self.submitButton.enabled = YES;
+        NSLog(@"Update password failed, error: %@", error.localizedDescription);
+        self.noticeLabel.text = [NSString stringWithFormat:@"We can't change password right now. Please try again later. "];
+    }];
 }
 
 /*

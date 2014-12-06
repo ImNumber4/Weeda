@@ -169,7 +169,7 @@
         compression -=0.1f;
         imageData = UIImageJPEGRepresentation(image, compression);
     }
-    NSLog(@"Image length: %ld", imageData.length);
+    NSLog(@"Image length: %ld", (unsigned long)imageData.length);
     
     if (imageData.length > MAX_UPLOAD_IMAGE_SIZE) {
         return nil;

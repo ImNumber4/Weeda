@@ -2,8 +2,10 @@
 
 include './library/ImageHandler.php';
 
-//ini_set('display_errors',1);
-//error_reporting(E_ALL);
+// ini_set('display_errors',1);
+// error_reporting(E_ALL);
+
+define("PASSWORD_DEFAULT", 39);
 
 class UserController extends Controller
 {
@@ -143,10 +145,10 @@ class UserController extends Controller
 		return $this->query($id);
 	}
 	
-	public function login() {
-		$data = json_decode(file_get_contents("php://input"));
-		$username = $data->username;
-		$password = $data->password;
+	public function login($parameters) {
+		$username = $parameters['username'];
+		$password = $parameters['password'];
+		$cookie = $parameters['cookie'];
 		
 		if (!isset($username)) {
 			throw new InvalidRequestException('Input para error, username is null');
@@ -156,17 +158,29 @@ class UserController extends Controller
 			throw new InvalidRequestException('Input para error, password is null');
 		}
 		
+		if (!isset($cookie)) {
+			$cookie = false;
+		}
+		
 		$user = $this->user_dao->find_by_username($username);
 		if ($user == null) {
 			throw new InvalidRequestException("Did not find user by username:$username");
 		}
 		
-		if ($password == $user['password']) {
-			$this->update_cookie($user);
-			return json_encode(array("user" => $user));
+		if ($cookie) {
+			if (strcmp($password, $user['password']) !== 0) {
+				throw new InvalidRequestException('user/password do not match record.');
+			}
 		} else {
-			throw new InvalidRequestException('user/password do not match record.');
+			if (!password_verify($password, $user['password'])) {
+				error_log("Password: " . $password);
+				error_log("Db Password: " . $user['password']);
+				throw new InvalidRequestException('user/password do not match record.');
+			}
 		}
+		
+		$this->update_cookie($user);
+		return json_encode(array("user" => $user));
 	}
 
 	public function signout() {		
@@ -188,6 +202,16 @@ class UserController extends Controller
 			throw new InvalidRequestException("Inputs are not valid due to $invalidReasons");
 		}
 		$user = $this->convert_data_to_user($data);
+		
+		if (!$this->check_username($user->get_username())) {
+			throw new InvalidRequestException("Username is not valid.");
+		}
+		
+		//Hash password
+		$password = $user->get_password();
+		$pasword_hash = password_hash($password, PASSWORD_DEFAULT);
+		$user->set_password($password_hash);
+		
 		$result = $this->user_dao->create($user);
 		$user->set_id($result);
 		$userPropertyMap = array('id'=>$user->get_id(), 'username'=>$user->get_username(), 'password'=>$user->get_password());
@@ -227,23 +251,26 @@ class UserController extends Controller
 		return;
 	}
 	
-	public function reset($parameters)
+	public function reset()
 	{
-		if (!isset($_POST['password']) || !isset($_POST['user_id']) || !isset($_POST['token_id'])) {
+		if (!isset($_POST['password']) || !isset($_POST['token_id'])) {
 			throw new InvalidRequestException("Inputs are not valid");
 		}
 		
 		$token_id = $_POST['token_id'];
 		$password = $_POST['password'];
-		$user_id = $_POST['user_id'];
 		
-		$this->user_dao->updatePassword($user_id, $password);
 		$token_dao = new TokenDAO();
+		$token = $token_dao->find_by_token_id($token_id);
+		$user_id = $token['user_id'];
+		
+		$password_hash = password_hash($password, PASSWORD_DEFAULT);
+		$this->user_dao->updatePassword($user_id, $password_hash);
+
 		$token_dao->update_used(1, $token_id);
 		
 		$title = "Reset password";
-		$message = "Password has been changed!";
-		
+		$message = "Password has been changed!";		
 		header('Content-Type: text/html; charset=UTF-8');
 		ob_start();
 		include('./page/notification.php');
@@ -260,6 +287,11 @@ class UserController extends Controller
 	public function updateUsername($username) {
 		$user_id = $this->getCurrentUser();
 		$password = $this->getCurrentUserPassword();
+		
+		if (!$this->check_username($username)) {
+			throw new InvalidRequestException("Username is not valid.");
+		}
+		
 		$this->user_dao->updateUsername($user_id, $username);
 		$user = array();
 		$user['id'] = $user_id;
@@ -268,15 +300,40 @@ class UserController extends Controller
 		$this->update_cookie($user);
 	}
 	
-	public function updatePassword($password)
+	public function updatePassword($user_id, $parameters)
 	{
-		$user_id = $this->getCurrentUser();
-		$username = $this->getCurrentUserPassword();
-		$this->user_dao->updatePassword($user_id, $password);
+		$cookie_user_id = $this->getCurrentUser();
+		$cookie_username = $this->getCurrentUsername();
+		$cookie_password = $this->getCurrentUserPassword();
+		
+		if ($cookie_user_id != $user_id) {
+			throw new InvalidRequestException("Inputs are not valid.");
+		}
+		
+		$password = $parameters['password'];
+		if (!isset($user_id) || !isset($password)) {
+			throw new InvalidRequestException("Inputs are not valid.");
+		}
+		
+		if (!$this->check_password($password)) {
+			throw new InvalidRequestException("Password is not valid.");
+		}
+		
+		$user = $this->user_dao->find_by_user_id($user_id);
+		if (!$user) {
+			throw new InvalidRequestException("User is empty.");
+		}
+		
+		if (strcmp($cookie_password, $user->get_password()) !== 0) {
+			throw new InvalidRequestException("password stored is not match.");
+		}
+		
+		$password_hash = password_hash($password, PASSWORD_DEFAULT);
+		$this->user_dao->updatePassword($user_id, $password_hash);
 		$user = array();
-		$user['id'] = $user_id;
-		$user['password'] = $password;
-		$user['username'] = $username;
+		$user['id'] = $cookie_user_id;
+		$user['password'] = $password_hash;
+		$user['username'] = $cookie_username;
 		$this->update_cookie($user);
 	}
 	
@@ -360,6 +417,40 @@ class UserController extends Controller
 		return $user;
 	}
 	
+	private function check_username($username)
+	{
+		error_log("change username to: " . $username);
+		if (!$username) {
+			error_log('username is null');
+			return false;
+		}
+		
+		$regex = "/[A-Za-z0-9]*/";
+		if (preg_match($regex, $username)) {
+			if (strlen($username) >= 1 && strlen($username) <= 16) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private function check_password($password)
+	{
+		if (!$password) {
+			error_log('password is null');
+			return false;
+		}
+		
+		$regex = "((?=.*\\d)(?=.*[A-Z])(?=.*[a-z]).{6,16})";
+		if (preg_match($regex, $password)) {
+			if (strlen($password) >= 6 && strlen($password) <= 16) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
 	private function check_para($data) {
 		$invalidReasons = array();
 		
@@ -371,6 +462,10 @@ class UserController extends Controller
 		$password = trim($data->password);
 		if ($password == '') {
 			$invalidReasons[] = 'Password can not be empty';
+		}
+		
+		if (!$this->check_password($password)) {
+			$invalidReasons[] = 'Password is not valid.';
 		}
 		
 		$email = trim($data->email);

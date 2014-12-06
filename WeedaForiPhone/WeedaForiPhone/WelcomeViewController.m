@@ -215,7 +215,7 @@ static double SIGN_UP_SIZE = 100;
     //everytime, first clear all the login cookies. Login will refresh it
     [appDelegate clearLoginCookies];
     if (appDelegate.currentUser) {
-        [self signInThoughServer:appDelegate.currentUser];
+        [self signInThoughServer:appDelegate.currentUser byCookie:YES];
     } else {
         [self showLoginUI];
         return;
@@ -242,12 +242,17 @@ static double SIGN_UP_SIZE = 100;
     user.username = [self.txtUsername text];
     user.password = [self.txtPassword text];
     [self hideLoginUI];
-    [self signInThoughServer:user];
+    [self signInThoughServer:user byCookie:NO];
 }
 
-- (void)signInThoughServer:(User *) user {
+- (void)signInThoughServer:(User *) user byCookie:(BOOL)isUseCookie
+{
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    [[RKObjectManager sharedManager] postObject:user path:@"user/login" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+    NSDictionary *param = nil;
+    if (isUseCookie) {
+        param = @{@"cookie" : @YES};
+    }
+    [[RKObjectManager sharedManager] postObject:user path:@"user/login" parameters:param success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
         [appDelegate populateCurrentUserFromCookie];
         [self performSegueWithIdentifier:@"masterView" sender:self];
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {

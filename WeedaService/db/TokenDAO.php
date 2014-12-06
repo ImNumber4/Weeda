@@ -26,8 +26,8 @@ class TokenDAO extends BaseDAO
 
 		$result = $this->db_conn->query($query);
 		if (mysql_num_rows($result)) {
-			$user = mysql_fetch_assoc($result);
-			return $user;
+			$token = mysql_fetch_assoc($result);
+			return $token;
 		} else {
 			return null;
 		}
