@@ -134,7 +134,7 @@
 
 		</style>
 		
-		<script>
+		<script type="application/javascript">
 			function checkPass()
 			{
 			    var pass1 = document.getElementById("password");
@@ -162,9 +162,11 @@
 					return false;
 			    }
 				
-				if (!preg_match("((?=.*\\d)(?=.*[A-Z])(?=.*[a-z]).{6,16})",$pass1.value)) {
+				var pwRegStr = new RegExp("((?=.*\\d)(?=.*[A-Z])(?=.*[a-z]).{6,16})");
+				var match = pwRegStr.test(pass1.value);
+				if (!match || pass1.value.length < 6 || pass1.value.length > 16) {
 					message.style.color = badColor;
-					message.innerHTML = "Password needs to have least 6 characters, include 1 uppercase and 1 lowercase and 1 Digital.";
+					message.innerHTML = "Password should have 1-16 characters, including at least 1 uppercase and 1 lowercase and 1 digit.";
 					return false;
 				}
 
