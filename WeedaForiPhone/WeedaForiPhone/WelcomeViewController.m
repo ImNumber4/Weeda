@@ -22,6 +22,7 @@
 @property (strong, nonatomic) UIButton *btnSignIn;
 @property (strong, nonatomic) UIButton *btnSignUp;
 @property (strong, nonatomic) UILabel *lbForgotPw;
+@property (strong, nonatomic) UITextView *tvReminder;
 
 @property (nonatomic, strong) UIImageView *titleImage;
 
@@ -139,6 +140,15 @@ static double SIGN_UP_SIZE = 100;
     self.btnSignUp.alpha = 0;
     self.lbForgotPw.alpha = 0;
     
+    self.tvReminder = [[UITextView alloc] initWithFrame:CGRectMake(leftPadding, self.view.frame.size.height - 110, self.view.frame.size.width - 2 * leftPadding, 100)];
+    self.tvReminder.editable = false;
+    self.tvReminder.scrollEnabled = false;
+    self.tvReminder.font = [UIFont systemFontOfSize:8.0];
+    self.tvReminder.backgroundColor = [UIColor clearColor];
+    self.tvReminder.textColor = [UIColor whiteColor];
+    self.tvReminder.text = @"The information contained in this app is intended for educational purposes only. We do not allow or encourage activity that suggests or condones interactions that could be considered illegal in your municipality. The information provided here is used for the sole purpose of providing legal, public access and contact information to horticultural gardening centers, tobacco pipe and supply reviews and vendors and as an educational source for those interested in legal medical cannabis businesses, as well as general horticultural knowledge and discussion groups.";
+    [self.view addSubview:self.tvReminder];
+    
     UITapGestureRecognizer *singleFingerTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
     [self.view addGestureRecognizer:singleFingerTap];
     
@@ -169,7 +179,7 @@ static double SIGN_UP_SIZE = 100;
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    sleep(1);
+    sleep(2);
     [self checkCookiesAndGetCurrentUser];
 }
 
